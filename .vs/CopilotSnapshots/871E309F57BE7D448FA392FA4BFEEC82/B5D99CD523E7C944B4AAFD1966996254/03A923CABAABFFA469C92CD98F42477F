@@ -1,0 +1,56 @@
+﻿using SmartStock.Classes.Settings;
+using SmartStock.Classes.Utils;
+
+namespace SmartStock
+{
+    public partial class SettingsForm : Form
+    {
+        public SettingsForm()
+        {
+            InitializeComponent();
+            populateOptions();
+            setRightIndex();
+            ThemeManager.Apply(this);
+        }
+
+        private void setRightIndex()
+        {
+            if (SettingsManager.Current.Theme == "Dark")
+            {
+                themes_cb.SelectedIndex = 0;
+            }
+            else if (SettingsManager.Current.Theme == "Light")
+            {
+                themes_cb.SelectedIndex = 1;
+            }
+        }
+        public void populateOptions()
+        {
+            themes_cb.Items.Clear();
+            themes_cb.Items.AddRange(new object[] {
+                "Dark", "Light"
+            });
+        }
+
+        private void apply_btn_Click(object sender, EventArgs e)
+        {
+            // 1. Preluăm valorile selectate de utilizator din controalele UI
+            string selectedTheme = themes_cb.SelectedItem?.ToString() ?? "Light";
+            //string selectedLanguage = options_cb.SelectedItem?.ToString() ?? "ro-RO";
+
+            // 2. Actualizăm obiectul global de setări
+            SettingsManager.Current.Theme = selectedTheme;
+            //SettingsManager.Current.Language = selectedLanguage;
+
+            // 3. Salvăm fizic în appSettings.json
+            SettingsManager.Save();
+
+            // 4. Aplicăm tema imediat (pentru feedback vizual instant)
+            ThemeManager.SetTheme(selectedTheme);
+            ThemeManager.Apply(this); // Aplicăm tema doar pe acest formular, restul vor fi aplicate la repornire
+
+            // 5. Opțional: Notificăm utilizatorul
+            MessageBox.Show("Settings saved succesful!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+    }
+}

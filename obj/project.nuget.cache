@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "3YCLvsBTzu8=",
+  "dgSpecHash": "fDbHzvAaDKw=",
   "success": true,
   "projectFilePath": "D:\\Files\\Degree\\App\\SmartStock\\SmartStock.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\Stas\\.nuget\\packages\\fontawesome.sharp\\6.3.0\\fontawesome.sharp.6.3.0.nupkg.sha512"
+  ],
   "logs": []
 }

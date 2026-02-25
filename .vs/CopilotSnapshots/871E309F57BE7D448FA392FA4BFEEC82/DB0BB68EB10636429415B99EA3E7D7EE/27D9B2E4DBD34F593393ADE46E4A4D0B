@@ -1,0 +1,152 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SmartStock.Classes.Utils
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Drawing;
+    using System.Windows.Forms;
+
+    public static class ThemeManager
+    {
+        // Eveniment la care se vor abona toate Form-urile pentru update live
+        public static event Action OnThemeChanged;
+
+        public static string CurrentThemeName { get; private set; } = "Light";
+
+        // Definiția paletelor de culori
+        private static readonly Dictionary<string, ThemePalette> Themes = new Dictionary<string, ThemePalette>
+        {
+            { "Dark", new ThemePalette { 
+                // 1. Panelurile și Fundalul Formei (64, 64, 64)
+                PanelBack = Color.FromArgb(64, 64, 64),
+                FormBackground = Color.FromArgb(54,54,54),
+        
+                // 2. Controalele: Butoane, ComboBox, TextBox (54, 54, 54)
+                ControlBack = Color.FromArgb(54, 54, 54),
+                Accent = Color.FromArgb(54, 54, 54), // Folosit pentru butoane
+        
+                Text = Color.WhiteSmoke
+            }},
+            { "Light", new ThemePalette {
+                PanelBack = Color.FromArgb(240, 240, 240),
+                ControlBack = Color.White,
+                Accent = Color.LightGray,
+                Text = Color.Black
+             }}
+        };
+
+        public static void SetTheme(string themeName)
+        {
+            if (Themes.ContainsKey(themeName))
+            {
+                CurrentThemeName = themeName;
+                // Notificăm toate ferestrele abonate să se redeseneze
+                OnThemeChanged?.Invoke();
+            }
+        }
+
+        public static void Apply(Control parent)
+        {
+            if (!Themes.TryGetValue(CurrentThemeName, out var theme)) return;
+
+            // Suspend layout while applying theme to all controls
+            parent.SuspendLayout();
+
+            try
+            {
+                // Dacă controlul este o Formă, îi schimbăm fundalul principal
+                if (parent is Form frm)
+                {
+                    frm.BackColor = theme.FormBackground;
+                    frm.DoubleBuffered = true;
+                }
+
+                foreach (Control c in parent.Controls)
+                {
+                    // Aplicăm culorile în funcție de tipul controlului
+                    ApplyStyleToControl(c, theme);
+
+                    // Enable double buffering on containers to prevent rendering artifacts
+                    // especially important for controls with custom rendering (like FontAwesome.Sharp IconButton)
+                    if (c is Panel or GroupBox or Form)
+                    {
+                        c.DoubleBuffered = true;
+                    }
+
+                    // Dacă controlul are alți copii (Panel, GroupBox etc.), intrăm recursiv
+                    if (c.HasChildren)
+                    {
+                        Apply(c);
+                    }
+                }
+            }
+            finally
+            {
+                // Always resume layout and force recalculation
+                parent.ResumeLayout(true);
+            }
+        }
+
+        private static void ApplyStyleToControl(Control c, ThemePalette theme)
+        {
+            c.ForeColor = theme.Text;
+
+            // Personalizare logică pe tipuri de controale
+            switch (c)
+            {
+                case Button btn:
+                    btn.BackColor = theme.Accent;
+                    btn.FlatStyle = FlatStyle.Flat;
+                    btn.FlatAppearance.BorderSize = 1;
+                    break;
+
+                case TextBox txt:
+                    txt.BackColor = theme.ControlBack;
+                    txt.BorderStyle = BorderStyle.Fixed3D;
+                    break;
+
+                case Label lbl:
+                    // Etichetele de obicei moștenesc fundalul părintelui
+                    lbl.BackColor = Color.Transparent;
+                    break;
+
+                case DataGridView dgv:
+                    dgv.BackgroundColor = theme.ControlBack;
+                    dgv.DefaultCellStyle.BackColor = theme.ControlBack;
+                    dgv.DefaultCellStyle.ForeColor = theme.Text;
+                    break;
+                case ComboBox combo:
+                    combo.FlatStyle = FlatStyle.Flat; 
+                    combo.BackColor = theme.ControlBack;
+                    combo.ForeColor = theme.Text;
+                    break;
+                case Panel pnl:
+                    pnl.BackColor = theme.PanelBack;
+                    break;
+                case GroupBox grp:
+                    grp.BackColor = theme.PanelBack;
+                    break;
+                 case CheckBox chk:
+                    chk.BackColor = theme.PanelBack;
+                    break;
+                default:
+                    c.BackColor = theme.ControlBack;
+                    break;
+            }
+        }
+
+        public class ThemePalette
+        {
+            public Color PanelBack { get; set; }
+            public Color FormBackground { get; set; }
+            public Color Text { get; set; }
+            public Color Accent { get; set; }
+            public Color ControlBack { get; set; }
+        }
+    }
+}

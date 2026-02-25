@@ -1,14 +1,14 @@
-﻿namespace SmartStock
+﻿namespace SmartStock.Forms
 {
     partial class MenuForm
     {
         /// <summary>
-        ///  Required designer variable.
+        /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
         /// <summary>
-        ///  Clean up any resources being used.
+        /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
@@ -23,449 +23,369 @@
         #region Windows Form Designer generated code
 
         /// <summary>
-        ///  Required method for Designer support - do not modify
-        ///  the contents of this method with the code editor.
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
-            apply_btn = new Button();
-            themes_cb = new ComboBox();
-            base_pnl = new Panel();
-            margin_pnl = new Panel();
-            ai_pnl = new Panel();
-            groupBox3 = new GroupBox();
-            tableLayoutPanel3 = new TableLayoutPanel();
-            api_tb = new TextBox();
-            ai_logs_lbl = new Label();
-            api_lbl = new Label();
-            ai_logs_ck = new CheckBox();
-            path_pnl = new Panel();
-            groupBox2 = new GroupBox();
-            tableLayoutPanel2 = new TableLayoutPanel();
-            settings_lbl = new Label();
-            db_lbl = new Label();
-            db_tb = new TextBox();
-            logs_lbl = new Label();
-            logs_tb = new TextBox();
-            settings_tb = new TextBox();
-            theme_pnl = new Panel();
-            groupBox1 = new GroupBox();
-            tableLayoutPanel1 = new TableLayoutPanel();
-            languages_cb = new ComboBox();
-            language_lbl = new Label();
-            theme_lbl = new Label();
-            base_pnl.SuspendLayout();
-            ai_pnl.SuspendLayout();
-            groupBox3.SuspendLayout();
-            tableLayoutPanel3.SuspendLayout();
-            path_pnl.SuspendLayout();
-            groupBox2.SuspendLayout();
-            tableLayoutPanel2.SuspendLayout();
-            theme_pnl.SuspendLayout();
-            groupBox1.SuspendLayout();
-            tableLayoutPanel1.SuspendLayout();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MenuForm));
+            menu_pnl = new Panel();
+            menu_buttons_pnl = new Panel();
+            settings_btn = new FontAwesome.Sharp.IconButton();
+            add_btn = new FontAwesome.Sharp.IconButton();
+            logo_pnl = new Panel();
+            iconPictureBox1 = new FontAwesome.Sharp.IconPictureBox();
+            restart_lbl = new Label();
+            restart_lbl2 = new Label();
+            titlebar_pnl = new Panel();
+            accent_pnl = new Panel();
+            workplace_pnl = new Panel();
+            workplace_layout = new TableLayoutPanel();
+            labelCurentChildForm = new Label();
+            iconCurentChildForm = new FontAwesome.Sharp.IconPictureBox();
+            minimize_btn = new FontAwesome.Sharp.IconButton();
+            maximize_btn = new FontAwesome.Sharp.IconButton();
+            close_btn = new FontAwesome.Sharp.IconButton();
+            desktop_pnl = new Panel();
+            menu_pnl.SuspendLayout();
+            menu_buttons_pnl.SuspendLayout();
+            logo_pnl.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)iconPictureBox1).BeginInit();
+            titlebar_pnl.SuspendLayout();
+            accent_pnl.SuspendLayout();
+            workplace_pnl.SuspendLayout();
+            workplace_layout.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)iconCurentChildForm).BeginInit();
             SuspendLayout();
             // 
-            // apply_btn
+            // menu_pnl
             // 
-            apply_btn.BackColor = Color.FromArgb(54, 54, 54);
-            apply_btn.Dock = DockStyle.Bottom;
-            apply_btn.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            apply_btn.ForeColor = Color.White;
-            apply_btn.Location = new Point(20, 612);
-            apply_btn.Margin = new Padding(0);
-            apply_btn.MaximumSize = new Size(0, 70);
-            apply_btn.MinimumSize = new Size(0, 70);
-            apply_btn.Name = "apply_btn";
-            apply_btn.Size = new Size(1231, 70);
-            apply_btn.TabIndex = 0;
-            apply_btn.Text = "Apply";
-            apply_btn.UseVisualStyleBackColor = false;
-            apply_btn.Click += apply_btn_Click;
+            menu_pnl.BackColor = Color.FromArgb(54, 54, 54);
+            menu_pnl.Controls.Add(menu_buttons_pnl);
+            menu_pnl.Controls.Add(logo_pnl);
+            menu_pnl.Dock = DockStyle.Left;
+            menu_pnl.Location = new Point(0, 1);
+            menu_pnl.Name = "menu_pnl";
+            menu_pnl.Size = new Size(304, 1101);
+            menu_pnl.TabIndex = 0;
             // 
-            // themes_cb
+            // menu_buttons_pnl
             // 
-            themes_cb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            themes_cb.BackColor = Color.FromArgb(54, 54, 54);
-            themes_cb.FlatStyle = FlatStyle.Flat;
-            themes_cb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            themes_cb.ForeColor = Color.White;
-            themes_cb.FormattingEnabled = true;
-            themes_cb.Location = new Point(595, 7);
-            themes_cb.Margin = new Padding(0, 5, 0, 5);
-            themes_cb.Name = "themes_cb";
-            themes_cb.Size = new Size(596, 33);
-            themes_cb.TabIndex = 1;
+            menu_buttons_pnl.AutoScroll = true;
+            menu_buttons_pnl.Controls.Add(settings_btn);
+            menu_buttons_pnl.Controls.Add(add_btn);
+            menu_buttons_pnl.Dock = DockStyle.Fill;
+            menu_buttons_pnl.Location = new Point(0, 125);
+            menu_buttons_pnl.Name = "menu_buttons_pnl";
+            menu_buttons_pnl.Size = new Size(304, 976);
+            menu_buttons_pnl.TabIndex = 0;
+            menu_buttons_pnl.Tag = "menu";
             // 
-            // base_pnl
+            // settings_btn
             // 
-            base_pnl.AutoScroll = true;
-            base_pnl.BackColor = Color.FromArgb(64, 64, 64);
-            base_pnl.Controls.Add(apply_btn);
-            base_pnl.Controls.Add(margin_pnl);
-            base_pnl.Controls.Add(ai_pnl);
-            base_pnl.Controls.Add(path_pnl);
-            base_pnl.Controls.Add(theme_pnl);
-            base_pnl.Dock = DockStyle.Fill;
-            base_pnl.Location = new Point(30, 30);
-            base_pnl.Margin = new Padding(30);
-            base_pnl.Name = "base_pnl";
-            base_pnl.Padding = new Padding(20);
-            base_pnl.Size = new Size(1271, 702);
-            base_pnl.TabIndex = 2;
+            settings_btn.BackColor = Color.Transparent;
+            settings_btn.Dock = DockStyle.Bottom;
+            settings_btn.FlatAppearance.BorderSize = 0;
+            settings_btn.FlatStyle = FlatStyle.Flat;
+            settings_btn.Font = new Font("Segoe UI", 16.2F, FontStyle.Bold);
+            settings_btn.ForeColor = Color.White;
+            settings_btn.IconChar = FontAwesome.Sharp.IconChar.Gear;
+            settings_btn.IconColor = Color.White;
+            settings_btn.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            settings_btn.ImageAlign = ContentAlignment.MiddleLeft;
+            settings_btn.Location = new Point(0, 876);
+            settings_btn.Name = "settings_btn";
+            settings_btn.Padding = new Padding(10, 0, 21, 0);
+            settings_btn.Size = new Size(304, 100);
+            settings_btn.TabIndex = 2;
+            settings_btn.Tag = "menu";
+            settings_btn.Text = "Settings";
+            settings_btn.TextAlign = ContentAlignment.MiddleLeft;
+            settings_btn.TextImageRelation = TextImageRelation.ImageBeforeText;
+            settings_btn.UseVisualStyleBackColor = false;
+            settings_btn.Click += iconButton1_Click;
             // 
-            // margin_pnl
+            // add_btn
             // 
-            margin_pnl.BackColor = Color.Transparent;
-            margin_pnl.Dock = DockStyle.Top;
-            margin_pnl.Location = new Point(20, 569);
-            margin_pnl.MaximumSize = new Size(0, 20);
-            margin_pnl.MinimumSize = new Size(0, 20);
-            margin_pnl.Name = "margin_pnl";
-            margin_pnl.Size = new Size(1231, 20);
-            margin_pnl.TabIndex = 8;
+            add_btn.BackColor = Color.Transparent;
+            add_btn.Dock = DockStyle.Top;
+            add_btn.FlatAppearance.BorderSize = 0;
+            add_btn.FlatStyle = FlatStyle.Flat;
+            add_btn.Font = new Font("Segoe UI", 16.2F, FontStyle.Bold);
+            add_btn.ForeColor = Color.White;
+            add_btn.IconChar = FontAwesome.Sharp.IconChar.PlusSquare;
+            add_btn.IconColor = Color.White;
+            add_btn.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            add_btn.ImageAlign = ContentAlignment.MiddleLeft;
+            add_btn.Location = new Point(0, 0);
+            add_btn.Name = "add_btn";
+            add_btn.Padding = new Padding(10, 0, 21, 0);
+            add_btn.Size = new Size(304, 100);
+            add_btn.TabIndex = 1;
+            add_btn.Tag = "menu";
+            add_btn.Text = "Add Instance";
+            add_btn.TextAlign = ContentAlignment.MiddleLeft;
+            add_btn.TextImageRelation = TextImageRelation.ImageBeforeText;
+            add_btn.UseVisualStyleBackColor = false;
+            add_btn.Click += add_btn_Click;
             // 
-            // ai_pnl
+            // logo_pnl
             // 
-            ai_pnl.Controls.Add(groupBox3);
-            ai_pnl.Dock = DockStyle.Top;
-            ai_pnl.Location = new Point(20, 399);
-            ai_pnl.Name = "ai_pnl";
-            ai_pnl.Padding = new Padding(10);
-            ai_pnl.Size = new Size(1231, 170);
-            ai_pnl.TabIndex = 7;
+            logo_pnl.Controls.Add(iconPictureBox1);
+            logo_pnl.Controls.Add(restart_lbl);
+            logo_pnl.Controls.Add(restart_lbl2);
+            logo_pnl.Dock = DockStyle.Top;
+            logo_pnl.Location = new Point(0, 0);
+            logo_pnl.Name = "logo_pnl";
+            logo_pnl.Size = new Size(304, 125);
+            logo_pnl.TabIndex = 0;
+            logo_pnl.Tag = "menu";
             // 
-            // groupBox3
+            // iconPictureBox1
             // 
-            groupBox3.Controls.Add(tableLayoutPanel3);
-            groupBox3.Dock = DockStyle.Fill;
-            groupBox3.ForeColor = Color.White;
-            groupBox3.Location = new Point(10, 10);
-            groupBox3.Margin = new Padding(0);
-            groupBox3.Name = "groupBox3";
-            groupBox3.Padding = new Padding(10);
-            groupBox3.Size = new Size(1211, 150);
-            groupBox3.TabIndex = 4;
-            groupBox3.TabStop = false;
-            groupBox3.Text = "AI Settings";
+            iconPictureBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            iconPictureBox1.BackColor = Color.Transparent;
+            iconPictureBox1.BackgroundImageLayout = ImageLayout.None;
+            iconPictureBox1.IconChar = FontAwesome.Sharp.IconChar.Box;
+            iconPictureBox1.IconColor = Color.White;
+            iconPictureBox1.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            iconPictureBox1.IconSize = 99;
+            iconPictureBox1.Location = new Point(5, 13);
+            iconPictureBox1.Name = "iconPictureBox1";
+            iconPictureBox1.Padding = new Padding(21, 0, 21, 0);
+            iconPictureBox1.Size = new Size(107, 99);
+            iconPictureBox1.TabIndex = 4;
+            iconPictureBox1.TabStop = false;
+            iconPictureBox1.Tag = "";
             // 
-            // tableLayoutPanel3
+            // restart_lbl
             // 
-            tableLayoutPanel3.ColumnCount = 2;
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 49.7446365F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50.2553635F));
-            tableLayoutPanel3.Controls.Add(api_tb, 1, 0);
-            tableLayoutPanel3.Controls.Add(ai_logs_lbl, 0, 1);
-            tableLayoutPanel3.Controls.Add(api_lbl, 0, 0);
-            tableLayoutPanel3.Controls.Add(ai_logs_ck, 1, 1);
-            tableLayoutPanel3.Dock = DockStyle.Fill;
-            tableLayoutPanel3.Location = new Point(10, 30);
-            tableLayoutPanel3.Name = "tableLayoutPanel3";
-            tableLayoutPanel3.RowCount = 2;
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 48.50746F));
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 51.49254F));
-            tableLayoutPanel3.Size = new Size(1191, 110);
-            tableLayoutPanel3.TabIndex = 2;
+            restart_lbl.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            restart_lbl.AutoSize = true;
+            restart_lbl.Font = new Font("Segoe UI", 22.2F, FontStyle.Bold);
+            restart_lbl.ForeColor = Color.White;
+            restart_lbl.Location = new Point(113, 10);
+            restart_lbl.Margin = new Padding(0);
+            restart_lbl.Name = "restart_lbl";
+            restart_lbl.Size = new Size(127, 50);
+            restart_lbl.TabIndex = 0;
+            restart_lbl.Text = "Smart";
+            restart_lbl.TextAlign = ContentAlignment.BottomLeft;
             // 
-            // api_tb
+            // restart_lbl2
             // 
-            api_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            api_tb.BackColor = Color.FromArgb(54, 54, 54);
-            api_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            api_tb.ForeColor = Color.White;
-            api_tb.Location = new Point(592, 11);
-            api_tb.Margin = new Padding(0, 5, 0, 5);
-            api_tb.Name = "api_tb";
-            api_tb.Size = new Size(599, 31);
-            api_tb.TabIndex = 14;
+            restart_lbl2.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            restart_lbl2.AutoSize = true;
+            restart_lbl2.Font = new Font("Segoe UI", 22.2F, FontStyle.Bold);
+            restart_lbl2.ForeColor = Color.White;
+            restart_lbl2.Location = new Point(113, 47);
+            restart_lbl2.Name = "restart_lbl2";
+            restart_lbl2.Size = new Size(118, 50);
+            restart_lbl2.TabIndex = 0;
+            restart_lbl2.Text = "Stock";
             // 
-            // ai_logs_lbl
+            // titlebar_pnl
             // 
-            ai_logs_lbl.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            ai_logs_lbl.AutoSize = true;
-            ai_logs_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            ai_logs_lbl.Location = new Point(3, 53);
-            ai_logs_lbl.Name = "ai_logs_lbl";
-            ai_logs_lbl.Size = new Size(177, 57);
-            ai_logs_lbl.TabIndex = 3;
-            ai_logs_lbl.Text = "Detailed logs for AI";
-            ai_logs_lbl.TextAlign = ContentAlignment.MiddleLeft;
+            titlebar_pnl.BackColor = Color.FromArgb(54, 54, 54);
+            titlebar_pnl.Controls.Add(accent_pnl);
+            titlebar_pnl.Controls.Add(minimize_btn);
+            titlebar_pnl.Controls.Add(maximize_btn);
+            titlebar_pnl.Controls.Add(close_btn);
+            titlebar_pnl.Dock = DockStyle.Top;
+            titlebar_pnl.Location = new Point(304, 1);
+            titlebar_pnl.Margin = new Padding(0);
+            titlebar_pnl.MaximumSize = new Size(0, 53);
+            titlebar_pnl.MinimumSize = new Size(0, 35);
+            titlebar_pnl.Name = "titlebar_pnl";
+            titlebar_pnl.Size = new Size(1598, 53);
+            titlebar_pnl.TabIndex = 1;
+            titlebar_pnl.MouseDown += titlebar_pnl_MouseDown;
             // 
-            // api_lbl
+            // accent_pnl
             // 
-            api_lbl.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            api_lbl.AutoSize = true;
-            api_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            api_lbl.Location = new Point(3, 0);
-            api_lbl.Name = "api_lbl";
-            api_lbl.Size = new Size(79, 53);
-            api_lbl.TabIndex = 2;
-            api_lbl.Text = "API Key";
-            api_lbl.TextAlign = ContentAlignment.MiddleLeft;
+            accent_pnl.BackColor = Color.White;
+            accent_pnl.Controls.Add(workplace_pnl);
+            accent_pnl.Dock = DockStyle.Left;
+            accent_pnl.Location = new Point(0, 0);
+            accent_pnl.Name = "accent_pnl";
+            accent_pnl.Padding = new Padding(0, 7, 0, 0);
+            accent_pnl.Size = new Size(308, 53);
+            accent_pnl.TabIndex = 3;
+            accent_pnl.Tag = "accent";
             // 
-            // ai_logs_ck
+            // workplace_pnl
             // 
-            ai_logs_ck.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
-            ai_logs_ck.AutoSize = true;
-            ai_logs_ck.ForeColor = Color.FromArgb(64, 64, 64);
-            ai_logs_ck.Location = new Point(1170, 56);
-            ai_logs_ck.Name = "ai_logs_ck";
-            ai_logs_ck.Size = new Size(18, 51);
-            ai_logs_ck.TabIndex = 15;
-            ai_logs_ck.UseVisualStyleBackColor = true;
+            workplace_pnl.BackColor = Color.FromArgb(64, 64, 64);
+            workplace_pnl.Controls.Add(workplace_layout);
+            workplace_pnl.Dock = DockStyle.Fill;
+            workplace_pnl.Location = new Point(0, 7);
+            workplace_pnl.Name = "workplace_pnl";
+            workplace_pnl.Size = new Size(308, 46);
+            workplace_pnl.TabIndex = 5;
+            workplace_pnl.Tag = "workplace";
             // 
-            // path_pnl
+            // workplace_layout
             // 
-            path_pnl.Controls.Add(groupBox2);
-            path_pnl.Dock = DockStyle.Top;
-            path_pnl.Location = new Point(20, 181);
-            path_pnl.Margin = new Padding(0);
-            path_pnl.Name = "path_pnl";
-            path_pnl.Padding = new Padding(10);
-            path_pnl.Size = new Size(1231, 218);
-            path_pnl.TabIndex = 6;
+            workplace_layout.ColumnCount = 2;
+            workplace_layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 26.6233768F));
+            workplace_layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 73.3766251F));
+            workplace_layout.Controls.Add(labelCurentChildForm, 1, 0);
+            workplace_layout.Controls.Add(iconCurentChildForm, 0, 0);
+            workplace_layout.Dock = DockStyle.Fill;
+            workplace_layout.Location = new Point(0, 0);
+            workplace_layout.Name = "workplace_layout";
+            workplace_layout.RowCount = 1;
+            workplace_layout.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            workplace_layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            workplace_layout.Size = new Size(308, 46);
+            workplace_layout.TabIndex = 5;
+            workplace_layout.Tag = "workplace";
             // 
-            // groupBox2
+            // labelCurentChildForm
             // 
-            groupBox2.Controls.Add(tableLayoutPanel2);
-            groupBox2.Dock = DockStyle.Fill;
-            groupBox2.ForeColor = Color.White;
-            groupBox2.Location = new Point(10, 10);
-            groupBox2.Margin = new Padding(0);
-            groupBox2.Name = "groupBox2";
-            groupBox2.Padding = new Padding(10);
-            groupBox2.Size = new Size(1211, 198);
-            groupBox2.TabIndex = 4;
-            groupBox2.TabStop = false;
-            groupBox2.Text = "File paths";
+            labelCurentChildForm.BackColor = Color.FromArgb(64, 64, 64);
+            labelCurentChildForm.Font = new Font("Segoe UI", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            labelCurentChildForm.ForeColor = Color.White;
+            labelCurentChildForm.Location = new Point(85, 0);
+            labelCurentChildForm.Margin = new Padding(3, 0, 3, 7);
+            labelCurentChildForm.Name = "labelCurentChildForm";
+            labelCurentChildForm.Size = new Size(218, 39);
+            labelCurentChildForm.TabIndex = 4;
+            labelCurentChildForm.Tag = "workplace";
+            labelCurentChildForm.Text = "Acasă";
+            labelCurentChildForm.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // tableLayoutPanel2
+            // iconCurentChildForm
             // 
-            tableLayoutPanel2.ColumnCount = 2;
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 49.92504F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50.0749664F));
-            tableLayoutPanel2.Controls.Add(settings_lbl, 0, 0);
-            tableLayoutPanel2.Controls.Add(db_lbl, 0, 1);
-            tableLayoutPanel2.Controls.Add(db_tb, 1, 1);
-            tableLayoutPanel2.Controls.Add(logs_lbl, 0, 2);
-            tableLayoutPanel2.Controls.Add(logs_tb, 1, 2);
-            tableLayoutPanel2.Controls.Add(settings_tb, 1, 0);
-            tableLayoutPanel2.Dock = DockStyle.Fill;
-            tableLayoutPanel2.Location = new Point(10, 30);
-            tableLayoutPanel2.Name = "tableLayoutPanel2";
-            tableLayoutPanel2.RowCount = 3;
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 48.50746F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 51.49254F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 45F));
-            tableLayoutPanel2.Size = new Size(1191, 158);
-            tableLayoutPanel2.TabIndex = 2;
+            iconCurentChildForm.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            iconCurentChildForm.BackColor = Color.Transparent;
+            iconCurentChildForm.BackgroundImageLayout = ImageLayout.None;
+            iconCurentChildForm.IconChar = FontAwesome.Sharp.IconChar.HomeLgAlt;
+            iconCurentChildForm.IconColor = Color.White;
+            iconCurentChildForm.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            iconCurentChildForm.IconSize = 40;
+            iconCurentChildForm.Location = new Point(3, 3);
+            iconCurentChildForm.Name = "iconCurentChildForm";
+            iconCurentChildForm.Padding = new Padding(21, 0, 21, 0);
+            iconCurentChildForm.Size = new Size(76, 40);
+            iconCurentChildForm.TabIndex = 3;
+            iconCurentChildForm.TabStop = false;
+            iconCurentChildForm.Tag = "workplace";
             // 
-            // settings_lbl
+            // minimize_btn
             // 
-            settings_lbl.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            settings_lbl.AutoSize = true;
-            settings_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            settings_lbl.Location = new Point(3, 0);
-            settings_lbl.Name = "settings_lbl";
-            settings_lbl.Size = new Size(157, 54);
-            settings_lbl.TabIndex = 7;
-            settings_lbl.Text = "Settings file path";
-            settings_lbl.TextAlign = ContentAlignment.MiddleLeft;
+            minimize_btn.Dock = DockStyle.Right;
+            minimize_btn.FlatAppearance.BorderSize = 0;
+            minimize_btn.FlatStyle = FlatStyle.Flat;
+            minimize_btn.ForeColor = Color.FromArgb(224, 224, 224);
+            minimize_btn.IconChar = FontAwesome.Sharp.IconChar.WindowMinimize;
+            minimize_btn.IconColor = Color.FromArgb(224, 224, 224);
+            minimize_btn.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            minimize_btn.IconSize = 30;
+            minimize_btn.Location = new Point(1316, 0);
+            minimize_btn.Name = "minimize_btn";
+            minimize_btn.Size = new Size(94, 53);
+            minimize_btn.TabIndex = 6;
+            minimize_btn.Tag = "title";
+            minimize_btn.TextAlign = ContentAlignment.MiddleRight;
+            minimize_btn.UseVisualStyleBackColor = true;
+            minimize_btn.Click += minimize_btn_Click;
             // 
-            // db_lbl
+            // maximize_btn
             // 
-            db_lbl.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            db_lbl.AutoSize = true;
-            db_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            db_lbl.Location = new Point(3, 54);
-            db_lbl.Name = "db_lbl";
-            db_lbl.Size = new Size(141, 58);
-            db_lbl.TabIndex = 8;
-            db_lbl.Text = "Data Base path";
-            db_lbl.TextAlign = ContentAlignment.MiddleLeft;
+            maximize_btn.Dock = DockStyle.Right;
+            maximize_btn.FlatAppearance.BorderSize = 0;
+            maximize_btn.FlatStyle = FlatStyle.Flat;
+            maximize_btn.ForeColor = Color.FromArgb(224, 224, 224);
+            maximize_btn.IconChar = FontAwesome.Sharp.IconChar.WindowMaximize;
+            maximize_btn.IconColor = Color.FromArgb(224, 224, 224);
+            maximize_btn.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            maximize_btn.IconSize = 30;
+            maximize_btn.Location = new Point(1410, 0);
+            maximize_btn.Name = "maximize_btn";
+            maximize_btn.Size = new Size(94, 53);
+            maximize_btn.TabIndex = 7;
+            maximize_btn.Tag = "title";
+            maximize_btn.TextAlign = ContentAlignment.MiddleRight;
+            maximize_btn.UseVisualStyleBackColor = true;
+            maximize_btn.Click += maximize_btn_Click;
             // 
-            // db_tb
+            // close_btn
             // 
-            db_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            db_tb.BackColor = Color.FromArgb(54, 54, 54);
-            db_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            db_tb.ForeColor = Color.White;
-            db_tb.Location = new Point(594, 67);
-            db_tb.Margin = new Padding(0, 5, 0, 5);
-            db_tb.Name = "db_tb";
-            db_tb.Size = new Size(597, 31);
-            db_tb.TabIndex = 12;
+            close_btn.Dock = DockStyle.Right;
+            close_btn.FlatAppearance.BorderSize = 0;
+            close_btn.FlatStyle = FlatStyle.Flat;
+            close_btn.ForeColor = Color.FromArgb(224, 224, 224);
+            close_btn.IconChar = FontAwesome.Sharp.IconChar.Multiply;
+            close_btn.IconColor = Color.FromArgb(224, 224, 224);
+            close_btn.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            close_btn.IconSize = 30;
+            close_btn.Location = new Point(1504, 0);
+            close_btn.Name = "close_btn";
+            close_btn.Size = new Size(94, 53);
+            close_btn.TabIndex = 8;
+            close_btn.Tag = "title";
+            close_btn.TextAlign = ContentAlignment.MiddleRight;
+            close_btn.UseVisualStyleBackColor = true;
+            close_btn.Click += close_btn_Click;
             // 
-            // logs_lbl
+            // desktop_pnl
             // 
-            logs_lbl.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            logs_lbl.AutoSize = true;
-            logs_lbl.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
-            logs_lbl.Location = new Point(3, 112);
-            logs_lbl.Name = "logs_lbl";
-            logs_lbl.Size = new Size(150, 46);
-            logs_lbl.TabIndex = 9;
-            logs_lbl.Text = "Logging file path";
-            logs_lbl.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // logs_tb
-            // 
-            logs_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            logs_tb.BackColor = Color.FromArgb(54, 54, 54);
-            logs_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            logs_tb.ForeColor = Color.White;
-            logs_tb.Location = new Point(594, 119);
-            logs_tb.Margin = new Padding(0, 5, 0, 5);
-            logs_tb.Name = "logs_tb";
-            logs_tb.Size = new Size(597, 31);
-            logs_tb.TabIndex = 13;
-            // 
-            // settings_tb
-            // 
-            settings_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            settings_tb.BackColor = Color.FromArgb(54, 54, 54);
-            settings_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            settings_tb.ForeColor = Color.White;
-            settings_tb.Location = new Point(594, 11);
-            settings_tb.Margin = new Padding(0, 5, 0, 5);
-            settings_tb.Name = "settings_tb";
-            settings_tb.Size = new Size(597, 31);
-            settings_tb.TabIndex = 11;
-            // 
-            // theme_pnl
-            // 
-            theme_pnl.Controls.Add(groupBox1);
-            theme_pnl.Dock = DockStyle.Top;
-            theme_pnl.Location = new Point(20, 20);
-            theme_pnl.Margin = new Padding(0);
-            theme_pnl.Name = "theme_pnl";
-            theme_pnl.Padding = new Padding(10);
-            theme_pnl.Size = new Size(1231, 161);
-            theme_pnl.TabIndex = 5;
-            // 
-            // groupBox1
-            // 
-            groupBox1.Controls.Add(tableLayoutPanel1);
-            groupBox1.Dock = DockStyle.Fill;
-            groupBox1.ForeColor = Color.White;
-            groupBox1.Location = new Point(10, 10);
-            groupBox1.Margin = new Padding(0);
-            groupBox1.Name = "groupBox1";
-            groupBox1.Padding = new Padding(10);
-            groupBox1.Size = new Size(1211, 141);
-            groupBox1.TabIndex = 3;
-            groupBox1.TabStop = false;
-            groupBox1.Text = "Theme and Preferences";
-            // 
-            // tableLayoutPanel1
-            // 
-            tableLayoutPanel1.ColumnCount = 2;
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.Controls.Add(languages_cb, 1, 1);
-            tableLayoutPanel1.Controls.Add(language_lbl, 0, 1);
-            tableLayoutPanel1.Controls.Add(theme_lbl, 0, 0);
-            tableLayoutPanel1.Controls.Add(themes_cb, 1, 0);
-            tableLayoutPanel1.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Location = new Point(10, 30);
-            tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 2;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 48.50746F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 51.49254F));
-            tableLayoutPanel1.Size = new Size(1191, 101);
-            tableLayoutPanel1.TabIndex = 2;
-            // 
-            // languages_cb
-            // 
-            languages_cb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            languages_cb.BackColor = Color.FromArgb(54, 54, 54);
-            languages_cb.FlatStyle = FlatStyle.Flat;
-            languages_cb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            languages_cb.ForeColor = Color.White;
-            languages_cb.FormattingEnabled = true;
-            languages_cb.Location = new Point(595, 58);
-            languages_cb.Margin = new Padding(0, 5, 0, 5);
-            languages_cb.Name = "languages_cb";
-            languages_cb.Size = new Size(596, 33);
-            languages_cb.TabIndex = 5;
-            // 
-            // language_lbl
-            // 
-            language_lbl.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            language_lbl.AutoSize = true;
-            language_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            language_lbl.Location = new Point(3, 48);
-            language_lbl.Name = "language_lbl";
-            language_lbl.Size = new Size(95, 53);
-            language_lbl.TabIndex = 3;
-            language_lbl.Text = "Language";
-            language_lbl.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // theme_lbl
-            // 
-            theme_lbl.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            theme_lbl.AutoSize = true;
-            theme_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            theme_lbl.Location = new Point(3, 0);
-            theme_lbl.Name = "theme_lbl";
-            theme_lbl.Size = new Size(70, 48);
-            theme_lbl.TabIndex = 2;
-            theme_lbl.Text = "Theme";
-            theme_lbl.TextAlign = ContentAlignment.MiddleLeft;
+            desktop_pnl.Dock = DockStyle.Fill;
+            desktop_pnl.Location = new Point(304, 54);
+            desktop_pnl.Name = "desktop_pnl";
+            desktop_pnl.Size = new Size(1598, 1048);
+            desktop_pnl.TabIndex = 2;
+            desktop_pnl.Tag = "workplace";
             // 
             // MenuForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.FromArgb(54, 54, 54);
-            ClientSize = new Size(1331, 762);
-            Controls.Add(base_pnl);
+            BackColor = Color.FromArgb(64, 64, 64);
+            ClientSize = new Size(1902, 1102);
+            Controls.Add(desktop_pnl);
+            Controls.Add(titlebar_pnl);
+            Controls.Add(menu_pnl);
+            FormBorderStyle = FormBorderStyle.None;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "MenuForm";
-            Padding = new Padding(30);
-            Text = "Form1";
-            base_pnl.ResumeLayout(false);
-            ai_pnl.ResumeLayout(false);
-            groupBox3.ResumeLayout(false);
-            tableLayoutPanel3.ResumeLayout(false);
-            tableLayoutPanel3.PerformLayout();
-            path_pnl.ResumeLayout(false);
-            groupBox2.ResumeLayout(false);
-            tableLayoutPanel2.ResumeLayout(false);
-            tableLayoutPanel2.PerformLayout();
-            theme_pnl.ResumeLayout(false);
-            groupBox1.ResumeLayout(false);
-            tableLayoutPanel1.ResumeLayout(false);
-            tableLayoutPanel1.PerformLayout();
+            Padding = new Padding(0, 1, 0, 0);
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Gestiune Cărți";
+            Load += MenuForm_Load;
+            menu_pnl.ResumeLayout(false);
+            menu_buttons_pnl.ResumeLayout(false);
+            logo_pnl.ResumeLayout(false);
+            logo_pnl.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)iconPictureBox1).EndInit();
+            titlebar_pnl.ResumeLayout(false);
+            accent_pnl.ResumeLayout(false);
+            workplace_pnl.ResumeLayout(false);
+            workplace_layout.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)iconCurentChildForm).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
 
-        private Button apply_btn;
-        private ComboBox themes_cb;
-        private Panel base_pnl;
-        private TableLayoutPanel tableLayoutPanel1;
-        private Label theme_lbl;
-        private ComboBox languages_cb;
-        private Label language_lbl;
-        private GroupBox groupBox1;
-        private GroupBox groupBox2;
-        private TableLayoutPanel tableLayoutPanel2;
-        private TextBox settings_tb;
-        private Label settings_lbl;
-        private GroupBox groupBox3;
-        private TableLayoutPanel tableLayoutPanel3;
-        private TextBox api_tb;
-        private Label ai_logs_lbl;
-        private Label api_lbl;
-        private CheckBox ai_logs_ck;
-        private Label db_lbl;
-        private TextBox db_tb;
-        private Label logs_lbl;
-        private TextBox logs_tb;
-        private Panel ai_pnl;
-        private Panel path_pnl;
-        private Panel theme_pnl;
-        private Panel margin_pnl;
+        private Panel menu_pnl;
+        private FontAwesome.Sharp.IconButton add_btn;
+        private Panel logo_pnl;
+        private Panel titlebar_pnl;
+        private FontAwesome.Sharp.IconButton close_btn;
+        private FontAwesome.Sharp.IconButton maximize_btn;
+        private FontAwesome.Sharp.IconButton minimize_btn;
+        private FontAwesome.Sharp.IconPictureBox iconCurentChildForm;
+        private Label labelCurentChildForm;
+        private Panel accent_pnl;
+        private Panel desktop_pnl;
+        private Label restart_lbl2;
+        private Label restart_lbl;
+        private Panel workplace_pnl;
+        private TableLayoutPanel workplace_layout;
+        private Panel menu_buttons_pnl;
+        private FontAwesome.Sharp.IconButton settings_btn;
+        private FontAwesome.Sharp.IconPictureBox iconPictureBox1;
     }
 }

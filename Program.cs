@@ -1,5 +1,6 @@
 using SmartStock.Classes.Settings;
 using SmartStock.Classes.Utils;
+using SmartStock.Forms;
 
 namespace SmartStock
 {

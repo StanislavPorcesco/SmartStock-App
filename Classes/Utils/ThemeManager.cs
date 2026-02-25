@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FontAwesome.Sharp;
 
 namespace SmartStock.Classes.Utils
 {
@@ -19,23 +20,20 @@ namespace SmartStock.Classes.Utils
         public static string CurrentThemeName { get; private set; } = "Light";
 
         // Definiția paletelor de culori
-        private static readonly Dictionary<string, ThemePalette> Themes = new Dictionary<string, ThemePalette>
+        public static readonly Dictionary<string, ThemePalette> Themes = new Dictionary<string, ThemePalette>
         {
             { "Dark", new ThemePalette { 
-                // 1. Panelurile și Fundalul Formei (64, 64, 64)
-                PanelBack = Color.FromArgb(64, 64, 64),
-                FormBackground = Color.FromArgb(54,54,54),
-        
-                // 2. Controalele: Butoane, ComboBox, TextBox (54, 54, 54)
-                ControlBack = Color.FromArgb(54, 54, 54),
-                Accent = Color.FromArgb(54, 54, 54), // Folosit pentru butoane
-        
+                DarkColor = Color.FromArgb(54,54,54),
+                LightColor = Color.FromArgb(64,64,64),
+                HoverColor = Color.FromArgb(74,74,74),
+                Accent = Color.White,
                 Text = Color.WhiteSmoke
             }},
             { "Light", new ThemePalette {
-                PanelBack = Color.FromArgb(240, 240, 240),
-                ControlBack = Color.White,
-                Accent = Color.LightGray,
+                DarkColor = Color.FromArgb(240, 240, 240),
+                LightColor = Color.White,
+                HoverColor = Color.FromArgb(220, 220, 220),
+                Accent = Color.Black,
                 Text = Color.Black
              }}
         };
@@ -57,7 +55,7 @@ namespace SmartStock.Classes.Utils
             // Dacă controlul este o Formă, îi schimbăm fundalul principal
             if (parent is Form frm)
             {
-                frm.BackColor = theme.FormBackground;
+                frm.BackColor = theme.LightColor;
             }
 
             foreach (Control c in parent.Controls)
@@ -80,54 +78,91 @@ namespace SmartStock.Classes.Utils
             // Personalizare logică pe tipuri de controale
             switch (c)
             {
+                case TableLayoutPanel flp:
+                    if (flp.Tag != null && flp.Tag.ToString() == "workplace")
+                        flp.BackColor = theme.LightColor;
+                    break;
                 case Button btn:
-                    btn.BackColor = theme.Accent;
+                    if(btn is IconButton icn)
+                    {
+                        icn.IconColor = theme.Text;
+                    }
+                    btn.FlatAppearance.MouseOverBackColor = theme.HoverColor;
+                    btn.FlatAppearance.BorderSize = 0;
                     btn.FlatStyle = FlatStyle.Flat;
-                    btn.FlatAppearance.BorderSize = 1;
+                    if (btn.Tag == "menu" || btn.Tag == "title")
+                    {
+                        btn.BackColor = Color.Transparent;
+                    }
+                    else
+                    {
+                        btn.BackColor = theme.LightColor;
+                        btn.FlatStyle = FlatStyle.Flat;
+                        btn.FlatAppearance.BorderSize = 1;
+                    }                  
                     break;
 
                 case TextBox txt:
-                    txt.BackColor = theme.ControlBack;
+                    txt.BackColor = theme.LightColor;
                     txt.BorderStyle = BorderStyle.Fixed3D;
                     break;
 
                 case Label lbl:
-                    // Etichetele de obicei moștenesc fundalul părintelui
-                    lbl.BackColor = Color.Transparent;
+                    if (lbl.Tag != null && lbl.Tag.ToString() == "workplace")
+                        lbl.BackColor = theme.LightColor;
+                    else
+                        lbl.BackColor = Color.Transparent;
                     break;
 
                 case DataGridView dgv:
-                    dgv.BackgroundColor = theme.ControlBack;
-                    dgv.DefaultCellStyle.BackColor = theme.ControlBack;
+                    dgv.BackgroundColor = theme.DarkColor;
+                    dgv.DefaultCellStyle.BackColor = theme.LightColor;
                     dgv.DefaultCellStyle.ForeColor = theme.Text;
                     break;
                 case ComboBox combo:
                     combo.FlatStyle = FlatStyle.Flat; 
-                    combo.BackColor = theme.ControlBack;
+                    combo.BackColor = theme.LightColor;
                     combo.ForeColor = theme.Text;
                     break;
                 case Panel pnl:
-                    pnl.BackColor = theme.PanelBack;
+                    if(pnl.Tag != null && pnl.Tag.ToString() == "menu")
+                    {
+                        pnl.BackColor = theme.DarkColor;
+                    }
+                    else if(pnl.Tag != null && pnl.Tag.ToString() == "base")
+                        pnl.BackColor = theme.DarkColor;
+                    else if (pnl.Tag != null && pnl.Tag.ToString() == "accent")
+                        pnl.BackColor = theme.Accent;
+                    else if (pnl.Tag != null && pnl.Tag.ToString() == "workplace")
+                        pnl.BackColor = theme.LightColor;
+                    else
+                        pnl.BackColor = theme.DarkColor;
                     break;
                 case GroupBox grp:
-                    grp.BackColor = theme.PanelBack;
+                    grp.BackColor = theme.DarkColor;
                     break;
                  case CheckBox chk:
-                    chk.BackColor = theme.PanelBack;
+                    chk.BackColor = theme.DarkColor;
+                    break;
+                case IconPictureBox pic:
+                    pic.BackColor = Color.Transparent;
+                    pic.IconColor = theme.Text;
+                    if (pic.Tag != null && pic.Tag.ToString() == "workplace")
+                        pic.BackColor = theme.LightColor;
                     break;
                 default:
-                    c.BackColor = theme.ControlBack;
+                    c.BackColor = Color.Red;
                     break;
             }
         }
 
         public class ThemePalette
         {
-            public Color PanelBack { get; set; }
-            public Color FormBackground { get; set; }
-            public Color Text { get; set; }
+            public Color LightColor { get; set; }
+            public Color DarkColor { get; set; }
+            public Color HoverColor { get; set; }
             public Color Accent { get; set; }
-            public Color ControlBack { get; set; }
+            public Color Text { get; set; }
         }
     }
 }
