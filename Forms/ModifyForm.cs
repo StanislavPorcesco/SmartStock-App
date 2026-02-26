@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace SmartStock.Forms
 {
-    public partial class MenuFormOld : Form
+    public partial class ModifyForm : Form
     {
-        public MenuFormOld()
+        public ModifyForm()
         {
             InitializeComponent();
         }

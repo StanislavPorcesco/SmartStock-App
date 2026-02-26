@@ -33,14 +33,14 @@
             base_pnl = new Panel();
             margin_pnl = new Panel();
             ai_pnl = new Panel();
-            groupBox3 = new GroupBox();
+            ai_settings_gb = new GroupBox();
             tableLayoutPanel3 = new TableLayoutPanel();
             api_tb = new TextBox();
             ai_logs_lbl = new Label();
             api_lbl = new Label();
             ai_logs_ck = new CheckBox();
             path_pnl = new Panel();
-            groupBox2 = new GroupBox();
+            paths_gb = new GroupBox();
             tableLayoutPanel2 = new TableLayoutPanel();
             settings_lbl = new Label();
             db_lbl = new Label();
@@ -49,20 +49,20 @@
             logs_tb = new TextBox();
             settings_tb = new TextBox();
             theme_pnl = new Panel();
-            groupBox1 = new GroupBox();
+            preferences_gb = new GroupBox();
             tableLayoutPanel1 = new TableLayoutPanel();
             languages_cb = new ComboBox();
             language_lbl = new Label();
             theme_lbl = new Label();
             base_pnl.SuspendLayout();
             ai_pnl.SuspendLayout();
-            groupBox3.SuspendLayout();
+            ai_settings_gb.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
             path_pnl.SuspendLayout();
-            groupBox2.SuspendLayout();
+            paths_gb.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             theme_pnl.SuspendLayout();
-            groupBox1.SuspendLayout();
+            preferences_gb.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
@@ -128,7 +128,7 @@
             // 
             // ai_pnl
             // 
-            ai_pnl.Controls.Add(groupBox3);
+            ai_pnl.Controls.Add(ai_settings_gb);
             ai_pnl.Dock = DockStyle.Top;
             ai_pnl.Location = new Point(20, 399);
             ai_pnl.Name = "ai_pnl";
@@ -136,19 +136,19 @@
             ai_pnl.Size = new Size(1231, 170);
             ai_pnl.TabIndex = 7;
             // 
-            // groupBox3
+            // ai_settings_gb
             // 
-            groupBox3.Controls.Add(tableLayoutPanel3);
-            groupBox3.Dock = DockStyle.Fill;
-            groupBox3.ForeColor = Color.White;
-            groupBox3.Location = new Point(10, 10);
-            groupBox3.Margin = new Padding(0);
-            groupBox3.Name = "groupBox3";
-            groupBox3.Padding = new Padding(10);
-            groupBox3.Size = new Size(1211, 150);
-            groupBox3.TabIndex = 4;
-            groupBox3.TabStop = false;
-            groupBox3.Text = "AI Settings";
+            ai_settings_gb.Controls.Add(tableLayoutPanel3);
+            ai_settings_gb.Dock = DockStyle.Fill;
+            ai_settings_gb.ForeColor = Color.White;
+            ai_settings_gb.Location = new Point(10, 10);
+            ai_settings_gb.Margin = new Padding(0);
+            ai_settings_gb.Name = "ai_settings_gb";
+            ai_settings_gb.Padding = new Padding(10);
+            ai_settings_gb.Size = new Size(1211, 150);
+            ai_settings_gb.TabIndex = 4;
+            ai_settings_gb.TabStop = false;
+            ai_settings_gb.Text = "AI Settings";
             // 
             // tableLayoutPanel3
             // 
@@ -217,7 +217,7 @@
             // 
             // path_pnl
             // 
-            path_pnl.Controls.Add(groupBox2);
+            path_pnl.Controls.Add(paths_gb);
             path_pnl.Dock = DockStyle.Top;
             path_pnl.Location = new Point(20, 181);
             path_pnl.Margin = new Padding(0);
@@ -226,19 +226,19 @@
             path_pnl.Size = new Size(1231, 218);
             path_pnl.TabIndex = 6;
             // 
-            // groupBox2
+            // paths_gb
             // 
-            groupBox2.Controls.Add(tableLayoutPanel2);
-            groupBox2.Dock = DockStyle.Fill;
-            groupBox2.ForeColor = Color.White;
-            groupBox2.Location = new Point(10, 10);
-            groupBox2.Margin = new Padding(0);
-            groupBox2.Name = "groupBox2";
-            groupBox2.Padding = new Padding(10);
-            groupBox2.Size = new Size(1211, 198);
-            groupBox2.TabIndex = 4;
-            groupBox2.TabStop = false;
-            groupBox2.Text = "File paths";
+            paths_gb.Controls.Add(tableLayoutPanel2);
+            paths_gb.Dock = DockStyle.Fill;
+            paths_gb.ForeColor = Color.White;
+            paths_gb.Location = new Point(10, 10);
+            paths_gb.Margin = new Padding(0);
+            paths_gb.Name = "paths_gb";
+            paths_gb.Padding = new Padding(10);
+            paths_gb.Size = new Size(1211, 198);
+            paths_gb.TabIndex = 4;
+            paths_gb.TabStop = false;
+            paths_gb.Text = "File paths";
             // 
             // tableLayoutPanel2
             // 
@@ -335,7 +335,7 @@
             // 
             // theme_pnl
             // 
-            theme_pnl.Controls.Add(groupBox1);
+            theme_pnl.Controls.Add(preferences_gb);
             theme_pnl.Dock = DockStyle.Top;
             theme_pnl.Location = new Point(20, 20);
             theme_pnl.Margin = new Padding(0);
@@ -344,19 +344,19 @@
             theme_pnl.Size = new Size(1231, 161);
             theme_pnl.TabIndex = 5;
             // 
-            // groupBox1
+            // preferences_gb
             // 
-            groupBox1.Controls.Add(tableLayoutPanel1);
-            groupBox1.Dock = DockStyle.Fill;
-            groupBox1.ForeColor = Color.White;
-            groupBox1.Location = new Point(10, 10);
-            groupBox1.Margin = new Padding(0);
-            groupBox1.Name = "groupBox1";
-            groupBox1.Padding = new Padding(10);
-            groupBox1.Size = new Size(1211, 141);
-            groupBox1.TabIndex = 3;
-            groupBox1.TabStop = false;
-            groupBox1.Text = "Theme and Preferences";
+            preferences_gb.Controls.Add(tableLayoutPanel1);
+            preferences_gb.Dock = DockStyle.Fill;
+            preferences_gb.ForeColor = Color.White;
+            preferences_gb.Location = new Point(10, 10);
+            preferences_gb.Margin = new Padding(0);
+            preferences_gb.Name = "preferences_gb";
+            preferences_gb.Padding = new Padding(10);
+            preferences_gb.Size = new Size(1211, 141);
+            preferences_gb.TabIndex = 3;
+            preferences_gb.TabStop = false;
+            preferences_gb.Text = "Theme and Preferences";
             // 
             // tableLayoutPanel1
             // 
@@ -427,15 +427,15 @@
             Text = "Form1";
             base_pnl.ResumeLayout(false);
             ai_pnl.ResumeLayout(false);
-            groupBox3.ResumeLayout(false);
+            ai_settings_gb.ResumeLayout(false);
             tableLayoutPanel3.ResumeLayout(false);
             tableLayoutPanel3.PerformLayout();
             path_pnl.ResumeLayout(false);
-            groupBox2.ResumeLayout(false);
+            paths_gb.ResumeLayout(false);
             tableLayoutPanel2.ResumeLayout(false);
             tableLayoutPanel2.PerformLayout();
             theme_pnl.ResumeLayout(false);
-            groupBox1.ResumeLayout(false);
+            preferences_gb.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
             ResumeLayout(false);
@@ -450,12 +450,12 @@
         private Label theme_lbl;
         private ComboBox languages_cb;
         private Label language_lbl;
-        private GroupBox groupBox1;
-        private GroupBox groupBox2;
+        private GroupBox preferences_gb;
+        private GroupBox paths_gb;
         private TableLayoutPanel tableLayoutPanel2;
         private TextBox settings_tb;
         private Label settings_lbl;
-        private GroupBox groupBox3;
+        private GroupBox ai_settings_gb;
         private TableLayoutPanel tableLayoutPanel3;
         private TextBox api_tb;
         private Label ai_logs_lbl;

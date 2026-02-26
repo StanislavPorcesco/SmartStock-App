@@ -147,8 +147,19 @@ namespace SmartStock.Classes.Utils
                 case IconPictureBox pic:
                     pic.BackColor = Color.Transparent;
                     pic.IconColor = theme.Text;
+                    if (pic.Tag != null && pic.Tag.ToString() == "menu")
+                        pic.BackColor = theme.DarkColor;
                     if (pic.Tag != null && pic.Tag.ToString() == "workplace")
                         pic.BackColor = theme.LightColor;
+                    break;
+                case DateTimePicker date:
+                    date.Format = DateTimePickerFormat.Custom;
+                    date.CalendarMonthBackground = theme.DarkColor;
+                    date.CalendarTitleBackColor = theme.LightColor;
+                    date.CalendarTitleForeColor = theme.Text;
+                    date.CalendarTrailingForeColor = theme.Text;
+                    date.BackColor = theme.LightColor;
+                    date.ForeColor = theme.Text;
                     break;
                 default:
                     c.BackColor = Color.Red;
@@ -163,6 +174,10 @@ namespace SmartStock.Classes.Utils
             public Color HoverColor { get; set; }
             public Color Accent { get; set; }
             public Color Text { get; set; }
+        }
+        public static ThemePalette GetCurrentPalette()
+        {
+            return Themes[CurrentThemeName];
         }
     }
 }

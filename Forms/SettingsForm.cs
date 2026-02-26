@@ -11,7 +11,6 @@ namespace SmartStock
             populateOptions();
             setRightIndex();
             ThemeManager.Apply(this);
-            // Subscribe to theme changes to update this form when the theme changes
             ThemeManager.OnThemeChanged += HandleThemeUpdate;
         }
 
@@ -42,23 +41,41 @@ namespace SmartStock
 
         private void apply_btn_Click(object sender, EventArgs e)
         {
-            // 1. Preluăm valorile selectate de utilizator din controalele UI
             string selectedTheme = themes_cb.SelectedItem?.ToString() ?? "Light";
-            //string selectedLanguage = options_cb.SelectedItem?.ToString() ?? "ro-RO";
-
-            // 2. Actualizăm obiectul global de setări
             SettingsManager.Current.Theme = selectedTheme;
-            //SettingsManager.Current.Language = selectedLanguage;
-
-            // 3. Salvăm fizic în appSettings.json
             SettingsManager.Save();
-
-            // 4. Aplicăm tema imediat (pentru feedback vizual instant)
             ThemeManager.SetTheme(selectedTheme);
-            ThemeManager.Apply(this); // Aplicăm tema doar pe acest formular, restul vor fi aplicate la repornire
+            ThemeManager.Apply(this);
+            this.Invalidate(true);
+            this.Update();
+            this.Refresh();
 
-            // 5. Opțional: Notificăm utilizatorul
-            MessageBox.Show("Settings saved succesful!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            ApplyThemeToParentForm();
+
+            MessageBox.Show("Settings saved successfully!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void ApplyThemeToParentForm()
+        {
+            try
+            {
+                foreach (Form form in Application.OpenForms)
+                {
+                    if (form.Name == "MenuForm" || form.GetType().Name == "MenuForm")
+                    {
+                        ThemeManager.Apply(form);
+                        form.Invalidate(true);
+                        form.Update();
+                        form.Refresh();
+
+                        return;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error updating parent form: {ex.Message}");
+            }
         }
     }
 }

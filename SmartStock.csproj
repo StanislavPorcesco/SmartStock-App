@@ -17,6 +17,24 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Forms\User Control\AddExternalFactor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\AddSale.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\AddCustomer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\AddTransaction.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\AddSupplier.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\BaseAddProduct.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

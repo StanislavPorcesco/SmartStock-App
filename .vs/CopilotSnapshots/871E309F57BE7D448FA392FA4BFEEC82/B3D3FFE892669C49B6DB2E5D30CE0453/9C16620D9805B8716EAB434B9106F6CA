@@ -1,0 +1,105 @@
+﻿using SmartStock.Classes.Settings;
+using SmartStock.Classes.Utils;
+
+namespace SmartStock
+{
+    public partial class SettingsForm : Form
+    {
+        public SettingsForm()
+        {
+            InitializeComponent();
+            populateOptions();
+            setRightIndex();
+            ThemeManager.Apply(this);
+            // Subscribe to theme changes to update this form when the theme changes
+            ThemeManager.OnThemeChanged += HandleThemeUpdate;
+        }
+
+        private void HandleThemeUpdate()
+        {
+            ThemeManager.Apply(this);
+            this.Refresh();
+        }
+
+        private void setRightIndex()
+        {
+            if (SettingsManager.Current.Theme == "Dark")
+            {
+                themes_cb.SelectedIndex = 0;
+            }
+            else if (SettingsManager.Current.Theme == "Light")
+            {
+                themes_cb.SelectedIndex = 1;
+            }
+        }
+        public void populateOptions()
+        {
+            themes_cb.Items.Clear();
+            themes_cb.Items.AddRange(new object[] {
+                "Dark", "Light"
+            });
+        }
+
+        private void apply_btn_Click(object sender, EventArgs e)
+        {
+            // 1. Preluăm valorile selectate de utilizator din controalele UI
+            string selectedTheme = themes_cb.SelectedItem?.ToString() ?? "Light";
+            //string selectedLanguage = options_cb.SelectedItem?.ToString() ?? "ro-RO";
+
+            // 2. Actualizăm obiectul global de setări
+            SettingsManager.Current.Theme = selectedTheme;
+            //SettingsManager.Current.Language = selectedLanguage;
+
+            // 3. Salvăm fizic în appSettings.json
+            SettingsManager.Save();
+
+            // 4. Aplicăm tema imediat (pentru feedback vizual instant)
+            ThemeManager.SetTheme(selectedTheme);
+
+            // 5. Apply theme to this form and force refresh
+            ThemeManager.Apply(this);
+            this.Invalidate(true);
+            this.Update();
+            this.Refresh();
+
+            // 6. Also apply theme to the parent MenuForm (main form) to ensure all UI elements update
+            // This is necessary because the parent form doesn't always refresh child controls automatically
+            ApplyThemeToParentForm();
+
+            // 7. Opțional: Notificăm utilizatorul
+            MessageBox.Show("Settings saved successfully!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        /// <summary>
+        /// Finds the parent MenuForm and applies the theme to it and all its child controls.
+        /// This ensures that theme changes in the Settings form immediately reflect in the parent form.
+        /// </summary>
+        private void ApplyThemeToParentForm()
+        {
+            try
+            {
+                // Find the main MenuForm in the open forms
+                foreach (Form form in Application.OpenForms)
+                {
+                    if (form.Name == "MenuForm" || form.GetType().Name == "MenuForm")
+                    {
+                        // Apply theme to the parent form
+                        ThemeManager.Apply(form);
+
+                        // Force complete refresh
+                        form.Invalidate(true);
+                        form.Update();
+                        form.Refresh();
+
+                        return; // Found and updated the parent form
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Silently handle any errors - the theme will still be applied on restart
+                System.Diagnostics.Debug.WriteLine($"Error updating parent form: {ex.Message}");
+            }
+        }
+    }
+}

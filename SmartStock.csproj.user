@@ -1,20 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Compile Update="Classes\Utils\DoubleBufferedPanel.cs">
-      <SubType>Component</SubType>
+    <Compile Update="Forms\User Control\AddCategory.cs">
+      <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="Forms\AddForm.cs">
+    <Compile Update="Forms\AnalyzeForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\MenuForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\MenuFormOld.cs">
+    <Compile Update="Forms\ModifyForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\SearchForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\SettingsForm.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\AddProduct.cs">
+      <SubType>UserControl</SubType>
     </Compile>
   </ItemGroup>
 </Project>

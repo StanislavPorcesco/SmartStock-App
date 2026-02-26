@@ -6,13 +6,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Media;
-using System.Drawing;
 
 namespace SmartStock.Forms
 {
@@ -25,43 +26,49 @@ namespace SmartStock.Forms
         public MenuForm()
         {
             InitializeComponent();
-           
-            ThemeManager.Apply(this);
-            ThemeManager.OnThemeChanged += HandleThemeUpdate;          
+            ThemeManager.OnThemeChanged += HandleThemeUpdate;
 
             leftBorderBtn = new Panel();
             leftBorderBtn.Size = new Size(7, 75);
             menu_pnl.Controls.Add(leftBorderBtn);
-            maximize_btn_Click(this, EventArgs.Empty);
-            OpenChildForm(new SettingsForm());
+            OpenChildForm(new BaseAddProduct());
 
-        }
-        //Structuri
-        public struct RGBcolor
-        {
-            public static System.Drawing.Color color1 = System.Drawing.Color.FromArgb(255, 255, 255);
-            public static System.Drawing.Color color2 = System.Drawing.Color.FromArgb(64, 64, 64);
-            public static System.Drawing.Color color3 = System.Drawing.Color.FromArgb(54, 54, 54);
         }
 
         //Metode 
+
         private void HandleThemeUpdate()
         {
             ThemeManager.Apply(this);
+            ApplyThemeToChildForms();
             this.Refresh();
         }
+
+        private void ApplyThemeToChildForms()
+        {
+            foreach (Control control in desktop_pnl.Controls)
+            {
+                if (control is Form childForm)
+                {
+                    ThemeManager.Apply(childForm);
+                    childForm.Invalidate(true);
+                    childForm.Update();
+                    childForm.Refresh();
+                }
+            }
+        }
+
         private void ActivateButton(object senderBtn)
         {
             DisableButton();
             if (senderBtn != null)
             {
                 currentBtn = (IconButton)senderBtn;
-                //currentBtn.BackColor = System.Drawing.Color.FromArgb(64, 64, 64);
-                //currentBtn.ForeColor = RGBcolor.color1;
                 currentBtn.TextAlign = ContentAlignment.MiddleLeft;
+                currentBtn.BackColor = ThemeManager.GetCurrentPalette().LightColor;
 
                 //Left border button
-                leftBorderBtn.BackColor = ThemeManager.CurrentThemeName == "Dark" ? System.Drawing.Color.White : System.Drawing.Color.Black;
+                leftBorderBtn.BackColor = ThemeManager.GetCurrentPalette().Accent;
                 int buttonPositionInMenu = currentBtn.Location.Y + menu_buttons_pnl.Location.Y;
                 leftBorderBtn.Location = new Point(0, buttonPositionInMenu);
                 leftBorderBtn.Height = currentBtn.Height;
@@ -82,10 +89,8 @@ namespace SmartStock.Forms
         {
             if (currentBtn != null)
             {
-                //currentBtn.BackColor = RGBcolor.color3;
-                //currentBtn.ForeColor = RGBcolor.color1;
                 currentBtn.TextAlign = ContentAlignment.MiddleCenter;
-                //currentBtn.IconColor = RGBcolor.color1;
+                currentBtn.BackColor = ThemeManager.GetCurrentPalette().DarkColor;
                 currentBtn.TextImageRelation = TextImageRelation.ImageBeforeText;
                 currentBtn.ImageAlign = ContentAlignment.MiddleLeft;
                 leftBorderBtn.Location = new Point(-10, currentBtn.Location.Y);
@@ -97,7 +102,6 @@ namespace SmartStock.Forms
         {
             if (currentChildForm != null)
             {
-                //open only one form
                 currentChildForm.Close();
             }
 
@@ -107,69 +111,43 @@ namespace SmartStock.Forms
             childForm.FormBorderStyle = FormBorderStyle.None;
             childForm.Dock = DockStyle.Fill;
 
-            // Apply the current theme to the child form before adding it to the panel
-            // This ensures the form respects the user's theme preference
             ThemeManager.Apply(childForm);
 
             desktop_pnl.Controls.Add(childForm);
             desktop_pnl.Tag = childForm;
             childForm.BringToFront();
-            // Don't override with hardcoded color - let the theme handle the BackColor
-            // childForm.BackColor = RGBcolor.color2;
             childForm.Show();
-        }
-
-        private void MenuForm_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void close_btn_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
-
-        private void minimize_btn_Click(object sender, EventArgs e)
-        {
-            WindowState = FormWindowState.Minimized;
-        }
-        private void maximize_btn_Click(object sender, EventArgs e)
-        {
-            if (WindowState == FormWindowState.Normal)
-            {
-                //WindowState = FormWindowState.Maximized;
-                Rectangle workingArea = Screen.PrimaryScreen.WorkingArea;
-                this.Location = workingArea.Location;
-                this.Size = workingArea.Size;
-            }
-            else WindowState = FormWindowState.Normal;
-
         }
 
         private void add_btn_Click(object sender, EventArgs e)
         {
             ActivateButton(sender);
-
-            OpenChildForm(new AddForm());
+            OpenChildForm(new BaseAddProduct());
         }
 
-
-
-        //Drag form
-        [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
-        private static extern void ReleaseCapture();
-        [DllImport("user32.DLL", EntryPoint = "SendMessage")]
-        private extern static void SendMessage(System.IntPtr hWnd, int wMsg, int wParam, int lParam);
-        private void titlebar_pnl_MouseDown(object sender, MouseEventArgs e)
-        {
-            ReleaseCapture();
-            SendMessage(this.Handle, 0x112, 0xf012, 0);
-        }
-
-        private void iconButton1_Click(object sender, EventArgs e)
+        private void settings_btn_Click(object sender, EventArgs e)
         {
             ActivateButton(sender);
             OpenChildForm(new SettingsForm());
         }
+
+        private void search_btn_Click(object sender, EventArgs e)
+        {
+            ActivateButton(sender);
+            OpenChildForm(new SearchForm());
+        }
+
+        private void modify_btn_Click(object sender, EventArgs e)
+        {
+            ActivateButton(sender);
+            OpenChildForm(new ModifyForm());
+        }
+
+        private void analyze_btn_Click(object sender, EventArgs e)
+        {
+            ActivateButton(sender);
+            OpenChildForm(new AnalyzeForm());
+        }
+
     }
 }

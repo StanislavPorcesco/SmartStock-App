@@ -18,6 +18,15 @@ D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.SettingsForm.
 D:\Files\Degree\App\SmartStock\bin\Debug\net8.0-windows\FontAwesome.Sharp.dll
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.csproj.AssemblyReference.cache
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.csproj.Up2Date
-D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.MenuFormOld.resources
-D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.AddForm.resources
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Properties.Resources.resources
+D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.SearchForm.resources
+D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.AnalyzeForm.resources
+D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.ModifyForm.resources
+D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.AddForms.AddCategory.resources
+D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.User_Control.AddProduct.resources
+D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.User_Control.AddSupplier.resources
+D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.BaseAddProduct.resources
+D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.User_Control.AddTransaction.resources
+D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.User_Control.AddCustomer.resources
+D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.User_Control.AddSale.resources
+D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.User_Control.AddExternalFactor.resources

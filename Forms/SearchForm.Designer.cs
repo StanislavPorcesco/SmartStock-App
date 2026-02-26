@@ -1,6 +1,6 @@
 ﻿namespace SmartStock.Forms
 {
-    partial class AddForm
+    partial class SearchForm
     {
         /// <summary>
         /// Required designer variable.
@@ -30,14 +30,13 @@
         {
             SuspendLayout();
             // 
-            // AddForm
+            // SearchForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Name = "AddForm";
-            Tag = "workplace";
-            Text = "AddForm";
+            Name = "SearchForm";
+            Text = "SearchForm";
             ResumeLayout(false);
         }
 

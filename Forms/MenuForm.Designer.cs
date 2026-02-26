@@ -32,9 +32,12 @@
             menu_pnl = new Panel();
             menu_buttons_pnl = new Panel();
             settings_btn = new FontAwesome.Sharp.IconButton();
+            analyze_btn = new FontAwesome.Sharp.IconButton();
+            modify_btn = new FontAwesome.Sharp.IconButton();
+            search_btn = new FontAwesome.Sharp.IconButton();
             add_btn = new FontAwesome.Sharp.IconButton();
             logo_pnl = new Panel();
-            iconPictureBox1 = new FontAwesome.Sharp.IconPictureBox();
+            logo_pc = new FontAwesome.Sharp.IconPictureBox();
             restart_lbl = new Label();
             restart_lbl2 = new Label();
             titlebar_pnl = new Panel();
@@ -43,14 +46,12 @@
             workplace_layout = new TableLayoutPanel();
             labelCurentChildForm = new Label();
             iconCurentChildForm = new FontAwesome.Sharp.IconPictureBox();
-            minimize_btn = new FontAwesome.Sharp.IconButton();
-            maximize_btn = new FontAwesome.Sharp.IconButton();
-            close_btn = new FontAwesome.Sharp.IconButton();
             desktop_pnl = new Panel();
+            bottom_pnl = new Panel();
             menu_pnl.SuspendLayout();
             menu_buttons_pnl.SuspendLayout();
             logo_pnl.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)iconPictureBox1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)logo_pc).BeginInit();
             titlebar_pnl.SuspendLayout();
             accent_pnl.SuspendLayout();
             workplace_pnl.SuspendLayout();
@@ -65,19 +66,23 @@
             menu_pnl.Controls.Add(logo_pnl);
             menu_pnl.Dock = DockStyle.Left;
             menu_pnl.Location = new Point(0, 1);
+            menu_pnl.MinimumSize = new Size(320, 0);
             menu_pnl.Name = "menu_pnl";
-            menu_pnl.Size = new Size(304, 1101);
+            menu_pnl.Size = new Size(320, 1001);
             menu_pnl.TabIndex = 0;
             // 
             // menu_buttons_pnl
             // 
             menu_buttons_pnl.AutoScroll = true;
             menu_buttons_pnl.Controls.Add(settings_btn);
+            menu_buttons_pnl.Controls.Add(analyze_btn);
+            menu_buttons_pnl.Controls.Add(modify_btn);
+            menu_buttons_pnl.Controls.Add(search_btn);
             menu_buttons_pnl.Controls.Add(add_btn);
             menu_buttons_pnl.Dock = DockStyle.Fill;
             menu_buttons_pnl.Location = new Point(0, 125);
             menu_buttons_pnl.Name = "menu_buttons_pnl";
-            menu_buttons_pnl.Size = new Size(304, 976);
+            menu_buttons_pnl.Size = new Size(320, 876);
             menu_buttons_pnl.TabIndex = 0;
             menu_buttons_pnl.Tag = "menu";
             // 
@@ -93,17 +98,89 @@
             settings_btn.IconColor = Color.White;
             settings_btn.IconFont = FontAwesome.Sharp.IconFont.Auto;
             settings_btn.ImageAlign = ContentAlignment.MiddleLeft;
-            settings_btn.Location = new Point(0, 876);
+            settings_btn.Location = new Point(0, 776);
             settings_btn.Name = "settings_btn";
-            settings_btn.Padding = new Padding(10, 0, 21, 0);
-            settings_btn.Size = new Size(304, 100);
-            settings_btn.TabIndex = 2;
+            settings_btn.Padding = new Padding(30, 0, 21, 0);
+            settings_btn.Size = new Size(320, 100);
+            settings_btn.TabIndex = 7;
             settings_btn.Tag = "menu";
             settings_btn.Text = "Settings";
             settings_btn.TextAlign = ContentAlignment.MiddleLeft;
             settings_btn.TextImageRelation = TextImageRelation.ImageBeforeText;
             settings_btn.UseVisualStyleBackColor = false;
-            settings_btn.Click += iconButton1_Click;
+            settings_btn.Click += settings_btn_Click;
+            // 
+            // analyze_btn
+            // 
+            analyze_btn.BackColor = Color.Transparent;
+            analyze_btn.Dock = DockStyle.Top;
+            analyze_btn.FlatAppearance.BorderSize = 0;
+            analyze_btn.FlatStyle = FlatStyle.Flat;
+            analyze_btn.Font = new Font("Segoe UI", 16.2F, FontStyle.Bold);
+            analyze_btn.ForeColor = Color.White;
+            analyze_btn.IconChar = FontAwesome.Sharp.IconChar.ChartLine;
+            analyze_btn.IconColor = Color.White;
+            analyze_btn.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            analyze_btn.ImageAlign = ContentAlignment.MiddleLeft;
+            analyze_btn.Location = new Point(0, 300);
+            analyze_btn.Name = "analyze_btn";
+            analyze_btn.Padding = new Padding(30, 0, 21, 0);
+            analyze_btn.Size = new Size(320, 100);
+            analyze_btn.TabIndex = 5;
+            analyze_btn.Tag = "menu";
+            analyze_btn.Text = "Analyze";
+            analyze_btn.TextAlign = ContentAlignment.MiddleLeft;
+            analyze_btn.TextImageRelation = TextImageRelation.ImageBeforeText;
+            analyze_btn.UseVisualStyleBackColor = false;
+            analyze_btn.Click += analyze_btn_Click;
+            // 
+            // modify_btn
+            // 
+            modify_btn.BackColor = Color.Transparent;
+            modify_btn.Dock = DockStyle.Top;
+            modify_btn.FlatAppearance.BorderSize = 0;
+            modify_btn.FlatStyle = FlatStyle.Flat;
+            modify_btn.Font = new Font("Segoe UI", 16.2F, FontStyle.Bold);
+            modify_btn.ForeColor = Color.White;
+            modify_btn.IconChar = FontAwesome.Sharp.IconChar.PenSquare;
+            modify_btn.IconColor = Color.White;
+            modify_btn.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            modify_btn.ImageAlign = ContentAlignment.MiddleLeft;
+            modify_btn.Location = new Point(0, 200);
+            modify_btn.Name = "modify_btn";
+            modify_btn.Padding = new Padding(30, 0, 21, 0);
+            modify_btn.Size = new Size(320, 100);
+            modify_btn.TabIndex = 4;
+            modify_btn.Tag = "menu";
+            modify_btn.Text = "Modify";
+            modify_btn.TextAlign = ContentAlignment.MiddleLeft;
+            modify_btn.TextImageRelation = TextImageRelation.ImageBeforeText;
+            modify_btn.UseVisualStyleBackColor = false;
+            modify_btn.Click += modify_btn_Click;
+            // 
+            // search_btn
+            // 
+            search_btn.BackColor = Color.Transparent;
+            search_btn.Dock = DockStyle.Top;
+            search_btn.FlatAppearance.BorderSize = 0;
+            search_btn.FlatStyle = FlatStyle.Flat;
+            search_btn.Font = new Font("Segoe UI", 16.2F, FontStyle.Bold);
+            search_btn.ForeColor = Color.White;
+            search_btn.IconChar = FontAwesome.Sharp.IconChar.Search;
+            search_btn.IconColor = Color.White;
+            search_btn.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            search_btn.ImageAlign = ContentAlignment.MiddleLeft;
+            search_btn.Location = new Point(0, 100);
+            search_btn.Name = "search_btn";
+            search_btn.Padding = new Padding(30, 0, 21, 0);
+            search_btn.Size = new Size(320, 100);
+            search_btn.TabIndex = 3;
+            search_btn.Tag = "menu";
+            search_btn.Text = "Search";
+            search_btn.TextAlign = ContentAlignment.MiddleLeft;
+            search_btn.TextImageRelation = TextImageRelation.ImageBeforeText;
+            search_btn.UseVisualStyleBackColor = false;
+            search_btn.Click += search_btn_Click;
             // 
             // add_btn
             // 
@@ -119,8 +196,8 @@
             add_btn.ImageAlign = ContentAlignment.MiddleLeft;
             add_btn.Location = new Point(0, 0);
             add_btn.Name = "add_btn";
-            add_btn.Padding = new Padding(10, 0, 21, 0);
-            add_btn.Size = new Size(304, 100);
+            add_btn.Padding = new Padding(30, 0, 21, 0);
+            add_btn.Size = new Size(320, 100);
             add_btn.TabIndex = 1;
             add_btn.Tag = "menu";
             add_btn.Text = "Add Instance";
@@ -131,32 +208,32 @@
             // 
             // logo_pnl
             // 
-            logo_pnl.Controls.Add(iconPictureBox1);
+            logo_pnl.Controls.Add(logo_pc);
             logo_pnl.Controls.Add(restart_lbl);
             logo_pnl.Controls.Add(restart_lbl2);
             logo_pnl.Dock = DockStyle.Top;
             logo_pnl.Location = new Point(0, 0);
             logo_pnl.Name = "logo_pnl";
-            logo_pnl.Size = new Size(304, 125);
+            logo_pnl.Size = new Size(320, 125);
             logo_pnl.TabIndex = 0;
             logo_pnl.Tag = "menu";
             // 
-            // iconPictureBox1
+            // logo_pc
             // 
-            iconPictureBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            iconPictureBox1.BackColor = Color.Transparent;
-            iconPictureBox1.BackgroundImageLayout = ImageLayout.None;
-            iconPictureBox1.IconChar = FontAwesome.Sharp.IconChar.Box;
-            iconPictureBox1.IconColor = Color.White;
-            iconPictureBox1.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            iconPictureBox1.IconSize = 99;
-            iconPictureBox1.Location = new Point(5, 13);
-            iconPictureBox1.Name = "iconPictureBox1";
-            iconPictureBox1.Padding = new Padding(21, 0, 21, 0);
-            iconPictureBox1.Size = new Size(107, 99);
-            iconPictureBox1.TabIndex = 4;
-            iconPictureBox1.TabStop = false;
-            iconPictureBox1.Tag = "";
+            logo_pc.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            logo_pc.BackColor = Color.Transparent;
+            logo_pc.BackgroundImageLayout = ImageLayout.None;
+            logo_pc.IconChar = FontAwesome.Sharp.IconChar.Box;
+            logo_pc.IconColor = Color.White;
+            logo_pc.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            logo_pc.IconSize = 99;
+            logo_pc.Location = new Point(5, 13);
+            logo_pc.Name = "logo_pc";
+            logo_pc.Padding = new Padding(21, 0, 21, 0);
+            logo_pc.Size = new Size(123, 99);
+            logo_pc.TabIndex = 4;
+            logo_pc.TabStop = false;
+            logo_pc.Tag = "menu";
             // 
             // restart_lbl
             // 
@@ -164,7 +241,7 @@
             restart_lbl.AutoSize = true;
             restart_lbl.Font = new Font("Segoe UI", 22.2F, FontStyle.Bold);
             restart_lbl.ForeColor = Color.White;
-            restart_lbl.Location = new Point(113, 10);
+            restart_lbl.Location = new Point(122, 10);
             restart_lbl.Margin = new Padding(0);
             restart_lbl.Name = "restart_lbl";
             restart_lbl.Size = new Size(127, 50);
@@ -178,7 +255,7 @@
             restart_lbl2.AutoSize = true;
             restart_lbl2.Font = new Font("Segoe UI", 22.2F, FontStyle.Bold);
             restart_lbl2.ForeColor = Color.White;
-            restart_lbl2.Location = new Point(113, 47);
+            restart_lbl2.Location = new Point(122, 47);
             restart_lbl2.Name = "restart_lbl2";
             restart_lbl2.Size = new Size(118, 50);
             restart_lbl2.TabIndex = 0;
@@ -188,18 +265,14 @@
             // 
             titlebar_pnl.BackColor = Color.FromArgb(54, 54, 54);
             titlebar_pnl.Controls.Add(accent_pnl);
-            titlebar_pnl.Controls.Add(minimize_btn);
-            titlebar_pnl.Controls.Add(maximize_btn);
-            titlebar_pnl.Controls.Add(close_btn);
             titlebar_pnl.Dock = DockStyle.Top;
-            titlebar_pnl.Location = new Point(304, 1);
+            titlebar_pnl.Location = new Point(320, 1);
             titlebar_pnl.Margin = new Padding(0);
             titlebar_pnl.MaximumSize = new Size(0, 53);
             titlebar_pnl.MinimumSize = new Size(0, 35);
             titlebar_pnl.Name = "titlebar_pnl";
-            titlebar_pnl.Size = new Size(1598, 53);
+            titlebar_pnl.Size = new Size(1582, 53);
             titlebar_pnl.TabIndex = 1;
-            titlebar_pnl.MouseDown += titlebar_pnl_MouseDown;
             // 
             // accent_pnl
             // 
@@ -272,93 +345,46 @@
             iconCurentChildForm.TabStop = false;
             iconCurentChildForm.Tag = "workplace";
             // 
-            // minimize_btn
-            // 
-            minimize_btn.Dock = DockStyle.Right;
-            minimize_btn.FlatAppearance.BorderSize = 0;
-            minimize_btn.FlatStyle = FlatStyle.Flat;
-            minimize_btn.ForeColor = Color.FromArgb(224, 224, 224);
-            minimize_btn.IconChar = FontAwesome.Sharp.IconChar.WindowMinimize;
-            minimize_btn.IconColor = Color.FromArgb(224, 224, 224);
-            minimize_btn.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            minimize_btn.IconSize = 30;
-            minimize_btn.Location = new Point(1316, 0);
-            minimize_btn.Name = "minimize_btn";
-            minimize_btn.Size = new Size(94, 53);
-            minimize_btn.TabIndex = 6;
-            minimize_btn.Tag = "title";
-            minimize_btn.TextAlign = ContentAlignment.MiddleRight;
-            minimize_btn.UseVisualStyleBackColor = true;
-            minimize_btn.Click += minimize_btn_Click;
-            // 
-            // maximize_btn
-            // 
-            maximize_btn.Dock = DockStyle.Right;
-            maximize_btn.FlatAppearance.BorderSize = 0;
-            maximize_btn.FlatStyle = FlatStyle.Flat;
-            maximize_btn.ForeColor = Color.FromArgb(224, 224, 224);
-            maximize_btn.IconChar = FontAwesome.Sharp.IconChar.WindowMaximize;
-            maximize_btn.IconColor = Color.FromArgb(224, 224, 224);
-            maximize_btn.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            maximize_btn.IconSize = 30;
-            maximize_btn.Location = new Point(1410, 0);
-            maximize_btn.Name = "maximize_btn";
-            maximize_btn.Size = new Size(94, 53);
-            maximize_btn.TabIndex = 7;
-            maximize_btn.Tag = "title";
-            maximize_btn.TextAlign = ContentAlignment.MiddleRight;
-            maximize_btn.UseVisualStyleBackColor = true;
-            maximize_btn.Click += maximize_btn_Click;
-            // 
-            // close_btn
-            // 
-            close_btn.Dock = DockStyle.Right;
-            close_btn.FlatAppearance.BorderSize = 0;
-            close_btn.FlatStyle = FlatStyle.Flat;
-            close_btn.ForeColor = Color.FromArgb(224, 224, 224);
-            close_btn.IconChar = FontAwesome.Sharp.IconChar.Multiply;
-            close_btn.IconColor = Color.FromArgb(224, 224, 224);
-            close_btn.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            close_btn.IconSize = 30;
-            close_btn.Location = new Point(1504, 0);
-            close_btn.Name = "close_btn";
-            close_btn.Size = new Size(94, 53);
-            close_btn.TabIndex = 8;
-            close_btn.Tag = "title";
-            close_btn.TextAlign = ContentAlignment.MiddleRight;
-            close_btn.UseVisualStyleBackColor = true;
-            close_btn.Click += close_btn_Click;
-            // 
             // desktop_pnl
             // 
             desktop_pnl.Dock = DockStyle.Fill;
-            desktop_pnl.Location = new Point(304, 54);
+            desktop_pnl.Location = new Point(320, 54);
             desktop_pnl.Name = "desktop_pnl";
-            desktop_pnl.Size = new Size(1598, 1048);
+            desktop_pnl.Size = new Size(1582, 948);
             desktop_pnl.TabIndex = 2;
             desktop_pnl.Tag = "workplace";
+            // 
+            // bottom_pnl
+            // 
+            bottom_pnl.BackColor = Color.FromArgb(54, 54, 54);
+            bottom_pnl.Dock = DockStyle.Bottom;
+            bottom_pnl.Location = new Point(0, 1002);
+            bottom_pnl.Name = "bottom_pnl";
+            bottom_pnl.Size = new Size(1902, 53);
+            bottom_pnl.TabIndex = 0;
+            bottom_pnl.Tag = "menu";
             // 
             // MenuForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(64, 64, 64);
-            ClientSize = new Size(1902, 1102);
+            ClientSize = new Size(1902, 1055);
             Controls.Add(desktop_pnl);
             Controls.Add(titlebar_pnl);
             Controls.Add(menu_pnl);
-            FormBorderStyle = FormBorderStyle.None;
+            Controls.Add(bottom_pnl);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "MenuForm";
             Padding = new Padding(0, 1, 0, 0);
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Gestiune Cărți";
-            Load += MenuForm_Load;
+            Text = "SmartStock";
+            WindowState = FormWindowState.Maximized;
             menu_pnl.ResumeLayout(false);
             menu_buttons_pnl.ResumeLayout(false);
             logo_pnl.ResumeLayout(false);
             logo_pnl.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)iconPictureBox1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)logo_pc).EndInit();
             titlebar_pnl.ResumeLayout(false);
             accent_pnl.ResumeLayout(false);
             workplace_pnl.ResumeLayout(false);
@@ -373,9 +399,6 @@
         private FontAwesome.Sharp.IconButton add_btn;
         private Panel logo_pnl;
         private Panel titlebar_pnl;
-        private FontAwesome.Sharp.IconButton close_btn;
-        private FontAwesome.Sharp.IconButton maximize_btn;
-        private FontAwesome.Sharp.IconButton minimize_btn;
         private FontAwesome.Sharp.IconPictureBox iconCurentChildForm;
         private Label labelCurentChildForm;
         private Panel accent_pnl;
@@ -385,7 +408,11 @@
         private Panel workplace_pnl;
         private TableLayoutPanel workplace_layout;
         private Panel menu_buttons_pnl;
+        private FontAwesome.Sharp.IconPictureBox logo_pc;
+        private Panel bottom_pnl;
+        private FontAwesome.Sharp.IconButton analyze_btn;
+        private FontAwesome.Sharp.IconButton modify_btn;
+        private FontAwesome.Sharp.IconButton search_btn;
         private FontAwesome.Sharp.IconButton settings_btn;
-        private FontAwesome.Sharp.IconPictureBox iconPictureBox1;
     }
 }
