@@ -17,6 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Forms\LoginForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Forms\User Control\AddExternalFactor.cs">
       <SubType>UserControl</SubType>
     </Compile>

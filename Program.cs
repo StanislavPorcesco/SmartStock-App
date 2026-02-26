@@ -9,6 +9,7 @@ namespace SmartStock
         [STAThread]
         static void Main()
         {
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
@@ -18,11 +19,11 @@ namespace SmartStock
             // 2. Setează tema curentă în manager (asta doar pregătește paleta)
             ThemeManager.SetTheme(SettingsManager.Current.Theme);
             // 3. Creează instanța formei
-            MenuForm mainForm = new MenuForm();
+            LoginForm loginForm = new LoginForm();
 
             // 4. Aplică tema pe instanța creată înainte de Run
-            ThemeManager.Apply(mainForm);
-            Application.Run(mainForm);
+            ThemeManager.Apply(loginForm);
+            Application.Run(loginForm);
             
         }
     }
