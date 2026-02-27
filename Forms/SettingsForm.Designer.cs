@@ -31,6 +31,7 @@
             apply_btn = new Button();
             themes_cb = new ComboBox();
             base_pnl = new Panel();
+            apply_pnl = new Panel();
             margin_pnl = new Panel();
             ai_pnl = new Panel();
             ai_settings_gb = new GroupBox();
@@ -55,6 +56,7 @@
             language_lbl = new Label();
             theme_lbl = new Label();
             base_pnl.SuspendLayout();
+            apply_pnl.SuspendLayout();
             ai_pnl.SuspendLayout();
             ai_settings_gb.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
@@ -69,15 +71,15 @@
             // apply_btn
             // 
             apply_btn.BackColor = Color.FromArgb(54, 54, 54);
-            apply_btn.Dock = DockStyle.Bottom;
+            apply_btn.Dock = DockStyle.Fill;
             apply_btn.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             apply_btn.ForeColor = Color.White;
-            apply_btn.Location = new Point(20, 612);
+            apply_btn.Location = new Point(10, 0);
             apply_btn.Margin = new Padding(0);
             apply_btn.MaximumSize = new Size(0, 70);
             apply_btn.MinimumSize = new Size(0, 70);
             apply_btn.Name = "apply_btn";
-            apply_btn.Size = new Size(1231, 70);
+            apply_btn.Size = new Size(1211, 70);
             apply_btn.TabIndex = 0;
             apply_btn.Text = "Apply";
             apply_btn.UseVisualStyleBackColor = false;
@@ -91,7 +93,7 @@
             themes_cb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             themes_cb.ForeColor = Color.White;
             themes_cb.FormattingEnabled = true;
-            themes_cb.Location = new Point(595, 7);
+            themes_cb.Location = new Point(595, 5);
             themes_cb.Margin = new Padding(0, 5, 0, 5);
             themes_cb.Name = "themes_cb";
             themes_cb.Size = new Size(596, 33);
@@ -101,7 +103,7 @@
             // 
             base_pnl.AutoScroll = true;
             base_pnl.BackColor = Color.FromArgb(64, 64, 64);
-            base_pnl.Controls.Add(apply_btn);
+            base_pnl.Controls.Add(apply_pnl);
             base_pnl.Controls.Add(margin_pnl);
             base_pnl.Controls.Add(ai_pnl);
             base_pnl.Controls.Add(path_pnl);
@@ -115,11 +117,21 @@
             base_pnl.TabIndex = 2;
             base_pnl.Tag = "base";
             // 
+            // apply_pnl
+            // 
+            apply_pnl.Controls.Add(apply_btn);
+            apply_pnl.Dock = DockStyle.Bottom;
+            apply_pnl.Location = new Point(20, 612);
+            apply_pnl.Name = "apply_pnl";
+            apply_pnl.Padding = new Padding(10, 0, 10, 0);
+            apply_pnl.Size = new Size(1231, 70);
+            apply_pnl.TabIndex = 9;
+            // 
             // margin_pnl
             // 
             margin_pnl.BackColor = Color.Transparent;
             margin_pnl.Dock = DockStyle.Top;
-            margin_pnl.Location = new Point(20, 569);
+            margin_pnl.Location = new Point(20, 606);
             margin_pnl.MaximumSize = new Size(0, 20);
             margin_pnl.MinimumSize = new Size(0, 20);
             margin_pnl.Name = "margin_pnl";
@@ -130,22 +142,23 @@
             // 
             ai_pnl.Controls.Add(ai_settings_gb);
             ai_pnl.Dock = DockStyle.Top;
-            ai_pnl.Location = new Point(20, 399);
+            ai_pnl.Location = new Point(20, 419);
             ai_pnl.Name = "ai_pnl";
             ai_pnl.Padding = new Padding(10);
-            ai_pnl.Size = new Size(1231, 170);
+            ai_pnl.Size = new Size(1231, 187);
             ai_pnl.TabIndex = 7;
             // 
             // ai_settings_gb
             // 
             ai_settings_gb.Controls.Add(tableLayoutPanel3);
             ai_settings_gb.Dock = DockStyle.Fill;
+            ai_settings_gb.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             ai_settings_gb.ForeColor = Color.White;
             ai_settings_gb.Location = new Point(10, 10);
             ai_settings_gb.Margin = new Padding(0);
             ai_settings_gb.Name = "ai_settings_gb";
-            ai_settings_gb.Padding = new Padding(10);
-            ai_settings_gb.Size = new Size(1211, 150);
+            ai_settings_gb.Padding = new Padding(10, 20, 10, 20);
+            ai_settings_gb.Size = new Size(1211, 167);
             ai_settings_gb.TabIndex = 4;
             ai_settings_gb.TabStop = false;
             ai_settings_gb.Text = "AI Settings";
@@ -160,12 +173,12 @@
             tableLayoutPanel3.Controls.Add(api_lbl, 0, 0);
             tableLayoutPanel3.Controls.Add(ai_logs_ck, 1, 1);
             tableLayoutPanel3.Dock = DockStyle.Fill;
-            tableLayoutPanel3.Location = new Point(10, 30);
+            tableLayoutPanel3.Location = new Point(10, 40);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
             tableLayoutPanel3.RowCount = 2;
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 48.50746F));
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 51.49254F));
-            tableLayoutPanel3.Size = new Size(1191, 110);
+            tableLayoutPanel3.Size = new Size(1191, 107);
             tableLayoutPanel3.TabIndex = 2;
             // 
             // api_tb
@@ -174,7 +187,7 @@
             api_tb.BackColor = Color.FromArgb(54, 54, 54);
             api_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             api_tb.ForeColor = Color.White;
-            api_tb.Location = new Point(592, 11);
+            api_tb.Location = new Point(592, 10);
             api_tb.Margin = new Padding(0, 5, 0, 5);
             api_tb.Name = "api_tb";
             api_tb.Size = new Size(599, 31);
@@ -185,9 +198,9 @@
             ai_logs_lbl.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             ai_logs_lbl.AutoSize = true;
             ai_logs_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            ai_logs_lbl.Location = new Point(3, 53);
+            ai_logs_lbl.Location = new Point(3, 51);
             ai_logs_lbl.Name = "ai_logs_lbl";
-            ai_logs_lbl.Size = new Size(177, 57);
+            ai_logs_lbl.Size = new Size(177, 56);
             ai_logs_lbl.TabIndex = 3;
             ai_logs_lbl.Text = "Detailed logs for AI";
             ai_logs_lbl.TextAlign = ContentAlignment.MiddleLeft;
@@ -199,7 +212,7 @@
             api_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             api_lbl.Location = new Point(3, 0);
             api_lbl.Name = "api_lbl";
-            api_lbl.Size = new Size(79, 53);
+            api_lbl.Size = new Size(79, 51);
             api_lbl.TabIndex = 2;
             api_lbl.Text = "API Key";
             api_lbl.TextAlign = ContentAlignment.MiddleLeft;
@@ -209,9 +222,9 @@
             ai_logs_ck.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             ai_logs_ck.AutoSize = true;
             ai_logs_ck.ForeColor = Color.FromArgb(64, 64, 64);
-            ai_logs_ck.Location = new Point(1170, 56);
+            ai_logs_ck.Location = new Point(1170, 54);
             ai_logs_ck.Name = "ai_logs_ck";
-            ai_logs_ck.Size = new Size(18, 51);
+            ai_logs_ck.Size = new Size(18, 50);
             ai_logs_ck.TabIndex = 15;
             ai_logs_ck.UseVisualStyleBackColor = true;
             // 
@@ -219,23 +232,24 @@
             // 
             path_pnl.Controls.Add(paths_gb);
             path_pnl.Dock = DockStyle.Top;
-            path_pnl.Location = new Point(20, 181);
+            path_pnl.Location = new Point(20, 191);
             path_pnl.Margin = new Padding(0);
             path_pnl.Name = "path_pnl";
             path_pnl.Padding = new Padding(10);
-            path_pnl.Size = new Size(1231, 218);
+            path_pnl.Size = new Size(1231, 228);
             path_pnl.TabIndex = 6;
             // 
             // paths_gb
             // 
             paths_gb.Controls.Add(tableLayoutPanel2);
             paths_gb.Dock = DockStyle.Fill;
+            paths_gb.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             paths_gb.ForeColor = Color.White;
             paths_gb.Location = new Point(10, 10);
             paths_gb.Margin = new Padding(0);
             paths_gb.Name = "paths_gb";
-            paths_gb.Padding = new Padding(10);
-            paths_gb.Size = new Size(1211, 198);
+            paths_gb.Padding = new Padding(10, 20, 10, 20);
+            paths_gb.Size = new Size(1211, 208);
             paths_gb.TabIndex = 4;
             paths_gb.TabStop = false;
             paths_gb.Text = "File paths";
@@ -252,13 +266,13 @@
             tableLayoutPanel2.Controls.Add(logs_tb, 1, 2);
             tableLayoutPanel2.Controls.Add(settings_tb, 1, 0);
             tableLayoutPanel2.Dock = DockStyle.Fill;
-            tableLayoutPanel2.Location = new Point(10, 30);
+            tableLayoutPanel2.Location = new Point(10, 40);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 3;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 48.50746F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 51.49254F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 45F));
-            tableLayoutPanel2.Size = new Size(1191, 158);
+            tableLayoutPanel2.Size = new Size(1191, 148);
             tableLayoutPanel2.TabIndex = 2;
             // 
             // settings_lbl
@@ -268,7 +282,7 @@
             settings_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             settings_lbl.Location = new Point(3, 0);
             settings_lbl.Name = "settings_lbl";
-            settings_lbl.Size = new Size(157, 54);
+            settings_lbl.Size = new Size(157, 49);
             settings_lbl.TabIndex = 7;
             settings_lbl.Text = "Settings file path";
             settings_lbl.TextAlign = ContentAlignment.MiddleLeft;
@@ -278,9 +292,9 @@
             db_lbl.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             db_lbl.AutoSize = true;
             db_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            db_lbl.Location = new Point(3, 54);
+            db_lbl.Location = new Point(3, 49);
             db_lbl.Name = "db_lbl";
-            db_lbl.Size = new Size(141, 58);
+            db_lbl.Size = new Size(141, 53);
             db_lbl.TabIndex = 8;
             db_lbl.Text = "Data Base path";
             db_lbl.TextAlign = ContentAlignment.MiddleLeft;
@@ -291,7 +305,7 @@
             db_tb.BackColor = Color.FromArgb(54, 54, 54);
             db_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             db_tb.ForeColor = Color.White;
-            db_tb.Location = new Point(594, 67);
+            db_tb.Location = new Point(594, 60);
             db_tb.Margin = new Padding(0, 5, 0, 5);
             db_tb.Name = "db_tb";
             db_tb.Size = new Size(597, 31);
@@ -302,7 +316,7 @@
             logs_lbl.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             logs_lbl.AutoSize = true;
             logs_lbl.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
-            logs_lbl.Location = new Point(3, 112);
+            logs_lbl.Location = new Point(3, 102);
             logs_lbl.Name = "logs_lbl";
             logs_lbl.Size = new Size(150, 46);
             logs_lbl.TabIndex = 9;
@@ -315,7 +329,7 @@
             logs_tb.BackColor = Color.FromArgb(54, 54, 54);
             logs_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             logs_tb.ForeColor = Color.White;
-            logs_tb.Location = new Point(594, 119);
+            logs_tb.Location = new Point(594, 109);
             logs_tb.Margin = new Padding(0, 5, 0, 5);
             logs_tb.Name = "logs_tb";
             logs_tb.Size = new Size(597, 31);
@@ -327,7 +341,7 @@
             settings_tb.BackColor = Color.FromArgb(54, 54, 54);
             settings_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             settings_tb.ForeColor = Color.White;
-            settings_tb.Location = new Point(594, 11);
+            settings_tb.Location = new Point(594, 9);
             settings_tb.Margin = new Padding(0, 5, 0, 5);
             settings_tb.Name = "settings_tb";
             settings_tb.Size = new Size(597, 31);
@@ -341,19 +355,20 @@
             theme_pnl.Margin = new Padding(0);
             theme_pnl.Name = "theme_pnl";
             theme_pnl.Padding = new Padding(10);
-            theme_pnl.Size = new Size(1231, 161);
+            theme_pnl.Size = new Size(1231, 171);
             theme_pnl.TabIndex = 5;
             // 
             // preferences_gb
             // 
             preferences_gb.Controls.Add(tableLayoutPanel1);
             preferences_gb.Dock = DockStyle.Fill;
+            preferences_gb.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             preferences_gb.ForeColor = Color.White;
             preferences_gb.Location = new Point(10, 10);
             preferences_gb.Margin = new Padding(0);
             preferences_gb.Name = "preferences_gb";
-            preferences_gb.Padding = new Padding(10);
-            preferences_gb.Size = new Size(1211, 141);
+            preferences_gb.Padding = new Padding(10, 20, 10, 20);
+            preferences_gb.Size = new Size(1211, 151);
             preferences_gb.TabIndex = 3;
             preferences_gb.TabStop = false;
             preferences_gb.Text = "Theme and Preferences";
@@ -368,12 +383,12 @@
             tableLayoutPanel1.Controls.Add(theme_lbl, 0, 0);
             tableLayoutPanel1.Controls.Add(themes_cb, 1, 0);
             tableLayoutPanel1.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Location = new Point(10, 30);
+            tableLayoutPanel1.Location = new Point(10, 40);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 2;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 48.50746F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 51.49254F));
-            tableLayoutPanel1.Size = new Size(1191, 101);
+            tableLayoutPanel1.Size = new Size(1191, 91);
             tableLayoutPanel1.TabIndex = 2;
             // 
             // languages_cb
@@ -384,7 +399,7 @@
             languages_cb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             languages_cb.ForeColor = Color.White;
             languages_cb.FormattingEnabled = true;
-            languages_cb.Location = new Point(595, 58);
+            languages_cb.Location = new Point(595, 51);
             languages_cb.Margin = new Padding(0, 5, 0, 5);
             languages_cb.Name = "languages_cb";
             languages_cb.Size = new Size(596, 33);
@@ -395,9 +410,9 @@
             language_lbl.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             language_lbl.AutoSize = true;
             language_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            language_lbl.Location = new Point(3, 48);
+            language_lbl.Location = new Point(3, 44);
             language_lbl.Name = "language_lbl";
-            language_lbl.Size = new Size(95, 53);
+            language_lbl.Size = new Size(95, 47);
             language_lbl.TabIndex = 3;
             language_lbl.Text = "Language";
             language_lbl.TextAlign = ContentAlignment.MiddleLeft;
@@ -409,7 +424,7 @@
             theme_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             theme_lbl.Location = new Point(3, 0);
             theme_lbl.Name = "theme_lbl";
-            theme_lbl.Size = new Size(70, 48);
+            theme_lbl.Size = new Size(70, 44);
             theme_lbl.TabIndex = 2;
             theme_lbl.Text = "Theme";
             theme_lbl.TextAlign = ContentAlignment.MiddleLeft;
@@ -426,6 +441,7 @@
             Tag = "workplace";
             Text = "Form1";
             base_pnl.ResumeLayout(false);
+            apply_pnl.ResumeLayout(false);
             ai_pnl.ResumeLayout(false);
             ai_settings_gb.ResumeLayout(false);
             tableLayoutPanel3.ResumeLayout(false);
@@ -469,5 +485,6 @@
         private Panel path_pnl;
         private Panel theme_pnl;
         private Panel margin_pnl;
+        private Panel apply_pnl;
     }
 }

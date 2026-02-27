@@ -1,11 +1,6 @@
 ﻿using SmartStock.Classes.Settings;
 using SmartStock.Forms.AddForms;
 using SmartStock.Forms.User_Control;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SmartStock.Classes.Utils
 {
@@ -18,6 +13,7 @@ namespace SmartStock.Classes.Utils
                 selector.Items.Clear();
                 selector.Items.AddRange(new string[] { "Product", "Category", "Supplier", "Transaction", "Customer", "Sale", "ExternalFactor" });
             }
+            selector.Text = "Select an option";
         }
 
         public static void OpenUserControl(Form form, UserControl controlToOpen) {
@@ -67,6 +63,36 @@ namespace SmartStock.Classes.Utils
             {
                 themes_cb.SelectedIndex = 1;
             }
+        }
+
+        public static System.EventHandler OpenAddInstanceForm(UserControl container, ComboBox selector_cb)
+        {
+            return (sender, e) =>
+            {
+                string selectedOption = selector_cb.SelectedItem as string;
+                if (selectedOption == null) return;
+                container.SuspendLayout();
+                container.Controls.Clear();
+                UserControl controlToOpen = selectedOption switch
+                {
+                    "Product" => new AddProduct(),
+                    "Category" => new AddCategory(),
+                    "Supplier" => new AddSupplier(),
+                    "Transaction" => new AddTransaction(),
+                    "Customer" => new AddCustomer(),
+                    "Sale" => new AddSale(),
+                    "ExternalFactor" => new AddExternalFactor()
+                };
+
+                if (controlToOpen != null)
+                {
+                    controlToOpen.Dock = DockStyle.Fill;
+                    container.Controls.Add(controlToOpen);
+                    ThemeManager.Apply(controlToOpen);
+                }
+
+                container.ResumeLayout(true);
+            };
         }
     }
 }

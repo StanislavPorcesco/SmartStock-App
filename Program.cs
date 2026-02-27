@@ -2,6 +2,7 @@ using SmartStock.Classes.Settings;
 using SmartStock.Classes.Utils;
 using SmartStock.Forms;
 
+
 namespace SmartStock
 {
     internal static class Program
@@ -9,7 +10,7 @@ namespace SmartStock
         [STAThread]
         static void Main()
         {
-
+            ApplicationConfiguration.Initialize();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 

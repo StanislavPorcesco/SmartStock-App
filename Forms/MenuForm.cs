@@ -1,6 +1,7 @@
 ﻿
 using FontAwesome.Sharp;
 using SmartStock.Classes.Utils;
+using SmartStock.Forms.User_Control;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -26,12 +27,14 @@ namespace SmartStock.Forms
         public MenuForm()
         {
             InitializeComponent();
+            ThemeManager.Apply(this);
+            this.Refresh();
             ThemeManager.OnThemeChanged += HandleThemeUpdate;
 
             leftBorderBtn = new Panel();
             leftBorderBtn.Size = new Size(7, 75);
             menu_pnl.Controls.Add(leftBorderBtn);
-            OpenChildForm(new BaseAddProduct());
+            add_btn_Click(this.add_btn, EventArgs.Empty);
 
         }
 
@@ -122,7 +125,9 @@ namespace SmartStock.Forms
         private void add_btn_Click(object sender, EventArgs e)
         {
             ActivateButton(sender);
-            OpenChildForm(new BaseAddProduct());
+            BaseAddInstance form = new BaseAddInstance();
+            OpenChildForm(form);
+            DataLayer.OpenUserControl(form, new AddProduct());
         }
 
         private void settings_btn_Click(object sender, EventArgs e)

@@ -3,7 +3,6 @@ D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.Analyze
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.LoginForm.resources
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.MenuForm.resources
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.ModifyForm.resources
-D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.SearchForm.resources
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.SettingsForm.resources
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.AddForms.AddCategory.resources
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.User_Control.AddCustomer.resources
@@ -24,7 +23,6 @@ D:\Files\Degree\App\SmartStock\bin\Debug\net8.0-windows\SmartStock.runtimeconfig
 D:\Files\Degree\App\SmartStock\bin\Debug\net8.0-windows\SmartStock.dll
 D:\Files\Degree\App\SmartStock\bin\Debug\net8.0-windows\SmartStock.pdb
 D:\Files\Degree\App\SmartStock\bin\Debug\net8.0-windows\FontAwesome.Sharp.dll
-D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.BaseAddProduct.resources
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.csproj.Up2Date
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.dll
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\refint\SmartStock.dll
@@ -35,3 +33,12 @@ D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.AddForm
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.User_Control.Login.resources
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.AddForms.Settings.resources
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.User_Control.MailConfirmation.resources
+D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.BaseAddInstance.resources
+D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.SearchForm.resources
+D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.User_Control.SearchForms.FilterProducts.resources
+D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.User_Control.SearchForms.FilterCategories.resources
+D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.User_Control.SearchForms.FilterSuppliers.resources
+D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.User_Control.SearchForms.FilterTransactions.resources
+D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.User_Control.SearchForms.FilterCustomers.resources
+D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.User_Control.SearchForms.FilterSales.resources
+D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.User_Control.SearchForms.FilterFactors.resources

@@ -20,32 +20,53 @@
     <Compile Update="Forms\LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\User Control\MailConfirmation.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Forms\User Control\Settings.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Forms\User Control\AddAccount.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Forms\User Control\AddExternalFactor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Forms\User Control\AddSale.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Forms\User Control\AddCustomer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Forms\User Control\AddTransaction.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Forms\User Control\AddSupplier.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Forms\User Control\BaseAddProduct.cs">
+    <Compile Update="Forms\SearchForm.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\LoginForms\MailConfirmation.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\LoginForms\Settings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\LoginForms\AddAccount.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\AddForms\AddExternalFactor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\AddForms\AddSale.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\AddForms\AddCustomer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\AddForms\AddTransaction.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\AddForms\AddSupplier.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\AddForms\BaseAddInstance.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\SearchForms\FilterCategories.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\SearchForms\FilterCustomers.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\SearchForms\FilterFactors.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\SearchForms\FilterSales.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\SearchForms\FilterTransactions.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\SearchForms\FilterSuppliers.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
