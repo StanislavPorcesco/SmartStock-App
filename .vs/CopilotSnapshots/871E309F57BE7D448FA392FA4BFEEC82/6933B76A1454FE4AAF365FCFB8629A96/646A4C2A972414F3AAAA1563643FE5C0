@@ -1,0 +1,80 @@
+﻿using SmartStock.Classes.Utils;
+using SmartStock.Forms.User_Control;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace SmartStock.Forms.AddForms
+{
+    public partial class AddAccount : UserControl
+    {
+        public AddAccount()
+        {
+            InitializeComponent();
+
+            // Ensure buttons panel stays at bottom
+            if (base_pnl != null && base_pnl.Controls.Contains(options_pnl))
+            {
+                options_pnl.BringToFront();
+            }
+
+            ThemeManager.Apply(this);
+
+            // Force complete layout recalculation with Fill dock mode
+            this.SuspendLayout();
+            this.AutoScroll = false;  // Ensure no scrolling hides the buttons
+            this.PerformLayout();
+            this.ResumeLayout(true);  // Force immediate layout with true parameter
+
+            // Force immediate visual update
+            this.Invalidate(true);
+            this.Update();
+
+            // Subscribe to theme changes
+            ThemeManager.OnThemeChanged += HandleThemeUpdate;
+        }
+
+        private void HandleThemeUpdate()
+        {
+            ThemeManager.Apply(this);
+            this.Refresh();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            // This is connected to the return_btn.Click event
+            // Should close or navigate back
+        }
+
+        /*void SelectorIndexChanged(object sender, EventArgs e)
+        {
+            string selectedOption = selector_cb.SelectedItem as string;
+            if (selectedOption == null) return;
+            base_pnl.Controls.Clear();
+
+            UserControl controlToOpen = selectedOption switch
+            {
+                "Product" => new AddProduct(),
+                "Category" => new AddCategory(),
+                "Supplier" => new AddSupplier(),
+                "Transaction" => new AddTransaction(),
+                "Customer" => new AddCustomer(),
+                "Sale" => new AddSale(),
+                "ExternalFactor" => new AddExternalFactor()
+            };
+
+            if (controlToOpen != null)
+            {
+                controlToOpen.Dock = DockStyle.Fill;
+                base_pnl.Controls.Add(controlToOpen);
+                ThemeManager.Apply(controlToOpen);
+            }
+        }*/
+    }
+}

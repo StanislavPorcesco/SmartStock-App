@@ -8,8 +8,8 @@ namespace SmartStock
         public SettingsForm()
         {
             InitializeComponent();
-            populateOptions();
-            setRightIndex();
+            DataLayer.populateOptions(themes_cb);
+            DataLayer.setRightIndex(themes_cb);
             ThemeManager.Apply(this);
             ThemeManager.OnThemeChanged += HandleThemeUpdate;
         }
@@ -18,25 +18,6 @@ namespace SmartStock
         {
             ThemeManager.Apply(this);
             this.Refresh();
-        }
-
-        private void setRightIndex()
-        {
-            if (SettingsManager.Current.Theme == "Dark")
-            {
-                themes_cb.SelectedIndex = 0;
-            }
-            else if (SettingsManager.Current.Theme == "Light")
-            {
-                themes_cb.SelectedIndex = 1;
-            }
-        }
-        public void populateOptions()
-        {
-            themes_cb.Items.Clear();
-            themes_cb.Items.AddRange(new object[] {
-                "Dark", "Light"
-            });
         }
 
         private void apply_btn_Click(object sender, EventArgs e)
@@ -50,32 +31,9 @@ namespace SmartStock
             this.Update();
             this.Refresh();
 
-            ApplyThemeToParentForm();
+            ThemeManager.ApplyThemeToParentForm();
 
             MessageBox.Show("Settings saved successfully!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        private void ApplyThemeToParentForm()
-        {
-            try
-            {
-                foreach (Form form in Application.OpenForms)
-                {
-                    if (form.Name == "MenuForm" || form.GetType().Name == "MenuForm")
-                    {
-                        ThemeManager.Apply(form);
-                        form.Invalidate(true);
-                        form.Update();
-                        form.Refresh();
-
-                        return;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Error updating parent form: {ex.Message}");
-            }
         }
     }
 }

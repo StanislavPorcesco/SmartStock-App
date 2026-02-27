@@ -31,3 +31,7 @@ D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\refint\SmartStock.dll
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.pdb
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.genruntimeconfig.cache
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\ref\SmartStock.dll
+D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.AddForms.AddAccount.resources
+D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.User_Control.Login.resources
+D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.AddForms.Settings.resources
+D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.User_Control.MailConfirmation.resources

@@ -10,14 +10,10 @@ namespace SmartStock
         public LoginForm()
         {
             InitializeComponent();
-            //ThemeManager.OnThemeChanged += HandleThemeUpdate;
-            this.Load += (s, e) => {
-                this.SuspendLayout();
-                this.PerformLayout();
-                this.ResumeLayout();
-            };
+            ThemeManager.Apply(this);
+            ThemeManager.OnThemeChanged += HandleThemeUpdate;
+            DataLayer.OpenUserControl(this, new Login());
         }
-
 
         private void HandleThemeUpdate()
         {

@@ -20,7 +20,10 @@ namespace SmartStock
             ThemeManager.SetTheme(SettingsManager.Current.Theme);
             // 3. Creează instanța formei
             LoginForm loginForm = new LoginForm();
+            //MenuForm menuForm = new MenuForm();
 
+            //ThemeManager.Apply(menuForm);
+            //Application.Run(menuForm);
             // 4. Aplică tema pe instanța creată înainte de Run
             ThemeManager.Apply(loginForm);
             Application.Run(loginForm);

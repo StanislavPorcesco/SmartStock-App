@@ -22,5 +22,8 @@
     <Compile Update="Forms\User Control\AddProduct.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="Forms\User Control\Login.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
   </ItemGroup>
 </Project>

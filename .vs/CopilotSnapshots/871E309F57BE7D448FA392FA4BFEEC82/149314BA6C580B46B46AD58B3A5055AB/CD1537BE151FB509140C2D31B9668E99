@@ -1,0 +1,83 @@
+﻿using SmartStock.Classes.Settings;
+using SmartStock.Classes.Utils;
+using SmartStock.Forms.AddForms;
+using SmartStock.Forms.User_Control;
+
+namespace SmartStock
+{
+    public partial class LoginForm : Form
+    {
+        public LoginForm()
+        {
+            InitializeComponent();
+            ThemeManager.Apply(this);
+            ThemeManager.OnThemeChanged += HandleThemeUpdate;
+            this.Load += (s, e) =>
+            {
+                this.SuspendLayout();
+                this.PerformLayout();
+                this.ResumeLayout();
+            };
+        }
+
+
+        private void HandleThemeUpdate()
+        {
+            ThemeManager.Apply(this);
+            this.Refresh();
+        }
+
+        private void settings_btn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void account_btn_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Clear all existing controls from base_pnl
+                base_pnl.Controls.Clear();
+
+                // Suspend layout while adding controls
+                base_pnl.SuspendLayout();
+
+                // Create the AddAccount UserControl
+                UserControl controlToOpen = new AddAccount();
+
+                if (controlToOpen != null)
+                {
+                    // Set the UserControl to fill the entire panel
+                    controlToOpen.Dock = DockStyle.Fill;
+
+                    // Add the UserControl to the panel
+                    base_pnl.Controls.Add(controlToOpen);
+
+                    // Apply the current theme to the UserControl
+                    ThemeManager.Apply(controlToOpen);
+                }
+
+                // Resume layout and force complete recalculation
+                base_pnl.ResumeLayout(true);
+
+                // Force immediate visual refresh of the entire control tree
+                controlToOpen?.Invalidate(true);
+                base_pnl.Invalidate(true);
+                controlToOpen?.Update();
+                base_pnl.Update();
+                controlToOpen?.Refresh();
+                base_pnl.Refresh();
+
+                // Set focus to the new control
+                controlToOpen?.Focus();
+            }
+            catch (Exception ex)
+            {
+                // Log the error for debugging
+                System.Diagnostics.Debug.WriteLine($"Error opening AddAccount: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
+                MessageBox.Show($"Error opening Create Account form: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+    }
+}

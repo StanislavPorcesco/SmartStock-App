@@ -1,0 +1,77 @@
+﻿using SmartStock.Classes.Utils;
+using SmartStock.Forms.AddForms;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace SmartStock.Forms.User_Control
+{
+    public partial class AddAccount : UserControl
+    {
+        public AddAccount()
+        {
+            try
+            {
+                InitializeComponent();
+
+                // Only populate the selector if it exists and is initialized
+                if (selector_cb != null)
+                {
+                    DataLayer.PopulateSelector(selector_cb);
+                    selector_cb.Text = "Select an option";
+                    // Wire up the SelectedIndexChanged event
+                    selector_cb.SelectedIndexChanged += SelectorIndexChanged;
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("WARNING: selector_cb is null in AddAccount constructor");
+                }
+
+                ThemeManager.Apply(this);
+                this.Refresh();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error in AddAccount constructor: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
+                throw; // Re-throw so LoginForm can catch and display the error
+            }
+        }
+
+        void SelectorIndexChanged(object sender, EventArgs e)
+        {
+            string selectedOption = selector_cb.SelectedItem as string;
+            if (selectedOption == null) return;
+
+            // Only clear and rebuild if there's a base_pnl to work with
+            if (base_pnl != null)
+            {
+                base_pnl.Controls.Clear();
+
+                UserControl controlToOpen = selectedOption switch
+                {
+                    "Product" => new AddProduct(),
+                    "Category" => new AddCategory(),
+                    "Supplier" => new AddSupplier(),
+                    "Transaction" => new AddTransaction(),
+                    "Customer" => new AddCustomer(),
+                    "Sale" => new AddSale(),
+                    "ExternalFactor" => new AddExternalFactor()
+                };
+
+                if (controlToOpen != null)
+                {
+                    controlToOpen.Dock = DockStyle.Fill;
+                    base_pnl.Controls.Add(controlToOpen); 
+                    ThemeManager.Apply(controlToOpen);
+                }
+            }
+        }
+    }
+}

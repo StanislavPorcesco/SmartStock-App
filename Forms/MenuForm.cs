@@ -68,7 +68,7 @@ namespace SmartStock.Forms
                 currentBtn.BackColor = ThemeManager.GetCurrentPalette().LightColor;
 
                 //Left border button
-                leftBorderBtn.BackColor = ThemeManager.GetCurrentPalette().Accent;
+                leftBorderBtn.BackColor = ThemeManager.GetCurrentPalette().Text;
                 int buttonPositionInMenu = currentBtn.Location.Y + menu_buttons_pnl.Location.Y;
                 leftBorderBtn.Location = new Point(0, buttonPositionInMenu);
                 leftBorderBtn.Height = currentBtn.Height;

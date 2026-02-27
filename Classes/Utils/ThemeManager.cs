@@ -33,8 +33,8 @@ namespace SmartStock.Classes.Utils
                 DarkColor = Color.FromArgb(240, 240, 240),
                 LightColor = Color.White,
                 HoverColor = Color.FromArgb(220, 220, 220),
-                Accent = Color.Black,
-                Text = Color.Black
+                Accent = Color.FromArgb(40,40,40),
+                Text = Color.FromArgb(40,40,40)
              }}
         };
 
@@ -90,7 +90,7 @@ namespace SmartStock.Classes.Utils
                     btn.FlatAppearance.MouseOverBackColor = theme.HoverColor;
                     btn.FlatAppearance.BorderSize = 0;
                     btn.FlatStyle = FlatStyle.Flat;
-                    if (btn.Tag == "menu" || btn.Tag == "title")
+                    if ("menu".Equals(btn.Tag) || "title".Equals(btn.Tag))
                     {
                         btn.BackColor = Color.Transparent;
                     }
@@ -178,6 +178,29 @@ namespace SmartStock.Classes.Utils
         public static ThemePalette GetCurrentPalette()
         {
             return Themes[CurrentThemeName];
+        }
+
+        public static void ApplyThemeToParentForm()
+        {
+            try
+            {
+                foreach (Form form in Application.OpenForms)
+                {
+                    if (form.Name == "MenuForm" || form.GetType().Name == "MenuForm")
+                    {
+                        ThemeManager.Apply(form);
+                        form.Invalidate(true);
+                        form.Update();
+                        form.Refresh();
+
+                        return;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error updating parent form: {ex.Message}");
+            }
         }
     }
 }
