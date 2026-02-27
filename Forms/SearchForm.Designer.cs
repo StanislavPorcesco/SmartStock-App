@@ -175,7 +175,7 @@
             checkBox1.Name = "checkBox1";
             checkBox1.Size = new Size(163, 38);
             checkBox1.TabIndex = 15;
-            checkBox1.Text = "Regex Search";
+            checkBox1.Text = "Regex";
             checkBox1.UseVisualStyleBackColor = true;
             // 
             // path_pnl

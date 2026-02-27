@@ -32,9 +32,9 @@
             tableLayoutPanel1 = new TableLayoutPanel();
             checkBox3 = new CheckBox();
             checkBox2 = new CheckBox();
-            label7 = new Label();
-            label6 = new Label();
-            settings_lbl = new Label();
+            total_lbl = new Label();
+            range_lbl = new Label();
+            status_lbl = new Label();
             panel2 = new Panel();
             label4 = new Label();
             numericUpDown1 = new NumericUpDown();
@@ -69,9 +69,9 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.Controls.Add(checkBox3, 1, 0);
             tableLayoutPanel1.Controls.Add(checkBox2, 1, 6);
-            tableLayoutPanel1.Controls.Add(label7, 0, 6);
-            tableLayoutPanel1.Controls.Add(label6, 0, 4);
-            tableLayoutPanel1.Controls.Add(settings_lbl, 0, 0);
+            tableLayoutPanel1.Controls.Add(total_lbl, 0, 6);
+            tableLayoutPanel1.Controls.Add(range_lbl, 0, 4);
+            tableLayoutPanel1.Controls.Add(status_lbl, 0, 0);
             tableLayoutPanel1.Controls.Add(panel2, 1, 4);
             tableLayoutPanel1.Controls.Add(panel3, 1, 5);
             tableLayoutPanel1.Controls.Add(panel4, 0, 7);
@@ -119,48 +119,48 @@
             checkBox2.TextAlign = ContentAlignment.MiddleRight;
             checkBox2.UseVisualStyleBackColor = true;
             // 
-            // label7
+            // total_lbl
             // 
-            label7.AutoSize = true;
-            label7.Dock = DockStyle.Left;
-            label7.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label7.ForeColor = Color.White;
-            label7.Location = new Point(10, 131);
-            label7.Margin = new Padding(10, 0, 3, 0);
-            label7.Name = "label7";
-            label7.Size = new Size(195, 37);
-            label7.TabIndex = 25;
-            label7.Text = "Total Inventory Value";
-            label7.TextAlign = ContentAlignment.MiddleLeft;
+            total_lbl.AutoSize = true;
+            total_lbl.Dock = DockStyle.Left;
+            total_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            total_lbl.ForeColor = Color.White;
+            total_lbl.Location = new Point(10, 131);
+            total_lbl.Margin = new Padding(10, 0, 3, 0);
+            total_lbl.Name = "total_lbl";
+            total_lbl.Size = new Size(195, 37);
+            total_lbl.TabIndex = 25;
+            total_lbl.Text = "Total Inventory Value";
+            total_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // label6
+            // range_lbl
             // 
-            label6.AutoSize = true;
-            label6.Dock = DockStyle.Left;
-            label6.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label6.ForeColor = Color.White;
-            label6.Location = new Point(10, 37);
-            label6.Margin = new Padding(10, 0, 3, 0);
-            label6.Name = "label6";
-            tableLayoutPanel1.SetRowSpan(label6, 2);
-            label6.Size = new Size(194, 94);
-            label6.TabIndex = 24;
-            label6.Text = "Product Count Range";
-            label6.TextAlign = ContentAlignment.MiddleLeft;
+            range_lbl.AutoSize = true;
+            range_lbl.Dock = DockStyle.Left;
+            range_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            range_lbl.ForeColor = Color.White;
+            range_lbl.Location = new Point(10, 37);
+            range_lbl.Margin = new Padding(10, 0, 3, 0);
+            range_lbl.Name = "range_lbl";
+            tableLayoutPanel1.SetRowSpan(range_lbl, 2);
+            range_lbl.Size = new Size(194, 94);
+            range_lbl.TabIndex = 24;
+            range_lbl.Text = "Product Count Range";
+            range_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // settings_lbl
+            // status_lbl
             // 
-            settings_lbl.AutoSize = true;
-            settings_lbl.Dock = DockStyle.Left;
-            settings_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            settings_lbl.ForeColor = Color.White;
-            settings_lbl.Location = new Point(10, 0);
-            settings_lbl.Margin = new Padding(10, 0, 3, 0);
-            settings_lbl.Name = "settings_lbl";
-            settings_lbl.Size = new Size(142, 37);
-            settings_lbl.TabIndex = 8;
-            settings_lbl.Text = "Active/Inactive";
-            settings_lbl.TextAlign = ContentAlignment.MiddleLeft;
+            status_lbl.AutoSize = true;
+            status_lbl.Dock = DockStyle.Left;
+            status_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            status_lbl.ForeColor = Color.White;
+            status_lbl.Location = new Point(10, 0);
+            status_lbl.Margin = new Padding(10, 0, 3, 0);
+            status_lbl.Name = "status_lbl";
+            status_lbl.Size = new Size(142, 37);
+            status_lbl.TabIndex = 8;
+            status_lbl.Text = "Active/Inactive";
+            status_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // panel2
             // 
@@ -281,8 +281,8 @@
 
         private Panel panel1;
         private TableLayoutPanel tableLayoutPanel1;
-        private Label label6;
-        private Label settings_lbl;
+        private Label range_lbl;
+        private Label status_lbl;
         private Panel panel2;
         private Label label4;
         private NumericUpDown numericUpDown1;
@@ -290,7 +290,7 @@
         private Label label5;
         private NumericUpDown numericUpDown2;
         private CheckBox checkBox2;
-        private Label label7;
+        private Label total_lbl;
         private Panel panel4;
         private Button button1;
         private CheckBox checkBox3;

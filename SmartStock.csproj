@@ -17,6 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Forms\User Control\ModifyForms\BaseModifyInstance.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Forms\LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -49,6 +52,27 @@
     </Compile>
     <Compile Update="Forms\User Control\AddForms\BaseAddInstance.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\ModifyForms\ModifyCategory.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\ModifyForms\ModifyCustomer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\ModifyForms\ModifyExternalFactor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\ModifyForms\ModifyProduct.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\ModifyForms\ModifySale.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\ModifyForms\ModifySupplier.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\ModifyForms\ModifyTransaction.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="Forms\User Control\SearchForms\FilterCategories.cs">
       <SubType>UserControl</SubType>

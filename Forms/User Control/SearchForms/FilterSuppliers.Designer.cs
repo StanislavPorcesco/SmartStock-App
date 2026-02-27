@@ -33,12 +33,12 @@
             category_cb = new ComboBox();
             textBox3 = new TextBox();
             checkBox2 = new CheckBox();
-            label7 = new Label();
-            label6 = new Label();
-            label2 = new Label();
+            status_lbl = new Label();
+            range_lbl = new Label();
+            categories_lbl = new Label();
             textBox2 = new TextBox();
-            label1 = new Label();
-            settings_lbl = new Label();
+            contact_lbl = new Label();
+            supplier_lbl = new Label();
             panel2 = new Panel();
             label4 = new Label();
             numericUpDown1 = new NumericUpDown();
@@ -74,12 +74,12 @@
             tableLayoutPanel1.Controls.Add(category_cb, 1, 2);
             tableLayoutPanel1.Controls.Add(textBox3, 1, 0);
             tableLayoutPanel1.Controls.Add(checkBox2, 1, 6);
-            tableLayoutPanel1.Controls.Add(label7, 0, 6);
-            tableLayoutPanel1.Controls.Add(label6, 0, 4);
-            tableLayoutPanel1.Controls.Add(label2, 0, 2);
+            tableLayoutPanel1.Controls.Add(status_lbl, 0, 6);
+            tableLayoutPanel1.Controls.Add(range_lbl, 0, 4);
+            tableLayoutPanel1.Controls.Add(categories_lbl, 0, 2);
             tableLayoutPanel1.Controls.Add(textBox2, 1, 1);
-            tableLayoutPanel1.Controls.Add(label1, 0, 1);
-            tableLayoutPanel1.Controls.Add(settings_lbl, 0, 0);
+            tableLayoutPanel1.Controls.Add(contact_lbl, 0, 1);
+            tableLayoutPanel1.Controls.Add(supplier_lbl, 0, 0);
             tableLayoutPanel1.Controls.Add(panel2, 1, 4);
             tableLayoutPanel1.Controls.Add(panel3, 1, 5);
             tableLayoutPanel1.Controls.Add(panel4, 0, 7);
@@ -139,48 +139,48 @@
             checkBox2.TextAlign = ContentAlignment.MiddleRight;
             checkBox2.UseVisualStyleBackColor = true;
             // 
-            // label7
+            // status_lbl
             // 
-            label7.AutoSize = true;
-            label7.Dock = DockStyle.Left;
-            label7.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label7.ForeColor = Color.White;
-            label7.Location = new Point(10, 249);
-            label7.Margin = new Padding(10, 0, 3, 0);
-            label7.Name = "label7";
-            label7.Size = new Size(124, 37);
-            label7.TabIndex = 25;
-            label7.Text = "Active Status";
-            label7.TextAlign = ContentAlignment.MiddleLeft;
+            status_lbl.AutoSize = true;
+            status_lbl.Dock = DockStyle.Left;
+            status_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            status_lbl.ForeColor = Color.White;
+            status_lbl.Location = new Point(10, 249);
+            status_lbl.Margin = new Padding(10, 0, 3, 0);
+            status_lbl.Name = "status_lbl";
+            status_lbl.Size = new Size(124, 37);
+            status_lbl.TabIndex = 25;
+            status_lbl.Text = "Active Status";
+            status_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // label6
+            // range_lbl
             // 
-            label6.AutoSize = true;
-            label6.Dock = DockStyle.Left;
-            label6.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label6.ForeColor = Color.White;
-            label6.Location = new Point(10, 155);
-            label6.Margin = new Padding(10, 0, 3, 0);
-            label6.Name = "label6";
-            tableLayoutPanel1.SetRowSpan(label6, 2);
-            label6.Size = new Size(236, 94);
-            label6.TabIndex = 24;
-            label6.Text = "Supply Volume (Min/Max)";
-            label6.TextAlign = ContentAlignment.MiddleLeft;
+            range_lbl.AutoSize = true;
+            range_lbl.Dock = DockStyle.Left;
+            range_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            range_lbl.ForeColor = Color.White;
+            range_lbl.Location = new Point(10, 155);
+            range_lbl.Margin = new Padding(10, 0, 3, 0);
+            range_lbl.Name = "range_lbl";
+            tableLayoutPanel1.SetRowSpan(range_lbl, 2);
+            range_lbl.Size = new Size(236, 94);
+            range_lbl.TabIndex = 24;
+            range_lbl.Text = "Supply Volume (Min/Max)";
+            range_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // label2
+            // categories_lbl
             // 
-            label2.AutoSize = true;
-            label2.Dock = DockStyle.Left;
-            label2.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label2.ForeColor = Color.White;
-            label2.Location = new Point(10, 102);
-            label2.Margin = new Padding(10, 0, 3, 0);
-            label2.Name = "label2";
-            label2.Size = new Size(179, 53);
-            label2.TabIndex = 18;
-            label2.Text = "Product Categories Supplied";
-            label2.TextAlign = ContentAlignment.MiddleLeft;
+            categories_lbl.AutoSize = true;
+            categories_lbl.Dock = DockStyle.Left;
+            categories_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            categories_lbl.ForeColor = Color.White;
+            categories_lbl.Location = new Point(10, 102);
+            categories_lbl.Margin = new Padding(10, 0, 3, 0);
+            categories_lbl.Name = "categories_lbl";
+            categories_lbl.Size = new Size(179, 53);
+            categories_lbl.TabIndex = 18;
+            categories_lbl.Text = "Product Categories Supplied";
+            categories_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // textBox2
             // 
@@ -194,33 +194,33 @@
             textBox2.Size = new Size(255, 31);
             textBox2.TabIndex = 17;
             // 
-            // label1
+            // contact_lbl
             // 
-            label1.AutoSize = true;
-            label1.Dock = DockStyle.Left;
-            label1.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label1.ForeColor = Color.White;
-            label1.Location = new Point(10, 51);
-            label1.Margin = new Padding(10, 0, 3, 0);
-            label1.Name = "label1";
-            label1.Size = new Size(140, 51);
-            label1.TabIndex = 16;
-            label1.Text = "Contact Person";
-            label1.TextAlign = ContentAlignment.MiddleLeft;
+            contact_lbl.AutoSize = true;
+            contact_lbl.Dock = DockStyle.Left;
+            contact_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            contact_lbl.ForeColor = Color.White;
+            contact_lbl.Location = new Point(10, 51);
+            contact_lbl.Margin = new Padding(10, 0, 3, 0);
+            contact_lbl.Name = "contact_lbl";
+            contact_lbl.Size = new Size(140, 51);
+            contact_lbl.TabIndex = 16;
+            contact_lbl.Text = "Contact Person";
+            contact_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // settings_lbl
+            // supplier_lbl
             // 
-            settings_lbl.AutoSize = true;
-            settings_lbl.Dock = DockStyle.Left;
-            settings_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            settings_lbl.ForeColor = Color.White;
-            settings_lbl.Location = new Point(10, 0);
-            settings_lbl.Margin = new Padding(10, 0, 3, 0);
-            settings_lbl.Name = "settings_lbl";
-            settings_lbl.Size = new Size(235, 51);
-            settings_lbl.TabIndex = 8;
-            settings_lbl.Text = "Supplier Name / Company";
-            settings_lbl.TextAlign = ContentAlignment.MiddleLeft;
+            supplier_lbl.AutoSize = true;
+            supplier_lbl.Dock = DockStyle.Left;
+            supplier_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            supplier_lbl.ForeColor = Color.White;
+            supplier_lbl.Location = new Point(10, 0);
+            supplier_lbl.Margin = new Padding(10, 0, 3, 0);
+            supplier_lbl.Name = "supplier_lbl";
+            supplier_lbl.Size = new Size(235, 51);
+            supplier_lbl.TabIndex = 8;
+            supplier_lbl.Text = "Supplier Name / Company";
+            supplier_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // panel2
             // 
@@ -341,10 +341,10 @@
 
         private Panel panel1;
         private TableLayoutPanel tableLayoutPanel1;
-        private Label label6;
-        private Label label2;
-        private Label label1;
-        private Label settings_lbl;
+        private Label range_lbl;
+        private Label categories_lbl;
+        private Label contact_lbl;
+        private Label supplier_lbl;
         private Panel panel2;
         private Label label4;
         private NumericUpDown numericUpDown1;
@@ -352,7 +352,7 @@
         private Label label5;
         private NumericUpDown numericUpDown2;
         private CheckBox checkBox2;
-        private Label label7;
+        private Label status_lbl;
         private Panel panel4;
         private Button button1;
         private TextBox textBox3;

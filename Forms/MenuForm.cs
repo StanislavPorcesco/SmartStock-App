@@ -145,7 +145,9 @@ namespace SmartStock.Forms
         private void modify_btn_Click(object sender, EventArgs e)
         {
             ActivateButton(sender);
-            OpenChildForm(new ModifyForm());
+            BaseModifyInstance form = new BaseModifyInstance();
+            OpenChildForm(form);
+            DataLayer.OpenUserControl(form, new AddProduct());
         }
 
         private void analyze_btn_Click(object sender, EventArgs e)

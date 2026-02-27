@@ -1,4 +1,5 @@
 ﻿using SmartStock.Classes.Utils;
+using SmartStock.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,6 +20,9 @@ namespace SmartStock.Forms.User_Control.SearchForms
             ThemeManager.Apply(this);
             ThemeManager.OnThemeChanged += HandleThemeUpdate;
             this.Refresh();
+            ToolTipHelp.AddToolTip(status_lbl, "Filters to show only categories that currently contain active, in-stock items.");
+            ToolTipHelp.AddToolTip(range_lbl, "Filters categories based on the number of individual products they contain.");
+            ToolTipHelp.AddToolTip(total_lbl, "Displays categories whose total stock value falls within the specified monetary range.");
         }
         private void HandleThemeUpdate()
         {

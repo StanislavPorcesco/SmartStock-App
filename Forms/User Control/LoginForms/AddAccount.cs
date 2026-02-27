@@ -34,7 +34,7 @@ namespace SmartStock.Forms.AddForms
 
         private void create_btn_Click(object sender, EventArgs e)
         {
-            //string code = EmailService.SendVerificationCode(email_tb.Text);
+            string code = EmailService.SendVerificationCode(email_tb.Text);
             DataLayer.OpenUserControl(this.FindForm(), new MailConfirmation());
         }
     }

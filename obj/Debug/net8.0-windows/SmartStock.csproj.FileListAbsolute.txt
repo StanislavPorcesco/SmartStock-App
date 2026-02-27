@@ -2,7 +2,6 @@ D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.csproj.Assemb
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.AnalyzeForm.resources
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.LoginForm.resources
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.MenuForm.resources
-D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.ModifyForm.resources
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.SettingsForm.resources
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.AddForms.AddCategory.resources
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.User_Control.AddCustomer.resources
@@ -42,3 +41,12 @@ D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.User_Co
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.User_Control.SearchForms.FilterCustomers.resources
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.User_Control.SearchForms.FilterSales.resources
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.User_Control.SearchForms.FilterFactors.resources
+D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.BaseModifyInstance.resources
+D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.AddForms.ModifyCategory.resources
+D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.User_Control.ModifyCustomer.resources
+D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.User_Control.ModifyExternalFactor.resources
+D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.User_Control.ModifyProduct.resources
+D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.User_Control.ModifySale.resources
+D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.User_Control.ModifySupplier.resources
+D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.User_Control.ModifyTransaction.resources
+D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.Form1.resources

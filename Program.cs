@@ -14,19 +14,15 @@ namespace SmartStock
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            // 1. Încarcă setările din JSON
             SettingsManager.Load();
-
-            // 2. Setează tema curentă în manager (asta doar pregătește paleta)
             ThemeManager.SetTheme(SettingsManager.Current.Theme);
-            // 3. Creează instanța formei
-            LoginForm loginForm = new LoginForm();
-            //MenuForm menuForm = new MenuForm();
 
-            //ThemeManager.Apply(menuForm);
-            //Application.Run(menuForm);
-            // 4. Aplică tema pe instanța creată înainte de Run
-            ThemeManager.Apply(loginForm);
+            LoginForm loginForm = new LoginForm();
+
+            //Form loginForm = new Form1();
+
+
+            //ThemeManager.Apply(loginForm);
             Application.Run(loginForm);
             
         }

@@ -1,4 +1,5 @@
 ﻿using SmartStock.Classes.Utils;
+using SmartStock.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,6 +20,13 @@ namespace SmartStock.Forms.User_Control.SearchForms
             ThemeManager.Apply(this);
             ThemeManager.OnThemeChanged += HandleThemeUpdate;
             this.Refresh();
+            ToolTipHelp.AddToolTip(category_lbl, "Filters products by their assigned group or department for easier inventory organization.");
+            ToolTipHelp.AddToolTip(supplier_lbl, "Displays products provided by a specific partner or manufacturer.");
+            ToolTipHelp.AddToolTip(safety_lbl, "Shows items where the current stock is lower than the predefined minimum threshold.");
+            ToolTipHelp.AddToolTip(dead_lbl, "Identifies products with zero sales or movement during the last X days.");
+            ToolTipHelp.AddToolTip(range_lbl, "Filters results based on the unit price, between the specified minimum and maximum values.");
+            ToolTipHelp.AddToolTip(top_lbl, "Highlights the most popular products with the highest sales volume in the selected period.");
+
         }
         private void HandleThemeUpdate()
         {

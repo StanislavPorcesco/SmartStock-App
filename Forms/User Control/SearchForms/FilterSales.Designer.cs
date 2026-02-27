@@ -34,13 +34,13 @@
             comboBox1 = new ComboBox();
             category_cb = new ComboBox();
             dateTimePicker1 = new DateTimePicker();
-            label7 = new Label();
-            label6 = new Label();
-            label3 = new Label();
-            label2 = new Label();
+            inclusion_lbl = new Label();
+            total_range_lbl = new Label();
+            payment_lbl = new Label();
+            customer_lbl = new Label();
             textBox2 = new TextBox();
-            label1 = new Label();
-            settings_lbl = new Label();
+            supplier_lbl = new Label();
+            range_lbl = new Label();
             panel2 = new Panel();
             label4 = new Label();
             numericUpDown1 = new NumericUpDown();
@@ -77,13 +77,13 @@
             tableLayoutPanel1.Controls.Add(comboBox1, 1, 3);
             tableLayoutPanel1.Controls.Add(category_cb, 1, 2);
             tableLayoutPanel1.Controls.Add(dateTimePicker1, 1, 0);
-            tableLayoutPanel1.Controls.Add(label7, 0, 6);
-            tableLayoutPanel1.Controls.Add(label6, 0, 4);
-            tableLayoutPanel1.Controls.Add(label3, 0, 3);
-            tableLayoutPanel1.Controls.Add(label2, 0, 2);
+            tableLayoutPanel1.Controls.Add(inclusion_lbl, 0, 6);
+            tableLayoutPanel1.Controls.Add(total_range_lbl, 0, 4);
+            tableLayoutPanel1.Controls.Add(payment_lbl, 0, 3);
+            tableLayoutPanel1.Controls.Add(customer_lbl, 0, 2);
             tableLayoutPanel1.Controls.Add(textBox2, 1, 1);
-            tableLayoutPanel1.Controls.Add(label1, 0, 1);
-            tableLayoutPanel1.Controls.Add(settings_lbl, 0, 0);
+            tableLayoutPanel1.Controls.Add(supplier_lbl, 0, 1);
+            tableLayoutPanel1.Controls.Add(range_lbl, 0, 0);
             tableLayoutPanel1.Controls.Add(panel2, 1, 4);
             tableLayoutPanel1.Controls.Add(panel3, 1, 5);
             tableLayoutPanel1.Controls.Add(panel4, 0, 7);
@@ -153,62 +153,62 @@
             dateTimePicker1.Size = new Size(250, 31);
             dateTimePicker1.TabIndex = 29;
             // 
-            // label7
+            // inclusion_lbl
             // 
-            label7.AutoSize = true;
-            label7.Dock = DockStyle.Left;
-            label7.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label7.ForeColor = Color.White;
-            label7.Location = new Point(10, 288);
-            label7.Margin = new Padding(10, 0, 3, 0);
-            label7.Name = "label7";
-            label7.Size = new Size(161, 51);
-            label7.TabIndex = 25;
-            label7.Text = "Product Inclusion";
-            label7.TextAlign = ContentAlignment.MiddleLeft;
+            inclusion_lbl.AutoSize = true;
+            inclusion_lbl.Dock = DockStyle.Left;
+            inclusion_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            inclusion_lbl.ForeColor = Color.White;
+            inclusion_lbl.Location = new Point(10, 288);
+            inclusion_lbl.Margin = new Padding(10, 0, 3, 0);
+            inclusion_lbl.Name = "inclusion_lbl";
+            inclusion_lbl.Size = new Size(161, 51);
+            inclusion_lbl.TabIndex = 25;
+            inclusion_lbl.Text = "Product Inclusion";
+            inclusion_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // label6
+            // total_range_lbl
             // 
-            label6.AutoSize = true;
-            label6.Dock = DockStyle.Left;
-            label6.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label6.ForeColor = Color.White;
-            label6.Location = new Point(10, 194);
-            label6.Margin = new Padding(10, 0, 3, 0);
-            label6.Name = "label6";
-            tableLayoutPanel1.SetRowSpan(label6, 2);
-            label6.Size = new Size(187, 94);
-            label6.TabIndex = 24;
-            label6.Text = "Total Amount Range";
-            label6.TextAlign = ContentAlignment.MiddleLeft;
+            total_range_lbl.AutoSize = true;
+            total_range_lbl.Dock = DockStyle.Left;
+            total_range_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            total_range_lbl.ForeColor = Color.White;
+            total_range_lbl.Location = new Point(10, 194);
+            total_range_lbl.Margin = new Padding(10, 0, 3, 0);
+            total_range_lbl.Name = "total_range_lbl";
+            tableLayoutPanel1.SetRowSpan(total_range_lbl, 2);
+            total_range_lbl.Size = new Size(187, 94);
+            total_range_lbl.TabIndex = 24;
+            total_range_lbl.Text = "Total Amount Range";
+            total_range_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // label3
+            // payment_lbl
             // 
-            label3.AutoSize = true;
-            label3.Dock = DockStyle.Left;
-            label3.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label3.ForeColor = Color.White;
-            label3.Location = new Point(10, 141);
-            label3.Margin = new Padding(10, 0, 3, 0);
-            label3.Name = "label3";
-            label3.Size = new Size(220, 53);
-            label3.TabIndex = 20;
-            label3.Text = "Payment Status/Method";
-            label3.TextAlign = ContentAlignment.MiddleLeft;
+            payment_lbl.AutoSize = true;
+            payment_lbl.Dock = DockStyle.Left;
+            payment_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            payment_lbl.ForeColor = Color.White;
+            payment_lbl.Location = new Point(10, 141);
+            payment_lbl.Margin = new Padding(10, 0, 3, 0);
+            payment_lbl.Name = "payment_lbl";
+            payment_lbl.Size = new Size(220, 53);
+            payment_lbl.TabIndex = 20;
+            payment_lbl.Text = "Payment Status/Method";
+            payment_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // label2
+            // customer_lbl
             // 
-            label2.AutoSize = true;
-            label2.Dock = DockStyle.Left;
-            label2.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label2.ForeColor = Color.White;
-            label2.Location = new Point(10, 88);
-            label2.Margin = new Padding(10, 0, 3, 0);
-            label2.Name = "label2";
-            label2.Size = new Size(155, 53);
-            label2.TabIndex = 18;
-            label2.Text = "Customer Search";
-            label2.TextAlign = ContentAlignment.MiddleLeft;
+            customer_lbl.AutoSize = true;
+            customer_lbl.Dock = DockStyle.Left;
+            customer_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            customer_lbl.ForeColor = Color.White;
+            customer_lbl.Location = new Point(10, 88);
+            customer_lbl.Margin = new Padding(10, 0, 3, 0);
+            customer_lbl.Name = "customer_lbl";
+            customer_lbl.Size = new Size(155, 53);
+            customer_lbl.TabIndex = 18;
+            customer_lbl.Text = "Customer Search";
+            customer_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // textBox2
             // 
@@ -222,33 +222,33 @@
             textBox2.Size = new Size(255, 31);
             textBox2.TabIndex = 17;
             // 
-            // label1
+            // supplier_lbl
             // 
-            label1.AutoSize = true;
-            label1.Dock = DockStyle.Left;
-            label1.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label1.ForeColor = Color.White;
-            label1.Location = new Point(10, 37);
-            label1.Margin = new Padding(10, 0, 3, 0);
-            label1.Name = "label1";
-            label1.Size = new Size(82, 51);
-            label1.TabIndex = 16;
-            label1.Text = "Supplier";
-            label1.TextAlign = ContentAlignment.MiddleLeft;
+            supplier_lbl.AutoSize = true;
+            supplier_lbl.Dock = DockStyle.Left;
+            supplier_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            supplier_lbl.ForeColor = Color.White;
+            supplier_lbl.Location = new Point(10, 37);
+            supplier_lbl.Margin = new Padding(10, 0, 3, 0);
+            supplier_lbl.Name = "supplier_lbl";
+            supplier_lbl.Size = new Size(82, 51);
+            supplier_lbl.TabIndex = 16;
+            supplier_lbl.Text = "Supplier";
+            supplier_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // settings_lbl
+            // range_lbl
             // 
-            settings_lbl.AutoSize = true;
-            settings_lbl.Dock = DockStyle.Left;
-            settings_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            settings_lbl.ForeColor = Color.White;
-            settings_lbl.Location = new Point(10, 0);
-            settings_lbl.Margin = new Padding(10, 0, 3, 0);
-            settings_lbl.Name = "settings_lbl";
-            settings_lbl.Size = new Size(111, 37);
-            settings_lbl.TabIndex = 8;
-            settings_lbl.Text = "Date Range";
-            settings_lbl.TextAlign = ContentAlignment.MiddleLeft;
+            range_lbl.AutoSize = true;
+            range_lbl.Dock = DockStyle.Left;
+            range_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            range_lbl.ForeColor = Color.White;
+            range_lbl.Location = new Point(10, 0);
+            range_lbl.Margin = new Padding(10, 0, 3, 0);
+            range_lbl.Name = "range_lbl";
+            range_lbl.Size = new Size(111, 37);
+            range_lbl.TabIndex = 8;
+            range_lbl.Text = "Date Range";
+            range_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // panel2
             // 
@@ -369,19 +369,19 @@
 
         private Panel panel1;
         private TableLayoutPanel tableLayoutPanel1;
-        private Label label6;
-        private Label label3;
-        private Label label2;
+        private Label total_range_lbl;
+        private Label payment_lbl;
+        private Label customer_lbl;
         private TextBox textBox2;
-        private Label label1;
-        private Label settings_lbl;
+        private Label supplier_lbl;
+        private Label range_lbl;
         private Panel panel2;
         private Label label4;
         private NumericUpDown numericUpDown1;
         private Panel panel3;
         private Label label5;
         private NumericUpDown numericUpDown2;
-        private Label label7;
+        private Label inclusion_lbl;
         private Panel panel4;
         private Button button1;
         private DateTimePicker dateTimePicker1;

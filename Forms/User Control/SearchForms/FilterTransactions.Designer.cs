@@ -32,12 +32,12 @@
             tableLayoutPanel1 = new TableLayoutPanel();
             comboBox1 = new ComboBox();
             category_cb = new ComboBox();
-            label6 = new Label();
+            range_lbl = new Label();
             textBox1 = new TextBox();
-            label3 = new Label();
-            label2 = new Label();
-            label1 = new Label();
-            settings_lbl = new Label();
+            dead_lbl = new Label();
+            user_lbl = new Label();
+            type_lbl = new Label();
+            date_lbl = new Label();
             panel2 = new Panel();
             label4 = new Label();
             numericUpDown1 = new NumericUpDown();
@@ -73,12 +73,12 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.Controls.Add(comboBox1, 1, 2);
             tableLayoutPanel1.Controls.Add(category_cb, 1, 1);
-            tableLayoutPanel1.Controls.Add(label6, 0, 4);
+            tableLayoutPanel1.Controls.Add(range_lbl, 0, 4);
             tableLayoutPanel1.Controls.Add(textBox1, 1, 3);
-            tableLayoutPanel1.Controls.Add(label3, 0, 3);
-            tableLayoutPanel1.Controls.Add(label2, 0, 2);
-            tableLayoutPanel1.Controls.Add(label1, 0, 1);
-            tableLayoutPanel1.Controls.Add(settings_lbl, 0, 0);
+            tableLayoutPanel1.Controls.Add(dead_lbl, 0, 3);
+            tableLayoutPanel1.Controls.Add(user_lbl, 0, 2);
+            tableLayoutPanel1.Controls.Add(type_lbl, 0, 1);
+            tableLayoutPanel1.Controls.Add(date_lbl, 0, 0);
             tableLayoutPanel1.Controls.Add(panel2, 1, 4);
             tableLayoutPanel1.Controls.Add(panel3, 1, 5);
             tableLayoutPanel1.Controls.Add(panel4, 0, 7);
@@ -127,20 +127,20 @@
             category_cb.Size = new Size(255, 33);
             category_cb.TabIndex = 29;
             // 
-            // label6
+            // range_lbl
             // 
-            label6.AutoSize = true;
-            label6.Dock = DockStyle.Left;
-            label6.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label6.ForeColor = Color.White;
-            label6.Location = new Point(10, 194);
-            label6.Margin = new Padding(10, 0, 3, 0);
-            label6.Name = "label6";
-            tableLayoutPanel1.SetRowSpan(label6, 2);
-            label6.Size = new Size(146, 94);
-            label6.TabIndex = 24;
-            label6.Text = "Quantity Range";
-            label6.TextAlign = ContentAlignment.MiddleLeft;
+            range_lbl.AutoSize = true;
+            range_lbl.Dock = DockStyle.Left;
+            range_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            range_lbl.ForeColor = Color.White;
+            range_lbl.Location = new Point(10, 194);
+            range_lbl.Margin = new Padding(10, 0, 3, 0);
+            range_lbl.Name = "range_lbl";
+            tableLayoutPanel1.SetRowSpan(range_lbl, 2);
+            range_lbl.Size = new Size(146, 94);
+            range_lbl.TabIndex = 24;
+            range_lbl.Text = "Quantity Range";
+            range_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // textBox1
             // 
@@ -154,61 +154,61 @@
             textBox1.Size = new Size(255, 31);
             textBox1.TabIndex = 21;
             // 
-            // label3
+            // dead_lbl
             // 
-            label3.AutoSize = true;
-            label3.Dock = DockStyle.Left;
-            label3.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label3.ForeColor = Color.White;
-            label3.Location = new Point(10, 143);
-            label3.Margin = new Padding(10, 0, 3, 0);
-            label3.Name = "label3";
-            label3.Size = new Size(108, 51);
-            label3.TabIndex = 20;
-            label3.Text = "Dead Stock";
-            label3.TextAlign = ContentAlignment.MiddleLeft;
+            dead_lbl.AutoSize = true;
+            dead_lbl.Dock = DockStyle.Left;
+            dead_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            dead_lbl.ForeColor = Color.White;
+            dead_lbl.Location = new Point(10, 143);
+            dead_lbl.Margin = new Padding(10, 0, 3, 0);
+            dead_lbl.Name = "dead_lbl";
+            dead_lbl.Size = new Size(108, 51);
+            dead_lbl.TabIndex = 20;
+            dead_lbl.Text = "Dead Stock";
+            dead_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // label2
+            // user_lbl
             // 
-            label2.AutoSize = true;
-            label2.Dock = DockStyle.Left;
-            label2.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label2.ForeColor = Color.White;
-            label2.Location = new Point(10, 90);
-            label2.Margin = new Padding(10, 0, 3, 0);
-            label2.Name = "label2";
-            label2.Size = new Size(151, 53);
-            label2.TabIndex = 18;
-            label2.Text = "User / Employee";
-            label2.TextAlign = ContentAlignment.MiddleLeft;
+            user_lbl.AutoSize = true;
+            user_lbl.Dock = DockStyle.Left;
+            user_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            user_lbl.ForeColor = Color.White;
+            user_lbl.Location = new Point(10, 90);
+            user_lbl.Margin = new Padding(10, 0, 3, 0);
+            user_lbl.Name = "user_lbl";
+            user_lbl.Size = new Size(151, 53);
+            user_lbl.TabIndex = 18;
+            user_lbl.Text = "User / Employee";
+            user_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // label1
+            // type_lbl
             // 
-            label1.AutoSize = true;
-            label1.Dock = DockStyle.Left;
-            label1.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label1.ForeColor = Color.White;
-            label1.Location = new Point(10, 37);
-            label1.Margin = new Padding(10, 0, 3, 0);
-            label1.Name = "label1";
-            label1.Size = new Size(53, 53);
-            label1.TabIndex = 16;
-            label1.Text = "Type";
-            label1.TextAlign = ContentAlignment.MiddleLeft;
+            type_lbl.AutoSize = true;
+            type_lbl.Dock = DockStyle.Left;
+            type_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            type_lbl.ForeColor = Color.White;
+            type_lbl.Location = new Point(10, 37);
+            type_lbl.Margin = new Padding(10, 0, 3, 0);
+            type_lbl.Name = "type_lbl";
+            type_lbl.Size = new Size(53, 53);
+            type_lbl.TabIndex = 16;
+            type_lbl.Text = "Type";
+            type_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // settings_lbl
+            // date_lbl
             // 
-            settings_lbl.AutoSize = true;
-            settings_lbl.Dock = DockStyle.Left;
-            settings_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            settings_lbl.ForeColor = Color.White;
-            settings_lbl.Location = new Point(10, 0);
-            settings_lbl.Margin = new Padding(10, 0, 3, 0);
-            settings_lbl.Name = "settings_lbl";
-            settings_lbl.Size = new Size(111, 37);
-            settings_lbl.TabIndex = 8;
-            settings_lbl.Text = "Date Range";
-            settings_lbl.TextAlign = ContentAlignment.MiddleLeft;
+            date_lbl.AutoSize = true;
+            date_lbl.Dock = DockStyle.Left;
+            date_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            date_lbl.ForeColor = Color.White;
+            date_lbl.Location = new Point(10, 0);
+            date_lbl.Margin = new Padding(10, 0, 3, 0);
+            date_lbl.Name = "date_lbl";
+            date_lbl.Size = new Size(111, 37);
+            date_lbl.TabIndex = 8;
+            date_lbl.Text = "Date Range";
+            date_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // panel2
             // 
@@ -339,12 +339,12 @@
 
         private Panel panel1;
         private TableLayoutPanel tableLayoutPanel1;
-        private Label label6;
+        private Label range_lbl;
         private TextBox textBox1;
-        private Label label3;
-        private Label label2;
-        private Label label1;
-        private Label settings_lbl;
+        private Label dead_lbl;
+        private Label user_lbl;
+        private Label type_lbl;
+        private Label date_lbl;
         private Panel panel2;
         private Label label4;
         private NumericUpDown numericUpDown1;

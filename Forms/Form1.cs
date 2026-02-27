@@ -6,15 +6,18 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Forms;
+using SmartStock.Utils;
 
 namespace SmartStock.Forms
 {
-    public partial class ModifyForm : Form
+    public partial class Form1 : Form
     {
-        public ModifyForm()
+        public Form1()
         {
             InitializeComponent();
+            ToolTipHelp.AddToolTip(label1, "This is a tooltip for label1");
         }
     }
 }

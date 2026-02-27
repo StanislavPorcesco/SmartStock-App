@@ -31,15 +31,15 @@
             panel1 = new Panel();
             tableLayoutPanel1 = new TableLayoutPanel();
             checkBox2 = new CheckBox();
-            label7 = new Label();
-            label6 = new Label();
+            top_lbl = new Label();
+            range_lbl = new Label();
             textBox1 = new TextBox();
-            label3 = new Label();
-            label2 = new Label();
+            dead_lbl = new Label();
+            safety_lbl = new Label();
             textBox2 = new TextBox();
-            label1 = new Label();
+            supplier_lbl = new Label();
             category_cb = new ComboBox();
-            settings_lbl = new Label();
+            category_lbl = new Label();
             checkBox1 = new CheckBox();
             panel2 = new Panel();
             label4 = new Label();
@@ -74,15 +74,15 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.Controls.Add(checkBox2, 1, 6);
-            tableLayoutPanel1.Controls.Add(label7, 0, 6);
-            tableLayoutPanel1.Controls.Add(label6, 0, 4);
+            tableLayoutPanel1.Controls.Add(top_lbl, 0, 6);
+            tableLayoutPanel1.Controls.Add(range_lbl, 0, 4);
             tableLayoutPanel1.Controls.Add(textBox1, 1, 3);
-            tableLayoutPanel1.Controls.Add(label3, 0, 3);
-            tableLayoutPanel1.Controls.Add(label2, 0, 2);
+            tableLayoutPanel1.Controls.Add(dead_lbl, 0, 3);
+            tableLayoutPanel1.Controls.Add(safety_lbl, 0, 2);
             tableLayoutPanel1.Controls.Add(textBox2, 1, 1);
-            tableLayoutPanel1.Controls.Add(label1, 0, 1);
+            tableLayoutPanel1.Controls.Add(supplier_lbl, 0, 1);
             tableLayoutPanel1.Controls.Add(category_cb, 1, 0);
-            tableLayoutPanel1.Controls.Add(settings_lbl, 0, 0);
+            tableLayoutPanel1.Controls.Add(category_lbl, 0, 0);
             tableLayoutPanel1.Controls.Add(checkBox1, 1, 2);
             tableLayoutPanel1.Controls.Add(panel2, 1, 4);
             tableLayoutPanel1.Controls.Add(panel3, 1, 5);
@@ -117,34 +117,34 @@
             checkBox2.TextAlign = ContentAlignment.MiddleRight;
             checkBox2.UseVisualStyleBackColor = true;
             // 
-            // label7
+            // top_lbl
             // 
-            label7.AutoSize = true;
-            label7.Dock = DockStyle.Left;
-            label7.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label7.ForeColor = Color.White;
-            label7.Location = new Point(10, 286);
-            label7.Margin = new Padding(10, 0, 3, 0);
-            label7.Name = "label7";
-            label7.Size = new Size(103, 37);
-            label7.TabIndex = 25;
-            label7.Text = "Top Sellers";
-            label7.TextAlign = ContentAlignment.MiddleLeft;
+            top_lbl.AutoSize = true;
+            top_lbl.Dock = DockStyle.Left;
+            top_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            top_lbl.ForeColor = Color.White;
+            top_lbl.Location = new Point(10, 286);
+            top_lbl.Margin = new Padding(10, 0, 3, 0);
+            top_lbl.Name = "top_lbl";
+            top_lbl.Size = new Size(103, 37);
+            top_lbl.TabIndex = 25;
+            top_lbl.Text = "Top Sellers";
+            top_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // label6
+            // range_lbl
             // 
-            label6.AutoSize = true;
-            label6.Dock = DockStyle.Left;
-            label6.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label6.ForeColor = Color.White;
-            label6.Location = new Point(10, 192);
-            label6.Margin = new Padding(10, 0, 3, 0);
-            label6.Name = "label6";
-            tableLayoutPanel1.SetRowSpan(label6, 2);
-            label6.Size = new Size(113, 94);
-            label6.TabIndex = 24;
-            label6.Text = "Price Range";
-            label6.TextAlign = ContentAlignment.MiddleLeft;
+            range_lbl.AutoSize = true;
+            range_lbl.Dock = DockStyle.Left;
+            range_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            range_lbl.ForeColor = Color.White;
+            range_lbl.Location = new Point(10, 192);
+            range_lbl.Margin = new Padding(10, 0, 3, 0);
+            range_lbl.Name = "range_lbl";
+            tableLayoutPanel1.SetRowSpan(range_lbl, 2);
+            range_lbl.Size = new Size(113, 94);
+            range_lbl.TabIndex = 24;
+            range_lbl.Text = "Price Range";
+            range_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // textBox1
             // 
@@ -158,33 +158,33 @@
             textBox1.Size = new Size(255, 31);
             textBox1.TabIndex = 21;
             // 
-            // label3
+            // dead_lbl
             // 
-            label3.AutoSize = true;
-            label3.Dock = DockStyle.Left;
-            label3.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label3.ForeColor = Color.White;
-            label3.Location = new Point(10, 141);
-            label3.Margin = new Padding(10, 0, 3, 0);
-            label3.Name = "label3";
-            label3.Size = new Size(108, 51);
-            label3.TabIndex = 20;
-            label3.Text = "Dead Stock";
-            label3.TextAlign = ContentAlignment.MiddleLeft;
+            dead_lbl.AutoSize = true;
+            dead_lbl.Dock = DockStyle.Left;
+            dead_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            dead_lbl.ForeColor = Color.White;
+            dead_lbl.Location = new Point(10, 141);
+            dead_lbl.Margin = new Padding(10, 0, 3, 0);
+            dead_lbl.Name = "dead_lbl";
+            dead_lbl.Size = new Size(108, 51);
+            dead_lbl.TabIndex = 20;
+            dead_lbl.Text = "Dead Stock";
+            dead_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // label2
+            // safety_lbl
             // 
-            label2.AutoSize = true;
-            label2.Dock = DockStyle.Left;
-            label2.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label2.ForeColor = Color.White;
-            label2.Location = new Point(10, 104);
-            label2.Margin = new Padding(10, 0, 3, 0);
-            label2.Name = "label2";
-            label2.Size = new Size(170, 37);
-            label2.TabIndex = 18;
-            label2.Text = "Under Safety Limit";
-            label2.TextAlign = ContentAlignment.MiddleLeft;
+            safety_lbl.AutoSize = true;
+            safety_lbl.Dock = DockStyle.Left;
+            safety_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            safety_lbl.ForeColor = Color.White;
+            safety_lbl.Location = new Point(10, 104);
+            safety_lbl.Margin = new Padding(10, 0, 3, 0);
+            safety_lbl.Name = "safety_lbl";
+            safety_lbl.Size = new Size(170, 37);
+            safety_lbl.TabIndex = 18;
+            safety_lbl.Text = "Under Safety Limit";
+            safety_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // textBox2
             // 
@@ -198,19 +198,19 @@
             textBox2.Size = new Size(255, 31);
             textBox2.TabIndex = 17;
             // 
-            // label1
+            // supplier_lbl
             // 
-            label1.AutoSize = true;
-            label1.Dock = DockStyle.Left;
-            label1.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label1.ForeColor = Color.White;
-            label1.Location = new Point(10, 53);
-            label1.Margin = new Padding(10, 0, 3, 0);
-            label1.Name = "label1";
-            label1.Size = new Size(82, 51);
-            label1.TabIndex = 16;
-            label1.Text = "Supplier";
-            label1.TextAlign = ContentAlignment.MiddleLeft;
+            supplier_lbl.AutoSize = true;
+            supplier_lbl.Dock = DockStyle.Left;
+            supplier_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            supplier_lbl.ForeColor = Color.White;
+            supplier_lbl.Location = new Point(10, 53);
+            supplier_lbl.Margin = new Padding(10, 0, 3, 0);
+            supplier_lbl.Name = "supplier_lbl";
+            supplier_lbl.Size = new Size(82, 51);
+            supplier_lbl.TabIndex = 16;
+            supplier_lbl.Text = "Supplier";
+            supplier_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // category_cb
             // 
@@ -226,19 +226,19 @@
             category_cb.Size = new Size(255, 33);
             category_cb.TabIndex = 15;
             // 
-            // settings_lbl
+            // category_lbl
             // 
-            settings_lbl.AutoSize = true;
-            settings_lbl.Dock = DockStyle.Left;
-            settings_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            settings_lbl.ForeColor = Color.White;
-            settings_lbl.Location = new Point(10, 0);
-            settings_lbl.Margin = new Padding(10, 0, 3, 0);
-            settings_lbl.Name = "settings_lbl";
-            settings_lbl.Size = new Size(90, 53);
-            settings_lbl.TabIndex = 8;
-            settings_lbl.Text = "Category";
-            settings_lbl.TextAlign = ContentAlignment.MiddleLeft;
+            category_lbl.AutoSize = true;
+            category_lbl.Dock = DockStyle.Left;
+            category_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            category_lbl.ForeColor = Color.White;
+            category_lbl.Location = new Point(10, 0);
+            category_lbl.Margin = new Padding(10, 0, 3, 0);
+            category_lbl.Name = "category_lbl";
+            category_lbl.Size = new Size(90, 53);
+            category_lbl.TabIndex = 8;
+            category_lbl.Text = "Category";
+            category_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // checkBox1
             // 
@@ -373,14 +373,14 @@
 
         private Panel panel1;
         private TableLayoutPanel tableLayoutPanel1;
-        private Label label6;
+        private Label range_lbl;
         private TextBox textBox1;
-        private Label label3;
-        private Label label2;
+        private Label dead_lbl;
+        private Label safety_lbl;
         private TextBox textBox2;
-        private Label label1;
+        private Label supplier_lbl;
         private ComboBox category_cb;
-        private Label settings_lbl;
+        private Label category_lbl;
         private CheckBox checkBox1;
         private Panel panel2;
         private Label label4;
@@ -389,7 +389,7 @@
         private Label label5;
         private NumericUpDown numericUpDown2;
         private CheckBox checkBox2;
-        private Label label7;
+        private Label top_lbl;
         private Panel panel4;
         private Button button1;
     }

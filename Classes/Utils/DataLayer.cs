@@ -94,5 +94,35 @@ namespace SmartStock.Classes.Utils
                 container.ResumeLayout(true);
             };
         }
+
+        public static System.EventHandler OpenModifyInstanceForm(UserControl container, ComboBox selector_cb)
+        {
+            return (sender, e) =>
+            {
+                string selectedOption = selector_cb.SelectedItem as string;
+                if (selectedOption == null) return;
+                container.SuspendLayout();
+                container.Controls.Clear();
+                UserControl controlToOpen = selectedOption switch
+                {
+                    "Product" => new ModifyProduct(),
+                    "Category" => new ModifyCategory(),
+                    "Supplier" => new ModifySupplier(),
+                    "Transaction" => new ModifyTransaction(),
+                    "Customer" => new ModifyCustomer(),
+                    "Sale" => new ModifySale(),
+                    "ExternalFactor" => new ModifyExternalFactor()
+                };
+
+                if (controlToOpen != null)
+                {
+                    controlToOpen.Dock = DockStyle.Fill;
+                    container.Controls.Add(controlToOpen);
+                    ThemeManager.Apply(controlToOpen);
+                }
+
+                container.ResumeLayout(true);
+            };
+        }
     }
 }
