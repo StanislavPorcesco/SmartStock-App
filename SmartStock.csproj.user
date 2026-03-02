@@ -19,6 +19,9 @@
     <Compile Update="Forms\User Control\LoginForms\Login.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="Forms\User Control\ModifyForms\ModifyUser.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="Forms\User Control\SearchForms\FilterProducts.cs">
       <SubType>UserControl</SubType>
     </Compile>

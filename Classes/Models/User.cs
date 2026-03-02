@@ -37,7 +37,8 @@ namespace SmartStock.Classes.Models
 
         [Required]
         public int IsActive { get; set; } = 1;
-
+        [Required]
+        public int AccessFailedCount { get; set; } = 0;
         public void CreateUser(User newUser, string plainPassword)
         {
             using (var db = new SmartStockContext())
@@ -57,13 +58,23 @@ namespace SmartStock.Classes.Models
         {
             using (var db = new SmartStockContext())
             {
-                var user = db.Users.FirstOrDefault(u => u.Username == username && u.IsActive == 1);
+                var user = db.Users.FirstOrDefault(u => u.Username == username);
 
                 if (user == null) return null;
+
+                // 1. Verificăm dacă este blocat (IsActive = 0)
+                if (user.IsActive == 0)
+                {
+                    throw new Exception("The account is locked due to too many failed login attempts. Please contact the administrator.");
+                }
+
+                // 2. Verificăm parola
                 bool isPasswordCorrect = SecurityService.VerifyPassword(password, user.PasswordHash, user.Salt);
 
                 if (isPasswordCorrect)
                 {
+                    // Resetăm contorul la succes
+                    user.AccessFailedCount = 0;
                     user.LastLoginDate = DateTime.Now;
                     user.IsLoggedIn = 1;
                     db.SaveChanges();
@@ -71,7 +82,21 @@ namespace SmartStock.Classes.Models
                     SessionManager.CurrentUser = user;
                     return user;
                 }
-                return null;
+                else
+                {
+                    // 3. Parolă greșită: incrementăm eșecurile
+                    user.AccessFailedCount++;
+
+                    if (user.AccessFailedCount >= 3)
+                    {
+                        user.IsActive = 0; // Blocăm contul
+                        db.SaveChanges();
+                        throw new Exception("Account locked! You have entered the wrong password 3 times.");
+                    }
+
+                    db.SaveChanges();
+                    throw new Exception($"Incorrect password! Remaining attempts: {3 - user.AccessFailedCount}");
+                }
             }
         }
 

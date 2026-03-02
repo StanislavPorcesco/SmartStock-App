@@ -1,0 +1,18 @@
+﻿using SmartStock.Classes.Utils;
+
+namespace SmartStock.Forms.User_Control
+{
+    public partial class ModifySupplier : UserControl
+    {
+        public ModifySupplier()
+        {
+            InitializeComponent();
+            DataLayer.PopulateSelector(selector_cb);
+            // NOTE: DO NOT wire up selector_cb event here!
+            // This form is displayed BY a parent container, not a container itself.
+            // The parent container (e.g., BaseModifyInstance) handles form switching via the selector.
+            ThemeManager.Apply(this);
+            this.Refresh();
+        }
+    }
+}

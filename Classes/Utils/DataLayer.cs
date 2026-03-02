@@ -16,6 +16,16 @@ namespace SmartStock.Classes.Utils
             }            
         }
 
+        public static void PopulateRoleSelector(ComboBox selector)
+        {
+            if (selector != null)
+            {
+                selector.Items.Clear();
+                selector.Items.AddRange(new string[] { "Admin", "Agent" });
+                selector.Text = "Select a role";
+            }
+        }
+
         public static void OpenUserControl(Form form, UserControl controlToOpen) {
             try
             {
@@ -71,6 +81,12 @@ namespace SmartStock.Classes.Utils
             {
                 string selectedOption = selector_cb.SelectedItem as string;
                 if (selectedOption == null) return;
+                if (selectedOption == "User" && (SessionManager.CurrentUser == null || SessionManager.CurrentUser.Role != "Admin"))
+                {
+                    MessageBox.Show("Unauthorized access! Only administrators can manage user accounts.",
+                                    "Access Denied", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    return;
+                }
                 container.SuspendLayout();
                 container.Controls.Clear();
                 UserControl controlToOpen = selectedOption switch
@@ -102,6 +118,12 @@ namespace SmartStock.Classes.Utils
             {
                 string selectedOption = selector_cb.SelectedItem as string;
                 if (selectedOption == null) return;
+                if (selectedOption == "User" && (SessionManager.CurrentUser == null || SessionManager.CurrentUser.Role != "Admin"))
+                {
+                    MessageBox.Show("Unauthorized access! Only administrators can manage user accounts.",
+                                    "Access Denied", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    return; // Oprim execuția aici
+                }
                 container.SuspendLayout();
                 container.Controls.Clear();
                 UserControl controlToOpen = selectedOption switch
@@ -112,7 +134,8 @@ namespace SmartStock.Classes.Utils
                     "Transaction" => new ModifyTransaction(),
                     "Customer" => new ModifyCustomer(),
                     "Sale" => new ModifySale(),
-                    "ExternalFactor" => new ModifyExternalFactor()
+                    "ExternalFactor" => new ModifyExternalFactor(),
+                    "User" => new ModifyUser()
                 };
 
                 if (controlToOpen != null)

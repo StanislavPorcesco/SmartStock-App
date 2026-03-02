@@ -55,7 +55,7 @@ namespace SmartStock.Forms.User_Control
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"An error occurred while connecting to the database: {ex.Message}",
+                MessageBox.Show($"Authentification error: {ex.Message}",
                                 "System Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
