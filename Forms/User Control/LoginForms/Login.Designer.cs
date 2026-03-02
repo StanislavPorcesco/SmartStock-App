@@ -89,7 +89,7 @@
             login_btn.MinimumSize = new Size(0, 69);
             login_btn.Name = "login_btn";
             login_btn.Size = new Size(848, 69);
-            login_btn.TabIndex = 0;
+            login_btn.TabIndex = 3;
             login_btn.Text = "Login";
             login_btn.UseVisualStyleBackColor = false;
             login_btn.Click += login_btn_Click;
@@ -115,7 +115,7 @@
             settings_btn.Location = new Point(0, 0);
             settings_btn.Name = "settings_btn";
             settings_btn.Size = new Size(136, 40);
-            settings_btn.TabIndex = 0;
+            settings_btn.TabIndex = 4;
             settings_btn.Tag = "menu";
             settings_btn.Text = "Settings";
             settings_btn.UseVisualStyleBackColor = true;
@@ -132,7 +132,7 @@
             account_btn.Location = new Point(673, 0);
             account_btn.Name = "account_btn";
             account_btn.Size = new Size(175, 40);
-            account_btn.TabIndex = 1;
+            account_btn.TabIndex = 5;
             account_btn.Tag = "menu";
             account_btn.Text = "Create Account";
             account_btn.UseVisualStyleBackColor = true;
@@ -189,7 +189,7 @@
             password_tb.Margin = new Padding(0, 5, 0, 5);
             password_tb.Name = "password_tb";
             password_tb.Size = new Size(414, 31);
-            password_tb.TabIndex = 14;
+            password_tb.TabIndex = 2;
             // 
             // username_tb
             // 
@@ -201,7 +201,7 @@
             username_tb.Margin = new Padding(0, 5, 0, 5);
             username_tb.Name = "username_tb";
             username_tb.Size = new Size(414, 31);
-            username_tb.TabIndex = 12;
+            username_tb.TabIndex = 1;
             // 
             // label1
             // 
@@ -210,7 +210,7 @@
             label1.Location = new Point(3, 0);
             label1.Name = "label1";
             label1.Size = new Size(123, 45);
-            label1.TabIndex = 4;
+            label1.TabIndex = 0;
             label1.Text = "Username";
             label1.TextAlign = ContentAlignment.MiddleLeft;
             // 
@@ -221,7 +221,7 @@
             label2.Location = new Point(3, 49);
             label2.Name = "label2";
             label2.Size = new Size(128, 47);
-            label2.TabIndex = 13;
+            label2.TabIndex = 0;
             label2.Text = "Password";
             label2.TextAlign = ContentAlignment.MiddleLeft;
             // 
@@ -242,7 +242,7 @@
             theme_lbl.Location = new Point(0, 0);
             theme_lbl.Name = "theme_lbl";
             theme_lbl.Size = new Size(848, 75);
-            theme_lbl.TabIndex = 3;
+            theme_lbl.TabIndex = 0;
             theme_lbl.Text = "Login";
             theme_lbl.TextAlign = ContentAlignment.MiddleCenter;
             // 

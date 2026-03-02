@@ -380,6 +380,7 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "SmartStock";
             WindowState = FormWindowState.Maximized;
+            FormClosing += MenuForm_FormClosing;
             menu_pnl.ResumeLayout(false);
             menu_buttons_pnl.ResumeLayout(false);
             logo_pnl.ResumeLayout(false);

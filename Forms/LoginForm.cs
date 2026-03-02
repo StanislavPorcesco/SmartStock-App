@@ -1,6 +1,5 @@
-using SmartStock.Classes.Settings;
+using SmartStock.Classes.Models;
 using SmartStock.Classes.Utils;
-using SmartStock.Forms.AddForms;
 using SmartStock.Forms.User_Control;
 
 namespace SmartStock

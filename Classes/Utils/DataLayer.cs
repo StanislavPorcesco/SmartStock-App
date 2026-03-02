@@ -12,8 +12,8 @@ namespace SmartStock.Classes.Utils
             {
                 selector.Items.Clear();
                 selector.Items.AddRange(new string[] { "Product", "Category", "Supplier", "Transaction", "Customer", "Sale", "ExternalFactor", "User" });
-            }
-            selector.Text = "Select an option";
+                selector.Text = "Select an option";
+            }            
         }
 
         public static void OpenUserControl(Form form, UserControl controlToOpen) {

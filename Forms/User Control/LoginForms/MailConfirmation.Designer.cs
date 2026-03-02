@@ -32,11 +32,11 @@
             panel1 = new Panel();
             label1 = new Label();
             login_btn_pnl = new Panel();
-            login_btn = new Button();
+            confirm_btn = new Button();
             password_tb_pnl = new Panel();
-            textBox3 = new TextBox();
-            textBox4 = new TextBox();
             textBox5 = new TextBox();
+            textBox4 = new TextBox();
+            textBox3 = new TextBox();
             textBox2 = new TextBox();
             textBox1 = new TextBox();
             textBox0 = new TextBox();
@@ -88,34 +88,35 @@
             // 
             // login_btn_pnl
             // 
-            login_btn_pnl.Controls.Add(login_btn);
+            login_btn_pnl.Controls.Add(confirm_btn);
             login_btn_pnl.Dock = DockStyle.Bottom;
             login_btn_pnl.Location = new Point(20, 333);
             login_btn_pnl.Name = "login_btn_pnl";
             login_btn_pnl.Size = new Size(532, 70);
             login_btn_pnl.TabIndex = 22;
             // 
-            // login_btn
+            // confirm_btn
             // 
-            login_btn.BackColor = Color.FromArgb(54, 54, 54);
-            login_btn.Dock = DockStyle.Fill;
-            login_btn.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            login_btn.ForeColor = Color.White;
-            login_btn.Location = new Point(0, 0);
-            login_btn.Margin = new Padding(0);
-            login_btn.MaximumSize = new Size(0, 70);
-            login_btn.MinimumSize = new Size(0, 70);
-            login_btn.Name = "login_btn";
-            login_btn.Size = new Size(532, 70);
-            login_btn.TabIndex = 7;
-            login_btn.Text = "Confirm";
-            login_btn.UseVisualStyleBackColor = false;
+            confirm_btn.BackColor = Color.FromArgb(54, 54, 54);
+            confirm_btn.Dock = DockStyle.Fill;
+            confirm_btn.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            confirm_btn.ForeColor = Color.White;
+            confirm_btn.Location = new Point(0, 0);
+            confirm_btn.Margin = new Padding(0);
+            confirm_btn.MaximumSize = new Size(0, 70);
+            confirm_btn.MinimumSize = new Size(0, 70);
+            confirm_btn.Name = "confirm_btn";
+            confirm_btn.Size = new Size(532, 70);
+            confirm_btn.TabIndex = 7;
+            confirm_btn.Text = "Confirm";
+            confirm_btn.UseVisualStyleBackColor = false;
+            confirm_btn.Click += confirm_btn_Click;
             // 
             // password_tb_pnl
             // 
-            password_tb_pnl.Controls.Add(textBox3);
-            password_tb_pnl.Controls.Add(textBox4);
             password_tb_pnl.Controls.Add(textBox5);
+            password_tb_pnl.Controls.Add(textBox4);
+            password_tb_pnl.Controls.Add(textBox3);
             password_tb_pnl.Controls.Add(textBox2);
             password_tb_pnl.Controls.Add(textBox1);
             password_tb_pnl.Controls.Add(textBox0);
@@ -125,20 +126,20 @@
             password_tb_pnl.Size = new Size(532, 151);
             password_tb_pnl.TabIndex = 21;
             // 
-            // textBox3
+            // textBox5
             // 
-            textBox3.BackColor = Color.FromArgb(54, 54, 54);
-            textBox3.Font = new Font("Segoe UI", 28.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            textBox3.ForeColor = Color.White;
-            textBox3.Location = new Point(416, 40);
-            textBox3.Margin = new Padding(0, 5, 0, 5);
-            textBox3.MaxLength = 1;
-            textBox3.Name = "textBox3";
-            textBox3.Size = new Size(50, 70);
-            textBox3.TabIndex = 6;
-            textBox3.TextAlign = HorizontalAlignment.Center;
-            textBox3.TextChanged += CodeTextBox_TextChanged;
-            textBox3.KeyDown += CodeTextBox_KeyDown;
+            textBox5.BackColor = Color.FromArgb(54, 54, 54);
+            textBox5.Font = new Font("Segoe UI", 28.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            textBox5.ForeColor = Color.White;
+            textBox5.Location = new Point(416, 40);
+            textBox5.Margin = new Padding(0, 5, 0, 5);
+            textBox5.MaxLength = 1;
+            textBox5.Name = "textBox5";
+            textBox5.Size = new Size(50, 70);
+            textBox5.TabIndex = 6;
+            textBox5.TextAlign = HorizontalAlignment.Center;
+            textBox5.TextChanged += CodeTextBox_TextChanged;
+            textBox5.KeyDown += CodeTextBox_KeyDown;
             // 
             // textBox4
             // 
@@ -155,20 +156,20 @@
             textBox4.TextChanged += CodeTextBox_TextChanged;
             textBox4.KeyDown += CodeTextBox_KeyDown;
             // 
-            // textBox5
+            // textBox3
             // 
-            textBox5.BackColor = Color.FromArgb(54, 54, 54);
-            textBox5.Font = new Font("Segoe UI", 28.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            textBox5.ForeColor = Color.White;
-            textBox5.Location = new Point(275, 40);
-            textBox5.Margin = new Padding(0, 5, 0, 5);
-            textBox5.MaxLength = 1;
-            textBox5.Name = "textBox5";
-            textBox5.Size = new Size(50, 70);
-            textBox5.TabIndex = 4;
-            textBox5.TextAlign = HorizontalAlignment.Center;
-            textBox5.TextChanged += CodeTextBox_TextChanged;
-            textBox5.KeyDown += CodeTextBox_KeyDown;
+            textBox3.BackColor = Color.FromArgb(54, 54, 54);
+            textBox3.Font = new Font("Segoe UI", 28.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            textBox3.ForeColor = Color.White;
+            textBox3.Location = new Point(275, 40);
+            textBox3.Margin = new Padding(0, 5, 0, 5);
+            textBox3.MaxLength = 1;
+            textBox3.Name = "textBox3";
+            textBox3.Size = new Size(50, 70);
+            textBox3.TabIndex = 4;
+            textBox3.TextAlign = HorizontalAlignment.Center;
+            textBox3.TextChanged += CodeTextBox_TextChanged;
+            textBox3.KeyDown += CodeTextBox_KeyDown;
             // 
             // textBox2
             // 
@@ -256,16 +257,16 @@
 
         private Panel base_pnl;
         private Panel login_btn_pnl;
-        private Button login_btn;
+        private Button confirm_btn;
         private Panel password_tb_pnl;
         private TextBox textBox0;
         private Panel login_label_pnl;
         private Label theme_lbl;
         private Panel panel1;
         private Label label1;
-        private TextBox textBox3;
-        private TextBox textBox4;
         private TextBox textBox5;
+        private TextBox textBox4;
+        private TextBox textBox3;
         private TextBox textBox2;
         private TextBox textBox1;
     }

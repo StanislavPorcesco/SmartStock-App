@@ -1,20 +1,8 @@
 ﻿
 using FontAwesome.Sharp;
+using SmartStock.Classes.Models;
 using SmartStock.Classes.Utils;
 using SmartStock.Forms.User_Control;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Drawing;
-using System.Linq;
-using System.Reflection.PortableExecutable;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Media;
 
 namespace SmartStock.Forms
 {
@@ -156,5 +144,24 @@ namespace SmartStock.Forms
             OpenChildForm(new AnalyzeForm());
         }
 
+        private void MenuForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // Verificăm dacă avem un utilizator logat în sesiune
+            if (SessionManager.CurrentUser != null)
+            {
+                try
+                {
+                    User.Logout(SessionManager.CurrentUser.UserId);
+                }
+                catch (Exception ex)
+                {
+                    // Opțional: logare eroare (nu e recomandat MessageBox aici pentru că încetinește închiderea)
+                    Console.WriteLine("Error updating isLogged status " + ex.Message);
+                }
+            }
+
+            // Important: Forțăm oprirea întregii aplicații (mai ales că am ascuns LoginForm)
+            Application.Exit();
+        }
     }
 }

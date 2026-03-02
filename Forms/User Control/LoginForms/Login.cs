@@ -1,14 +1,6 @@
-﻿using SmartStock.Classes.Utils;
+﻿using SmartStock.Classes.Models;
+using SmartStock.Classes.Utils;
 using SmartStock.Forms.AddForms;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace SmartStock.Forms.User_Control
 {
@@ -31,10 +23,45 @@ namespace SmartStock.Forms.User_Control
 
         private void login_btn_Click(object sender, EventArgs e)
         {
-            this.FindForm().Hide();
-            MenuForm mainForm = new MenuForm();
-            mainForm.ShowDialog();
-            this.FindForm().Close();
+            if (string.IsNullOrWhiteSpace(username_tb.Text) || string.IsNullOrWhiteSpace(password_tb.Text))
+            {
+                MessageBox.Show("Please enter both the username and the password.", "Completion Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            try
+            {
+                Cursor = Cursors.WaitCursor;
+
+                User userLogic = new User();
+                User authenticatedUser = userLogic.Authenticate(username_tb.Text, password_tb.Text);
+                if (authenticatedUser != null)
+                {
+                    MessageBox.Show($"Wellcome back, {authenticatedUser.FullName}!", "Autentification succesful!",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    MenuForm mainForm = new MenuForm();
+                    mainForm.Show();    
+                    this.FindForm().Hide();
+                }
+                else
+                {
+                    MessageBox.Show("Incorrect username or password, or the account is disabled.",
+                                    "Access Denied", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    password_tb.Clear();
+                    password_tb.Focus();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred while connecting to the database: {ex.Message}",
+                                "System Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
         }
     }
 }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace SmartStock.Classes.Settings
 {
     using System;
@@ -12,7 +7,7 @@ using System.Text.Json;
 
 public static class SettingsManager
 {
-    private static readonly string FilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appSettings.json");
+    private static readonly string FilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/appSettings.json");
     
     // Proprietate statică pentru a accesa setările de oriunde în cod
     public static AppSettings Current { get; private set; } = new AppSettings();

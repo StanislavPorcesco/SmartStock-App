@@ -1,32 +1,75 @@
-﻿using SmartStock.Classes.Utils;
+﻿using SmartStock.Classes.Models;
+using SmartStock.Classes.Utils;
 using SmartStock.Forms.AddForms;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace SmartStock.Forms.User_Control
 {
     public partial class MailConfirmation : UserControl
     {
-        public MailConfirmation()
+        string generatedCode;
+        string username;
+        string password;
+        string fullname;
+        string email;
+        public MailConfirmation(string _generatedCode, string _username, string _password, string _fullname, string _email)
         {
             InitializeComponent();
+            generatedCode = _generatedCode;
+            username = _username;
+            password = _password;
+            fullname = _fullname;
+            email = _email;
         }
-
-        private void account_btn_Click(object sender, EventArgs e)
+        private void confirm_btn_Click(object sender, EventArgs e)
         {
-            DataLayer.OpenUserControl(this.FindForm(), new AddAccount());
+            if(generatedCode == textBox0.Text + textBox1.Text + textBox2.Text + textBox3.Text + textBox4.Text + textBox5.Text)
+            {
+                FinalizeAccountCreation(username, password, fullname, email);
+            }
+            else
+            {
+                MessageBox.Show("The code you entered is incorrect. Please check your email and try again.", "Invalid Code",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBox0.Clear();
+                textBox1.Clear();
+                textBox2.Clear();
+                textBox5.Clear();
+                textBox4.Clear();
+                textBox3.Clear();
+            }
         }
-
-        private void settings_btn_Click(object sender, EventArgs e)
+        private void FinalizeAccountCreation(string username, string password, string fullName, string email)
         {
-            DataLayer.OpenUserControl(this.FindForm(), new Settings());
+            try
+            {
+                // 1. Instanțiem clasa de logică
+                User userLogic = new User();
+
+                // 2. Pregătim obiectul nou cu datele de bază
+                User newAgent = new User
+                {
+                    Username = username,
+                    FullName = fullName,
+                    Email = email,
+                    Role = "Agent", // Setăm fix rolul de Agent
+                    IsActive = 1,    // Contul este activ implicit
+                    IsLoggedIn = 0   // Nu este logat încă
+                };
+
+                // 3. Apelăm metoda CreateUser care se ocupă de Salt, Hash și SaveChanges
+                // Aceasta este metoda pe care am scris-o anterior în clasa User
+                userLogic.CreateUser(newAgent, password);
+                LoginForm loginForm = new LoginForm();
+                loginForm.Show();
+                this.FindForm().Hide();
+                MessageBox.Show("The Agent account has been created successfully!", "Succes",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error creating the account: {ex.Message}", "Critical Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         private void CodeTextBox_TextChanged(object sender, EventArgs e)
         {
@@ -35,8 +78,6 @@ namespace SmartStock.Forms.User_Control
             // Verificăm dacă s-a introdus un caracter
             if (currentTb != null && currentTb.Text.Length > 0)
             {
-                // Selectăm automat următorul control în ordinea TabIndex
-                //this.SelectNextControl(currentTb, true, true, false, false);
                 SendKeys.Send("{TAB}");
             }
         }
@@ -64,7 +105,7 @@ namespace SmartStock.Forms.User_Control
                 if (digitsOnly.Length >= 6)
                 {
                     // IMPORTANT: Asigură-te că numele acestor controale coincid cu cele din Designer-ul tău
-                    TextBox[] boxes = { textBox0, textBox1, textBox2, textBox3, textBox4, textBox5 };
+                    TextBox[] boxes = { textBox0, textBox1, textBox2, textBox5, textBox4, textBox3 };
 
                     for (int i = 0; i < 6; i++)
                     {
@@ -79,5 +120,6 @@ namespace SmartStock.Forms.User_Control
                 }
             }
         }
+
     }
 }

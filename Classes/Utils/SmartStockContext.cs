@@ -1,13 +1,6 @@
-﻿using Microsoft.VisualBasic.ApplicationServices;
-using Microsoft.EntityFrameworkCore;
-using SmartStock.Classes.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
-using System.Transactions;
+﻿using Microsoft.EntityFrameworkCore;
+using SmartStock.Classes.Utils;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace SmartStock.Classes.Models
 {
@@ -30,42 +23,44 @@ namespace SmartStock.Classes.Models
         // Configurarea conexiunii către fișierul SQLite local
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            // Se folosește calea relativă către fișierul bazei de date
-            optionsBuilder.UseSqlite("Data Source=SmartStock.db");
+            // Construim calea completă: Debug/net8.0-windows/Resources/SmartStock.db
+            string folderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources");
+            string dbPath = Path.Combine(folderPath, "SmartStock.db");
+
+            optionsBuilder.UseSqlite($"Data Source={dbPath}");
         }
 
         // Definirea relațiilor complexe și a constrângerilor (Fluent API)
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Exemplu: Relația One-to-Many între Categorie și Produse
+            // Relația Product -> Category
             modelBuilder.Entity<Product>()
                 .HasOne(p => p.Category)
-                .WithMany()
-                .HasForeignKey(p => p.CategoryId);
+                .WithMany(c => c.Products)
+                .HasForeignKey(p => p.CategoryId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            // Exemplu: Relația One-to-Many între Furnizor și Produse
+            // Relația Product -> Supplier
             modelBuilder.Entity<Product>()
                 .HasOne(p => p.Supplier)
-                .WithMany()
-                .HasForeignKey(p => p.SupplierId);
-
-            // Constrângere de unicitate pentru Username
-            modelBuilder.Entity<User>()
-                .HasIndex(u => u.Username)
-                .IsUnique();
-
-            // Seeding: Crearea unui cont de Admin implicit la prima pornire
+                .WithMany(s => s.Products)
+                .HasForeignKey(p => p.SupplierId)
+                .OnDelete(DeleteBehavior.Cascade);
+            string adminSalt = "StaticSaltForAdmin123!";
+            string adminHash = SecurityService.HashPassword("admin", adminSalt);
             modelBuilder.Entity<User>().HasData(new User
             {
                 UserId = 1,
                 Username = "admin",
+                PasswordHash = adminHash,
+                Salt = adminSalt,
                 FullName = "System Administrator",
                 Role = "Admin",
+                Email = "admin@gmail.com",
                 IsActive = 1,
-                // Notă: Aici ar trebui să pui un hash real generat
-                PasswordHash = "InitialAdminHash",
-                Salt = "InitialSalt"
+                IsLoggedIn = 0
             });
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

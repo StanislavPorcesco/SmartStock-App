@@ -110,7 +110,6 @@ D:\Files\Degree\App\SmartStock\bin\Debug\net8.0-windows\runtimes\win-x64\native\
 D:\Files\Degree\App\SmartStock\bin\Debug\net8.0-windows\runtimes\win-x86\native\e_sqlite3.dll
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.csproj.AssemblyReference.cache
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.AnalyzeForm.resources
-D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.Form1.resources
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.LoginForm.resources
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.MenuForm.resources
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.SearchForm.resources
