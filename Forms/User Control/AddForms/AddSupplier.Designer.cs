@@ -96,7 +96,7 @@ namespace SmartStock.Forms.User_Control
             // 
             margin_pnl.BackColor = Color.Transparent;
             margin_pnl.Dock = DockStyle.Top;
-            margin_pnl.Location = new Point(20, 436);
+            margin_pnl.Location = new Point(20, 430);
             margin_pnl.MaximumSize = new Size(0, 20);
             margin_pnl.MinimumSize = new Size(0, 20);
             margin_pnl.Name = "margin_pnl";
@@ -111,7 +111,7 @@ namespace SmartStock.Forms.User_Control
             add_instance_pnl.Location = new Point(20, 150);
             add_instance_pnl.Name = "add_instance_pnl";
             add_instance_pnl.Padding = new Padding(10);
-            add_instance_pnl.Size = new Size(1259, 286);
+            add_instance_pnl.Size = new Size(1259, 280);
             add_instance_pnl.TabIndex = 4;
             // 
             // groupBox2
@@ -123,7 +123,7 @@ namespace SmartStock.Forms.User_Control
             groupBox2.Location = new Point(10, 10);
             groupBox2.Name = "groupBox2";
             groupBox2.Padding = new Padding(10, 20, 10, 20);
-            groupBox2.Size = new Size(1239, 266);
+            groupBox2.Size = new Size(1239, 260);
             groupBox2.TabIndex = 2;
             groupBox2.TabStop = false;
             groupBox2.Text = "Current Instance: Supplier";
@@ -133,27 +133,27 @@ namespace SmartStock.Forms.User_Control
             tableLayoutPanel2.ColumnCount = 2;
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 49.92503F));
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50.0749664F));
-            tableLayoutPanel2.Controls.Add(contact_person_tb, 1, 2);
-            tableLayoutPanel2.Controls.Add(adress_tb, 1, 5);
-            tableLayoutPanel2.Controls.Add(label4, 0, 5);
-            tableLayoutPanel2.Controls.Add(phone_tb, 1, 4);
-            tableLayoutPanel2.Controls.Add(label3, 0, 4);
-            tableLayoutPanel2.Controls.Add(email_tb, 1, 3);
-            tableLayoutPanel2.Controls.Add(label2, 0, 3);
-            tableLayoutPanel2.Controls.Add(db_lbl, 0, 1);
-            tableLayoutPanel2.Controls.Add(supplier_name_tb, 1, 1);
-            tableLayoutPanel2.Controls.Add(logs_lbl, 0, 2);
+            tableLayoutPanel2.Controls.Add(contact_person_tb, 1, 1);
+            tableLayoutPanel2.Controls.Add(adress_tb, 1, 4);
+            tableLayoutPanel2.Controls.Add(label4, 0, 4);
+            tableLayoutPanel2.Controls.Add(phone_tb, 1, 3);
+            tableLayoutPanel2.Controls.Add(label3, 0, 3);
+            tableLayoutPanel2.Controls.Add(email_tb, 1, 2);
+            tableLayoutPanel2.Controls.Add(label2, 0, 2);
+            tableLayoutPanel2.Controls.Add(db_lbl, 0, 0);
+            tableLayoutPanel2.Controls.Add(supplier_name_tb, 1, 0);
+            tableLayoutPanel2.Controls.Add(logs_lbl, 0, 1);
             tableLayoutPanel2.Dock = DockStyle.Fill;
             tableLayoutPanel2.Location = new Point(10, 40);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
-            tableLayoutPanel2.RowCount = 6;
+            tableLayoutPanel2.RowCount = 5;
             tableLayoutPanel2.RowStyles.Add(new RowStyle());
             tableLayoutPanel2.RowStyles.Add(new RowStyle());
             tableLayoutPanel2.RowStyles.Add(new RowStyle());
             tableLayoutPanel2.RowStyles.Add(new RowStyle());
             tableLayoutPanel2.RowStyles.Add(new RowStyle());
-            tableLayoutPanel2.RowStyles.Add(new RowStyle());
-            tableLayoutPanel2.Size = new Size(1219, 206);
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel2.Size = new Size(1219, 200);
             tableLayoutPanel2.TabIndex = 3;
             // 
             // contact_person_tb
@@ -187,7 +187,7 @@ namespace SmartStock.Forms.User_Control
             label4.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
             label4.Location = new Point(3, 164);
             label4.Name = "label4";
-            label4.Size = new Size(74, 42);
+            label4.Size = new Size(74, 41);
             label4.TabIndex = 18;
             label4.Text = "Address";
             label4.TextAlign = ContentAlignment.MiddleLeft;

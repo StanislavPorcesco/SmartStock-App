@@ -31,28 +31,28 @@
             panel1 = new Panel();
             tableLayoutPanel1 = new TableLayoutPanel();
             category_cb = new ComboBox();
-            textBox3 = new TextBox();
-            checkBox2 = new CheckBox();
+            supplier_name_tb = new TextBox();
+            status_ck = new CheckBox();
             status_lbl = new Label();
             range_lbl = new Label();
             categories_lbl = new Label();
-            textBox2 = new TextBox();
+            contact_tb = new TextBox();
             contact_lbl = new Label();
             supplier_lbl = new Label();
             panel2 = new Panel();
             label4 = new Label();
-            numericUpDown1 = new NumericUpDown();
+            min_numeric = new NumericUpDown();
             panel3 = new Panel();
             label5 = new Label();
-            numericUpDown2 = new NumericUpDown();
+            max_numeric = new NumericUpDown();
             panel4 = new Panel();
-            button1 = new Button();
+            reset_btn = new Button();
             panel1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)min_numeric).BeginInit();
             panel3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown2).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)max_numeric).BeginInit();
             panel4.SuspendLayout();
             SuspendLayout();
             // 
@@ -72,12 +72,12 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.Controls.Add(category_cb, 1, 2);
-            tableLayoutPanel1.Controls.Add(textBox3, 1, 0);
-            tableLayoutPanel1.Controls.Add(checkBox2, 1, 6);
+            tableLayoutPanel1.Controls.Add(supplier_name_tb, 1, 0);
+            tableLayoutPanel1.Controls.Add(status_ck, 1, 6);
             tableLayoutPanel1.Controls.Add(status_lbl, 0, 6);
             tableLayoutPanel1.Controls.Add(range_lbl, 0, 4);
             tableLayoutPanel1.Controls.Add(categories_lbl, 0, 2);
-            tableLayoutPanel1.Controls.Add(textBox2, 1, 1);
+            tableLayoutPanel1.Controls.Add(contact_tb, 1, 1);
             tableLayoutPanel1.Controls.Add(contact_lbl, 0, 1);
             tableLayoutPanel1.Controls.Add(supplier_lbl, 0, 0);
             tableLayoutPanel1.Controls.Add(panel2, 1, 4);
@@ -113,31 +113,31 @@
             category_cb.Size = new Size(255, 33);
             category_cb.TabIndex = 29;
             // 
-            // textBox3
+            // supplier_name_tb
             // 
-            textBox3.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            textBox3.BackColor = Color.FromArgb(54, 54, 54);
-            textBox3.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            textBox3.ForeColor = Color.White;
-            textBox3.Location = new Point(264, 10);
-            textBox3.Margin = new Padding(0, 10, 10, 10);
-            textBox3.Name = "textBox3";
-            textBox3.Size = new Size(255, 31);
-            textBox3.TabIndex = 28;
+            supplier_name_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            supplier_name_tb.BackColor = Color.FromArgb(54, 54, 54);
+            supplier_name_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            supplier_name_tb.ForeColor = Color.White;
+            supplier_name_tb.Location = new Point(264, 10);
+            supplier_name_tb.Margin = new Padding(0, 10, 10, 10);
+            supplier_name_tb.Name = "supplier_name_tb";
+            supplier_name_tb.Size = new Size(255, 31);
+            supplier_name_tb.TabIndex = 28;
             // 
-            // checkBox2
+            // status_ck
             // 
-            checkBox2.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            checkBox2.AutoSize = true;
-            checkBox2.CheckAlign = ContentAlignment.MiddleRight;
-            checkBox2.ImageAlign = ContentAlignment.MiddleRight;
-            checkBox2.Location = new Point(264, 259);
-            checkBox2.Margin = new Padding(0, 10, 10, 10);
-            checkBox2.Name = "checkBox2";
-            checkBox2.Size = new Size(255, 17);
-            checkBox2.TabIndex = 26;
-            checkBox2.TextAlign = ContentAlignment.MiddleRight;
-            checkBox2.UseVisualStyleBackColor = true;
+            status_ck.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            status_ck.AutoSize = true;
+            status_ck.CheckAlign = ContentAlignment.MiddleRight;
+            status_ck.ImageAlign = ContentAlignment.MiddleRight;
+            status_ck.Location = new Point(264, 259);
+            status_ck.Margin = new Padding(0, 10, 10, 10);
+            status_ck.Name = "status_ck";
+            status_ck.Size = new Size(255, 17);
+            status_ck.TabIndex = 26;
+            status_ck.TextAlign = ContentAlignment.MiddleRight;
+            status_ck.UseVisualStyleBackColor = true;
             // 
             // status_lbl
             // 
@@ -182,17 +182,17 @@
             categories_lbl.Text = "Product Categories Supplied";
             categories_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // textBox2
+            // contact_tb
             // 
-            textBox2.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            textBox2.BackColor = Color.FromArgb(54, 54, 54);
-            textBox2.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            textBox2.ForeColor = Color.White;
-            textBox2.Location = new Point(264, 61);
-            textBox2.Margin = new Padding(0, 10, 10, 10);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(255, 31);
-            textBox2.TabIndex = 17;
+            contact_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            contact_tb.BackColor = Color.FromArgb(54, 54, 54);
+            contact_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            contact_tb.ForeColor = Color.White;
+            contact_tb.Location = new Point(264, 61);
+            contact_tb.Margin = new Padding(0, 10, 10, 10);
+            contact_tb.Name = "contact_tb";
+            contact_tb.Size = new Size(255, 31);
+            contact_tb.TabIndex = 17;
             // 
             // contact_lbl
             // 
@@ -225,7 +225,7 @@
             // panel2
             // 
             panel2.Controls.Add(label4);
-            panel2.Controls.Add(numericUpDown1);
+            panel2.Controls.Add(min_numeric);
             panel2.Dock = DockStyle.Fill;
             panel2.Location = new Point(264, 165);
             panel2.Margin = new Padding(0, 10, 10, 10);
@@ -247,19 +247,19 @@
             label4.Text = "Min";
             label4.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // numericUpDown1
+            // min_numeric
             // 
-            numericUpDown1.Dock = DockStyle.Right;
-            numericUpDown1.Location = new Point(127, 0);
-            numericUpDown1.Margin = new Padding(0, 10, 0, 0);
-            numericUpDown1.Name = "numericUpDown1";
-            numericUpDown1.Size = new Size(128, 27);
-            numericUpDown1.TabIndex = 0;
+            min_numeric.Dock = DockStyle.Right;
+            min_numeric.Location = new Point(127, 0);
+            min_numeric.Margin = new Padding(0, 10, 0, 0);
+            min_numeric.Name = "min_numeric";
+            min_numeric.Size = new Size(128, 27);
+            min_numeric.TabIndex = 0;
             // 
             // panel3
             // 
             panel3.Controls.Add(label5);
-            panel3.Controls.Add(numericUpDown2);
+            panel3.Controls.Add(max_numeric);
             panel3.Dock = DockStyle.Fill;
             panel3.Location = new Point(264, 212);
             panel3.Margin = new Padding(0, 10, 10, 10);
@@ -281,18 +281,18 @@
             label5.Text = "Max";
             label5.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // numericUpDown2
+            // max_numeric
             // 
-            numericUpDown2.Dock = DockStyle.Right;
-            numericUpDown2.Location = new Point(127, 0);
-            numericUpDown2.Name = "numericUpDown2";
-            numericUpDown2.Size = new Size(128, 27);
-            numericUpDown2.TabIndex = 0;
+            max_numeric.Dock = DockStyle.Right;
+            max_numeric.Location = new Point(127, 0);
+            max_numeric.Name = "max_numeric";
+            max_numeric.Size = new Size(128, 27);
+            max_numeric.TabIndex = 0;
             // 
             // panel4
             // 
             tableLayoutPanel1.SetColumnSpan(panel4, 2);
-            panel4.Controls.Add(button1);
+            panel4.Controls.Add(reset_btn);
             panel4.Dock = DockStyle.Bottom;
             panel4.Location = new Point(3, 499);
             panel4.Name = "panel4";
@@ -300,21 +300,21 @@
             panel4.Size = new Size(523, 70);
             panel4.TabIndex = 27;
             // 
-            // button1
+            // reset_btn
             // 
-            button1.BackColor = Color.FromArgb(54, 54, 54);
-            button1.Dock = DockStyle.Bottom;
-            button1.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button1.ForeColor = Color.White;
-            button1.Location = new Point(10, 0);
-            button1.Margin = new Padding(10, 0, 0, 0);
-            button1.MaximumSize = new Size(0, 70);
-            button1.MinimumSize = new Size(0, 70);
-            button1.Name = "button1";
-            button1.Size = new Size(503, 70);
-            button1.TabIndex = 17;
-            button1.Text = "Reset Filters";
-            button1.UseVisualStyleBackColor = false;
+            reset_btn.BackColor = Color.FromArgb(54, 54, 54);
+            reset_btn.Dock = DockStyle.Bottom;
+            reset_btn.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            reset_btn.ForeColor = Color.White;
+            reset_btn.Location = new Point(10, 0);
+            reset_btn.Margin = new Padding(10, 0, 0, 0);
+            reset_btn.MaximumSize = new Size(0, 70);
+            reset_btn.MinimumSize = new Size(0, 70);
+            reset_btn.Name = "reset_btn";
+            reset_btn.Size = new Size(503, 70);
+            reset_btn.TabIndex = 17;
+            reset_btn.Text = "Reset Filters";
+            reset_btn.UseVisualStyleBackColor = false;
             // 
             // FilterSuppliers
             // 
@@ -329,10 +329,10 @@
             tableLayoutPanel1.PerformLayout();
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)min_numeric).EndInit();
             panel3.ResumeLayout(false);
             panel3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown2).EndInit();
+            ((System.ComponentModel.ISupportInitialize)max_numeric).EndInit();
             panel4.ResumeLayout(false);
             ResumeLayout(false);
         }
@@ -347,16 +347,16 @@
         private Label supplier_lbl;
         private Panel panel2;
         private Label label4;
-        private NumericUpDown numericUpDown1;
+        private NumericUpDown min_numeric;
         private Panel panel3;
         private Label label5;
-        private NumericUpDown numericUpDown2;
-        private CheckBox checkBox2;
+        private NumericUpDown max_numeric;
+        private CheckBox status_ck;
         private Label status_lbl;
         private Panel panel4;
-        private Button button1;
-        private TextBox textBox3;
+        private Button reset_btn;
+        private TextBox supplier_name_tb;
         private ComboBox category_cb;
-        private TextBox textBox2;
+        private TextBox contact_tb;
     }
 }

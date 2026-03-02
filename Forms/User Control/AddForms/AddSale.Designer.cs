@@ -35,13 +35,13 @@ namespace SmartStock.Forms.User_Control
             add_instance_pnl = new Panel();
             groupBox2 = new GroupBox();
             tableLayoutPanel2 = new TableLayoutPanel();
-            dateTimePicker1 = new DateTimePicker();
+            date_picker = new DateTimePicker();
             label3 = new Label();
-            contact_person_tb = new TextBox();
-            email_tb = new TextBox();
+            user_Id_tb = new TextBox();
+            total_amount_tb = new TextBox();
             label2 = new Label();
             db_lbl = new Label();
-            supplier_name_tb = new TextBox();
+            customer_id_tb = new TextBox();
             logs_lbl = new Label();
             selector_pnl = new Panel();
             groupBox1 = new GroupBox();
@@ -94,7 +94,7 @@ namespace SmartStock.Forms.User_Control
             // 
             margin_pnl.BackColor = Color.Transparent;
             margin_pnl.Dock = DockStyle.Top;
-            margin_pnl.Location = new Point(20, 391);
+            margin_pnl.Location = new Point(20, 385);
             margin_pnl.MaximumSize = new Size(0, 20);
             margin_pnl.MinimumSize = new Size(0, 20);
             margin_pnl.Name = "margin_pnl";
@@ -109,7 +109,7 @@ namespace SmartStock.Forms.User_Control
             add_instance_pnl.Location = new Point(20, 150);
             add_instance_pnl.Name = "add_instance_pnl";
             add_instance_pnl.Padding = new Padding(10);
-            add_instance_pnl.Size = new Size(1259, 241);
+            add_instance_pnl.Size = new Size(1259, 235);
             add_instance_pnl.TabIndex = 4;
             // 
             // groupBox2
@@ -121,7 +121,7 @@ namespace SmartStock.Forms.User_Control
             groupBox2.Location = new Point(10, 10);
             groupBox2.Name = "groupBox2";
             groupBox2.Padding = new Padding(10, 20, 10, 20);
-            groupBox2.Size = new Size(1239, 221);
+            groupBox2.Size = new Size(1239, 215);
             groupBox2.TabIndex = 2;
             groupBox2.TabStop = false;
             groupBox2.Text = "Current Instance: Sale";
@@ -131,39 +131,39 @@ namespace SmartStock.Forms.User_Control
             tableLayoutPanel2.ColumnCount = 2;
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 49.92503F));
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50.0749664F));
-            tableLayoutPanel2.Controls.Add(dateTimePicker1, 1, 4);
-            tableLayoutPanel2.Controls.Add(label3, 0, 4);
-            tableLayoutPanel2.Controls.Add(contact_person_tb, 1, 2);
-            tableLayoutPanel2.Controls.Add(email_tb, 1, 3);
-            tableLayoutPanel2.Controls.Add(label2, 0, 3);
-            tableLayoutPanel2.Controls.Add(db_lbl, 0, 1);
-            tableLayoutPanel2.Controls.Add(supplier_name_tb, 1, 1);
-            tableLayoutPanel2.Controls.Add(logs_lbl, 0, 2);
+            tableLayoutPanel2.Controls.Add(date_picker, 1, 3);
+            tableLayoutPanel2.Controls.Add(label3, 0, 3);
+            tableLayoutPanel2.Controls.Add(user_Id_tb, 1, 1);
+            tableLayoutPanel2.Controls.Add(total_amount_tb, 1, 2);
+            tableLayoutPanel2.Controls.Add(label2, 0, 2);
+            tableLayoutPanel2.Controls.Add(db_lbl, 0, 0);
+            tableLayoutPanel2.Controls.Add(customer_id_tb, 1, 0);
+            tableLayoutPanel2.Controls.Add(logs_lbl, 0, 1);
             tableLayoutPanel2.Dock = DockStyle.Fill;
             tableLayoutPanel2.Location = new Point(10, 40);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
-            tableLayoutPanel2.RowCount = 5;
+            tableLayoutPanel2.RowCount = 4;
             tableLayoutPanel2.RowStyles.Add(new RowStyle());
             tableLayoutPanel2.RowStyles.Add(new RowStyle());
             tableLayoutPanel2.RowStyles.Add(new RowStyle());
             tableLayoutPanel2.RowStyles.Add(new RowStyle());
-            tableLayoutPanel2.RowStyles.Add(new RowStyle());
-            tableLayoutPanel2.Size = new Size(1219, 161);
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel2.Size = new Size(1219, 155);
             tableLayoutPanel2.TabIndex = 3;
             // 
-            // dateTimePicker1
+            // date_picker
             // 
-            dateTimePicker1.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            dateTimePicker1.CalendarForeColor = Color.Black;
-            dateTimePicker1.CalendarMonthBackground = SystemColors.Highlight;
-            dateTimePicker1.CalendarTitleBackColor = Color.Red;
-            dateTimePicker1.CalendarTitleForeColor = Color.IndianRed;
-            dateTimePicker1.CalendarTrailingForeColor = Color.Purple;
-            dateTimePicker1.Format = DateTimePickerFormat.Custom;
-            dateTimePicker1.Location = new Point(611, 128);
-            dateTimePicker1.Name = "dateTimePicker1";
-            dateTimePicker1.Size = new Size(605, 27);
-            dateTimePicker1.TabIndex = 10;
+            date_picker.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            date_picker.CalendarForeColor = Color.Black;
+            date_picker.CalendarMonthBackground = SystemColors.Highlight;
+            date_picker.CalendarTitleBackColor = Color.Red;
+            date_picker.CalendarTitleForeColor = Color.IndianRed;
+            date_picker.CalendarTrailingForeColor = Color.Purple;
+            date_picker.Format = DateTimePickerFormat.Custom;
+            date_picker.Location = new Point(611, 126);
+            date_picker.Name = "date_picker";
+            date_picker.Size = new Size(605, 27);
+            date_picker.TabIndex = 10;
             // 
             // label3
             // 
@@ -172,34 +172,34 @@ namespace SmartStock.Forms.User_Control
             label3.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
             label3.Location = new Point(3, 123);
             label3.Name = "label3";
-            label3.Size = new Size(81, 38);
+            label3.Size = new Size(86, 33);
             label3.TabIndex = 21;
-            label3.Text = "SaleDate";
+            label3.Text = "Sale Date";
             label3.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // contact_person_tb
+            // user_Id_tb
             // 
-            contact_person_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            contact_person_tb.BackColor = Color.FromArgb(54, 54, 54);
-            contact_person_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            contact_person_tb.ForeColor = Color.White;
-            contact_person_tb.Location = new Point(608, 46);
-            contact_person_tb.Margin = new Padding(0, 5, 0, 5);
-            contact_person_tb.Name = "contact_person_tb";
-            contact_person_tb.Size = new Size(611, 31);
-            contact_person_tb.TabIndex = 20;
+            user_Id_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            user_Id_tb.BackColor = Color.FromArgb(54, 54, 54);
+            user_Id_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            user_Id_tb.ForeColor = Color.White;
+            user_Id_tb.Location = new Point(608, 46);
+            user_Id_tb.Margin = new Padding(0, 5, 0, 5);
+            user_Id_tb.Name = "user_Id_tb";
+            user_Id_tb.Size = new Size(611, 31);
+            user_Id_tb.TabIndex = 20;
             // 
-            // email_tb
+            // total_amount_tb
             // 
-            email_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            email_tb.BackColor = Color.FromArgb(54, 54, 54);
-            email_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            email_tb.ForeColor = Color.White;
-            email_tb.Location = new Point(608, 87);
-            email_tb.Margin = new Padding(0, 5, 0, 5);
-            email_tb.Name = "email_tb";
-            email_tb.Size = new Size(611, 31);
-            email_tb.TabIndex = 15;
+            total_amount_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            total_amount_tb.BackColor = Color.FromArgb(54, 54, 54);
+            total_amount_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            total_amount_tb.ForeColor = Color.White;
+            total_amount_tb.Location = new Point(608, 87);
+            total_amount_tb.Margin = new Padding(0, 5, 0, 5);
+            total_amount_tb.Name = "total_amount_tb";
+            total_amount_tb.Size = new Size(611, 31);
+            total_amount_tb.TabIndex = 15;
             // 
             // label2
             // 
@@ -225,17 +225,17 @@ namespace SmartStock.Forms.User_Control
             db_lbl.Text = "Customer ID";
             db_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // supplier_name_tb
+            // customer_id_tb
             // 
-            supplier_name_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            supplier_name_tb.BackColor = Color.FromArgb(54, 54, 54);
-            supplier_name_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            supplier_name_tb.ForeColor = Color.White;
-            supplier_name_tb.Location = new Point(608, 5);
-            supplier_name_tb.Margin = new Padding(0, 5, 0, 5);
-            supplier_name_tb.Name = "supplier_name_tb";
-            supplier_name_tb.Size = new Size(611, 31);
-            supplier_name_tb.TabIndex = 12;
+            customer_id_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            customer_id_tb.BackColor = Color.FromArgb(54, 54, 54);
+            customer_id_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            customer_id_tb.ForeColor = Color.White;
+            customer_id_tb.Location = new Point(608, 5);
+            customer_id_tb.Margin = new Padding(0, 5, 0, 5);
+            customer_id_tb.Name = "customer_id_tb";
+            customer_id_tb.Size = new Size(611, 31);
+            customer_id_tb.TabIndex = 12;
             // 
             // logs_lbl
             // 
@@ -348,18 +348,18 @@ namespace SmartStock.Forms.User_Control
         private Label label5;
         private TextBox safety_stock_tb;
         private TextBox current_stock_tb;
-        private TextBox email_tb;
+        private TextBox total_amount_tb;
         private Label label2;
         private Label db_lbl;
-        private TextBox supplier_name_tb;
+        private TextBox customer_id_tb;
         private Label logs_lbl;
         private Panel selector_pnl;
         private GroupBox groupBox1;
         private TableLayoutPanel tableLayoutPanel1;
         private ComboBox selector_cb;
         private Label label1;
-        private TextBox contact_person_tb;
+        private TextBox user_Id_tb;
         private Label label3;
-        private DateTimePicker dateTimePicker1;
+        private DateTimePicker date_picker;
     }
 }

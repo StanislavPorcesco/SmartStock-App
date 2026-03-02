@@ -30,8 +30,8 @@
         {
             panel1 = new Panel();
             tableLayoutPanel1 = new TableLayoutPanel();
-            comboBox1 = new ComboBox();
-            category_cb = new ComboBox();
+            user_cb = new ComboBox();
+            type_cb = new ComboBox();
             range_lbl = new Label();
             textBox1 = new TextBox();
             dead_lbl = new Label();
@@ -40,19 +40,19 @@
             date_lbl = new Label();
             panel2 = new Panel();
             label4 = new Label();
-            numericUpDown1 = new NumericUpDown();
+            min_numeric = new NumericUpDown();
             panel3 = new Panel();
             label5 = new Label();
-            numericUpDown2 = new NumericUpDown();
+            max_numeric = new NumericUpDown();
             panel4 = new Panel();
-            button1 = new Button();
-            dateTimePicker1 = new DateTimePicker();
+            reset_btn = new Button();
+            date_picker = new DateTimePicker();
             panel1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)min_numeric).BeginInit();
             panel3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown2).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)max_numeric).BeginInit();
             panel4.SuspendLayout();
             SuspendLayout();
             // 
@@ -71,8 +71,8 @@
             tableLayoutPanel1.ColumnCount = 2;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.Controls.Add(comboBox1, 1, 2);
-            tableLayoutPanel1.Controls.Add(category_cb, 1, 1);
+            tableLayoutPanel1.Controls.Add(user_cb, 1, 2);
+            tableLayoutPanel1.Controls.Add(type_cb, 1, 1);
             tableLayoutPanel1.Controls.Add(range_lbl, 0, 4);
             tableLayoutPanel1.Controls.Add(textBox1, 1, 3);
             tableLayoutPanel1.Controls.Add(dead_lbl, 0, 3);
@@ -82,7 +82,7 @@
             tableLayoutPanel1.Controls.Add(panel2, 1, 4);
             tableLayoutPanel1.Controls.Add(panel3, 1, 5);
             tableLayoutPanel1.Controls.Add(panel4, 0, 7);
-            tableLayoutPanel1.Controls.Add(dateTimePicker1, 1, 0);
+            tableLayoutPanel1.Controls.Add(date_picker, 1, 0);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 10);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -99,33 +99,33 @@
             tableLayoutPanel1.Size = new Size(529, 572);
             tableLayoutPanel1.TabIndex = 0;
             // 
-            // comboBox1
+            // user_cb
             // 
-            comboBox1.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            comboBox1.BackColor = Color.FromArgb(54, 54, 54);
-            comboBox1.FlatStyle = FlatStyle.Flat;
-            comboBox1.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            comboBox1.ForeColor = Color.White;
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(264, 100);
-            comboBox1.Margin = new Padding(0, 10, 10, 10);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(255, 33);
-            comboBox1.TabIndex = 30;
+            user_cb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            user_cb.BackColor = Color.FromArgb(54, 54, 54);
+            user_cb.FlatStyle = FlatStyle.Flat;
+            user_cb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            user_cb.ForeColor = Color.White;
+            user_cb.FormattingEnabled = true;
+            user_cb.Location = new Point(264, 100);
+            user_cb.Margin = new Padding(0, 10, 10, 10);
+            user_cb.Name = "user_cb";
+            user_cb.Size = new Size(255, 33);
+            user_cb.TabIndex = 30;
             // 
-            // category_cb
+            // type_cb
             // 
-            category_cb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            category_cb.BackColor = Color.FromArgb(54, 54, 54);
-            category_cb.FlatStyle = FlatStyle.Flat;
-            category_cb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            category_cb.ForeColor = Color.White;
-            category_cb.FormattingEnabled = true;
-            category_cb.Location = new Point(264, 47);
-            category_cb.Margin = new Padding(0, 10, 10, 10);
-            category_cb.Name = "category_cb";
-            category_cb.Size = new Size(255, 33);
-            category_cb.TabIndex = 29;
+            type_cb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            type_cb.BackColor = Color.FromArgb(54, 54, 54);
+            type_cb.FlatStyle = FlatStyle.Flat;
+            type_cb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            type_cb.ForeColor = Color.White;
+            type_cb.FormattingEnabled = true;
+            type_cb.Location = new Point(264, 47);
+            type_cb.Margin = new Padding(0, 10, 10, 10);
+            type_cb.Name = "type_cb";
+            type_cb.Size = new Size(255, 33);
+            type_cb.TabIndex = 29;
             // 
             // range_lbl
             // 
@@ -213,7 +213,7 @@
             // panel2
             // 
             panel2.Controls.Add(label4);
-            panel2.Controls.Add(numericUpDown1);
+            panel2.Controls.Add(min_numeric);
             panel2.Dock = DockStyle.Fill;
             panel2.Location = new Point(264, 204);
             panel2.Margin = new Padding(0, 10, 10, 10);
@@ -235,19 +235,19 @@
             label4.Text = "Min";
             label4.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // numericUpDown1
+            // min_numeric
             // 
-            numericUpDown1.Dock = DockStyle.Right;
-            numericUpDown1.Location = new Point(127, 0);
-            numericUpDown1.Margin = new Padding(0, 10, 0, 0);
-            numericUpDown1.Name = "numericUpDown1";
-            numericUpDown1.Size = new Size(128, 27);
-            numericUpDown1.TabIndex = 0;
+            min_numeric.Dock = DockStyle.Right;
+            min_numeric.Location = new Point(127, 0);
+            min_numeric.Margin = new Padding(0, 10, 0, 0);
+            min_numeric.Name = "min_numeric";
+            min_numeric.Size = new Size(128, 27);
+            min_numeric.TabIndex = 0;
             // 
             // panel3
             // 
             panel3.Controls.Add(label5);
-            panel3.Controls.Add(numericUpDown2);
+            panel3.Controls.Add(max_numeric);
             panel3.Dock = DockStyle.Fill;
             panel3.Location = new Point(264, 251);
             panel3.Margin = new Padding(0, 10, 10, 10);
@@ -269,18 +269,18 @@
             label5.Text = "Max";
             label5.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // numericUpDown2
+            // max_numeric
             // 
-            numericUpDown2.Dock = DockStyle.Right;
-            numericUpDown2.Location = new Point(127, 0);
-            numericUpDown2.Name = "numericUpDown2";
-            numericUpDown2.Size = new Size(128, 27);
-            numericUpDown2.TabIndex = 0;
+            max_numeric.Dock = DockStyle.Right;
+            max_numeric.Location = new Point(127, 0);
+            max_numeric.Name = "max_numeric";
+            max_numeric.Size = new Size(128, 27);
+            max_numeric.TabIndex = 0;
             // 
             // panel4
             // 
             tableLayoutPanel1.SetColumnSpan(panel4, 2);
-            panel4.Controls.Add(button1);
+            panel4.Controls.Add(reset_btn);
             panel4.Dock = DockStyle.Bottom;
             panel4.Location = new Point(3, 499);
             panel4.Name = "panel4";
@@ -288,31 +288,31 @@
             panel4.Size = new Size(523, 70);
             panel4.TabIndex = 27;
             // 
-            // button1
+            // reset_btn
             // 
-            button1.BackColor = Color.FromArgb(54, 54, 54);
-            button1.Dock = DockStyle.Bottom;
-            button1.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button1.ForeColor = Color.White;
-            button1.Location = new Point(10, 0);
-            button1.Margin = new Padding(10, 0, 0, 0);
-            button1.MaximumSize = new Size(0, 70);
-            button1.MinimumSize = new Size(0, 70);
-            button1.Name = "button1";
-            button1.Size = new Size(503, 70);
-            button1.TabIndex = 17;
-            button1.Text = "Reset Filters";
-            button1.UseVisualStyleBackColor = false;
+            reset_btn.BackColor = Color.FromArgb(54, 54, 54);
+            reset_btn.Dock = DockStyle.Bottom;
+            reset_btn.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            reset_btn.ForeColor = Color.White;
+            reset_btn.Location = new Point(10, 0);
+            reset_btn.Margin = new Padding(10, 0, 0, 0);
+            reset_btn.MaximumSize = new Size(0, 70);
+            reset_btn.MinimumSize = new Size(0, 70);
+            reset_btn.Name = "reset_btn";
+            reset_btn.Size = new Size(503, 70);
+            reset_btn.TabIndex = 17;
+            reset_btn.Text = "Reset Filters";
+            reset_btn.UseVisualStyleBackColor = false;
             // 
-            // dateTimePicker1
+            // date_picker
             // 
-            dateTimePicker1.DropDownAlign = LeftRightAlignment.Right;
-            dateTimePicker1.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            dateTimePicker1.Format = DateTimePickerFormat.Custom;
-            dateTimePicker1.Location = new Point(267, 3);
-            dateTimePicker1.Name = "dateTimePicker1";
-            dateTimePicker1.Size = new Size(250, 31);
-            dateTimePicker1.TabIndex = 28;
+            date_picker.DropDownAlign = LeftRightAlignment.Right;
+            date_picker.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            date_picker.Format = DateTimePickerFormat.Custom;
+            date_picker.Location = new Point(267, 3);
+            date_picker.Name = "date_picker";
+            date_picker.Size = new Size(250, 31);
+            date_picker.TabIndex = 28;
             // 
             // FilterTransactions
             // 
@@ -327,10 +327,10 @@
             tableLayoutPanel1.PerformLayout();
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)min_numeric).EndInit();
             panel3.ResumeLayout(false);
             panel3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown2).EndInit();
+            ((System.ComponentModel.ISupportInitialize)max_numeric).EndInit();
             panel4.ResumeLayout(false);
             ResumeLayout(false);
         }
@@ -347,14 +347,14 @@
         private Label date_lbl;
         private Panel panel2;
         private Label label4;
-        private NumericUpDown numericUpDown1;
+        private NumericUpDown min_numeric;
         private Panel panel3;
         private Label label5;
-        private NumericUpDown numericUpDown2;
+        private NumericUpDown max_numeric;
         private Panel panel4;
-        private Button button1;
-        private DateTimePicker dateTimePicker1;
-        private ComboBox category_cb;
-        private ComboBox comboBox1;
+        private Button reset_btn;
+        private DateTimePicker date_picker;
+        private ComboBox type_cb;
+        private ComboBox user_cb;
     }
 }

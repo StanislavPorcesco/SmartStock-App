@@ -90,7 +90,7 @@ namespace SmartStock.Forms.AddForms
             // 
             margin_pnl.BackColor = Color.Transparent;
             margin_pnl.Dock = DockStyle.Top;
-            margin_pnl.Location = new Point(20, 335);
+            margin_pnl.Location = new Point(20, 323);
             margin_pnl.MaximumSize = new Size(0, 20);
             margin_pnl.MinimumSize = new Size(0, 20);
             margin_pnl.Name = "margin_pnl";
@@ -105,7 +105,7 @@ namespace SmartStock.Forms.AddForms
             add_instance_pnl.Location = new Point(20, 150);
             add_instance_pnl.Name = "add_instance_pnl";
             add_instance_pnl.Padding = new Padding(10, 11, 10, 11);
-            add_instance_pnl.Size = new Size(867, 185);
+            add_instance_pnl.Size = new Size(867, 173);
             add_instance_pnl.TabIndex = 4;
             // 
             // groupBox2
@@ -117,7 +117,7 @@ namespace SmartStock.Forms.AddForms
             groupBox2.Location = new Point(10, 11);
             groupBox2.Name = "groupBox2";
             groupBox2.Padding = new Padding(10, 20, 10, 20);
-            groupBox2.Size = new Size(847, 163);
+            groupBox2.Size = new Size(847, 151);
             groupBox2.TabIndex = 2;
             groupBox2.TabStop = false;
             groupBox2.Text = "Current Instance: Category";
@@ -135,9 +135,9 @@ namespace SmartStock.Forms.AddForms
             tableLayoutPanel2.Location = new Point(10, 40);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 2;
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 51F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 51F));
-            tableLayoutPanel2.Size = new Size(827, 103);
+            tableLayoutPanel2.RowStyles.Add(new RowStyle());
+            tableLayoutPanel2.RowStyles.Add(new RowStyle());
+            tableLayoutPanel2.Size = new Size(827, 91);
             tableLayoutPanel2.TabIndex = 3;
             // 
             // settings_lbl
@@ -147,7 +147,7 @@ namespace SmartStock.Forms.AddForms
             settings_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             settings_lbl.Location = new Point(3, 0);
             settings_lbl.Name = "settings_lbl";
-            settings_lbl.Size = new Size(109, 51);
+            settings_lbl.Size = new Size(109, 41);
             settings_lbl.TabIndex = 7;
             settings_lbl.Text = "CategoryID";
             settings_lbl.TextAlign = ContentAlignment.MiddleLeft;
@@ -157,9 +157,9 @@ namespace SmartStock.Forms.AddForms
             db_lbl.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             db_lbl.AutoSize = true;
             db_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            db_lbl.Location = new Point(3, 51);
+            db_lbl.Location = new Point(3, 41);
             db_lbl.Name = "db_lbl";
-            db_lbl.Size = new Size(145, 52);
+            db_lbl.Size = new Size(145, 50);
             db_lbl.TabIndex = 8;
             db_lbl.Text = "Category Name";
             db_lbl.TextAlign = ContentAlignment.MiddleLeft;
@@ -170,7 +170,7 @@ namespace SmartStock.Forms.AddForms
             category_name_tb.BackColor = Color.FromArgb(54, 54, 54);
             category_name_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             category_name_tb.ForeColor = Color.White;
-            category_name_tb.Location = new Point(412, 61);
+            category_name_tb.Location = new Point(412, 50);
             category_name_tb.Margin = new Padding(0, 5, 0, 5);
             category_name_tb.Name = "category_name_tb";
             category_name_tb.Size = new Size(415, 31);
@@ -182,7 +182,7 @@ namespace SmartStock.Forms.AddForms
             category_id_tb.BackColor = Color.FromArgb(54, 54, 54);
             category_id_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             category_id_tb.ForeColor = Color.White;
-            category_id_tb.Location = new Point(412, 10);
+            category_id_tb.Location = new Point(412, 5);
             category_id_tb.Margin = new Padding(0, 5, 0, 5);
             category_id_tb.Name = "category_id_tb";
             category_id_tb.Size = new Size(415, 31);
@@ -254,12 +254,12 @@ namespace SmartStock.Forms.AddForms
             label1.TabIndex = 0;
             label1.Text = "Select the desired instance";
             // 
-            // AddCategory
+            // ModifyCategory
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(base_pnl);
-            Name = "AddCategory";
+            Name = "ModifyCategory";
             Size = new Size(907, 572);
             base_pnl.ResumeLayout(false);
             add_instance_pnl.ResumeLayout(false);

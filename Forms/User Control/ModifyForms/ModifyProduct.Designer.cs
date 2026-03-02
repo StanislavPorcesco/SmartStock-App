@@ -100,7 +100,7 @@ namespace SmartStock.Forms.User_Control
             // 
             margin_pnl.BackColor = Color.Transparent;
             margin_pnl.Dock = DockStyle.Top;
-            margin_pnl.Location = new Point(20, 587);
+            margin_pnl.Location = new Point(20, 520);
             margin_pnl.MaximumSize = new Size(0, 20);
             margin_pnl.MinimumSize = new Size(0, 20);
             margin_pnl.Name = "margin_pnl";
@@ -115,7 +115,7 @@ namespace SmartStock.Forms.User_Control
             add_instance_pnl.Location = new Point(20, 150);
             add_instance_pnl.Name = "add_instance_pnl";
             add_instance_pnl.Padding = new Padding(10);
-            add_instance_pnl.Size = new Size(1259, 437);
+            add_instance_pnl.Size = new Size(1259, 370);
             add_instance_pnl.TabIndex = 4;
             // 
             // groupBox2
@@ -127,7 +127,7 @@ namespace SmartStock.Forms.User_Control
             groupBox2.Location = new Point(10, 10);
             groupBox2.Name = "groupBox2";
             groupBox2.Padding = new Padding(10, 20, 10, 20);
-            groupBox2.Size = new Size(1239, 417);
+            groupBox2.Size = new Size(1239, 350);
             groupBox2.TabIndex = 2;
             groupBox2.TabStop = false;
             groupBox2.Text = "Current Instance: Product";
@@ -155,14 +155,14 @@ namespace SmartStock.Forms.User_Control
             tableLayoutPanel2.Location = new Point(10, 40);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 7;
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-            tableLayoutPanel2.Size = new Size(1219, 357);
+            tableLayoutPanel2.RowStyles.Add(new RowStyle());
+            tableLayoutPanel2.RowStyles.Add(new RowStyle());
+            tableLayoutPanel2.RowStyles.Add(new RowStyle());
+            tableLayoutPanel2.RowStyles.Add(new RowStyle());
+            tableLayoutPanel2.RowStyles.Add(new RowStyle());
+            tableLayoutPanel2.RowStyles.Add(new RowStyle());
+            tableLayoutPanel2.RowStyles.Add(new RowStyle());
+            tableLayoutPanel2.Size = new Size(1219, 290);
             tableLayoutPanel2.TabIndex = 3;
             // 
             // product_caategory_cb
@@ -173,7 +173,7 @@ namespace SmartStock.Forms.User_Control
             product_caategory_cb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             product_caategory_cb.ForeColor = Color.White;
             product_caategory_cb.FormattingEnabled = true;
-            product_caategory_cb.Location = new Point(608, 108);
+            product_caategory_cb.Location = new Point(608, 87);
             product_caategory_cb.Margin = new Padding(0, 5, 0, 5);
             product_caategory_cb.Name = "product_caategory_cb";
             product_caategory_cb.Size = new Size(611, 33);
@@ -185,7 +185,7 @@ namespace SmartStock.Forms.User_Control
             unit_measure_tb.BackColor = Color.FromArgb(54, 54, 54);
             unit_measure_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             unit_measure_tb.ForeColor = Color.White;
-            unit_measure_tb.Location = new Point(608, 313);
+            unit_measure_tb.Location = new Point(608, 253);
             unit_measure_tb.Margin = new Padding(0, 5, 0, 5);
             unit_measure_tb.Name = "unit_measure_tb";
             unit_measure_tb.Size = new Size(611, 31);
@@ -196,9 +196,9 @@ namespace SmartStock.Forms.User_Control
             label5.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             label5.AutoSize = true;
             label5.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
-            label5.Location = new Point(3, 300);
+            label5.Location = new Point(3, 248);
             label5.Name = "label5";
-            label5.Size = new Size(141, 57);
+            label5.Size = new Size(141, 42);
             label5.TabIndex = 20;
             label5.Text = "Unit Of Measure";
             label5.TextAlign = ContentAlignment.MiddleLeft;
@@ -209,7 +209,7 @@ namespace SmartStock.Forms.User_Control
             safety_stock_tb.BackColor = Color.FromArgb(54, 54, 54);
             safety_stock_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             safety_stock_tb.ForeColor = Color.White;
-            safety_stock_tb.Location = new Point(608, 259);
+            safety_stock_tb.Location = new Point(608, 212);
             safety_stock_tb.Margin = new Padding(0, 5, 0, 5);
             safety_stock_tb.Name = "safety_stock_tb";
             safety_stock_tb.Size = new Size(611, 31);
@@ -220,9 +220,9 @@ namespace SmartStock.Forms.User_Control
             label4.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
-            label4.Location = new Point(3, 250);
+            label4.Location = new Point(3, 207);
             label4.Name = "label4";
-            label4.Size = new Size(111, 50);
+            label4.Size = new Size(111, 41);
             label4.TabIndex = 18;
             label4.Text = "Safety Stock";
             label4.TextAlign = ContentAlignment.MiddleLeft;
@@ -233,7 +233,7 @@ namespace SmartStock.Forms.User_Control
             current_stock_tb.BackColor = Color.FromArgb(54, 54, 54);
             current_stock_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             current_stock_tb.ForeColor = Color.White;
-            current_stock_tb.Location = new Point(608, 209);
+            current_stock_tb.Location = new Point(608, 171);
             current_stock_tb.Margin = new Padding(0, 5, 0, 5);
             current_stock_tb.Name = "current_stock_tb";
             current_stock_tb.Size = new Size(611, 31);
@@ -244,9 +244,9 @@ namespace SmartStock.Forms.User_Control
             label3.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
-            label3.Location = new Point(3, 200);
+            label3.Location = new Point(3, 166);
             label3.Name = "label3";
-            label3.Size = new Size(121, 50);
+            label3.Size = new Size(121, 41);
             label3.TabIndex = 16;
             label3.Text = "Current Stock";
             label3.TextAlign = ContentAlignment.MiddleLeft;
@@ -257,7 +257,7 @@ namespace SmartStock.Forms.User_Control
             unit_price_tb.BackColor = Color.FromArgb(54, 54, 54);
             unit_price_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             unit_price_tb.ForeColor = Color.White;
-            unit_price_tb.Location = new Point(608, 159);
+            unit_price_tb.Location = new Point(608, 130);
             unit_price_tb.Margin = new Padding(0, 5, 0, 5);
             unit_price_tb.Name = "unit_price_tb";
             unit_price_tb.Size = new Size(611, 31);
@@ -268,9 +268,9 @@ namespace SmartStock.Forms.User_Control
             label2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
-            label2.Location = new Point(3, 150);
+            label2.Location = new Point(3, 125);
             label2.Name = "label2";
-            label2.Size = new Size(88, 50);
+            label2.Size = new Size(88, 41);
             label2.TabIndex = 14;
             label2.Text = "Unit Price";
             label2.TextAlign = ContentAlignment.MiddleLeft;
@@ -282,7 +282,7 @@ namespace SmartStock.Forms.User_Control
             settings_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             settings_lbl.Location = new Point(3, 0);
             settings_lbl.Name = "settings_lbl";
-            settings_lbl.Size = new Size(103, 50);
+            settings_lbl.Size = new Size(103, 41);
             settings_lbl.TabIndex = 7;
             settings_lbl.Text = "Product ID";
             settings_lbl.TextAlign = ContentAlignment.MiddleLeft;
@@ -292,9 +292,9 @@ namespace SmartStock.Forms.User_Control
             db_lbl.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             db_lbl.AutoSize = true;
             db_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            db_lbl.Location = new Point(3, 50);
+            db_lbl.Location = new Point(3, 41);
             db_lbl.Name = "db_lbl";
-            db_lbl.Size = new Size(134, 50);
+            db_lbl.Size = new Size(134, 41);
             db_lbl.TabIndex = 8;
             db_lbl.Text = "Product Name";
             db_lbl.TextAlign = ContentAlignment.MiddleLeft;
@@ -305,7 +305,7 @@ namespace SmartStock.Forms.User_Control
             product_name_tb.BackColor = Color.FromArgb(54, 54, 54);
             product_name_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             product_name_tb.ForeColor = Color.White;
-            product_name_tb.Location = new Point(608, 59);
+            product_name_tb.Location = new Point(608, 46);
             product_name_tb.Margin = new Padding(0, 5, 0, 5);
             product_name_tb.Name = "product_name_tb";
             product_name_tb.Size = new Size(611, 31);
@@ -316,9 +316,9 @@ namespace SmartStock.Forms.User_Control
             logs_lbl.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             logs_lbl.AutoSize = true;
             logs_lbl.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
-            logs_lbl.Location = new Point(3, 100);
+            logs_lbl.Location = new Point(3, 82);
             logs_lbl.Name = "logs_lbl";
-            logs_lbl.Size = new Size(152, 50);
+            logs_lbl.Size = new Size(152, 43);
             logs_lbl.TabIndex = 9;
             logs_lbl.Text = "Product Category";
             logs_lbl.TextAlign = ContentAlignment.MiddleLeft;
@@ -329,7 +329,7 @@ namespace SmartStock.Forms.User_Control
             product_id_tb.BackColor = Color.FromArgb(54, 54, 54);
             product_id_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             product_id_tb.ForeColor = Color.White;
-            product_id_tb.Location = new Point(608, 9);
+            product_id_tb.Location = new Point(608, 5);
             product_id_tb.Margin = new Padding(0, 5, 0, 5);
             product_id_tb.Name = "product_id_tb";
             product_id_tb.Size = new Size(611, 31);
@@ -401,12 +401,12 @@ namespace SmartStock.Forms.User_Control
             label1.TabIndex = 0;
             label1.Text = "Select the desired instance";
             // 
-            // AddProduct
+            // ModifyProduct
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(base_pnl);
-            Name = "AddProduct";
+            Name = "ModifyProduct";
             Size = new Size(1299, 717);
             base_pnl.ResumeLayout(false);
             add_instance_pnl.ResumeLayout(false);

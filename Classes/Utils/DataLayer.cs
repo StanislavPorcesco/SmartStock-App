@@ -11,7 +11,7 @@ namespace SmartStock.Classes.Utils
             if (selector != null)
             {
                 selector.Items.Clear();
-                selector.Items.AddRange(new string[] { "Product", "Category", "Supplier", "Transaction", "Customer", "Sale", "ExternalFactor" });
+                selector.Items.AddRange(new string[] { "Product", "Category", "Supplier", "Transaction", "Customer", "Sale", "ExternalFactor", "User" });
             }
             selector.Text = "Select an option";
         }
@@ -81,7 +81,8 @@ namespace SmartStock.Classes.Utils
                     "Transaction" => new AddTransaction(),
                     "Customer" => new AddCustomer(),
                     "Sale" => new AddSale(),
-                    "ExternalFactor" => new AddExternalFactor()
+                    "ExternalFactor" => new AddExternalFactor(),
+                    "User" => new AddUser()
                 };
 
                 if (controlToOpen != null)
@@ -120,7 +121,6 @@ namespace SmartStock.Classes.Utils
                     container.Controls.Add(controlToOpen);
                     ThemeManager.Apply(controlToOpen);
                 }
-
                 container.ResumeLayout(true);
             };
         }

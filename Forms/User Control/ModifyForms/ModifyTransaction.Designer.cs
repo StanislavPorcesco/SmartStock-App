@@ -35,18 +35,20 @@ namespace SmartStock.Forms.User_Control
             add_instance_pnl = new Panel();
             groupBox2 = new GroupBox();
             tableLayoutPanel2 = new TableLayoutPanel();
-            contact_person_tb = new TextBox();
+            type_cb = new ComboBox();
+            quantity_tb = new TextBox();
+            label6 = new Label();
+            user_id_tb = new TextBox();
             adress_tb = new TextBox();
             label4 = new Label();
             phone_tb = new TextBox();
             label3 = new Label();
-            email_tb = new TextBox();
             label2 = new Label();
             transaction_id = new Label();
             db_lbl = new Label();
-            supplier_name_tb = new TextBox();
+            product_id_tb = new TextBox();
             logs_lbl = new Label();
-            supplier_id_tb = new TextBox();
+            transaction_id_tb = new TextBox();
             selector_pnl = new Panel();
             groupBox1 = new GroupBox();
             tableLayoutPanel1 = new TableLayoutPanel();
@@ -98,7 +100,7 @@ namespace SmartStock.Forms.User_Control
             // 
             margin_pnl.BackColor = Color.Transparent;
             margin_pnl.Dock = DockStyle.Top;
-            margin_pnl.Location = new Point(20, 533);
+            margin_pnl.Location = new Point(20, 518);
             margin_pnl.MaximumSize = new Size(0, 20);
             margin_pnl.MinimumSize = new Size(0, 20);
             margin_pnl.Name = "margin_pnl";
@@ -113,7 +115,7 @@ namespace SmartStock.Forms.User_Control
             add_instance_pnl.Location = new Point(20, 150);
             add_instance_pnl.Name = "add_instance_pnl";
             add_instance_pnl.Padding = new Padding(10);
-            add_instance_pnl.Size = new Size(1259, 383);
+            add_instance_pnl.Size = new Size(1259, 368);
             add_instance_pnl.TabIndex = 4;
             // 
             // groupBox2
@@ -125,7 +127,7 @@ namespace SmartStock.Forms.User_Control
             groupBox2.Location = new Point(10, 10);
             groupBox2.Name = "groupBox2";
             groupBox2.Padding = new Padding(10, 20, 10, 20);
-            groupBox2.Size = new Size(1239, 363);
+            groupBox2.Size = new Size(1239, 348);
             groupBox2.TabIndex = 2;
             groupBox2.TabStop = false;
             groupBox2.Text = "Current Instance: Transaction";
@@ -135,42 +137,83 @@ namespace SmartStock.Forms.User_Control
             tableLayoutPanel2.ColumnCount = 2;
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 49.92503F));
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50.0749664F));
-            tableLayoutPanel2.Controls.Add(contact_person_tb, 1, 2);
+            tableLayoutPanel2.Controls.Add(type_cb, 1, 3);
+            tableLayoutPanel2.Controls.Add(quantity_tb, 1, 6);
+            tableLayoutPanel2.Controls.Add(label6, 0, 6);
+            tableLayoutPanel2.Controls.Add(user_id_tb, 1, 2);
             tableLayoutPanel2.Controls.Add(adress_tb, 1, 5);
             tableLayoutPanel2.Controls.Add(label4, 0, 5);
             tableLayoutPanel2.Controls.Add(phone_tb, 1, 4);
             tableLayoutPanel2.Controls.Add(label3, 0, 4);
-            tableLayoutPanel2.Controls.Add(email_tb, 1, 3);
             tableLayoutPanel2.Controls.Add(label2, 0, 3);
             tableLayoutPanel2.Controls.Add(transaction_id, 0, 0);
             tableLayoutPanel2.Controls.Add(db_lbl, 0, 1);
-            tableLayoutPanel2.Controls.Add(supplier_name_tb, 1, 1);
+            tableLayoutPanel2.Controls.Add(product_id_tb, 1, 1);
             tableLayoutPanel2.Controls.Add(logs_lbl, 0, 2);
-            tableLayoutPanel2.Controls.Add(supplier_id_tb, 1, 0);
+            tableLayoutPanel2.Controls.Add(transaction_id_tb, 1, 0);
             tableLayoutPanel2.Dock = DockStyle.Fill;
             tableLayoutPanel2.Location = new Point(10, 40);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
-            tableLayoutPanel2.RowCount = 6;
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-            tableLayoutPanel2.Size = new Size(1219, 303);
+            tableLayoutPanel2.RowCount = 7;
+            tableLayoutPanel2.RowStyles.Add(new RowStyle());
+            tableLayoutPanel2.RowStyles.Add(new RowStyle());
+            tableLayoutPanel2.RowStyles.Add(new RowStyle());
+            tableLayoutPanel2.RowStyles.Add(new RowStyle());
+            tableLayoutPanel2.RowStyles.Add(new RowStyle());
+            tableLayoutPanel2.RowStyles.Add(new RowStyle());
+            tableLayoutPanel2.RowStyles.Add(new RowStyle());
+            tableLayoutPanel2.Size = new Size(1219, 288);
             tableLayoutPanel2.TabIndex = 3;
             // 
-            // contact_person_tb
+            // type_cb
             // 
-            contact_person_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            contact_person_tb.BackColor = Color.FromArgb(54, 54, 54);
-            contact_person_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            contact_person_tb.ForeColor = Color.White;
-            contact_person_tb.Location = new Point(608, 109);
-            contact_person_tb.Margin = new Padding(0, 5, 0, 5);
-            contact_person_tb.Name = "contact_person_tb";
-            contact_person_tb.Size = new Size(611, 31);
-            contact_person_tb.TabIndex = 20;
+            type_cb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            type_cb.BackColor = Color.FromArgb(54, 54, 54);
+            type_cb.FlatStyle = FlatStyle.Flat;
+            type_cb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            type_cb.ForeColor = Color.White;
+            type_cb.FormattingEnabled = true;
+            type_cb.Location = new Point(608, 128);
+            type_cb.Margin = new Padding(0, 5, 0, 5);
+            type_cb.Name = "type_cb";
+            type_cb.Size = new Size(611, 33);
+            type_cb.TabIndex = 25;
+            // 
+            // quantity_tb
+            // 
+            quantity_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            quantity_tb.BackColor = Color.FromArgb(54, 54, 54);
+            quantity_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            quantity_tb.ForeColor = Color.White;
+            quantity_tb.Location = new Point(608, 253);
+            quantity_tb.Margin = new Padding(0, 5, 0, 5);
+            quantity_tb.Name = "quantity_tb";
+            quantity_tb.Size = new Size(611, 31);
+            quantity_tb.TabIndex = 24;
+            // 
+            // label6
+            // 
+            label6.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            label6.AutoSize = true;
+            label6.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            label6.Location = new Point(3, 248);
+            label6.Name = "label6";
+            label6.Size = new Size(87, 41);
+            label6.TabIndex = 23;
+            label6.Text = "Quantity";
+            label6.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // user_id_tb
+            // 
+            user_id_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            user_id_tb.BackColor = Color.FromArgb(54, 54, 54);
+            user_id_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            user_id_tb.ForeColor = Color.White;
+            user_id_tb.Location = new Point(608, 87);
+            user_id_tb.Margin = new Padding(0, 5, 0, 5);
+            user_id_tb.Name = "user_id_tb";
+            user_id_tb.Size = new Size(611, 31);
+            user_id_tb.TabIndex = 20;
             // 
             // adress_tb
             // 
@@ -178,7 +221,7 @@ namespace SmartStock.Forms.User_Control
             adress_tb.BackColor = Color.FromArgb(54, 54, 54);
             adress_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             adress_tb.ForeColor = Color.White;
-            adress_tb.Location = new Point(608, 261);
+            adress_tb.Location = new Point(608, 212);
             adress_tb.Margin = new Padding(0, 5, 0, 5);
             adress_tb.Name = "adress_tb";
             adress_tb.Size = new Size(611, 31);
@@ -188,10 +231,10 @@ namespace SmartStock.Forms.User_Control
             // 
             label4.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             label4.AutoSize = true;
-            label4.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
-            label4.Location = new Point(3, 250);
+            label4.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            label4.Location = new Point(3, 207);
             label4.Name = "label4";
-            label4.Size = new Size(74, 53);
+            label4.Size = new Size(80, 41);
             label4.TabIndex = 18;
             label4.Text = "Address";
             label4.TextAlign = ContentAlignment.MiddleLeft;
@@ -202,7 +245,7 @@ namespace SmartStock.Forms.User_Control
             phone_tb.BackColor = Color.FromArgb(54, 54, 54);
             phone_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             phone_tb.ForeColor = Color.White;
-            phone_tb.Location = new Point(608, 209);
+            phone_tb.Location = new Point(608, 171);
             phone_tb.Margin = new Padding(0, 5, 0, 5);
             phone_tb.Name = "phone_tb";
             phone_tb.Size = new Size(611, 31);
@@ -212,34 +255,22 @@ namespace SmartStock.Forms.User_Control
             // 
             label3.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             label3.AutoSize = true;
-            label3.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
-            label3.Location = new Point(3, 200);
+            label3.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            label3.Location = new Point(3, 166);
             label3.Name = "label3";
-            label3.Size = new Size(59, 50);
+            label3.Size = new Size(66, 41);
             label3.TabIndex = 16;
             label3.Text = "Phone";
             label3.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // email_tb
-            // 
-            email_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            email_tb.BackColor = Color.FromArgb(54, 54, 54);
-            email_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            email_tb.ForeColor = Color.White;
-            email_tb.Location = new Point(608, 159);
-            email_tb.Margin = new Padding(0, 5, 0, 5);
-            email_tb.Name = "email_tb";
-            email_tb.Size = new Size(611, 31);
-            email_tb.TabIndex = 15;
             // 
             // label2
             // 
             label2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
-            label2.Location = new Point(3, 150);
+            label2.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            label2.Location = new Point(3, 123);
             label2.Name = "label2";
-            label2.Size = new Size(48, 50);
+            label2.Size = new Size(53, 43);
             label2.TabIndex = 14;
             label2.Text = "Type";
             label2.TextAlign = ContentAlignment.MiddleLeft;
@@ -251,7 +282,7 @@ namespace SmartStock.Forms.User_Control
             transaction_id.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             transaction_id.Location = new Point(3, 0);
             transaction_id.Name = "transaction_id";
-            transaction_id.Size = new Size(135, 50);
+            transaction_id.Size = new Size(135, 41);
             transaction_id.TabIndex = 7;
             transaction_id.Text = "Transaction ID";
             transaction_id.TextAlign = ContentAlignment.MiddleLeft;
@@ -261,48 +292,48 @@ namespace SmartStock.Forms.User_Control
             db_lbl.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             db_lbl.AutoSize = true;
             db_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            db_lbl.Location = new Point(3, 50);
+            db_lbl.Location = new Point(3, 41);
             db_lbl.Name = "db_lbl";
-            db_lbl.Size = new Size(103, 50);
+            db_lbl.Size = new Size(103, 41);
             db_lbl.TabIndex = 8;
             db_lbl.Text = "Product ID";
             db_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // supplier_name_tb
+            // product_id_tb
             // 
-            supplier_name_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            supplier_name_tb.BackColor = Color.FromArgb(54, 54, 54);
-            supplier_name_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            supplier_name_tb.ForeColor = Color.White;
-            supplier_name_tb.Location = new Point(608, 59);
-            supplier_name_tb.Margin = new Padding(0, 5, 0, 5);
-            supplier_name_tb.Name = "supplier_name_tb";
-            supplier_name_tb.Size = new Size(611, 31);
-            supplier_name_tb.TabIndex = 12;
+            product_id_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            product_id_tb.BackColor = Color.FromArgb(54, 54, 54);
+            product_id_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            product_id_tb.ForeColor = Color.White;
+            product_id_tb.Location = new Point(608, 46);
+            product_id_tb.Margin = new Padding(0, 5, 0, 5);
+            product_id_tb.Name = "product_id_tb";
+            product_id_tb.Size = new Size(611, 31);
+            product_id_tb.TabIndex = 12;
             // 
             // logs_lbl
             // 
             logs_lbl.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             logs_lbl.AutoSize = true;
-            logs_lbl.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
-            logs_lbl.Location = new Point(3, 100);
+            logs_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            logs_lbl.Location = new Point(3, 82);
             logs_lbl.Name = "logs_lbl";
-            logs_lbl.Size = new Size(68, 50);
+            logs_lbl.Size = new Size(74, 41);
             logs_lbl.TabIndex = 9;
             logs_lbl.Text = "User ID";
             logs_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // supplier_id_tb
+            // transaction_id_tb
             // 
-            supplier_id_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            supplier_id_tb.BackColor = Color.FromArgb(54, 54, 54);
-            supplier_id_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            supplier_id_tb.ForeColor = Color.White;
-            supplier_id_tb.Location = new Point(608, 9);
-            supplier_id_tb.Margin = new Padding(0, 5, 0, 5);
-            supplier_id_tb.Name = "supplier_id_tb";
-            supplier_id_tb.Size = new Size(611, 31);
-            supplier_id_tb.TabIndex = 11;
+            transaction_id_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            transaction_id_tb.BackColor = Color.FromArgb(54, 54, 54);
+            transaction_id_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            transaction_id_tb.ForeColor = Color.White;
+            transaction_id_tb.Location = new Point(608, 5);
+            transaction_id_tb.Margin = new Padding(0, 5, 0, 5);
+            transaction_id_tb.Name = "transaction_id_tb";
+            transaction_id_tb.Size = new Size(611, 31);
+            transaction_id_tb.TabIndex = 11;
             // 
             // selector_pnl
             // 
@@ -370,12 +401,12 @@ namespace SmartStock.Forms.User_Control
             label1.TabIndex = 0;
             label1.Text = "Select the desired instance";
             // 
-            // AddTransaction
+            // ModifyTransaction
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(base_pnl);
-            Name = "AddTransaction";
+            Name = "ModifyTransaction";
             Size = new Size(1299, 717);
             base_pnl.ResumeLayout(false);
             add_instance_pnl.ResumeLayout(false);
@@ -404,20 +435,22 @@ namespace SmartStock.Forms.User_Control
         private Label label4;
         private TextBox current_stock_tb;
         private Label label3;
-        private TextBox email_tb;
         private Label label2;
         private Label transaction_id;
         private Label db_lbl;
-        private TextBox supplier_name_tb;
+        private TextBox product_id_tb;
         private Label logs_lbl;
-        private TextBox supplier_id_tb;
+        private TextBox transaction_id_tb;
         private Panel selector_pnl;
         private GroupBox groupBox1;
         private TableLayoutPanel tableLayoutPanel1;
         private ComboBox selector_cb;
         private Label label1;
-        private TextBox contact_person_tb;
+        private TextBox user_id_tb;
         private TextBox adress_tb;
         private TextBox phone_tb;
+        private Label label6;
+        private TextBox quantity_tb;
+        private ComboBox type_cb;
     }
 }

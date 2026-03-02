@@ -35,7 +35,7 @@ namespace SmartStock.Forms.User_Control
             add_instance_pnl = new Panel();
             groupBox2 = new GroupBox();
             tableLayoutPanel2 = new TableLayoutPanel();
-            product_caategory_cb = new ComboBox();
+            product_category_cb = new ComboBox();
             unit_measure_tb = new TextBox();
             label5 = new Label();
             safety_stock_tb = new TextBox();
@@ -98,7 +98,7 @@ namespace SmartStock.Forms.User_Control
             // 
             margin_pnl.BackColor = Color.Transparent;
             margin_pnl.Dock = DockStyle.Top;
-            margin_pnl.Location = new Point(20, 480);
+            margin_pnl.Location = new Point(20, 474);
             margin_pnl.MaximumSize = new Size(0, 20);
             margin_pnl.MinimumSize = new Size(0, 20);
             margin_pnl.Name = "margin_pnl";
@@ -113,7 +113,7 @@ namespace SmartStock.Forms.User_Control
             add_instance_pnl.Location = new Point(20, 150);
             add_instance_pnl.Name = "add_instance_pnl";
             add_instance_pnl.Padding = new Padding(10);
-            add_instance_pnl.Size = new Size(1259, 330);
+            add_instance_pnl.Size = new Size(1259, 324);
             add_instance_pnl.TabIndex = 4;
             // 
             // groupBox2
@@ -125,7 +125,7 @@ namespace SmartStock.Forms.User_Control
             groupBox2.Location = new Point(10, 10);
             groupBox2.Name = "groupBox2";
             groupBox2.Padding = new Padding(10, 20, 10, 20);
-            groupBox2.Size = new Size(1239, 310);
+            groupBox2.Size = new Size(1239, 304);
             groupBox2.TabIndex = 2;
             groupBox2.TabStop = false;
             groupBox2.Text = "Current Instance: Product";
@@ -135,45 +135,45 @@ namespace SmartStock.Forms.User_Control
             tableLayoutPanel2.ColumnCount = 2;
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 49.92503F));
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50.0749664F));
-            tableLayoutPanel2.Controls.Add(product_caategory_cb, 1, 2);
-            tableLayoutPanel2.Controls.Add(unit_measure_tb, 1, 6);
-            tableLayoutPanel2.Controls.Add(label5, 0, 6);
-            tableLayoutPanel2.Controls.Add(safety_stock_tb, 1, 5);
-            tableLayoutPanel2.Controls.Add(label4, 0, 5);
-            tableLayoutPanel2.Controls.Add(current_stock_tb, 1, 4);
-            tableLayoutPanel2.Controls.Add(label3, 0, 4);
-            tableLayoutPanel2.Controls.Add(unit_price_tb, 1, 3);
-            tableLayoutPanel2.Controls.Add(label2, 0, 3);
-            tableLayoutPanel2.Controls.Add(db_lbl, 0, 1);
-            tableLayoutPanel2.Controls.Add(product_name_tb, 1, 1);
-            tableLayoutPanel2.Controls.Add(logs_lbl, 0, 2);
+            tableLayoutPanel2.Controls.Add(product_category_cb, 1, 1);
+            tableLayoutPanel2.Controls.Add(unit_measure_tb, 1, 5);
+            tableLayoutPanel2.Controls.Add(label5, 0, 5);
+            tableLayoutPanel2.Controls.Add(safety_stock_tb, 1, 4);
+            tableLayoutPanel2.Controls.Add(label4, 0, 4);
+            tableLayoutPanel2.Controls.Add(current_stock_tb, 1, 3);
+            tableLayoutPanel2.Controls.Add(label3, 0, 3);
+            tableLayoutPanel2.Controls.Add(unit_price_tb, 1, 2);
+            tableLayoutPanel2.Controls.Add(label2, 0, 2);
+            tableLayoutPanel2.Controls.Add(db_lbl, 0, 0);
+            tableLayoutPanel2.Controls.Add(product_name_tb, 1, 0);
+            tableLayoutPanel2.Controls.Add(logs_lbl, 0, 1);
             tableLayoutPanel2.Dock = DockStyle.Fill;
             tableLayoutPanel2.Location = new Point(10, 40);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
-            tableLayoutPanel2.RowCount = 7;
+            tableLayoutPanel2.RowCount = 6;
             tableLayoutPanel2.RowStyles.Add(new RowStyle());
             tableLayoutPanel2.RowStyles.Add(new RowStyle());
             tableLayoutPanel2.RowStyles.Add(new RowStyle());
             tableLayoutPanel2.RowStyles.Add(new RowStyle());
             tableLayoutPanel2.RowStyles.Add(new RowStyle());
             tableLayoutPanel2.RowStyles.Add(new RowStyle());
-            tableLayoutPanel2.RowStyles.Add(new RowStyle());
-            tableLayoutPanel2.Size = new Size(1219, 250);
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel2.Size = new Size(1219, 244);
             tableLayoutPanel2.TabIndex = 3;
             // 
-            // product_caategory_cb
+            // product_category_cb
             // 
-            product_caategory_cb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            product_caategory_cb.BackColor = Color.FromArgb(54, 54, 54);
-            product_caategory_cb.FlatStyle = FlatStyle.Flat;
-            product_caategory_cb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            product_caategory_cb.ForeColor = Color.White;
-            product_caategory_cb.FormattingEnabled = true;
-            product_caategory_cb.Location = new Point(608, 46);
-            product_caategory_cb.Margin = new Padding(0, 5, 0, 5);
-            product_caategory_cb.Name = "product_caategory_cb";
-            product_caategory_cb.Size = new Size(611, 33);
-            product_caategory_cb.TabIndex = 22;
+            product_category_cb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            product_category_cb.BackColor = Color.FromArgb(54, 54, 54);
+            product_category_cb.FlatStyle = FlatStyle.Flat;
+            product_category_cb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            product_category_cb.ForeColor = Color.White;
+            product_category_cb.FormattingEnabled = true;
+            product_category_cb.Location = new Point(608, 46);
+            product_category_cb.Margin = new Padding(0, 5, 0, 5);
+            product_category_cb.Name = "product_category_cb";
+            product_category_cb.Size = new Size(611, 33);
+            product_category_cb.TabIndex = 22;
             // 
             // unit_measure_tb
             // 
@@ -181,7 +181,7 @@ namespace SmartStock.Forms.User_Control
             unit_measure_tb.BackColor = Color.FromArgb(54, 54, 54);
             unit_measure_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             unit_measure_tb.ForeColor = Color.White;
-            unit_measure_tb.Location = new Point(608, 213);
+            unit_measure_tb.Location = new Point(608, 212);
             unit_measure_tb.Margin = new Padding(0, 5, 0, 5);
             unit_measure_tb.Name = "unit_measure_tb";
             unit_measure_tb.Size = new Size(611, 31);
@@ -194,7 +194,7 @@ namespace SmartStock.Forms.User_Control
             label5.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
             label5.Location = new Point(3, 207);
             label5.Name = "label5";
-            label5.Size = new Size(141, 43);
+            label5.Size = new Size(141, 41);
             label5.TabIndex = 20;
             label5.Text = "Unit Of Measure";
             label5.TextAlign = ContentAlignment.MiddleLeft;
@@ -400,7 +400,7 @@ namespace SmartStock.Forms.User_Control
         private Panel add_instance_pnl;
         private GroupBox groupBox2;
         private TableLayoutPanel tableLayoutPanel2;
-        private ComboBox product_caategory_cb;
+        private ComboBox product_category_cb;
         private TextBox unit_measure_tb;
         private Label label5;
         private TextBox safety_stock_tb;

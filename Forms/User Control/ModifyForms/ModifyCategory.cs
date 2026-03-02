@@ -20,7 +20,7 @@ namespace SmartStock.Forms.AddForms
             DataLayer.PopulateSelector(selector_cb);
             selector_cb.SelectedIndexChanged += DataLayer.OpenModifyInstanceForm(this, selector_cb);
             ThemeManager.Apply(this);
-            this.Refresh();           
+            this.Refresh();
         }
     }
 }
