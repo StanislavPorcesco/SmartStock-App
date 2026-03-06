@@ -36,7 +36,7 @@ namespace SmartStock.Classes.Models
         public int IsLoggedIn { get; set; } = 0;
 
         [Required]
-        public int IsActive { get; set; } = 1;
+        public bool IsActive { get; set; } = true;
         [Required]
         public int AccessFailedCount { get; set; } = 0;
         public void CreateUser(User newUser, string plainPassword)
@@ -63,7 +63,7 @@ namespace SmartStock.Classes.Models
                 if (user == null) return null;
 
                 // 1. Verificăm dacă este blocat (IsActive = 0)
-                if (user.IsActive == 0)
+                if (!user.IsActive)
                 {
                     throw new Exception("The account is locked due to too many failed login attempts. Please contact the administrator.");
                 }
@@ -89,7 +89,7 @@ namespace SmartStock.Classes.Models
 
                     if (user.AccessFailedCount >= 3)
                     {
-                        user.IsActive = 0; // Blocăm contul
+                        user.IsActive = false; // Blocăm contul
                         db.SaveChanges();
                         throw new Exception("Account locked! You have entered the wrong password 3 times.");
                     }
@@ -121,7 +121,7 @@ namespace SmartStock.Classes.Models
                 var user = db.Users.Find(userId);
                 if (user != null)
                 {
-                    user.IsActive = 0;
+                    user.IsActive = false;
                     db.SaveChanges();
                 }
             }

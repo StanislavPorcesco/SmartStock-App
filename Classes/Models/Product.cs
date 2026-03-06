@@ -8,7 +8,8 @@ namespace SmartStock.Classes.Models
     {
         [Key]
         public int ProductId { get; set; }
-
+        [Required]
+        public string ProductName { get; set; }
         [Required]
         public int CategoryId { get; set; }
 
@@ -28,6 +29,8 @@ namespace SmartStock.Classes.Models
         [Required]
         [StringLength(50)]
         public string UnitOfMeasure { get; set; }
+        [Required]
+        public bool IsActive { get; set; }
 
         // Proprietăți de navigare pentru EF Core
         [ForeignKey("CategoryId")]

@@ -3,28 +3,8 @@
   "WorkspaceRootPath": "D:\\Files\\Degree\\App\\SmartStock\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\forms\\user control\\modifyforms\\modifyuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:forms\\user control\\modifyforms\\modifyuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\classes\\utils\\datalayer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:classes\\utils\\datalayer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\forms\\user control\\modifyforms\\modifyuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:forms\\user control\\modifyforms\\modifyuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\forms\\menuform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:forms\\menuform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\classes\\utils\\securityservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:classes\\utils\\securityservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\forms\\user control\\loginforms\\login.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:forms\\user control\\loginforms\\login.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\forms\\user control\\modifyforms\\modifyproduct.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:forms\\user control\\modifyforms\\modifyproduct.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,89 +14,25 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "DataLayer.cs",
-              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Utils\\DataLayer.cs",
-              "RelativeDocumentMoniker": "Classes\\Utils\\DataLayer.cs",
-              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Utils\\DataLayer.cs",
-              "RelativeToolTip": "Classes\\Utils\\DataLayer.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAABcAAABGAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "ModifyProduct.cs",
+              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\User Control\\ModifyForms\\ModifyProduct.cs",
+              "RelativeDocumentMoniker": "Forms\\User Control\\ModifyForms\\ModifyProduct.cs",
+              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\User Control\\ModifyForms\\ModifyProduct.cs",
+              "RelativeToolTip": "Forms\\User Control\\ModifyForms\\ModifyProduct.cs",
+              "ViewState": "AgIAAGcAAAAAAAAAAAAkwIoAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-02T19:00:50.162Z",
+              "WhenOpened": "2026-03-06T18:07:19.344Z",
               "IsPinned": true,
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ModifyUser.cs [Design]",
-              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\User Control\\ModifyForms\\ModifyUser.cs",
-              "RelativeDocumentMoniker": "Forms\\User Control\\ModifyForms\\ModifyUser.cs",
-              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\User Control\\ModifyForms\\ModifyUser.cs [Design]",
-              "RelativeToolTip": "Forms\\User Control\\ModifyForms\\ModifyUser.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-02T19:29:50.866Z",
-              "EditorCaption": " [Design]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "SecurityService.cs",
-              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Utils\\SecurityService.cs",
-              "RelativeDocumentMoniker": "Classes\\Utils\\SecurityService.cs",
-              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Utils\\SecurityService.cs",
-              "RelativeToolTip": "Classes\\Utils\\SecurityService.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAABEAAABHAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-02T19:28:25.052Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Login.cs",
-              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\User Control\\LoginForms\\Login.cs",
-              "RelativeDocumentMoniker": "Forms\\User Control\\LoginForms\\Login.cs",
-              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\User Control\\LoginForms\\Login.cs",
-              "RelativeToolTip": "Forms\\User Control\\LoginForms\\Login.cs",
-              "ViewState": "AgIAABwAAAAAAAAAAAAkwDkAAAA4AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-02T19:10:12.175Z",
               "EditorCaption": ""
             },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "MenuForm.cs",
-              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\MenuForm.cs",
-              "RelativeDocumentMoniker": "Forms\\MenuForm.cs",
-              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\MenuForm.cs",
-              "RelativeToolTip": "Forms\\MenuForm.cs",
-              "ViewState": "AgIAAHMAAAAAAAAAAAAwwIoAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-02T18:51:21.688Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "ModifyUser.cs",
-              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\User Control\\ModifyForms\\ModifyUser.cs",
-              "RelativeDocumentMoniker": "Forms\\User Control\\ModifyForms\\ModifyUser.cs",
-              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\User Control\\ModifyForms\\ModifyUser.cs",
-              "RelativeToolTip": "Forms\\User Control\\ModifyForms\\ModifyUser.cs",
-              "ViewState": "AgIAAB8AAAAAAAAAAAAAADwAAAAxAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-02T18:50:37.109Z",
-              "EditorCaption": ""
             }
           ]
         }

@@ -29,6 +29,8 @@ namespace SmartStock.Classes.Models
         [Required]
         [StringLength(50)]
         public string PaymentStatus { get; set; } // Paid, Pending, Cancelled
+        [Required]
+        public bool IsActive{ get; set; }
 
         // Proprietăți de navigare
         [ForeignKey("CustomerId")]

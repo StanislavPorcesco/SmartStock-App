@@ -25,6 +25,8 @@ namespace SmartStock.Classes.Models
 
         [Required]
         public DateTime RegistrationDate { get; set; } = DateTime.Now;
+        [Required]
+        public bool IsActive { get; set; }
 
         // Relație One-to-Many: Un client poate avea mai multe vânzări
         public virtual ICollection<Sale> Sales { get; set; } = new List<Sale>();
@@ -36,14 +38,6 @@ namespace SmartStock.Classes.Models
                     .AsNoTracking() // Îmbunătățește performanța la citire
                     .OrderBy(c => c.FullName)
                     .ToList();
-            }
-        }
-        public void AddCustomer(Customer customer)
-        {
-            using (var db = new SmartStockContext())
-            {
-                db.Customers.Add(customer);
-                db.SaveChanges(); // Conexiunea se închide automat după finalizarea tranzacției
             }
         }
         public List<Customer> SearchCustomers(string searchTerm)

@@ -35,6 +35,8 @@ namespace SmartStock.Forms.User_Control
             add_instance_pnl = new Panel();
             groupBox2 = new GroupBox();
             tableLayoutPanel2 = new TableLayoutPanel();
+            email_tb = new TextBox();
+            label4 = new Label();
             label3 = new Label();
             name_tb = new TextBox();
             label2 = new Label();
@@ -48,8 +50,6 @@ namespace SmartStock.Forms.User_Control
             tableLayoutPanel1 = new TableLayoutPanel();
             selector_cb = new ComboBox();
             label1 = new Label();
-            label4 = new Label();
-            email_tb = new TextBox();
             base_pnl.SuspendLayout();
             add_instance_pnl.SuspendLayout();
             groupBox2.SuspendLayout();
@@ -88,7 +88,7 @@ namespace SmartStock.Forms.User_Control
             add_btn.MinimumSize = new Size(0, 70);
             add_btn.Name = "add_btn";
             add_btn.Size = new Size(1259, 70);
-            add_btn.TabIndex = 0;
+            add_btn.TabIndex = 6;
             add_btn.Text = "Add Instance";
             add_btn.UseVisualStyleBackColor = false;
             // 
@@ -156,6 +156,30 @@ namespace SmartStock.Forms.User_Control
             tableLayoutPanel2.Size = new Size(1219, 209);
             tableLayoutPanel2.TabIndex = 3;
             // 
+            // email_tb
+            // 
+            email_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            email_tb.BackColor = Color.FromArgb(54, 54, 54);
+            email_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            email_tb.ForeColor = Color.White;
+            email_tb.Location = new Point(608, 172);
+            email_tb.Margin = new Padding(0, 5, 0, 5);
+            email_tb.Name = "email_tb";
+            email_tb.Size = new Size(611, 31);
+            email_tb.TabIndex = 5;
+            // 
+            // label4
+            // 
+            label4.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            label4.AutoSize = true;
+            label4.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
+            label4.Location = new Point(3, 166);
+            label4.Name = "label4";
+            label4.Size = new Size(54, 43);
+            label4.TabIndex = 18;
+            label4.Text = "Email";
+            label4.TextAlign = ContentAlignment.MiddleLeft;
+            // 
             // label3
             // 
             label3.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
@@ -178,7 +202,7 @@ namespace SmartStock.Forms.User_Control
             name_tb.Margin = new Padding(0, 5, 0, 5);
             name_tb.Name = "name_tb";
             name_tb.Size = new Size(611, 31);
-            name_tb.TabIndex = 15;
+            name_tb.TabIndex = 3;
             // 
             // label2
             // 
@@ -214,7 +238,7 @@ namespace SmartStock.Forms.User_Control
             username_tb.Margin = new Padding(0, 5, 0, 5);
             username_tb.Name = "username_tb";
             username_tb.Size = new Size(611, 31);
-            username_tb.TabIndex = 12;
+            username_tb.TabIndex = 1;
             // 
             // logs_lbl
             // 
@@ -240,7 +264,7 @@ namespace SmartStock.Forms.User_Control
             role_cb.Margin = new Padding(0, 5, 0, 5);
             role_cb.Name = "role_cb";
             role_cb.Size = new Size(611, 33);
-            role_cb.TabIndex = 23;
+            role_cb.TabIndex = 4;
             // 
             // password_tb
             // 
@@ -252,7 +276,7 @@ namespace SmartStock.Forms.User_Control
             password_tb.Margin = new Padding(0, 5, 0, 5);
             password_tb.Name = "password_tb";
             password_tb.Size = new Size(611, 31);
-            password_tb.TabIndex = 24;
+            password_tb.TabIndex = 2;
             // 
             // selector_pnl
             // 
@@ -306,7 +330,7 @@ namespace SmartStock.Forms.User_Control
             selector_cb.Margin = new Padding(0, 5, 0, 5);
             selector_cb.Name = "selector_cb";
             selector_cb.Size = new Size(610, 33);
-            selector_cb.TabIndex = 2;
+            selector_cb.TabIndex = 7;
             // 
             // label1
             // 
@@ -319,30 +343,6 @@ namespace SmartStock.Forms.User_Control
             label1.Size = new Size(603, 31);
             label1.TabIndex = 0;
             label1.Text = "Select the desired instance";
-            // 
-            // label4
-            // 
-            label4.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            label4.AutoSize = true;
-            label4.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
-            label4.Location = new Point(3, 166);
-            label4.Name = "label4";
-            label4.Size = new Size(54, 43);
-            label4.TabIndex = 18;
-            label4.Text = "Email";
-            label4.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // email_tb
-            // 
-            email_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            email_tb.BackColor = Color.FromArgb(54, 54, 54);
-            email_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            email_tb.ForeColor = Color.White;
-            email_tb.Location = new Point(608, 172);
-            email_tb.Margin = new Padding(0, 5, 0, 5);
-            email_tb.Name = "email_tb";
-            email_tb.Size = new Size(611, 31);
-            email_tb.TabIndex = 19;
             // 
             // AddUser
             // 

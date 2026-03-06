@@ -52,7 +52,7 @@ namespace SmartStock.Forms.User_Control
                     FullName = fullName,
                     Email = email,
                     Role = "Agent", // Setăm fix rolul de Agent
-                    IsActive = 1,    // Contul este activ implicit
+                    IsActive = true,    // Contul este activ implicit
                     IsLoggedIn = 0   // Nu este logat încă
                 };
 

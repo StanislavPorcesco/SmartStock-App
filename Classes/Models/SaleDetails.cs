@@ -20,7 +20,7 @@ namespace SmartStock.Classes.Models
 
         [Required]
         [Column(TypeName = "decimal(18, 2)")]
-        public decimal UnitPriceAtSale { get; set; }
+        public decimal UnitPrice{ get; set; }
 
         // Proprietăți de navigare pentru EF Core
         [ForeignKey("SaleId")]
@@ -31,7 +31,7 @@ namespace SmartStock.Classes.Models
 
         // Proprietate calculată pentru UI (Subtotal per linie)
         [NotMapped]
-        public decimal LineTotal => Quantity * UnitPriceAtSale;
+        public decimal LineTotal => Quantity * UnitPrice;
         public List<SaleDetails> GetItemsBySaleId(int saleId)
         {
             using (var db = new SmartStockContext())
@@ -54,7 +54,7 @@ namespace SmartStock.Classes.Models
                     {
                         ProductId = group.Key,
                         TotalQuantity = group.Sum(sd => sd.Quantity),
-                        TotalRevenue = group.Sum(sd => sd.Quantity * sd.UnitPriceAtSale)
+                        TotalRevenue = group.Sum(sd => sd.Quantity * sd.UnitPrice)
                     })
                     .OrderByDescending(x => x.TotalQuantity)
                     .Take(limit)

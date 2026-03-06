@@ -158,7 +158,7 @@ namespace SmartStock.Classes.Utils
                     date.ForeColor = theme.Text;
                     break;
                 default:
-                    c.BackColor = Color.Red;
+                    c.BackColor = Color.Black;
                     break;
             }
         }

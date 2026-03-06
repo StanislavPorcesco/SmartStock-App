@@ -80,9 +80,10 @@ namespace SmartStock.Forms.AddForms
             add_btn.MinimumSize = new Size(0, 69);
             add_btn.Name = "add_btn";
             add_btn.Size = new Size(867, 69);
-            add_btn.TabIndex = 0;
+            add_btn.TabIndex = 2;
             add_btn.Text = "Add Instance";
             add_btn.UseVisualStyleBackColor = false;
+            add_btn.Click += add_btn_Click;
             // 
             // margin_pnl
             // 
@@ -158,7 +159,7 @@ namespace SmartStock.Forms.AddForms
             category_name_tb.Margin = new Padding(0, 5, 0, 5);
             category_name_tb.Name = "category_name_tb";
             category_name_tb.Size = new Size(415, 31);
-            category_name_tb.TabIndex = 12;
+            category_name_tb.TabIndex = 1;
             // 
             // selector_pnl
             // 
@@ -212,7 +213,7 @@ namespace SmartStock.Forms.AddForms
             selector_cb.Margin = new Padding(0, 5, 0, 5);
             selector_cb.Name = "selector_cb";
             selector_cb.Size = new Size(414, 33);
-            selector_cb.TabIndex = 2;
+            selector_cb.TabIndex = 3;
             // 
             // label1
             // 

@@ -25,6 +25,8 @@ namespace SmartStock.Classes.Models
 
         [StringLength(250)]
         public string Address { get; set; }
+        [Required]
+        public bool IsActive { get; set; }
 
         // Relație One-to-Many: Un furnizor oferă mai multe produse
         public virtual ICollection<Product> Products { get; set; } = new List<Product>();

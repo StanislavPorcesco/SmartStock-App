@@ -38,9 +38,6 @@ namespace SmartStock.Forms.User_Control
                 User authenticatedUser = userLogic.Authenticate(username_tb.Text, password_tb.Text);
                 if (authenticatedUser != null)
                 {
-                    MessageBox.Show($"Wellcome back, {authenticatedUser.FullName}!", "Autentification succesful!",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-
                     MenuForm mainForm = new MenuForm();
                     mainForm.Show();    
                     this.FindForm().Hide();

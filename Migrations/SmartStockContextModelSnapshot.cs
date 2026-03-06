@@ -90,6 +90,9 @@ namespace SmartStock.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("CategoryId");
 
                     b.ToTable("Categories");
@@ -115,6 +118,9 @@ namespace SmartStock.Migrations
                         .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Phone")
                         .IsRequired()
@@ -184,6 +190,14 @@ namespace SmartStock.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("ValueType")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("FactorId");
 
                     b.ToTable("ExternalFactors");
@@ -201,6 +215,10 @@ namespace SmartStock.Migrations
                     b.Property<int>("CurrentStock")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("SafetyStock")
                         .HasColumnType("INTEGER");
 
@@ -214,6 +232,9 @@ namespace SmartStock.Migrations
 
                     b.Property<decimal>("UnitPrice")
                         .HasColumnType("decimal(18, 2)");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("ProductId");
 
@@ -252,6 +273,9 @@ namespace SmartStock.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("isActive")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("SaleId");
 
                     b.HasIndex("CustomerId");
@@ -276,7 +300,7 @@ namespace SmartStock.Migrations
                     b.Property<int>("SaleId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<decimal>("UnitPriceAtSale")
+                    b.Property<decimal>("UnitPrice")
                         .HasColumnType("decimal(18, 2)");
 
                     b.HasKey("DetailId");
@@ -308,6 +332,9 @@ namespace SmartStock.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Phone")
                         .IsRequired()
@@ -365,6 +392,9 @@ namespace SmartStock.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -410,6 +440,7 @@ namespace SmartStock.Migrations
                         new
                         {
                             UserId = 1,
+                            AccessFailedCount = 0,
                             Email = "admin@gmail.com",
                             FullName = "System Administrator",
                             IsActive = 1,

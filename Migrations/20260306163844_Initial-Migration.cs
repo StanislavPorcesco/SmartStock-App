@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SmartStock.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,7 +17,8 @@ namespace SmartStock.Migrations
                 {
                     CategoryId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    CategoryName = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false)
+                    CategoryName = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -34,7 +35,8 @@ namespace SmartStock.Migrations
                     City = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     Email = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     Phone = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
-                    RegistrationDate = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    RegistrationDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -68,7 +70,9 @@ namespace SmartStock.Migrations
                     Description = table.Column<string>(type: "TEXT", maxLength: 250, nullable: false),
                     Region = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     ImpactValue = table.Column<decimal>(type: "decimal(18, 4)", nullable: false),
-                    Date = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    ValueType = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
+                    Date = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    isActive = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -85,7 +89,8 @@ namespace SmartStock.Migrations
                     ContactPerson = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     Email = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     Phone = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
-                    Address = table.Column<string>(type: "TEXT", maxLength: 250, nullable: false)
+                    Address = table.Column<string>(type: "TEXT", maxLength: 250, nullable: false),
+                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -106,7 +111,8 @@ namespace SmartStock.Migrations
                     Email = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     LastLoginDate = table.Column<DateTime>(type: "TEXT", nullable: true),
                     IsLoggedIn = table.Column<int>(type: "INTEGER", nullable: false),
-                    IsActive = table.Column<int>(type: "INTEGER", nullable: false)
+                    IsActive = table.Column<int>(type: "INTEGER", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -119,12 +125,14 @@ namespace SmartStock.Migrations
                 {
                     ProductId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    ProductName = table.Column<string>(type: "TEXT", nullable: false),
                     CategoryId = table.Column<int>(type: "INTEGER", nullable: false),
                     SupplierId = table.Column<int>(type: "INTEGER", nullable: false),
                     UnitPrice = table.Column<decimal>(type: "decimal(18, 2)", nullable: false),
                     CurrentStock = table.Column<int>(type: "INTEGER", nullable: false),
                     SafetyStock = table.Column<int>(type: "INTEGER", nullable: false),
-                    UnitOfMeasure = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false)
+                    UnitOfMeasure = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    isActive = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -154,7 +162,8 @@ namespace SmartStock.Migrations
                     TotalAmount = table.Column<decimal>(type: "decimal(18, 2)", nullable: false),
                     SaleDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     PaymentMethod = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    PaymentStatus = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false)
+                    PaymentStatus = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    isActive = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -258,7 +267,7 @@ namespace SmartStock.Migrations
                     SaleId = table.Column<int>(type: "INTEGER", nullable: false),
                     ProductId = table.Column<int>(type: "INTEGER", nullable: false),
                     Quantity = table.Column<int>(type: "INTEGER", nullable: false),
-                    UnitPriceAtSale = table.Column<decimal>(type: "decimal(18, 2)", nullable: false)
+                    UnitPrice = table.Column<decimal>(type: "decimal(18, 2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -279,8 +288,8 @@ namespace SmartStock.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "UserId", "Email", "FullName", "IsActive", "IsLoggedIn", "LastLoginDate", "PasswordHash", "Role", "Salt", "Username" },
-                values: new object[] { 1, "admin@gmail.com", "System Administrator", 1, 0, null, "iGTO9GE1H7OewewKCbZankAG07wX7ij0stVqalFmbuE=", "Admin", "StaticSaltForAdmin123!", "admin" });
+                columns: new[] { "UserId", "AccessFailedCount", "Email", "FullName", "IsActive", "IsLoggedIn", "LastLoginDate", "PasswordHash", "Role", "Salt", "Username" },
+                values: new object[] { 1, 0, "admin@gmail.com", "System Administrator", 1, 0, null, "iGTO9GE1H7OewewKCbZankAG07wX7ij0stVqalFmbuE=", "Admin", "StaticSaltForAdmin123!", "admin" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AiForecasts_ProductId",

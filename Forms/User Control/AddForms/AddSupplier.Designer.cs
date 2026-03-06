@@ -88,9 +88,10 @@ namespace SmartStock.Forms.User_Control
             add_btn.MinimumSize = new Size(0, 70);
             add_btn.Name = "add_btn";
             add_btn.Size = new Size(1259, 70);
-            add_btn.TabIndex = 0;
+            add_btn.TabIndex = 6;
             add_btn.Text = "Add Instance";
             add_btn.UseVisualStyleBackColor = false;
+            add_btn.Click += add_btn_Click;
             // 
             // margin_pnl
             // 
@@ -166,7 +167,7 @@ namespace SmartStock.Forms.User_Control
             contact_person_tb.Margin = new Padding(0, 5, 0, 5);
             contact_person_tb.Name = "contact_person_tb";
             contact_person_tb.Size = new Size(611, 31);
-            contact_person_tb.TabIndex = 20;
+            contact_person_tb.TabIndex = 2;
             // 
             // adress_tb
             // 
@@ -178,7 +179,7 @@ namespace SmartStock.Forms.User_Control
             adress_tb.Margin = new Padding(0, 5, 0, 5);
             adress_tb.Name = "adress_tb";
             adress_tb.Size = new Size(611, 31);
-            adress_tb.TabIndex = 19;
+            adress_tb.TabIndex = 5;
             // 
             // label4
             // 
@@ -202,7 +203,7 @@ namespace SmartStock.Forms.User_Control
             phone_tb.Margin = new Padding(0, 5, 0, 5);
             phone_tb.Name = "phone_tb";
             phone_tb.Size = new Size(611, 31);
-            phone_tb.TabIndex = 17;
+            phone_tb.TabIndex = 4;
             // 
             // label3
             // 
@@ -226,7 +227,7 @@ namespace SmartStock.Forms.User_Control
             email_tb.Margin = new Padding(0, 5, 0, 5);
             email_tb.Name = "email_tb";
             email_tb.Size = new Size(611, 31);
-            email_tb.TabIndex = 15;
+            email_tb.TabIndex = 3;
             // 
             // label2
             // 
@@ -262,7 +263,7 @@ namespace SmartStock.Forms.User_Control
             supplier_name_tb.Margin = new Padding(0, 5, 0, 5);
             supplier_name_tb.Name = "supplier_name_tb";
             supplier_name_tb.Size = new Size(611, 31);
-            supplier_name_tb.TabIndex = 12;
+            supplier_name_tb.TabIndex = 1;
             // 
             // logs_lbl
             // 
@@ -328,7 +329,7 @@ namespace SmartStock.Forms.User_Control
             selector_cb.Margin = new Padding(0, 5, 0, 5);
             selector_cb.Name = "selector_cb";
             selector_cb.Size = new Size(610, 33);
-            selector_cb.TabIndex = 2;
+            selector_cb.TabIndex = 7;
             // 
             // label1
             // 

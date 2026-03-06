@@ -11,6 +11,8 @@ namespace SmartStock.Classes.Models
         [Required]
         [StringLength(100)]
         public string CategoryName { get; set; }
+        [Required]
+        public bool IsActive { get; set; }
 
         // Relație One-to-Many: O categorie are mai multe produse
         public virtual ICollection<Product> Products { get; set; } = new List<Product>();

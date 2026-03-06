@@ -57,7 +57,7 @@ namespace SmartStock.Classes.Models
                 FullName = "System Administrator",
                 Role = "Admin",
                 Email = "admin@gmail.com",
-                IsActive = 1,
+                IsActive = true,
                 IsLoggedIn = 0
             });
             base.OnModelCreating(modelBuilder);

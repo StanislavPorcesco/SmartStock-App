@@ -22,9 +22,13 @@ namespace SmartStock.Classes.Models
         [Required]
         [Column(TypeName = "decimal(18, 4)")]
         public decimal ImpactValue { get; set; } // Valoarea numerică a factorului pentru regresie
-
+        [Required]
+        [StringLength(20)]
+        public string ValueType { get; set; } // "Absolute", "Percentage", "Multiplier"
         [Required]
         public DateTime Date { get; set; } = DateTime.Now;
+        [Required]
+        public bool IsActive { get; set; } = true; 
         public List<ExternalFactor> GetFactorsByPeriod(DateTime start, DateTime end, string region = null)
         {
             using (var db = new SmartStockContext())
