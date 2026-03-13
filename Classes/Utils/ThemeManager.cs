@@ -3,9 +3,12 @@ using FontAwesome.Sharp;
 
 namespace SmartStock.Classes.Utils
 {
+    using Microsoft.Windows.Themes;
     using System;
     using System.Collections.Generic;
     using System.Drawing;
+    using System.Reflection;
+    using System.Windows.Documents;
     using System.Windows.Forms;
 
     public static class ThemeManager
@@ -111,9 +114,61 @@ namespace SmartStock.Classes.Utils
                     break;
 
                 case DataGridView dgv:
+                    Font gridFont = new Font("Segoe UI", 10, FontStyle.Regular);
+                    Font headerFont = new Font("Segoe UI", 10, FontStyle.Bold);
+                    // 1. Fundalul general al controlului (zona fără celule)
                     dgv.BackgroundColor = theme.DarkColor;
+                    dgv.GridColor = theme.DarkColor; // Culoarea liniilor de demarcație
+
+                    // 2. Dezactivăm stilul Windows pentru a permite culori custom pe Headere
+                    dgv.EnableHeadersVisualStyles = false;
+
+                    // 3. Stilul Celulelor (Date)
                     dgv.DefaultCellStyle.BackColor = theme.LightColor;
                     dgv.DefaultCellStyle.ForeColor = theme.Text;
+                    dgv.DefaultCellStyle.SelectionBackColor = theme.DarkColor; // Recomandat pentru contrast
+                    dgv.DefaultCellStyle.SelectionForeColor = theme.Text;
+                    dgv.DefaultCellStyle.Font = gridFont;
+
+                    // Forțează selecția rândului întreg la orice click pe o celulă
+                    dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                    dgv.MultiSelect = false;
+                    dgv.StandardTab = true;
+                    dgv.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+
+                    // 4. Stilul Headerelor de Coloane
+                    dgv.ColumnHeadersDefaultCellStyle.BackColor = theme.DarkColor;
+                    dgv.ColumnHeadersDefaultCellStyle.ForeColor = theme.Text;
+                    dgv.ColumnHeadersDefaultCellStyle.SelectionBackColor = theme.DarkColor; // Evită schimbarea culorii la click
+                    dgv.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+                    dgv.ColumnHeadersDefaultCellStyle.Font = headerFont;
+
+                    // 5. Stilul Headerelor de Rânduri (partea stângă)
+                    dgv.RowHeadersDefaultCellStyle.BackColor = theme.DarkColor;
+                    dgv.RowHeadersDefaultCellStyle.ForeColor = theme.Text;
+                    dgv.RowHeadersDefaultCellStyle.SelectionBackColor = theme.DarkColor;
+                    dgv.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+
+                    typeof(DataGridView).InvokeMember("DoubleBuffered",
+                        BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty,
+                        null, dgv, new object[] { true });
+                    dgv.RowPostPaint -= Dgv_RowPostPaint;
+                    dgv.RowPostPaint += Dgv_RowPostPaint;
+
+                    dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+                    dgv.Resize -= Dgv_Resize;
+                    dgv.Resize += Dgv_Resize;
+                    dgv.Scroll -= (s, ev) => dgv.Invalidate();
+                    dgv.Scroll += (s, ev) => dgv.Invalidate();
+
+                    dgv.DataBindingComplete -= Dgv_DataBindingComplete;
+                    dgv.DataBindingComplete += Dgv_DataBindingComplete;
+
+                    AdjustGridAutoSize(dgv);
+
+                    AdjustGridAutoSize(dgv);
+
                     break;
                 case ComboBox combo:
                     combo.FlatStyle = FlatStyle.Flat; 
@@ -196,6 +251,57 @@ namespace SmartStock.Classes.Utils
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Error updating parent form: {ex.Message}");
+            }
+        }
+        private static void Dgv_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        {
+            var dgv = sender as DataGridView;
+            if (dgv == null) return;
+
+            if ((e.State & DataGridViewElementStates.Selected) == DataGridViewElementStates.Selected)
+            {
+                using (Pen pen = new Pen(ThemeManager.GetCurrentPalette().Text, 2))
+                {
+                    int rowWidth = dgv.DisplayRectangle.Width;
+                    int left = dgv.RowHeadersVisible ? dgv.RowHeadersWidth : 0;
+                    int right = left + rowWidth;
+                    int top = e.RowBounds.Top;
+                    int bottom = e.RowBounds.Bottom - 1;
+                    e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
+
+                    e.Graphics.DrawLine(pen, left, top, right, top);
+                    e.Graphics.DrawLine(pen, left, bottom, right, bottom);
+                }
+            }
+        }
+        private static void Dgv_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            if (sender is DataGridView dgv)
+            {
+                AdjustGridAutoSize(dgv);
+            }
+        }
+
+        private static void AdjustGridAutoSize(DataGridView dgv)
+        {
+            if (dgv.Columns.Count == 0 || dgv.ClientRectangle.Width == 0) return;
+            int totalPreferredWidth = dgv.Columns.Cast<DataGridViewColumn>()
+                .Sum(c => c.GetPreferredWidth(DataGridViewAutoSizeColumnMode.ColumnHeader, true));
+
+            var targetMode = (totalPreferredWidth < dgv.ClientRectangle.Width)
+                ? DataGridViewAutoSizeColumnsMode.Fill
+                : DataGridViewAutoSizeColumnsMode.DisplayedCells;
+
+            if (dgv.AutoSizeColumnsMode != targetMode)
+            {
+                dgv.AutoSizeColumnsMode = targetMode;
+            }
+        }
+        private static void Dgv_Resize(object sender, EventArgs e)
+        {
+            if (sender is DataGridView dgv)
+            {
+                AdjustGridAutoSize(dgv);
             }
         }
     }

@@ -1,0 +1,187 @@
+﻿using SmartStock.Classes.Models;
+using SmartStock.Classes.Utils;
+using SmartStock.Utils;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace SmartStock.Forms.User_Control.SearchForms
+{
+    public partial class FilterProducts : UserControl
+    {
+        // Event to notify parent form when filters are applied
+        public event Action<List<Product>> OnFilterApplied;
+
+        public FilterProducts()
+        {
+            InitializeComponent();
+            PopulateCategorySelector();
+            ThemeManager.Apply(this);
+            ThemeManager.OnThemeChanged += HandleThemeUpdate;
+
+            // Wire up event handlers
+            reset_btn.Click += Reset_btn_Click;
+            apply_filter_btn.Click += Apply_filter_btn_Click;
+
+            this.Refresh();
+
+            // Add tooltips for user guidance
+            ToolTipHelp.AddToolTip(category_lbl, "Filters products by their assigned group or department for easier inventory organization.");
+            ToolTipHelp.AddToolTip(supplier_lbl, "Displays products provided by a specific partner or manufacturer.");
+            ToolTipHelp.AddToolTip(safety_lbl, "Shows items where the current stock is lower than the predefined minimum threshold.");
+            ToolTipHelp.AddToolTip(dead_lbl, "Identifies products with zero sales or movement during the last X days.");
+            ToolTipHelp.AddToolTip(range_lbl, "Filters results based on the unit price, between the specified minimum and maximum values.");
+            ToolTipHelp.AddToolTip(top_lbl, "Highlights the most popular products with the highest sales volume in the selected period.");
+        }
+
+        private void HandleThemeUpdate()
+        {
+            ThemeManager.Apply(this);
+            this.Refresh();
+        }
+
+        /// <summary>
+        /// Populates the Category ComboBox from the database.
+        /// </summary>
+        private void PopulateCategorySelector()
+        {
+            try
+            {
+                using (var db = new SmartStockContext())
+                {
+                    var categories = db.Categories
+                        .AsNoTracking()
+                        .OrderBy(c => c.CategoryName)
+                        .ToList();
+
+                    category_cb.DataSource = new BindingSource { DataSource = categories };
+                    category_cb.DisplayMember = "CategoryName";
+                    category_cb.ValueMember = "CategoryId";
+
+                    // Add a "All Categories" option at the beginning
+                    category_cb.Items.Insert(0, new { CategoryId = 0, CategoryName = "All Categories" });
+                    category_cb.SelectedIndex = 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error populating categories: {ex.Message}");
+                MessageBox.Show("Error loading categories.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Builds a filtered IQueryable based on current filter selections.
+        /// Uses cumulative AND logic for all active filters.
+        /// </summary>
+        private IQueryable<Product> BuildFilteredQuery(SmartStockContext db)
+        {
+            IQueryable<Product> query = db.Products.AsNoTracking();
+
+            // Filter by Category
+            if (category_cb.SelectedIndex > 0 && int.TryParse(category_cb.SelectedValue?.ToString(), out int categoryId) && categoryId > 0)
+            {
+                query = query.Where(p => p.CategoryId == categoryId);
+            }
+
+            // Filter by Supplier (partial text match)
+            if (!string.IsNullOrWhiteSpace(supplier_tb.Text))
+            {
+                string supplierFilter = supplier_tb.Text.Trim().ToLower();
+                query = query.Where(p => p.Supplier.ToLower().Contains(supplierFilter));
+            }
+
+            // Filter by Under Safety Limit
+            if (under_limit_ck.Checked)
+            {
+                query = query.Where(p => p.CurrentStock < p.SafetyStockLevel);
+            }
+
+            // Filter by Dead Stock (no sales in X days)
+            if (!string.IsNullOrWhiteSpace(dead_stock_tb.Text) && int.TryParse(dead_stock_tb.Text, out int deadStockDays) && deadStockDays > 0)
+            {
+                DateTime cutoffDate = DateTime.Now.AddDays(-deadStockDays);
+                // Assuming there's a LastSaleDate property or you need to check transactions
+                query = query.Where(p => p.CurrentStock > 0); // Placeholder - adjust based on your model
+            }
+
+            // Filter by Price Range
+            decimal minPrice = (decimal)min_numeric.Value;
+            decimal maxPrice = (decimal)max_numeric.Value;
+
+            if (minPrice > 0 || maxPrice > 0)
+            {
+                if (minPrice > 0)
+                    query = query.Where(p => p.UnitPrice >= minPrice);
+
+                if (maxPrice > 0)
+                    query = query.Where(p => p.UnitPrice <= maxPrice);
+            }
+
+            // Filter by Top Sellers
+            if (top_sellers_ck.Checked)
+            {
+                // This would require joining with transactions/sales
+                // For now, we'll filter by a threshold (e.g., products with high sales quantity)
+                query = query.Where(p => p.CurrentStock > 0); // Placeholder
+            }
+
+            return query;
+        }
+
+        /// <summary>
+        /// Applies the current filters and invokes the OnFilterApplied event.
+        /// </summary>
+        public void ApplyFilters()
+        {
+            try
+            {
+                using (var db = new SmartStockContext())
+                {
+                    var filteredProducts = BuildFilteredQuery(db).ToList();
+
+                    // Invoke the event with the filtered results
+                    OnFilterApplied?.Invoke(filteredProducts);
+
+                    // Show feedback to user
+                    MessageBox.Show($"Found {filteredProducts.Count} products matching the filters.", "Filter Results", 
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error applying filters: {ex.Message}");
+                MessageBox.Show($"Error applying filters: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Resets all filter controls to their default values.
+        /// </summary>
+        private void Reset_btn_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                category_cb.SelectedIndex = 0;
+                supplier_tb.Clear();
+                under_limit_ck.Checked = false;
+                dead_stock_tb.Clear();
+                min_numeric.Value = 0;
+                max_numeric.Value = 0;
+                top_sellers_ck.Checked = false;
+
+                MessageBox.Show("Filters have been reset.", "Filters Reset", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error resetting filters: {ex.Message}");
+            }
+        }
+    }
+}

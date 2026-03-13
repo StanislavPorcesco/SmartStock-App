@@ -79,5 +79,39 @@ namespace SmartStock.Classes.Models
                     .FirstOrDefault(p => p.ProductId == id);
             }
         }
+        public List<Transaction> GetRelatedTransactions()
+        {
+            using (var db = new SmartStockContext())
+            {
+                return db.Transactions.AsNoTracking().Where(t => t.ProductId == this.ProductId).ToList();
+            }
+        }
+        public List<Transaction> GetProductHistory()
+        {
+            using (var db = new SmartStockContext())
+            {
+                return db.Transactions.AsNoTracking()
+                          .Where(t => t.ProductId == this.ProductId)
+                          .ToList();
+            }
+        }
+        public List<Category> GetCurrentCategory()
+        {
+            using (var db = new SmartStockContext())
+            {
+                return db.Categories.AsNoTracking()
+                          .Where(c => c.CategoryId == this.CategoryId)
+                          .ToList();
+            }
+        }
+        public string GetCategoryName()
+        {
+            using (var db = new SmartStockContext())
+            {
+                var category = db.Categories.AsNoTracking()
+                                  .FirstOrDefault(c => c.CategoryId == this.CategoryId);
+                return category != null ? category.CategoryName : "Unknown";
+            }
+        }
     }
 }

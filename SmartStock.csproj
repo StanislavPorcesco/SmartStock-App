@@ -82,6 +82,9 @@
     <Compile Update="Forms\User Control\ModifyForms\ModifyTransaction.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="Forms\User Control\SearchForms\FilterUsers.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="Forms\User Control\SearchForms\FilterCategories.cs">
       <SubType>UserControl</SubType>
     </Compile>

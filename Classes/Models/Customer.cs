@@ -52,5 +52,17 @@ namespace SmartStock.Classes.Models
                     .ToList();
             }
         }
+
+        public List<Sale> GetCustomerSales()
+        {
+            using (var db = new SmartStockContext())
+            {
+                return db.Sales
+                    .AsNoTracking()
+                    .Where(s => s.CustomerId == this.CustomerId)
+                    .Include(s => s.SaleDetails)
+                    .ToList();
+            }
+        }
     }
 }

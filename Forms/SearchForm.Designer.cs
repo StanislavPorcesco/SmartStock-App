@@ -30,13 +30,13 @@
         {
             base_pnl = new Panel();
             ai_pnl = new Panel();
-            dataGridView1 = new DataGridView();
+            main_dgv = new DataGridView();
             theme_pnl = new Panel();
             preferences_gb = new GroupBox();
             tableLayoutPanel1 = new TableLayoutPanel();
-            button1 = new Button();
-            textBox2 = new TextBox();
-            checkBox1 = new CheckBox();
+            search_btn = new Button();
+            regex_value_tb = new TextBox();
+            regex_ck = new CheckBox();
             path_pnl = new Panel();
             paths_gb = new GroupBox();
             filters_pnl = new Panel();
@@ -45,7 +45,7 @@
             settings_lbl = new Label();
             base_pnl.SuspendLayout();
             ai_pnl.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)main_dgv).BeginInit();
             theme_pnl.SuspendLayout();
             preferences_gb.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
@@ -71,7 +71,7 @@
             // 
             // ai_pnl
             // 
-            ai_pnl.Controls.Add(dataGridView1);
+            ai_pnl.Controls.Add(main_dgv);
             ai_pnl.Controls.Add(theme_pnl);
             ai_pnl.Dock = DockStyle.Fill;
             ai_pnl.Location = new Point(442, 20);
@@ -80,18 +80,22 @@
             ai_pnl.Size = new Size(809, 703);
             ai_pnl.TabIndex = 7;
             // 
-            // dataGridView1
+            // main_dgv
             // 
-            dataGridView1.BackgroundColor = Color.FromArgb(54, 54, 54);
-            dataGridView1.BorderStyle = BorderStyle.Fixed3D;
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Dock = DockStyle.Fill;
-            dataGridView1.GridColor = Color.FromArgb(54, 54, 54);
-            dataGridView1.Location = new Point(10, 20);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.RowHeadersWidth = 51;
-            dataGridView1.Size = new Size(789, 529);
-            dataGridView1.TabIndex = 10;
+            main_dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.ColumnHeader;
+            main_dgv.BackgroundColor = Color.FromArgb(54, 54, 54);
+            main_dgv.BorderStyle = BorderStyle.Fixed3D;
+            main_dgv.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            main_dgv.Dock = DockStyle.Fill;
+            main_dgv.GridColor = Color.FromArgb(54, 54, 54);
+            main_dgv.Location = new Point(10, 20);
+            main_dgv.Name = "main_dgv";
+            main_dgv.ReadOnly = true;
+            main_dgv.RowHeadersWidth = 51;
+            main_dgv.Size = new Size(789, 529);
+            main_dgv.TabIndex = 10;
+            main_dgv.CellDoubleClick += main_dgv_CellDoubleClick;
+            main_dgv.CellFormatting += main_dgv_CellFormatting;
             // 
             // theme_pnl
             // 
@@ -124,9 +128,9 @@
             tableLayoutPanel1.ColumnCount = 2;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 23.8461533F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 76.15385F));
-            tableLayoutPanel1.Controls.Add(button1, 1, 0);
-            tableLayoutPanel1.Controls.Add(textBox2, 0, 0);
-            tableLayoutPanel1.Controls.Add(checkBox1, 0, 1);
+            tableLayoutPanel1.Controls.Add(search_btn, 1, 0);
+            tableLayoutPanel1.Controls.Add(regex_value_tb, 0, 0);
+            tableLayoutPanel1.Controls.Add(regex_ck, 0, 1);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(10, 30);
             tableLayoutPanel1.Margin = new Padding(0);
@@ -137,46 +141,47 @@
             tableLayoutPanel1.Size = new Size(769, 94);
             tableLayoutPanel1.TabIndex = 2;
             // 
-            // button1
+            // search_btn
             // 
-            button1.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            button1.BackColor = Color.FromArgb(54, 54, 54);
-            button1.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button1.ForeColor = Color.White;
-            button1.Location = new Point(193, 12);
-            button1.Margin = new Padding(10, 0, 10, 0);
-            button1.MaximumSize = new Size(0, 70);
-            button1.MinimumSize = new Size(0, 70);
-            button1.Name = "button1";
-            tableLayoutPanel1.SetRowSpan(button1, 2);
-            button1.Size = new Size(566, 70);
-            button1.TabIndex = 16;
-            button1.Text = "Search";
-            button1.UseVisualStyleBackColor = false;
+            search_btn.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            search_btn.BackColor = Color.FromArgb(54, 54, 54);
+            search_btn.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            search_btn.ForeColor = Color.White;
+            search_btn.Location = new Point(193, 12);
+            search_btn.Margin = new Padding(10, 0, 10, 0);
+            search_btn.MaximumSize = new Size(0, 70);
+            search_btn.MinimumSize = new Size(0, 70);
+            search_btn.Name = "search_btn";
+            tableLayoutPanel1.SetRowSpan(search_btn, 2);
+            search_btn.Size = new Size(566, 70);
+            search_btn.TabIndex = 16;
+            search_btn.Text = "Search";
+            search_btn.UseVisualStyleBackColor = false;
+            search_btn.Click += search_btn_Click;
             // 
-            // textBox2
+            // regex_value_tb
             // 
-            textBox2.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            textBox2.BackColor = Color.FromArgb(54, 54, 54);
-            textBox2.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            textBox2.ForeColor = Color.White;
-            textBox2.Location = new Point(10, 12);
-            textBox2.Margin = new Padding(10, 0, 10, 0);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(163, 31);
-            textBox2.TabIndex = 13;
+            regex_value_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            regex_value_tb.BackColor = Color.FromArgb(54, 54, 54);
+            regex_value_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            regex_value_tb.ForeColor = Color.White;
+            regex_value_tb.Location = new Point(10, 12);
+            regex_value_tb.Margin = new Padding(10, 0, 10, 0);
+            regex_value_tb.Name = "regex_value_tb";
+            regex_value_tb.Size = new Size(163, 31);
+            regex_value_tb.TabIndex = 13;
             // 
-            // checkBox1
+            // regex_ck
             // 
-            checkBox1.AutoSize = true;
-            checkBox1.Dock = DockStyle.Fill;
-            checkBox1.Location = new Point(10, 56);
-            checkBox1.Margin = new Padding(10, 0, 10, 0);
-            checkBox1.Name = "checkBox1";
-            checkBox1.Size = new Size(163, 38);
-            checkBox1.TabIndex = 15;
-            checkBox1.Text = "Regex";
-            checkBox1.UseVisualStyleBackColor = true;
+            regex_ck.AutoSize = true;
+            regex_ck.Dock = DockStyle.Fill;
+            regex_ck.Location = new Point(10, 56);
+            regex_ck.Margin = new Padding(10, 0, 10, 0);
+            regex_ck.Name = "regex_ck";
+            regex_ck.Size = new Size(163, 38);
+            regex_ck.TabIndex = 15;
+            regex_ck.Text = "Regex";
+            regex_ck.UseVisualStyleBackColor = true;
             // 
             // path_pnl
             // 
@@ -266,7 +271,7 @@
             Text = "Form1";
             base_pnl.ResumeLayout(false);
             ai_pnl.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)main_dgv).EndInit();
             theme_pnl.ResumeLayout(false);
             preferences_gb.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
@@ -285,13 +290,13 @@
         private Panel ai_pnl;
         private Panel path_pnl;
         private ComboBox selector_cb;
-        private DataGridView dataGridView1;
+        private DataGridView main_dgv;
         private Panel theme_pnl;
         private GroupBox preferences_gb;
         private TableLayoutPanel tableLayoutPanel1;
-        private Button button1;
-        private TextBox textBox2;
-        private CheckBox checkBox1;
+        private Button search_btn;
+        private TextBox regex_value_tb;
+        private CheckBox regex_ck;
         private Panel panel1;
         private Panel filters_pnl;
     }

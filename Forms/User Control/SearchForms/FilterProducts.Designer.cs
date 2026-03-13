@@ -335,7 +335,7 @@
             // reset_btn
             // 
             reset_btn.BackColor = Color.FromArgb(54, 54, 54);
-            reset_btn.Dock = DockStyle.Bottom;
+            reset_btn.Dock = DockStyle.Fill;
             reset_btn.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             reset_btn.ForeColor = Color.White;
             reset_btn.Location = new Point(10, 0);

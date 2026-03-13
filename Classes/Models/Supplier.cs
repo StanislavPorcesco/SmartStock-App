@@ -58,5 +58,14 @@ namespace SmartStock.Classes.Models
                     .ToList();
             }
         }
+        public List<Product> GetRelatedProducts()
+        {
+            using (var db = new SmartStockContext())
+            {
+                return db.Products.AsNoTracking()
+                          .Where(p => p.SupplierId == this.SupplierId)
+                          .ToList();
+            }
+        }
     }
 }

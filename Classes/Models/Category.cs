@@ -7,37 +7,31 @@ namespace SmartStock.Classes.Models
     {
         [Key]
         public int CategoryId { get; set; }
-
         [Required]
         [StringLength(100)]
         public string CategoryName { get; set; }
         [Required]
         public bool IsActive { get; set; }
-
-        // Relație One-to-Many: O categorie are mai multe produse
         public virtual ICollection<Product> Products { get; set; } = new List<Product>();
-
-        public List<Category> GetAllCategories()
+        public static List<Category> GetAllCategories()
         {
             using (var db = new SmartStockContext())
             {
                 return db.Categories
-                    .AsNoTracking() // Performanță ridicată pentru citire
+                    .AsNoTracking()
                     .OrderBy(c => c.CategoryName)
                     .ToList();
             }
         }
-
         public void AddCategory(string name)
         {
             using (var db = new SmartStockContext())
             {
                 var category = new Category { CategoryName = name };
                 db.Categories.Add(category);
-                db.SaveChanges(); // Conexiunea se închide automat aici
+                db.SaveChanges();
             }
         }
-
         public dynamic GetCategoryStats()
         {
             using (var db = new SmartStockContext())
@@ -50,6 +44,15 @@ namespace SmartStock.Classes.Models
                         ProductCount = c.Products.Count
                     })
                     .ToList();
+            }
+        }
+        public List<Product> GetRelatedProducts()
+        {
+            using (var db = new SmartStockContext())
+            {
+                return db.Products.AsNoTracking()
+                          .Where(p => p.CategoryId == this.CategoryId)
+                          .ToList();
             }
         }
     }

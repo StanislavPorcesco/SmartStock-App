@@ -105,5 +105,14 @@ namespace SmartStock.Classes.Models
                     .Sum(s => s.TotalAmount);
             }
         }
+        public List<SaleDetails> GetRelatedDetails()
+        {
+            using (var db = new SmartStockContext())
+            {
+                return db.SaleDetails.AsNoTracking()
+                          .Where(d => d.SaleId == this.SaleId)
+                          .ToList();
+            }
+        }
     }
 }
