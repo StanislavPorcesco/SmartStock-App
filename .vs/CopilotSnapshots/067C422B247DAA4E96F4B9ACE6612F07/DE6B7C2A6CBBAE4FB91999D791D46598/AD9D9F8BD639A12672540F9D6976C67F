@@ -1,0 +1,160 @@
+﻿using SmartStock.Classes.Data.Services;
+using SmartStock.Classes.Data.Repositories;
+using SmartStock.Classes.Models;
+using SmartStock.Classes.Utils;
+
+namespace SmartStock.Forms.User_Control
+{
+    /// <summary>
+    /// Passive View: Doar colectează date din controale și afișează mesaje.
+    /// Logica de autentificare și hashing parole este delegată UserService.
+    /// </summary>
+    public partial class AddUser : UserControl
+    {
+        private UserService _userService;
+
+        public AddUser()
+        {
+            InitializeComponent();
+            InitializeService();
+            LoadUI();
+        }
+
+        private void InitializeService()
+        {
+            var repository = new GenericRepository<User>(new SmartStockContext());
+            _userService = new UserService(repository);
+        }
+
+        private void LoadUI()
+        {
+            DataLayer.PopulateSelector(selector_cb);
+            DataLayer.PopulateRoleSelector(role_cb);
+            selector_cb.SelectedIndexChanged += DataLayer.OpenAddInstanceForm(this, selector_cb);
+            ThemeManager.Apply(this);
+            this.Refresh();
+        }
+
+        private void add_btn_Click(object sender, EventArgs e)
+        {
+            if (!TryCollectUserData(out var newUser, out var plainPassword))
+                return;
+
+            CreateUser(newUser, plainPassword);
+        }
+
+        /// <summary>
+        /// Colectează și validează datele utilizatorului din controale.
+        /// </summary>
+        private bool TryCollectUserData(out User newUser, out string plainPassword)
+        {
+            newUser = null;
+            plainPassword = string.Empty;
+
+            string username = username_tb.Text.Trim();
+            plainPassword = password_tb.Text;
+            string fullName = name_tb.Text.Trim();
+            string email = email_tb.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(username) || username.Length < 3)
+            {
+                MessageBox.Show("Username must be at least 3 characters long.", "Input Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(plainPassword) || plainPassword.Length < 6)
+            {
+                MessageBox.Show("Password must be at least 6 characters long.", "Input Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(fullName))
+            {
+                MessageBox.Show("Full name is required.", "Input Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            if (role_cb.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please select a role.", "Input Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            // Validate email format if provided
+            if (!string.IsNullOrWhiteSpace(email) && (!email.Contains("@") || !email.Contains(".")))
+            {
+                MessageBox.Show("The email format is invalid.", "Validation Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            newUser = new User
+            {
+                Username = username,
+                FullName = fullName,
+                Email = email,
+                Role = role_cb.SelectedItem.ToString(),
+                IsActive = true
+            };
+
+            return true;
+        }
+
+        /// <summary>
+        /// Crează utilizatorul prin serviciu.
+        /// </summary>
+        private async void CreateUser(User newUser, string plainPassword)
+        {
+            try
+            {
+                Cursor = Cursors.WaitCursor;
+
+                bool success = await _userService.CreateUserAsync(newUser, plainPassword);
+
+                if (success)
+                {
+                    MessageBox.Show($"User '{newUser.Username}' has been created successfully!", "Success",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ClearFields();
+                }
+                else
+                {
+                    MessageBox.Show("Failed to create user.", "Error",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show($"User creation error: {ex.Message}", "Input Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show($"Validation error: {ex.Message}", "Input Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Database error: {ex.Message}", "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
+        }
+
+        private void ClearFields()
+        {
+            username_tb.Clear();
+            password_tb.Clear();
+            fullname_tb.Clear();
+            email_tb.Clear();
+            role_selector_cb.SelectedIndex = -1;
+        }
+    }
+}

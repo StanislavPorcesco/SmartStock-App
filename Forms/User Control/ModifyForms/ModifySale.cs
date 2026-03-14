@@ -1,16 +1,39 @@
-﻿using Microsoft.EntityFrameworkCore;
+using SmartStock.Classes.Data.Services;
+using SmartStock.Classes.Data.Repositories;
 using SmartStock.Classes.Models;
 using SmartStock.Classes.Utils;
 using System.ComponentModel;
 
 namespace SmartStock.Forms.User_Control
 {
+    /// <summary>
+    /// Passive View: Doar colectează date din controale și afișează mesaje.
+    /// Logica de business este delegată SaleService.
+    /// </summary>
     public partial class ModifySale : UserControl
     {
+        private SaleService _saleService;
+        private int _currentSaleId;
+        private BindingList<SaleDetails> saleItemsList = new BindingList<SaleDetails>();
 
         public ModifySale()
         {
             InitializeComponent();
+            InitializeService();
+            LoadUI();
+        }
+
+        private void InitializeService()
+        {
+            var repository = new GenericRepository<Sale>(new SmartStockContext());
+            var saleDetailsRepo = new GenericRepository<SaleDetails>(new SmartStockContext());
+            var productRepo = new GenericRepository<Product>(new SmartStockContext());
+
+            _saleService = new SaleService(repository, saleDetailsRepo, productRepo);
+        }
+
+        private void LoadUI()
+        {
             DataLayer.PopulateSelector(selector_cb);
             selector_cb.SelectedIndexChanged += DataLayer.OpenModifyInstanceForm(this, selector_cb);
             DataLayer.PopulatePaymentMethodSelector(payment_method_cb);
@@ -18,257 +41,193 @@ namespace SmartStock.Forms.User_Control
             ThemeManager.Apply(this);
             this.Refresh();
         }
-        BindingList<SaleDetails> saleItemsList = new BindingList<SaleDetails>();
 
         private void search_btn_Click(object sender, EventArgs e)
         {
-            if (!int.TryParse(sale_id_tb.Text, out int sId)) {
+            if (!int.TryParse(sale_id_tb.Text, out int saleId))
+            {
                 MessageBox.Show("Please enter a valid Sale ID.", "Search Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            using (var db = new SmartStockContext())
+            SearchAndLoadSale(saleId);
+        }
+
+        /// <summary>
+        /// Caută și încarcă vânzarea.
+        /// </summary>
+        private async void SearchAndLoadSale(int saleId)
+        {
+            try
             {
-                var sale = db.Sales.AsNoTracking().FirstOrDefault(s => s.SaleId == sId);
+                Cursor = Cursors.WaitCursor;
+
+                var sale = await _saleService.GetWithDetailsAsync(saleId);
+
                 if (sale != null)
                 {
-                    customer_id_tb.Text = sale.CustomerId.ToString();
-                    user_id_tb.Text = sale.UserId.ToString();
-                    date_picker.Value = sale.SaleDate;
-
-                    var details = new SaleDetails().GetItemsBySaleId(sId);
-                    saleItemsList = new BindingList<SaleDetails>(details);
-
-                    sales_dgv.DataSource = saleItemsList;
-                    sales_dgv.AllowUserToAddRows = true;
-                    sales_dgv.ReadOnly = false;
-
-                    if (sales_dgv.Columns["Sale"] != null) sales_dgv.Columns["Sale"].Visible = false;
-                    if (sales_dgv.Columns["Product"] != null) sales_dgv.Columns["Product"].Visible = false;
-
-                    if (sales_dgv.Columns["DetailId"] != null) sales_dgv.Columns["DetailId"].ReadOnly = true;
-                    if (sales_dgv.Columns["SaleId"] != null) sales_dgv.Columns["SaleId"].ReadOnly = true; // Blocat
-                    if (sales_dgv.Columns["LineTotal"] != null) sales_dgv.Columns["LineTotal"].ReadOnly = true;
-
-                    SetupProductNameColumn();
-
-                    if (sale.IsActive)
-                    {
-                        sale_id_tb.BackColor = Color.DarkGreen;
-                        sale_id_tb.ForeColor = Color.White;
-                    }
-                    else
-                    {
-                        sale_id_tb.BackColor = Color.DarkOrange;
-                        sale_id_tb.ForeColor = Color.White;
-                        MessageBox.Show("This sale is currently inactive (Soft Deleted).", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
+                    _currentSaleId = sale.SaleId;
+                    DisplaySaleData(sale);
                 }
                 else
                 {
                     sale_id_tb.BackColor = Color.DarkRed;
+                    sale_id_tb.ForeColor = Color.White;
                     MessageBox.Show("Sale not found.", "Search Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ClearSaleFields();
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error during search: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ClearSaleFields();
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
+        }
+
+        /// <summary>
+        /// Afișează datele vânzării în controale.
+        /// </summary>
+        private void DisplaySaleData(Sale sale)
+        {
+            customer_id_tb.Text = sale.CustomerId.ToString();
+            user_id_tb.Text = sale.UserId.ToString();
+            date_picker.Value = sale.SaleDate;
+            payment_method_cb.SelectedItem = sale.PaymentMethod;
+            payment_status_cb.SelectedItem = sale.PaymentStatus;
+
+            saleItemsList = new BindingList<SaleDetails>(sale.SaleDetails.ToList());
+            sales_dgv.DataSource = saleItemsList;
+            sales_dgv.AllowUserToAddRows = false;
+            sales_dgv.ReadOnly = true;
+
+            if (sales_dgv.Columns["Sale"] != null) sales_dgv.Columns["Sale"].Visible = false;
+            if (sales_dgv.Columns["Product"] != null) sales_dgv.Columns["Product"].Visible = false;
+
+            if (sale.IsActive)
+            {
+                sale_id_tb.BackColor = Color.DarkGreen;
+                sale_id_tb.ForeColor = Color.White;
+            }
+            else
+            {
+                sale_id_tb.BackColor = Color.DarkOrange;
+                sale_id_tb.ForeColor = Color.White;
+                MessageBox.Show("This sale is currently inactive (Soft Deleted).", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
         private void delete_btn_Click(object sender, EventArgs e)
         {
-            if (!int.TryParse(sale_id_tb.Text, out int saleId)) return;
+            if (!int.TryParse(sale_id_tb.Text, out int saleId))
+                return;
 
-            if (MessageBox.Show("Deactivate this sale? This will preserve historical data for AI analysis.",
+            if (MessageBox.Show("Deactivate this sale? Historical data will be preserved.",
                 "Confirm Deactivation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
-                try
+                DeactivateSale(saleId);
+            }
+        }
+
+        /// <summary>
+        /// Deactivează vânzarea.
+        /// </summary>
+        private async void DeactivateSale(int saleId)
+        {
+            try
+            {
+                Cursor = Cursors.WaitCursor;
+
+                bool success = await _saleService.DeactivateSaleAsync(saleId);
+
+                if (success)
                 {
-                    using (var db = new SmartStockContext())
-                    {
-                        var sale = db.Sales.Find(saleId);
-                        if (sale != null)
-                        {
-                            sale.IsActive = false;
-                            db.SaveChanges();
-                            MessageBox.Show("Sale has been deactivated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            ClearSaleFields();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Sale not found.", "Search Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            ClearSaleFields();
-                        }
-                    }
+                    MessageBox.Show("Sale has been deactivated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ClearSaleFields();
                 }
-                catch (Exception ex) { MessageBox.Show($"Error during deactivation: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+                else
+                {
+                    MessageBox.Show("Sale not found.", "Search Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ClearSaleFields();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error during deactivation: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
             }
         }
 
         private void apply_btn_Click(object sender, EventArgs e)
         {
-            if (!int.TryParse(sale_id_tb.Text, out int saleId)) {
-                MessageBox.Show("Please search for a sale first using a valid ID.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return; 
-            }
-            sales_dgv.EndEdit();
-            using (var db = new SmartStockContext())
+            if (!int.TryParse(sale_id_tb.Text, out int saleId))
             {
-                using (var transaction = db.Database.BeginTransaction())
+                MessageBox.Show("Please search for a sale first using a valid ID.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(payment_status_cb.Text))
+            {
+                MessageBox.Show("Please select a Payment Status.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            UpdateSaleStatus(saleId, payment_status_cb.SelectedItem.ToString());
+        }
+
+        /// <summary>
+        /// Actualizează status de plată al vânzării.
+        /// </summary>
+        private async void UpdateSaleStatus(int saleId, string newStatus)
+        {
+            try
+            {
+                Cursor = Cursors.WaitCursor;
+
+                bool success = await _saleService.UpdatePaymentStatusAsync(saleId, newStatus);
+
+                if (success)
                 {
-                    try
-                    {
-                        foreach (var item in saleItemsList)
-                        {
-                            if (item.ProductId <= 0 || item.Quantity <= 0)
-                            {
-                                MessageBox.Show("Invalid Product ID or Quantity in grid.", "Validation Error");
-                                return;
-                            }
-                            var prod = db.Products.Find(item.ProductId);
-                            if (prod == null)
-                            {
-                                MessageBox.Show($"Product {item.ProductId} does not exist!", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                return;
-                            }
-                        }
-                        var oldDetails = db.SaleDetails.Where(d => d.SaleId == saleId).ToList();
-                        foreach (var oldItem in oldDetails)
-                        {
-                            var product = db.Products.Find(oldItem.ProductId);
-                            if (product != null) product.CurrentStock += oldItem.Quantity;
-                        }
-                        db.SaveChanges();
-                        db.SaleDetails.RemoveRange(oldDetails);
-                        db.SaveChanges();
-
-                        foreach (var newItem in saleItemsList)
-                        {
-                            var product = db.Products.Find(newItem.ProductId);
-                            if (product.CurrentStock < newItem.Quantity)
-                            {
-                                throw new Exception($"Insufficient stock for {product.ProductName}. " +
-                                                    $"Available: {product.CurrentStock}, Requested: {newItem.Quantity}");
-                            }
-                            product.CurrentStock -= newItem.Quantity;
-                            db.SaleDetails.Add(new SaleDetails
-                            {
-                                SaleId = saleId,
-                                ProductId = newItem.ProductId,
-                                Quantity = newItem.Quantity,
-                                UnitPrice = newItem.UnitPrice
-                            });
-                        }
-                        var header = db.Sales.Find(saleId);
-                        if (header != null)
-                        {
-                            header.TotalAmount = saleItemsList.Sum(x => x.Quantity * x.UnitPrice);
-                            header.SaleDate = date_picker.Value;
-                        }
-
-                        db.SaveChanges();
-                        transaction.Commit();
-                        MessageBox.Show("Sale updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    catch (Exception ex)
-                    {
-                        transaction.Rollback();
-                        MessageBox.Show("Update Failed: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    MessageBox.Show("Sale status updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ClearSaleFields();
                 }
+                else
+                {
+                    MessageBox.Show("Failed to update sale status.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show($"Validation error: {ex.Message}", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show($"Validation error: {ex.Message}", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error updating sale: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
             }
         }
 
         private void ClearSaleFields()
         {
+            sale_id_tb.Clear();
             customer_id_tb.Clear();
             user_id_tb.Clear();
-            date_picker.Value = DateTime.Now;
-            payment_method_cb.SelectedIndex = -1;
-            payment_status_cb.SelectedIndex = -1;
-            total_amount_tb.Clear();
             sales_dgv.DataSource = null;
-        }
-
-        private void sales_dgv_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
-        {
-            string columnName = sales_dgv.Columns[e.ColumnIndex].Name;
-
-            if (columnName == "Quantity")
-            {
-                if (!int.TryParse(e.FormattedValue.ToString(), out int newQty) || newQty <= 0)
-                {
-                    e.Cancel = true;
-                    MessageBox.Show("Quantity must be a positive whole number.", "Validation Error",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            else if (columnName == "UnitPrice")
-            {
-                string val = e.FormattedValue.ToString().Replace('.', ',');
-                if (!decimal.TryParse(val, out decimal newPrice) || newPrice < 0)
-                {
-                    e.Cancel = true;
-                    MessageBox.Show("Price must be a valid positive number.", "Validation Error",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            else if (columnName == "ProductId")
-            {
-                if (!int.TryParse(e.FormattedValue.ToString(), out int pid) || pid <= 0)
-                {
-                    e.Cancel = true;
-                    MessageBox.Show("Please enter a valid Product ID.", "Validation Error");
-                }
-            }
-        }
-
-        private void sales_dgv_CellValidated(object sender, DataGridViewCellEventArgs e)
-        {
-            sales_dgv.Refresh();
-            decimal total = 0;
-            foreach (var item in saleItemsList) total += item.Quantity * item.UnitPrice;
-            total_amount_tb.Text = total.ToString("N2");
-        }
-
-        private void SetupProductNameColumn()
-        {
-            if (!sales_dgv.Columns.Contains("ProductNameDisplay"))
-            {
-                DataGridViewTextBoxColumn col = new DataGridViewTextBoxColumn();
-                col.Name = "ProductNameDisplay";
-                col.HeaderText = "Product Name";
-                col.ReadOnly = true;
-                sales_dgv.Columns.Insert(3, col);
-            }
-        }
-
-        private void sales_dgv_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-            if (sales_dgv.Columns[e.ColumnIndex].Name == "ProductNameDisplay")
-            {
-                var row = sales_dgv.Rows[e.RowIndex];
-                var detail = row.DataBoundItem as SaleDetails;
-
-                if (detail != null && detail.Product != null)
-                {
-                    e.Value = detail.Product.ProductName;
-                }
-                else if (detail != null && detail.ProductId > 0)
-                {
-                    using (var db = new SmartStockContext())
-                    {
-                        var pName = db.Products.Where(p => p.ProductId == detail.ProductId)
-                                               .Select(p => p.ProductName)
-                                               .FirstOrDefault();
-                        e.Value = pName ?? "Unknown Product";
-                    }
-                }
-            }
-        }
-        private void sales_dgv_DefaultValuesNeeded(object sender, DataGridViewRowEventArgs e)
-        {
-            if (int.TryParse(sale_id_tb.Text, out int sId))
-            {
-                e.Row.Cells["SaleId"].Value = sId;
-            }
+            saleItemsList.Clear();
+            ThemeManager.Apply(this);
         }
     }
 }

@@ -1,0 +1,68 @@
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+
+namespace SmartStock.Classes.Models
+{
+    public class Customer
+    {
+        [Key]
+        public int CustomerId { get; set; }
+
+        [Required]
+        [StringLength(150)]
+        public string FullName { get; set; }
+
+        [StringLength(100)]
+        public string City { get; set; }
+
+        [EmailAddress]
+        [StringLength(100)]
+        public string Email { get; set; }
+
+        [Phone]
+        [StringLength(20)]
+        public string Phone { get; set; }
+
+        [Required]
+        public DateTime RegistrationDate { get; set; } = DateTime.Now;
+        [Required]
+        public bool IsActive { get; set; }
+
+        // Relație One-to-Many: Un client poate avea mai multe vânzări
+        public virtual ICollection<Sale> Sales { get; set; } = new List<Sale>();
+        public List<Customer> GetAllCustomers()
+        {
+            using (var db = new SmartStockContext())
+            {
+                return db.Customers
+                    .AsNoTracking() // Îmbunătățește performanța la citire
+                    .OrderBy(c => c.FullName)
+                    .ToList();
+            }
+        }
+        public List<Customer> SearchCustomers(string searchTerm)
+        {
+            using (var db = new SmartStockContext())
+            {
+                return db.Customers
+                    .AsNoTracking()
+                    .Where(c => c.FullName.Contains(searchTerm) ||
+                                c.City.Contains(searchTerm) ||
+                                c.Email.Contains(searchTerm))
+                    .ToList();
+            }
+        }
+
+        public List<Sale> GetCustomerSales()
+        {
+            using (var db = new SmartStockContext())
+            {
+                return db.Sales
+                    .AsNoTracking()
+                    .Where(s => s.CustomerId == this.CustomerId)
+                    .Include(s => s.SaleDetails)
+                    .ToList();
+            }
+        }
+    }
+}

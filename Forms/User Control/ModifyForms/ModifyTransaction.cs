@@ -1,14 +1,36 @@
-﻿using Microsoft.EntityFrameworkCore;
+using SmartStock.Classes.Data.Services;
+using SmartStock.Classes.Data.Repositories;
 using SmartStock.Classes.Models;
 using SmartStock.Classes.Utils;
 
 namespace SmartStock.Forms.User_Control
 {
+    /// <summary>
+    /// Passive View: Doar colectează date din controale și afișează mesaje.
+    /// Logica de business și revert stoc este delegată TransactionService.
+    /// </summary>
     public partial class ModifyTransaction : UserControl
     {
+        private TransactionService _transactionService;
+        private int _currentTransactionId;
+
         public ModifyTransaction()
         {
             InitializeComponent();
+            InitializeService();
+            LoadUI();
+        }
+
+        private void InitializeService()
+        {
+            var repository = new GenericRepository<Transaction>(new SmartStockContext());
+            var productRepo = new GenericRepository<Product>(new SmartStockContext());
+
+            _transactionService = new TransactionService(repository, productRepo);
+        }
+
+        private void LoadUI()
+        {
             DataLayer.PopulateSelector(selector_cb);
             DataLayer.PopulateTransactionTypeSelector(type_cb);
             selector_cb.SelectedIndexChanged += DataLayer.OpenModifyInstanceForm(this, selector_cb);
@@ -24,150 +46,121 @@ namespace SmartStock.Forms.User_Control
                 return;
             }
 
-            try
-            {
-                using (var db = new SmartStockContext())
-                {
-                    var transaction = db.Transactions.AsNoTracking().FirstOrDefault(t => t.TransactionId == transId);
-
-                    if (transaction != null)
-                    {
-                        product_id_tb.Text = transaction.ProductId.ToString();
-                        entity_id_tb.Text = transaction.EntityId?.ToString() ?? "";
-                        user_id_tb.Text = transaction.UserId.ToString();
-                        quantity_tb.Text = transaction.Quantity.ToString();
-                        date_picker.Value = transaction.Date;
-                        type_cb.SelectedItem = transaction.Type;
-
-                        // Actualizăm eticheta în funcție de tipul tranzacției
-                        if (transaction.Type == "Stock In")
-                            entity_lbl.Text = "Supplier ID";
-                        else if (transaction.Type == "Stock Out" || transaction.Type == "Adjustment")
-                            entity_lbl.Text = "Customer ID";
-
-                        transaction_id_tb.BackColor = Color.DarkGreen;
-                        transaction_id_tb.ForeColor = Color.White;
-                    }
-                    else
-                    {
-                        transaction_id_tb.BackColor = Color.DarkRed;
-                        transaction_id_tb.ForeColor = Color.White;
-                        MessageBox.Show("Transaction not found.", "Search Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                        ClearTransactionFields();
-                    }
-                }
-            }
-            catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
+            SearchAndLoadTransaction(transId);
         }
 
-        private void delete_btn_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Caută și încarcă tranzacția.
+        /// </summary>
+        private async void SearchAndLoadTransaction(int transactionId)
         {
-            if (!int.TryParse(transaction_id_tb.Text, out int transId)) return;
-
-            DialogResult confirm = MessageBox.Show("Deleting a transaction will NOT automatically revert the stock levels. " +
-                "It is recommended to create a reverse transaction instead. Proceed with deletion?",
-                "Confirm Physical Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Stop);
-
-            if (confirm == DialogResult.Yes)
-            {
-                try
-                {
-                    using (var db = new SmartStockContext())
-                    {
-                        var transaction = db.Transactions.Find(transId);
-                        if (transaction != null)
-                        {
-                            db.Transactions.Remove(transaction);
-                            db.SaveChanges();
-                            MessageBox.Show("Transaction deleted from history.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            ClearTransactionFields();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Transaction not found.", "Search Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            ClearTransactionFields();
-                        }
-                    }
-                }
-                catch (Exception ex) {
-                    MessageBox.Show($"Error during deactivation: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-        }
-
-        private void apply_btn_Click(object sender, EventArgs e)
-        {
-            if (!int.TryParse(transaction_id_tb.Text, out int transId))
-            {
-                MessageBox.Show("Please select a valid Transaction ID first.", "Search Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
             try
             {
-                using (var db = new SmartStockContext())
+                Cursor = Cursors.WaitCursor;
+
+                var transaction = await _transactionService.GetWithDetailsAsync(transactionId);
+
+                if (transaction != null)
                 {
-                    var transaction = db.Transactions.FirstOrDefault(t => t.TransactionId == transId);
-
-                    if (transaction == null)
-                    {
-                        MessageBox.Show("Transaction not found.", "Search Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-
-                    if (int.TryParse(product_id_tb.Text, out int newPid))
-                    {
-                        if (!db.Products.Any(p => p.ProductId == newPid))
-                        {
-                            MessageBox.Show($"Product ID {newPid} does not exist!", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return;
-                        }
-                        transaction.ProductId = newPid;
-
-                        if (int.TryParse(user_id_tb.Text, out int newUid))
-                        {
-                            if (!db.Users.Any(u => u.UserId == newUid))
-                            {
-                                MessageBox.Show($"User ID {newUid} does not exist!", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                return;
-                            }
-                            transaction.UserId = newUid;
-                        }
-
-                        if (int.TryParse(entity_id_tb.Text, out int newEntId))
-                        {
-                            bool entityExists = false;
-                            string type = type_cb.SelectedItem?.ToString() ?? "";
-
-                            if (type == "Stock In")
-                            {
-                                entityExists = db.Suppliers.Any(s => s.SupplierId == newEntId);
-                                if (!entityExists) { MessageBox.Show($"Supplier ID {newEntId} does not exist!", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
-                            }
-                            else if (type == "Stock Out")
-                            {
-                                entityExists = db.Customers.Any(c => c.CustomerId == newEntId);
-                                if (!entityExists) { MessageBox.Show($"Customer ID {newEntId} does not exist!", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
-                            }
-
-                            transaction.EntityId = newEntId;
-                        }
-                        if (int.TryParse(quantity_tb.Text, out int qty)) transaction.Quantity = qty;
-                        transaction.Date = date_picker.Value;
-                        transaction.Type = type_cb.SelectedItem?.ToString() ?? transaction.Type;
-
-                        db.SaveChanges();
-                        MessageBox.Show("Transaction updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        ClearTransactionFields();
-                    }
+                    _currentTransactionId = transaction.TransactionId;
+                    DisplayTransactionData(transaction);
+                }
+                else
+                {
+                    transaction_id_tb.BackColor = Color.DarkRed;
+                    transaction_id_tb.ForeColor = Color.White;
+                    MessageBox.Show("Transaction not found.", "Search Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ClearTransactionFields();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error updating transaction: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error during search: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ClearTransactionFields();
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
             }
         }
+
+        /// <summary>
+        /// Afișează datele tranzacției în controale.
+        /// </summary>
+        private void DisplayTransactionData(Transaction transaction)
+        {
+            product_id_tb.Text = transaction.ProductId.ToString();
+            entity_id_tb.Text = transaction.EntityId?.ToString() ?? "";
+            user_id_tb.Text = transaction.UserId.ToString();
+            quantity_tb.Text = transaction.Quantity.ToString();
+            date_picker.Value = transaction.Date;
+            type_cb.SelectedItem = transaction.Type;
+
+            // Update label based on type
+            if (transaction.Type == "Stock In")
+                entity_lbl.Text = "Supplier ID";
+            else if (transaction.Type == "Stock Out" || transaction.Type == "Adjustment")
+                entity_lbl.Text = "Customer/Entity ID";
+
+            transaction_id_tb.BackColor = Color.DarkGreen;
+            transaction_id_tb.ForeColor = Color.White;
+        }
+
+        private void delete_btn_Click(object sender, EventArgs e)
+        {
+            if (!int.TryParse(transaction_id_tb.Text, out int transId))
+                return;
+
+            DialogResult confirm = MessageBox.Show(
+                "Deleting a transaction will automatically revert the stock levels.\nProceed with deletion?",
+                "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+            if (confirm == DialogResult.Yes)
+            {
+                DeleteTransaction(transId);
+            }
+        }
+
+        /// <summary>
+        /// Șterge tranzacția și revoacă ajustarea stocului.
+        /// </summary>
+        private async void DeleteTransaction(int transactionId)
+        {
+            try
+            {
+                Cursor = Cursors.WaitCursor;
+
+                bool success = await _transactionService.DeleteTransactionAsync(transactionId);
+
+                if (success)
+                {
+                    MessageBox.Show("Transaction deleted and stock reverted successfully.", "Success",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ClearTransactionFields();
+                }
+                else
+                {
+                    MessageBox.Show("Transaction not found.", "Search Error",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ClearTransactionFields();
+                }
+            }
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show($"Validation error: {ex.Message}", "Input Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error during deletion: {ex.Message}", "Database Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
+        }
+
         private void ClearTransactionFields()
         {
             transaction_id_tb.Clear();
@@ -176,7 +169,6 @@ namespace SmartStock.Forms.User_Control
             user_id_tb.Clear();
             quantity_tb.Clear();
             type_cb.SelectedIndex = -1;
-            entity_lbl.Text = "Entity ID";
             ThemeManager.Apply(this);
         }
     }

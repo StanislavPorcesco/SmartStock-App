@@ -1,14 +1,39 @@
-﻿using Microsoft.EntityFrameworkCore;
+using SmartStock.Classes.Data.Services;
+using SmartStock.Classes.Data.Repositories;
 using SmartStock.Classes.Models;
 using SmartStock.Classes.Utils;
+using Microsoft.EntityFrameworkCore;
 
 namespace SmartStock.Forms.User_Control
 {
+    /// <summary>
+    /// Passive View: Doar colectează date din controale și afișează mesaje.
+    /// Logica de business și procesarea vânzării este delegată SaleService.
+    /// </summary>
     public partial class AddSale : UserControl
     {
+        private SaleService _saleService;
+        private List<SaleDetails> cart = new List<SaleDetails>();
+
         public AddSale()
         {
             InitializeComponent();
+            InitializeService();
+            LoadUI();
+        }
+
+        private void InitializeService()
+        {
+            var repository = new GenericRepository<Sale>(new SmartStockContext());
+            var saleDetailsRepo = new GenericRepository<SaleDetails>(new SmartStockContext());
+            var productRepo = new GenericRepository<Product>(new SmartStockContext());
+            var transactionRepo = new GenericRepository<Transaction>(new SmartStockContext());
+
+            _saleService = new SaleService(repository, saleDetailsRepo, productRepo, transactionRepo);
+        }
+
+        private void LoadUI()
+        {
             DataLayer.PopulateSelector(selector_cb);
             selector_cb.SelectedIndexChanged += DataLayer.OpenAddInstanceForm(this, selector_cb);
             DataLayer.PopulatePaymentMethodSelector(payment_method_cb);
@@ -17,89 +42,106 @@ namespace SmartStock.Forms.User_Control
             this.Refresh();
             sales_dgv.EnableHeadersVisualStyles = false;
         }
-        private List<SaleDetails> cart = new List<SaleDetails>();
+
         private void add_btn_Click(object sender, EventArgs e)
         {
-            // 1. Validări de bază pentru input
+            if (!TryCollectSaleData(out var sale))
+                return;
+
+            ProcessSale(sale);
+        }
+
+        /// <summary>
+        /// Colectează și validează datele vânzării din controale.
+        /// </summary>
+        private bool TryCollectSaleData(out Sale sale)
+        {
+            sale = null;
+
             if (!int.TryParse(customer_id_tb.Text, out int customerId))
             {
                 MessageBox.Show("Please enter a valid numeric Customer ID.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                return false;
             }
 
             if (!decimal.TryParse(total_amount_tb.Text, out decimal totalAmount))
             {
                 MessageBox.Show("Invalid total amount format.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                return false;
             }
 
-            if (payment_method_cb.SelectedIndex == -1 || payment_status_cb.SelectedIndex == -1)
+            if (payment_method_cb.SelectedIndex == -1)
             {
-                MessageBox.Show("Please select both Payment Method and Payment Status.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                MessageBox.Show("Please select Payment Method.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
             }
 
-            // Presupunem că ai o listă 'cart' populată cu SaleDetails dintr-un DataGridView
+            if (payment_status_cb.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please select Payment Status.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
             if (cart == null || cart.Count == 0)
             {
                 MessageBox.Show("The sale must contain at least one product.", "Empty Cart", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                return false;
             }
 
+            sale = new Sale
+            {
+                CustomerId = customerId,
+                TotalAmount = totalAmount,
+                SaleDate = date_picker.Value,
+                PaymentMethod = payment_method_cb.SelectedItem.ToString(),
+                PaymentStatus = payment_status_cb.SelectedItem.ToString(),
+                IsActive = true
+            };
+
+            return true;
+        }
+
+        /// <summary>
+        /// Procesează vânzarea prin serviciu.
+        /// </summary>
+        private async void ProcessSale(Sale sale)
+        {
             try
             {
                 Cursor = Cursors.WaitCursor;
 
-                // 2. Pregătirea obiectului Sale
-                Sale newSale = new Sale
+                bool success = await _saleService.AddSaleWithDetailsAsync(
+                    sale,
+                    cart,
+                    SessionManager.CurrentUser.UserId
+                );
+
+                if (success)
                 {
-                    CustomerId = customerId,
-                    UserId = SessionManager.CurrentUser.UserId,
-                    TotalAmount = totalAmount,
-                    SaleDate = date_picker.Value,
-                    PaymentMethod = payment_method_cb.SelectedItem.ToString(),
-                    PaymentStatus = payment_status_cb.SelectedItem.ToString()
-                };
-
-                // 3. Procesarea vânzării prin metoda clasei Sale
-                // Această metodă scade deja stocul automat
-                newSale.ProcessSale(newSale, cart);
-
-                // 4. Generarea tranzacțiilor de tip "Out" pentru fiecare produs din vânzare
-                using (var db = new SmartStockContext())
-                {
-                    foreach (var item in cart)
-                    {
-                        Transaction saleTransaction = new Transaction
-                        {
-                            ProductId = item.ProductId,
-                            EntityId = customerId, // Legăm de Customer ID
-                            UserId = SessionManager.CurrentUser.UserId,
-                            Quantity = item.Quantity,
-                            Type = "Stock Out", // Tipul de ieșire
-                            Date = DateTime.Now
-                        };
-
-                        // Folosim metoda RegisterTransaction pentru a păstra istoricul
-                        // Notă: Metoda RegisterTransaction din clasa ta scade stocul din nou. 
-                        // Deoarece ProcessSale a scăzut deja stocul, aici doar adăugăm tranzacția manual în DB
-                        db.Transactions.Add(saleTransaction);
-                    }
-                    db.SaveChanges();
+                    MessageBox.Show("Sale and Stock Transactions registered successfully!", "Success",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ClearSaleForm();
                 }
-
-                MessageBox.Show("Sale and Stock Transactions registered successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                // Resetare formular
-                customer_id_tb.Clear();
-                total_amount_tb.Text = "0.00";
-                sales_dgv.DataSource = null;
-                cart.Clear();
-                ClearSaleForm();
+                else
+                {
+                    MessageBox.Show("Failed to process sale.", "Error",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show($"Validation error: {ex.Message}", "Input Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show($"Validation error: {ex.Message}", "Input Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"An error occurred during processing: {ex.Message}", "Critical Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Critical error: {ex.Message}", "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
@@ -110,50 +152,80 @@ namespace SmartStock.Forms.User_Control
         private void ClearSaleForm()
         {
             customer_id_tb.Clear();
-            total_amount_tb.Clear();
+            total_amount_tb.Text = "0.00";
+            sales_dgv.DataSource = null;
             cart.Clear();
-            // Refresh DataGridView here if applicable
+            product_id_tb.Clear();
+            qty_tb.Clear();
         }
 
         private void add_to_cart_btn_Click(object sender, EventArgs e)
         {
-            if (!int.TryParse(product_id_tb.Text, out int pid) || !int.TryParse(qty_tb.Text, out int qty))
-            {
-                MessageBox.Show("Please enter valid Product ID and Quantity.");
+            if (!TryCollectCartItem(out var detail))
                 return;
+
+            cart.Add(detail);
+            RefreshCartGrid();
+
+            // Auto-calculate total
+            total_amount_tb.Text = cart.Sum(item => item.Quantity * item.UnitPrice).ToString("F2");
+        }
+
+        /// <summary>
+        /// Validează și colectează un item de coș.
+        /// </summary>
+        private bool TryCollectCartItem(out SaleDetails detail)
+        {
+            detail = null;
+
+            if (!int.TryParse(product_id_tb.Text, out int pid))
+            {
+                MessageBox.Show("Please enter a valid Product ID.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
             }
 
-            using (var db = new SmartStockContext())
+            if (!int.TryParse(qty_tb.Text, out int qty) || qty <= 0)
             {
-                var product = db.Products.AsNoTracking().FirstOrDefault(p => p.ProductId == pid);
+                MessageBox.Show("Please enter a valid quantity (greater than 0).", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
 
-                if (product == null)
+            try
+            {
+                using (var db = new SmartStockContext())
                 {
-                    MessageBox.Show("Product not found!");
-                    return;
+                    var product = db.Products.AsNoTracking().FirstOrDefault(p => p.ProductId == pid);
+
+                    if (product == null)
+                    {
+                        MessageBox.Show("Product not found!", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return false;
+                    }
+
+                    if (product.CurrentStock < qty)
+                    {
+                        MessageBox.Show($"Insufficient stock! Available: {product.CurrentStock}", "Stock Error",
+                                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return false;
+                    }
+
+                    detail = new SaleDetails
+                    {
+                        ProductId = pid,
+                        Quantity = qty,
+                        UnitPrice = product.UnitPrice
+                    };
+
+                    return true;
                 }
-
-                if (product.CurrentStock < qty)
-                {
-                    MessageBox.Show($"Insufficient stock! Available: {product.CurrentStock}");
-                    return;
-                }
-
-                // Creăm obiectul de detaliu
-                SaleDetails detail = new SaleDetails
-                {
-                    ProductId = pid,
-                    Quantity = qty,
-                    UnitPrice = product.UnitPrice // Fixăm prețul de vânzare actual
-                };
-
-                cart.Add(detail);
-                RefreshCartGrid();
-
-                // Calculăm automat totalul în total_amount_tb
-                total_amount_tb.Text = cart.Sum(item => item.Quantity * item.UnitPrice).ToString("F2");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
         }
+
         private void RefreshCartGrid()
         {
             sales_dgv.DataSource = null;
@@ -162,46 +234,24 @@ namespace SmartStock.Forms.User_Control
             {
                 using (var db = new SmartStockContext())
                 {
-                    // Extragem toate ID-urile din coș pentru o singură interogare rapidă
                     var productIds = cart.Select(c => c.ProductId).ToList();
-
-                    // Interogarea SQL (în spate) care aduce denumirile produselor
                     var productsInfo = db.Products
                         .AsNoTracking()
                         .Where(p => productIds.Contains(p.ProductId))
                         .ToDictionary(p => p.ProductId, p => p.ProductName);
 
-                    // Proiecția finală pentru Grid
                     var displayData = cart.Select(item => new
                     {
                         ProductID = item.ProductId,
-                        // Luăm denumirea din dicționarul extras din SQL
-                        DenumireProdus = productsInfo.ContainsKey(item.ProductId)
-                                         ? productsInfo[item.ProductId]
-                                         : "Unknown Product",
-                        Cantitate = item.Quantity,
-                        UnitPrice = item.UnitPrice,
-                        LineTotal = item.Quantity * item.UnitPrice
+                        ProductName = productsInfo.ContainsKey(item.ProductId) ? productsInfo[item.ProductId] : "Unknown",
+                        Quantity = item.Quantity,
+                        UnitPrice = item.UnitPrice.ToString("F2"),
+                        LineTotal = (item.Quantity * item.UnitPrice).ToString("F2")
                     }).ToList();
 
                     sales_dgv.DataSource = displayData;
-
-                    // Formatare coloane
-                    FormatGridColumns();
                 }
             }
-        }
-
-        private void FormatGridColumns()
-        {
-            sales_dgv.Columns["ProductID"].HeaderText = "ID";
-            sales_dgv.Columns["DenumireProdus"].HeaderText = "Product Name";
-            sales_dgv.Columns["Cantitate"].HeaderText = "Qty";
-            sales_dgv.Columns["UnitPrice"].HeaderText = "Price";
-            sales_dgv.Columns["LineTotal"].HeaderText = "Total";
-
-            sales_dgv.Columns["UnitPrice"].DefaultCellStyle.Format = "N2";
-            sales_dgv.Columns["LineTotal"].DefaultCellStyle.Format = "N2";
         }
     }
 }

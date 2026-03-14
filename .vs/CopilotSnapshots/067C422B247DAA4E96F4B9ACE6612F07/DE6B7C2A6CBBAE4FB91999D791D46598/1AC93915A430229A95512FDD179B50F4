@@ -1,0 +1,238 @@
+﻿using SmartStock.Classes.Data.Services;
+using SmartStock.Classes.Data.Repositories;
+using SmartStock.Classes.Models;
+using SmartStock.Classes.Utils;
+
+namespace SmartStock.Forms.User_Control
+{
+    /// <summary>
+    /// Passive View: Doar colectează date din controale și afișează mesaje.
+    /// Logica de business și actualizări este delegată UserService.
+    /// </summary>
+    public partial class ModifyUser : UserControl
+    {
+        private UserService _userService;
+        private int _currentUserId;
+
+        public ModifyUser()
+        {
+            InitializeComponent();
+            InitializeService();
+            LoadUI();
+        }
+
+        private void InitializeService()
+        {
+            var repository = new GenericRepository<User>(new SmartStockContext());
+            _userService = new UserService(repository);
+        }
+
+        private void LoadUI()
+        {
+            DataLayer.PopulateSelector(selector_cb);
+            DataLayer.PopulateRoleSelector(role_cb);
+            selector_cb.SelectedIndexChanged += DataLayer.OpenModifyInstanceForm(this, selector_cb);
+            ThemeManager.Apply(this);
+            this.Refresh();
+        }
+
+        private void search_btn_Click(object sender, EventArgs e)
+        {
+            if (!int.TryParse(user_id_tb.Text, out int userId))
+            {
+                MessageBox.Show("Please enter a valid User ID.", "Search Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            SearchAndLoadUser(userId);
+        }
+
+        /// <summary>
+        /// Caută și încarcă utilizatorul.
+        /// </summary>
+        private async void SearchAndLoadUser(int userId)
+        {
+            try
+            {
+                Cursor = Cursors.WaitCursor;
+
+                var user = await _userService.GetByIdAsync(userId);
+
+                if (user != null)
+                {
+                    _currentUserId = user.UserId;
+                    DisplayUserData(user);
+                }
+                else
+                {
+                    user_id_tb.BackColor = Color.DarkRed;
+                    user_id_tb.ForeColor = Color.White;
+                    MessageBox.Show("User not found.", "Search Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ClearUserFields();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error during search: {ex.Message}", "Database Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ClearUserFields();
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
+        }
+
+        /// <summary>
+        /// Afișează datele utilizatorului în controale.
+        /// </summary>
+        private void DisplayUserData(User user)
+        {
+            username_tb.Text = user.Username;
+            name_tb.Text = user.FullName;
+            email_tb.Text = user.Email;
+            role_cb.SelectedItem = user.Role;
+            is_active_ck.Checked = user.IsActive;
+            failed_count_tb.Text = user.AccessFailedCount.ToString();
+            password_tb.Clear(); // Don't display password hash
+
+            if (user.IsActive)
+            {
+                user_id_tb.BackColor = Color.DarkGreen;
+                user_id_tb.ForeColor = Color.White;
+            }
+            else
+            {
+                user_id_tb.BackColor = Color.DarkOrange;
+                user_id_tb.ForeColor = Color.White;
+                MessageBox.Show("This user is currently inactive.", "Information",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void add_btn_Click(object sender, EventArgs e)
+        {
+            if (!int.TryParse(user_id_tb.Text, out int userId))
+            {
+                MessageBox.Show("Please search for a user first using a valid ID.", "Search Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (!TryCollectUserData(userId, out var user))
+                return;
+
+            UpdateUser(user);
+        }
+
+        /// <summary>
+        /// Colectează datele din controale.
+        /// </summary>
+        private bool TryCollectUserData(int userId, out User user)
+        {
+            user = null;
+
+            string username = username_tb.Text.Trim();
+            string fullName = name_tb.Text.Trim();
+            string email = email_tb.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(username) || username.Length < 3)
+            {
+                MessageBox.Show("Username must be at least 3 characters long.", "Input Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(fullName))
+            {
+                MessageBox.Show("Full name is required.", "Input Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            if (role_cb.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please select a role.", "Input Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            if (!string.IsNullOrWhiteSpace(email) && (!email.Contains("@") || !email.Contains(".")))
+            {
+                MessageBox.Show("The email format is invalid.", "Validation Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            user = new User
+            {
+                UserId = userId,
+                Username = username,
+                FullName = fullName,
+                Email = email,
+                Role = role_cb.SelectedItem.ToString(),
+                IsActive = is_active_ck.Checked
+            };
+
+            return true;
+        }
+
+        /// <summary>
+        /// Actualizează utilizatorul prin serviciu.
+        /// </summary>
+        private async void UpdateUser(User user)
+        {
+            try
+            {
+                Cursor = Cursors.WaitCursor;
+
+                bool success = await _userService.UpdateUserAsync(user);
+
+                if (success)
+                {
+                    MessageBox.Show($"User {user.Username} has been updated successfully.", "Success",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ClearUserFields();
+                }
+                else
+                {
+                    MessageBox.Show("Failed to update user.", "Error",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show($"Validation error: {ex.Message}", "Input Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show($"Validation error: {ex.Message}", "Input Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error updating user: {ex.Message}", "Database Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
+        }
+
+        private void ClearUserFields()
+        {
+            user_id_tb.Clear();
+            username_tb.Clear();
+            fullname_tb.Clear();
+            email_tb.Clear();
+            password_tb.Clear();
+            role_selector_cb.SelectedIndex = -1;
+            is_active_ck.Checked = false;
+            failed_count_tb.Clear();
+            ThemeManager.Apply(this);
+        }
+    }
+}

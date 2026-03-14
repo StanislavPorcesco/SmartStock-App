@@ -1,27 +1,38 @@
-using Microsoft.EntityFrameworkCore;
+using SmartStock.Classes.Data.DTOs;
+using SmartStock.Classes.Data.Interfaces;
+using SmartStock.Classes.Data.Repositories;
+using SmartStock.Classes.Data.Services;
 using SmartStock.Classes.Models;
 using SmartStock.Classes.Utils;
 using SmartStock.Utils;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace SmartStock.Forms.User_Control.SearchForms
 {
-    public partial class FilterProducts : UserControl
+    /// <summary>
+    /// Passive View: Implementează IFilterControl și delegă logica de filtrare serviciului.
+    /// Responsabil doar de colectarea datelor din controale și afișare.
+    /// </summary>
+    public partial class FilterProducts : UserControl, IFilterControl
     {
-        // Event to notify parent form when filters are applied
-        public event Action<List<Product>> OnFilterApplied;
+        private ProductService _productService;
+
+        public event Action FilterChanged;
 
         public FilterProducts()
         {
             InitializeComponent();
+            InitializeService();
+            LoadUI();
+        }
+
+        private void InitializeService()
+        {
+            var repository = new GenericRepository<Product>(new SmartStockContext());
+            _productService = new ProductService(repository);
+        }
+
+        private void LoadUI()
+        {
             ThemeManager.Apply(this);
             ThemeManager.OnThemeChanged += HandleThemeUpdate;
 
@@ -40,6 +51,93 @@ namespace SmartStock.Forms.User_Control.SearchForms
         {
             ThemeManager.Apply(this);
             this.Refresh();
+        }
+
+        /// <summary>
+        /// Implementează IFilterControl: Obține datele filtrate.
+        /// </summary>
+        public object GetFilteredData()
+        {
+            var criteria = BuildFilterCriteria();
+            return GetFilteredProductsAsync(criteria);
+        }
+
+        /// <summary>
+        /// Construiește criteriile de filtrare din controale.
+        /// </summary>
+        private ProductFilterCriteria BuildFilterCriteria()
+        {
+            var criteria = new ProductFilterCriteria();
+
+            // Categoria (dacă este selectată)
+            if (category_lbl.Tag is int categoryId && categoryId > 0)
+            {
+                criteria.CategoryId = categoryId;
+            }
+
+            // Furnizor (dacă este selectat)
+            if (supplier_lbl.Tag is int supplierId && supplierId > 0)
+            {
+                criteria.SupplierId = supplierId;
+            }
+
+            // Doar produse active (implicit)
+            criteria.IsActive = true;
+
+            // Doar produse sub limita de siguranță
+            // (Presupunem că ai un checkbox "safety_chk" pentru aceasta)
+            // criteria.OnlyUnderSafetyLimit = safety_chk?.Checked ?? false;
+
+            // Interval de preț (dacă sunt setate)
+            // (Presupunem că ai controale minPrice_tb și maxPrice_tb)
+            // if (decimal.TryParse(minPrice_tb?.Text, out decimal minPrice))
+            //     criteria.MinPrice = minPrice;
+            // if (decimal.TryParse(maxPrice_tb?.Text, out decimal maxPrice))
+            //     criteria.MaxPrice = maxPrice;
+
+            // Interval de stoc
+            // (Presupunem că ai controale minStock_tb și maxStock_tb)
+            // if (int.TryParse(minStock_tb?.Text, out int minStock))
+            //     criteria.MinStock = minStock;
+            // if (int.TryParse(maxStock_tb?.Text, out int maxStock))
+            //     criteria.MaxStock = maxStock;
+
+            return criteria;
+        }
+
+        /// <summary>
+        /// Obține produsele filtrate folosind serviciul.
+        /// </summary>
+        private async Task<List<Product>> GetFilteredProductsAsync(ProductFilterCriteria criteria)
+        {
+            try
+            {
+                return await _productService.GetFilteredAsync(criteria);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading filtered products: {ex.Message}", "Database Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return new List<Product>();
+            }
+        }
+
+        /// <summary>
+        /// Implementează IFilterControl: Resetează filtrele.
+        /// </summary>
+        public void ResetFilters()
+        {
+            category_lbl.Tag = 0;
+            supplier_lbl.Tag = 0;
+            FilterChanged?.Invoke();
+        }
+
+        /// <summary>
+        /// Declanșator pentru evenimentul FilterChanged.
+        /// </summary>
+        protected void OnFilterChanged()
+        {
+            FilterChanged?.Invoke();
         }
     }
 }

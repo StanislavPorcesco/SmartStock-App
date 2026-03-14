@@ -60,7 +60,7 @@ namespace SmartStock
                             break;
                         case "Category":
                             controlToOpen = new FilterCategories();
-                            main_dgv.DataSource = Category.GetAllCategories();
+                            // LoadCategoriesAsync() - să fie implementată în nou pattern
                             break;
                         case "Supplier":
                             controlToOpen = new FilterSuppliers();
@@ -184,23 +184,31 @@ namespace SmartStock
             {
                 case "Category" when columnName == "Products":
                     var cat = (Category)boundItem;
-                    detailsList = cat.GetRelatedProducts();
+                    // NOTE: GetRelatedProducts() moved to CategoryService
+                    // Use CategoryService.GetProductsInCategoryAsync(cat.CategoryId) instead
+                    detailsList = null; // TODO: Implement via service
                     popupTitle = $"Products in {cat.CategoryName}";
                     break;
 
                 case "Supplier" when columnName == "Products":
                     var sup = (Supplier)boundItem;
-                    detailsList = sup.GetRelatedProducts();
+                    // NOTE: GetRelatedProducts() moved to SupplierService
+                    // Use SupplierService.GetProductsFromSupplierAsync(sup.SupplierId) instead
+                    detailsList = null; // TODO: Implement via service
                     popupTitle = $"Products supplied by {sup.SupplierName}";
                     break;
                 case "Sale" when columnName == "SaleDetails":
                     var sale = (Sale)boundItem;
-                    detailsList = sale.GetRelatedDetails();
+                    // NOTE: GetRelatedDetails() moved to SaleService
+                    // Use SaleService.GetSaleDetailsAsync(sale.SaleId) instead
+                    detailsList = null; // TODO: Implement via service
                     popupTitle = $"Items in Sale #{sale.SaleId}";
                     break;
                 case "Customer" when columnName == "Sales":
                     var cust = (Customer)boundItem;
-                    detailsList = cust.GetCustomerSales();
+                    // NOTE: GetCustomerSales() moved to CustomerService
+                    // Use CustomerService.GetCustomerSalesAsync(cust.CustomerId) instead
+                    detailsList = null; // TODO: Implement via service
                     popupTitle = $"Transactions for {cust.FullName}";
                     break;
             }

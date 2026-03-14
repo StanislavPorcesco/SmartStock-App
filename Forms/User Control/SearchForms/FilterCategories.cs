@@ -1,4 +1,9 @@
-﻿using SmartStock.Classes.Utils;
+﻿using SmartStock.Classes.Data.DTOs;
+using SmartStock.Classes.Data.Interfaces;
+using SmartStock.Classes.Data.Repositories;
+using SmartStock.Classes.Data.Services;
+using SmartStock.Classes.Models;
+using SmartStock.Classes.Utils;
 using SmartStock.Utils;
 using System;
 using System.Collections.Generic;
@@ -12,22 +17,95 @@ using System.Windows.Forms;
 
 namespace SmartStock.Forms.User_Control.SearchForms
 {
-    public partial class FilterCategories : UserControl
+    public partial class FilterCategories : UserControl, IFilterControl
     {
+        private CategoryService _categoryService;
+
+        public event Action FilterChanged;
+
         public FilterCategories()
         {
             InitializeComponent();
+            InitializeService();
+            LoadUI();
+        }
+
+        private void InitializeService()
+        {
+            var repository = new GenericRepository<Category>(new SmartStockContext());
+            _categoryService = new CategoryService(repository);
+        }
+
+        private void LoadUI()
+        {
             ThemeManager.Apply(this);
             ThemeManager.OnThemeChanged += HandleThemeUpdate;
             this.Refresh();
-            ToolTipHelp.AddToolTip(status_lbl, "Filters to show only categories that currently contain active, in-stock items.");
-            ToolTipHelp.AddToolTip(range_lbl, "Filters categories based on the number of individual products they contain.");
-            ToolTipHelp.AddToolTip(total_lbl, "Displays categories whose total stock value falls within the specified monetary range.");
+
+            // Tooltips
+            ToolTipHelp.AddToolTip(this, "Filter categories by name or status");
         }
+
         private void HandleThemeUpdate()
         {
             ThemeManager.Apply(this);
             this.Refresh();
+        }
+
+        /// <summary>
+        /// Implementează IFilterControl: Obține datele filtrate.
+        /// </summary>
+        public object GetFilteredData()
+        {
+            var criteria = BuildFilterCriteria();
+            return GetFilteredCategoriesAsync(criteria);
+        }
+
+        /// <summary>
+        /// Construiește criteriile de filtrare din controale.
+        /// </summary>
+        private CategoryFilterCriteria BuildFilterCriteria()
+        {
+            var criteria = new CategoryFilterCriteria();
+
+            // Doar categorii active (implicit)
+            criteria.IsActive = true;
+
+            return criteria;
+        }
+
+        /// <summary>
+        /// Obține categoriile filtrate folosind serviciul.
+        /// </summary>
+        private async Task<List<Category>> GetFilteredCategoriesAsync(CategoryFilterCriteria criteria)
+        {
+            try
+            {
+                return await _categoryService.GetFilteredAsync(criteria);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading filtered categories: {ex.Message}", "Database Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return new List<Category>();
+            }
+        }
+
+        /// <summary>
+        /// Implementează IFilterControl: Resetează filtrele.
+        /// </summary>
+        public void ResetFilters()
+        {
+            // Resetează controale de filtrare dacă sunt necesare
+            FilterChanged?.Invoke();
+        }
+
+        /// <summary>
+        /// Declanșator pentru evenimentul FilterChanged.
+        /// </summary>
+        protected void OnFilterChanged()
+        {
+            FilterChanged?.Invoke();
         }
     }
 }

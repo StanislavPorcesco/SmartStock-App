@@ -1,0 +1,143 @@
+﻿using SmartStock.Classes.Data.DTOs;
+using SmartStock.Classes.Data.Interfaces;
+using SmartStock.Classes.Data.Repositories;
+using SmartStock.Classes.Data.Services;
+using SmartStock.Classes.Models;
+using SmartStock.Classes.Utils;
+
+namespace SmartStock.Forms.User_Control.SearchForms
+{
+    /// <summary>
+    /// Passive View: Implementează IFilterControl și delegă logica de filtrare serviciului.
+    /// Responsabil doar de colectarea datelor din controale și afișare.
+    /// </summary>
+    public partial class FilterProducts : UserControl, IFilterControl
+    {
+        private ProductService _productService;
+
+        public event Action FilterChanged;
+
+        public FilterProducts()
+        {
+            InitializeComponent();
+            InitializeService();
+            LoadUI();
+        }
+
+        private void InitializeService()
+        {
+            var repository = new GenericRepository<Product>(new SmartStockContext());
+            _productService = new ProductService(repository);
+        }
+
+        private void LoadUI()
+        {
+            ThemeManager.Apply(this);
+            ThemeManager.OnThemeChanged += HandleThemeUpdate;
+
+            this.Refresh();
+
+            // Add tooltips for user guidance
+            ToolTipHelp.AddToolTip(category_lbl, "Filters products by their assigned group or department for easier inventory organization.");
+            ToolTipHelp.AddToolTip(supplier_lbl, "Displays products provided by a specific partner or manufacturer.");
+            ToolTipHelp.AddToolTip(safety_lbl, "Shows items where the current stock is lower than the predefined minimum threshold.");
+            ToolTipHelp.AddToolTip(dead_lbl, "Identifies products with zero sales or movement during the last X days.");
+            ToolTipHelp.AddToolTip(range_lbl, "Filters results based on the unit price, between the specified minimum and maximum values.");
+            ToolTipHelp.AddToolTip(top_lbl, "Highlights the most popular products with the highest sales volume in the selected period.");
+        }
+
+        private void HandleThemeUpdate()
+        {
+            ThemeManager.Apply(this);
+            this.Refresh();
+        }
+
+        /// <summary>
+        /// Implementează IFilterControl: Obține datele filtrate.
+        /// </summary>
+        public object GetFilteredData()
+        {
+            var criteria = BuildFilterCriteria();
+            return GetFilteredProductsAsync(criteria);
+        }
+
+        /// <summary>
+        /// Construiește criteriile de filtrare din controale.
+        /// </summary>
+        private ProductFilterCriteria BuildFilterCriteria()
+        {
+            var criteria = new ProductFilterCriteria();
+
+            // Categoria (dacă este selectată)
+            if (category_lbl.Tag is int categoryId && categoryId > 0)
+            {
+                criteria.CategoryId = categoryId;
+            }
+
+            // Furnizor (dacă este selectat)
+            if (supplier_lbl.Tag is int supplierId && supplierId > 0)
+            {
+                criteria.SupplierId = supplierId;
+            }
+
+            // Doar produse active (implicit)
+            criteria.IsActive = true;
+
+            // Doar produse sub limita de siguranță
+            // (Presupunem că ai un checkbox "safety_chk" pentru aceasta)
+            // criteria.OnlyUnderSafetyLimit = safety_chk?.Checked ?? false;
+
+            // Interval de preț (dacă sunt setate)
+            // (Presupunem că ai controale minPrice_tb și maxPrice_tb)
+            // if (decimal.TryParse(minPrice_tb?.Text, out decimal minPrice))
+            //     criteria.MinPrice = minPrice;
+            // if (decimal.TryParse(maxPrice_tb?.Text, out decimal maxPrice))
+            //     criteria.MaxPrice = maxPrice;
+
+            // Interval de stoc
+            // (Presupunem că ai controale minStock_tb și maxStock_tb)
+            // if (int.TryParse(minStock_tb?.Text, out int minStock))
+            //     criteria.MinStock = minStock;
+            // if (int.TryParse(maxStock_tb?.Text, out int maxStock))
+            //     criteria.MaxStock = maxStock;
+
+            return criteria;
+        }
+
+        /// <summary>
+        /// Obține produsele filtrate folosind serviciul.
+        /// </summary>
+        private async Task<List<Product>> GetFilteredProductsAsync(ProductFilterCriteria criteria)
+        {
+            try
+            {
+                return await _productService.GetFilteredAsync(criteria);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading filtered products: {ex.Message}", "Database Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return new List<Product>();
+            }
+        }
+
+        /// <summary>
+        /// Implementează IFilterControl: Resetează filtrele.
+        /// </summary>
+        public void ResetFilters()
+        {
+            category_lbl.Tag = 0;
+            supplier_lbl.Tag = 0;
+            // Resetează alte controale de filtrare dacă sunt necesare
+            FilterChanged?.Invoke();
+        }
+
+        /// <summary>
+        /// Declanșator pentru evenimentul FilterChanged.
+        /// </summary>
+        protected void OnFilterChanged()
+        {
+            FilterChanged?.Invoke();
+        }
+    }
+}

@@ -1,155 +1,295 @@
-﻿using Microsoft.EntityFrameworkCore;
+using SmartStock.Classes.Data.Services;
+using SmartStock.Classes.Data.Repositories;
 using SmartStock.Classes.Models;
 using SmartStock.Classes.Utils;
 
 namespace SmartStock.Forms.User_Control
 {
+    /// <summary>
+    /// Passive View: Doar colectează date din controale și afișează mesaje.
+    /// Logica de business este delegată ExternalFactorService.
+    /// </summary>
     public partial class ModifyExternalFactor : UserControl
     {
+        private ExternalFactorService _factorService;
+        private int _currentFactorId;
+
         public ModifyExternalFactor()
         {
             InitializeComponent();
+            InitializeService();
+            LoadUI();
+        }
+
+        private void InitializeService()
+        {
+            var repository = new GenericRepository<ExternalFactor>(new SmartStockContext());
+            _factorService = new ExternalFactorService(repository);
+        }
+
+        private void LoadUI()
+        {
             DataLayer.PopulateSelector(selector_cb);
             selector_cb.SelectedIndexChanged += DataLayer.OpenModifyInstanceForm(this, selector_cb);
+
+            value_type_cb.Items.AddRange(new string[] { "Absolute", "Percentage", "Multiplier" });
+            value_type_cb.SelectedIndex = 0;
+
             ThemeManager.Apply(this);
             this.Refresh();
-            value_type_cb.Items.AddRange(new string[] { "Absolute", "Percentage", "Multiplier" });
-            value_type_cb.Text = "Select a value type";
         }
+
         private void search_btn_Click(object sender, EventArgs e)
         {
             if (!int.TryParse(factor_id_tb.Text, out int factorId))
             {
-                MessageBox.Show("Please enter a valid Factor ID.", "Search Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please enter a valid Factor ID.", "Search Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
+            SearchAndLoadFactor(factorId);
+        }
+
+        /// <summary>
+        /// Caută și încarcă factorul.
+        /// </summary>
+        private async void SearchAndLoadFactor(int factorId)
+        {
             try
             {
-                using (var db = new SmartStockContext())
+                Cursor = Cursors.WaitCursor;
+
+                var factor = await _factorService.GetByIdAsync(factorId);
+
+                if (factor != null)
                 {
-                    var factor = db.ExternalFactors.AsNoTracking().FirstOrDefault(f => f.FactorId == factorId);
-
-                    if (factor != null)
-                    {
-                        factor_type_tb.Text = factor.FactorType;
-                        description_tb.Text = factor.Description;
-                        region_tb.Text = factor.Region;
-                        impact_value_tb.Text = factor.ImpactValue.ToString();
-                        date_picker.Value = factor.Date;
-                        value_type_cb.SelectedItem = factor.ValueType;
-
-                        if (factor.IsActive)
-                        {
-                            factor_id_tb.BackColor = Color.DarkGreen;
-                            factor_id_tb.ForeColor = Color.White;
-                        }
-                        else
-                        {
-                            factor_id_tb.BackColor = Color.DarkOrange;
-                            factor_id_tb.ForeColor = Color.White;
-                            MessageBox.Show("This factor is currently deactivated (Soft Deleted).", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                    }
-                    else
-                    {
-                        factor_id_tb.BackColor = Color.DarkRed;
-                        factor_id_tb.ForeColor = Color.White;
-                        MessageBox.Show("Factor ID not found.", "Search Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        ClearFactorFields();
-                    }
+                    _currentFactorId = factor.FactorId;
+                    DisplayFactorData(factor);
+                }
+                else
+                {
+                    factor_id_tb.BackColor = Color.DarkRed;
+                    factor_id_tb.ForeColor = Color.White;
+                    MessageBox.Show("Factor ID not found.", "Search Error",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ClearFactorFields();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error during search: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error during search: {ex.Message}", "Database Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ClearFactorFields();
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
             }
         }
 
-        private void delete_btn_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Afișează datele factorului în controale.
+        /// </summary>
+        private void DisplayFactorData(ExternalFactor factor)
         {
-            if (!int.TryParse(factor_id_tb.Text, out int factorId)) return;
+            factor_type_tb.Text = factor.FactorType;
+            description_tb.Text = factor.Description;
+            region_tb.Text = factor.Region;
+            impact_value_tb.Text = factor.ImpactValue.ToString();
+            value_type_cb.SelectedItem = factor.ValueType;
+            date_picker.Value = factor.Date;
 
-            DialogResult confirm = MessageBox.Show("Are you sure you want to deactivate this factor? It will no longer be used in new AI predictions, but historical data remains.",
-                                                 "Confirm Deactivation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
-            if (confirm == DialogResult.Yes)
+            if (factor.IsActive)
             {
-                try
-                {
-                    using (var db = new SmartStockContext())
-                    {
-                        var factor = db.ExternalFactors.FirstOrDefault(f => f.FactorId == factorId);
-
-                        if (factor != null)
-                        {
-                            factor.IsActive = false;
-                            db.SaveChanges();
-
-                            MessageBox.Show("Factor has been deactivated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            ClearFactorFields();
-                        }
-                        else
-                        {
-                            MessageBox.Show("External Factor not found.", "Search Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            ClearFactorFields();
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error during deactivation: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                factor_id_tb.BackColor = Color.DarkGreen;
+                factor_id_tb.ForeColor = Color.White;
+            }
+            else
+            {
+                factor_id_tb.BackColor = Color.DarkOrange;
+                factor_id_tb.ForeColor = Color.White;
+                MessageBox.Show("This factor is currently deactivated.", "Information",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
         private void apply_btn_Click(object sender, EventArgs e)
         {
-            if (!int.TryParse(factor_id_tb.Text, out int factorId) || string.IsNullOrWhiteSpace(factor_type_tb.Text))
+            if (!int.TryParse(factor_id_tb.Text, out int factorId))
             {
-                MessageBox.Show("Please search for a External Factor first using a valid ID.", "Search Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please search for a factor first using a valid ID.", "Search Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
+            }
+
+            if (!TryCollectFactorData(factorId, out var factor))
+                return;
+
+            UpdateFactor(factor);
+        }
+
+        /// <summary>
+        /// Colectează și validează datele factorului din controale.
+        /// </summary>
+        private bool TryCollectFactorData(int factorId, out ExternalFactor factor)
+        {
+            factor = null;
+
+            string factorType = factor_type_tb.Text.Trim();
+            string region = region_tb.Text.Trim();
+            string description = description_tb.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(factorType))
+            {
+                MessageBox.Show("Factor Type is required.", "Input Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(region))
+            {
+                MessageBox.Show("Region is required.", "Input Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
             }
 
             if (!decimal.TryParse(impact_value_tb.Text, out decimal impactValue))
             {
-                MessageBox.Show("Invalid impact value.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                MessageBox.Show("Please enter a valid numeric value for Impact Value.", "Input Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
             }
 
+            if (impactValue < 0)
+            {
+                MessageBox.Show("Impact Value cannot be negative.", "Validation Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            if (value_type_cb.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please select a Value Type.", "Input Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            factor = new ExternalFactor
+            {
+                FactorId = factorId,
+                FactorType = factorType,
+                Description = description,
+                Region = region,
+                ImpactValue = impactValue,
+                ValueType = value_type_cb.SelectedItem.ToString(),
+                Date = date_picker.Value,
+                IsActive = true
+            };
+
+            return true;
+        }
+
+        /// <summary>
+        /// Actualizează factorul prin serviciu.
+        /// </summary>
+        private async void UpdateFactor(ExternalFactor factor)
+        {
             try
             {
-                using (var db = new SmartStockContext())
+                Cursor = Cursors.WaitCursor;
+
+                bool success = await _factorService.UpdateFactorAsync(factor);
+
+                if (success)
                 {
-                    var factor = db.ExternalFactors.FirstOrDefault(f => f.FactorId == factorId);
-
-                    if (factor != null)
-                    {
-                        factor.FactorType = factor_type_tb.Text.Trim();
-                        factor.Description = description_tb.Text.Trim();
-                        factor.Region = region_tb.Text.Trim();
-                        factor.ImpactValue = impactValue;
-                        factor.Date = date_picker.Value;
-                        factor.ValueType = value_type_cb.SelectedItem?.ToString() ?? "Absolute";
-
-                        db.SaveChanges();
-
-                        MessageBox.Show("External factor updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        ClearFactorFields();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Factor not found.", "Search Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        ClearFactorFields();
-                    }
+                    MessageBox.Show("External factor updated successfully.", "Success",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ClearFactorFields();
                 }
+                else
+                {
+                    MessageBox.Show("Failed to update factor.", "Error",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show($"Validation error: {ex.Message}", "Input Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show($"Operation error: {ex.Message}", "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error updating product: { ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                ClearFactorFields();
+                MessageBox.Show($"Database error: {ex.Message}", "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
             }
         }
+
+        private void delete_btn_Click(object sender, EventArgs e)
+        {
+            if (!int.TryParse(factor_id_tb.Text, out int factorId))
+                return;
+
+            DialogResult confirm = MessageBox.Show(
+                "Are you sure you want to deactivate this factor?\n\n" +
+                "It will no longer be used in new AI predictions, but historical data remains.",
+                "Confirm Deactivation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+            if (confirm == DialogResult.Yes)
+            {
+                DeactivateFactor(factorId);
+            }
+        }
+
+        /// <summary>
+        /// Dezactivează factorul (soft delete).
+        /// </summary>
+        private async void DeactivateFactor(int factorId)
+        {
+            try
+            {
+                Cursor = Cursors.WaitCursor;
+
+                bool success = await _factorService.DeactivateFactorAsync(factorId);
+
+                if (success)
+                {
+                    MessageBox.Show("Factor has been deactivated successfully.", "Success",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ClearFactorFields();
+                }
+                else
+                {
+                    MessageBox.Show("External Factor not found.", "Search Error",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ClearFactorFields();
+                }
+            }
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show($"Operation error: {ex.Message}", "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Database error: {ex.Message}", "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
+        }
+
         private void ClearFactorFields()
         {
             factor_id_tb.Clear();
@@ -157,8 +297,8 @@ namespace SmartStock.Forms.User_Control
             description_tb.Clear();
             region_tb.Clear();
             impact_value_tb.Clear();
+            value_type_cb.SelectedIndex = 0;
             date_picker.Value = DateTime.Now;
-            value_type_cb.SelectedIndex = -1;
             ThemeManager.Apply(this);
         }
     }

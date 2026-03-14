@@ -1,0 +1,168 @@
+﻿using SmartStock.Classes.Data.Services;
+using SmartStock.Classes.Data.Repositories;
+using SmartStock.Classes.Models;
+using SmartStock.Classes.Utils;
+
+namespace SmartStock.Forms.User_Control
+{
+    /// <summary>
+    /// Passive View: Doar colectează date din controale și afișează mesaje.
+    /// Logica de business și actualizarea stocului este delegată TransactionService.
+    /// </summary>
+    public partial class AddTransaction : UserControl
+    {
+        private TransactionService _transactionService;
+
+        public AddTransaction()
+        {
+            InitializeComponent();
+            InitializeService();
+            LoadUI();
+        }
+
+        private void InitializeService()
+        {
+            var repository = new GenericRepository<Transaction>(new SmartStockContext());
+            var productRepo = new GenericRepository<Product>(new SmartStockContext());
+
+            _transactionService = new TransactionService(repository, productRepo);
+        }
+
+        private void LoadUI()
+        {
+            DataLayer.PopulateSelector(selector_cb);
+            DataLayer.PopulateTransactionTypeSelector(type_cb);
+            selector_cb.SelectedIndexChanged += DataLayer.OpenAddInstanceForm(this, selector_cb);
+            ThemeManager.Apply(this);
+            this.Refresh();
+        }
+
+        private void add_btn_Click(object sender, EventArgs e)
+        {
+            if (!TryCollectTransactionData(out var transaction))
+                return;
+
+            AddTransaction(transaction);
+        }
+
+        /// <summary>
+        /// Colectează și validează datele tranzacției din controale.
+        /// </summary>
+        private bool TryCollectTransactionData(out Transaction transaction)
+        {
+            transaction = null;
+
+            if (!int.TryParse(product_id_tb.Text, out int productId))
+            {
+                MessageBox.Show("Please enter a valid numeric Product ID.", "Input Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            if (type_cb.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please select a transaction type.", "Input Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            if (!int.TryParse(quantity_tb.Text, out int qty) || qty <= 0)
+            {
+                MessageBox.Show("Please enter a valid positive quantity.", "Input Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            int? entityId = null;
+            if (int.TryParse(entity_id_tb.Text, out int parsedEntityId))
+            {
+                entityId = parsedEntityId;
+            }
+
+            transaction = new Transaction
+            {
+                ProductId = productId,
+                EntityId = entityId,
+                UserId = SessionManager.CurrentUser.UserId,
+                Quantity = qty,
+                Type = type_cb.SelectedItem.ToString(),
+                Date = DateTime.Now
+            };
+
+            return true;
+        }
+
+        /// <summary>
+        /// Adaugă tranzacția și actualizează stocul prin serviciu.
+        /// </summary>
+        private async void AddTransactionRecord(Transaction transaction)
+        {
+            try
+            {
+                Cursor = Cursors.WaitCursor;
+
+                bool success = await _transactionService.AddTransactionAsync(transaction);
+
+                if (success)
+                {
+                    MessageBox.Show($"Transaction completed successfully! Type: {transaction.Type}, Quantity: {transaction.Quantity}",
+                                    "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ClearFields();
+                }
+                else
+                {
+                    MessageBox.Show("Failed to register transaction.", "Error",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show($"Validation error: {ex.Message}", "Input Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show($"Validation error: {ex.Message}", "Input Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Database error: {ex.Message}", "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
+        }
+
+        private void ClearFields()
+        {
+            product_id_tb.Clear();
+            entity_id_tb.Clear();
+            quantity_tb.Clear();
+            type_cb.SelectedIndex = 0;
+        }
+
+        private void type_cb_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (type_cb.SelectedItem == null) return;
+
+            string selectedType = type_cb.SelectedItem.ToString();
+
+            // Update label based on transaction type
+            if (selectedType == "Stock In")
+            {
+                entity_lbl.Text = "Supplier ID";
+            }
+            else if (selectedType == "Stock Out")
+            {
+                entity_lbl.Text = "Customer ID";
+            }
+            else if (selectedType == "Adjustment")
+            {
+                entity_lbl.Text = "Entity ID (optional)";
+            }
+        }
+    }
+}

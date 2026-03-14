@@ -19,13 +19,31 @@
     <Compile Update="Forms\User Control\AddForms\AddProduct.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="Forms\User Control\AddForms\AddSale.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="Forms\User Control\LoginForms\Login.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\ModifyForms\ModifyCategory.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\ModifyForms\ModifyExternalFactor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\ModifyForms\ModifySale.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\ModifyForms\ModifyTransaction.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="Forms\User Control\ModifyForms\ModifyUser.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="Forms\User Control\SearchForms\FilterProducts.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\SearchForms\FilterSupplier.cs">
       <SubType>UserControl</SubType>
     </Compile>
   </ItemGroup>

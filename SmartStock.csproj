@@ -46,9 +46,6 @@
     <Compile Update="Forms\User Control\AddForms\AddExternalFactor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="Forms\User Control\AddForms\AddSale.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Update="Forms\User Control\AddForms\AddCustomer.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -61,25 +58,13 @@
     <Compile Update="Forms\User Control\AddForms\BaseAddInstance.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\User Control\ModifyForms\ModifyCategory.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Update="Forms\User Control\ModifyForms\ModifyCustomer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Forms\User Control\ModifyForms\ModifyExternalFactor.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="Forms\User Control\ModifyForms\ModifyProduct.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="Forms\User Control\ModifyForms\ModifySale.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Update="Forms\User Control\ModifyForms\ModifySupplier.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Forms\User Control\ModifyForms\ModifyTransaction.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="Forms\User Control\SearchForms\FilterUsers.cs">
@@ -115,6 +100,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Tests\Services\" />
   </ItemGroup>
 
 </Project>
