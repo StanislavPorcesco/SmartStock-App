@@ -48,12 +48,12 @@ namespace SmartStock.Classes.Models
         /// Colecție virtuală de tranzacții efectuate de acest utilizator.
         /// Lazy loading - se încarcă cu Include() în serviciu.
         /// </summary>
-        public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
+        //public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
 
         /// <summary>
         /// Colecție virtuală de vânzări efectuate de acest utilizator.
         /// Lazy loading - se încarcă cu Include() în serviciu.
         /// </summary>
-        public virtual ICollection<Sale> Sales { get; set; } = new List<Sale>();
+        //public virtual ICollection<Sale> Sales { get; set; } = new List<Sale>();
     }
 }

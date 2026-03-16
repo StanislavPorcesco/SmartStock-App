@@ -174,6 +174,12 @@ namespace SmartStock.Classes.Utils
                     combo.FlatStyle = FlatStyle.Flat; 
                     combo.BackColor = theme.LightColor;
                     combo.ForeColor = theme.Text;
+                    combo.DisableMouseWheelScroll();
+
+                    // IMPORTANT: Set AutoCompleteSource BEFORE AutoCompleteMode
+                    // to avoid NotSupportedException with DropDownList style
+                    combo.AutoCompleteSource = AutoCompleteSource.ListItems;
+                    combo.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
                     break;
                 case Panel pnl:
                     if(pnl.Tag != null && pnl.Tag.ToString() == "menu")
@@ -211,6 +217,19 @@ namespace SmartStock.Classes.Utils
                     date.CalendarTrailingForeColor = theme.Text;
                     date.BackColor = theme.LightColor;
                     date.ForeColor = theme.Text;
+                    break;
+                case RadioButton radio:
+                    radio.BackColor = theme.DarkColor;
+                    radio.ForeColor = theme.Text;
+                    break;
+                case NumericUpDown num:
+                    num.BackColor = theme.LightColor;
+                    num.ForeColor = theme.Text;
+                    num.Maximum = 9999999999;
+                    break;
+                case CheckedListBox ck:
+                    ck.BackColor = theme.DarkColor;
+                    ck.ForeColor = theme.Text;
                     break;
                 default:
                     c.BackColor = Color.Black;

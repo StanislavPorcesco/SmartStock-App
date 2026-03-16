@@ -1,0 +1,115 @@
+﻿using SmartStock.Classes.Data.DTOs;
+using SmartStock.Classes.Data.Interfaces;
+using SmartStock.Classes.Data.Repositories;
+using SmartStock.Classes.Data.Services;
+using SmartStock.Classes.Models;
+using SmartStock.Classes.Utils;
+using SmartStock.Utils;
+
+namespace SmartStock.Forms.User_Control.SearchForms
+{
+    /// <summary>
+    /// Passive View: Implementează IFilterControl și delegă logica de filtrare serviciului.
+    /// Responsabil doar de colectarea datelor din controale și afișare.
+    /// </summary>
+    public partial class FilterTransactions : UserControl, IFilterControl
+    {
+        private TransactionService _transactionService;
+
+        public event Action FilterChanged;
+
+        public FilterTransactions()
+        {
+            InitializeComponent();
+            InitializeService();
+            LoadUI();
+        }
+
+        private void InitializeService()
+        {
+            var repository = new GenericRepository<Transaction>(new SmartStockContext());
+            _transactionService = new TransactionService(repository);
+        }
+
+        private void LoadUI()
+        {
+            ThemeManager.Apply(this);
+            ThemeManager.OnThemeChanged += HandleThemeUpdate;
+            this.Refresh();
+
+            ToolTipHelp.AddToolTip(this, "Filter transactions by date range, type, product, user, or quantity");
+        }
+
+        private void HandleThemeUpdate()
+        {
+            ThemeManager.Apply(this);
+            this.Refresh();
+        }
+
+        /// <summary>
+        /// Implementează IFilterControl: Obține datele filtrate.
+        /// </summary>
+        public object GetFilteredData()
+        {
+            var criteria = BuildFilterCriteria();
+            return GetFilteredTransactionsAsync(criteria);
+        }
+
+        /// <summary>
+        /// Construiește criteriile de filtrare din controale.
+        /// </summary>
+        private TransactionFilterCriteria BuildFilterCriteria()
+        {
+            var criteria = new TransactionFilterCriteria();
+
+            // Add filtering logic here based on UI controls
+            // For example: criteria.Type = selectedType;
+
+            return criteria;
+        }
+
+        /// <summary>
+        /// Obține tranzacțiile filtrate folosind serviciul.
+        /// </summary>
+        private async Task<List<Transaction>> GetFilteredTransactionsAsync(TransactionFilterCriteria criteria)
+        {
+            try
+            {
+                return await _transactionService.GetFilteredAsync(criteria);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading filtered transactions: {ex.Message}", "Database Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return new List<Transaction>();
+            }
+        }
+
+        /// <summary>
+        /// Implementează IFilterControl: Resetează filtrele.
+        /// </summary>
+        public void ResetFilters()
+        {
+            date_start.Value = DateTime.Now;
+            date_end.Value = DateTime.Now;
+            // De setat sa fie mereu pe All type_cb.SelectedIndex = -1;
+            // De setat sa fie mereu pe All user_cb.SelectedIndex = -1;
+            min_numeric.Value = 0;
+            max_numeric.Value = 0;
+            FilterChanged?.Invoke();
+        }
+
+        /// <summary>
+        /// Declanșator pentru evenimentul FilterChanged.
+        /// </summary>
+        protected void OnFilterChanged()
+        {
+            FilterChanged?.Invoke();
+        }
+
+        private void reset_btn_Click(object sender, EventArgs e)
+        {
+            ResetFilters();
+        }
+    }
+}

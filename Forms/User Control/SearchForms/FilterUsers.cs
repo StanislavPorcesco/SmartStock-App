@@ -35,9 +35,12 @@ namespace SmartStock.Forms.User_Control.SearchForms
         {
             ThemeManager.Apply(this);
             ThemeManager.OnThemeChanged += HandleThemeUpdate;
+            ToolTipHelp.AddToolTip(this, "Filter users by role, status, or search by username/name/email");
+            tableLayoutPanel1.Padding = new Padding(0, 0, 45, 0);
+            panel1.Padding = new Padding(0, 10, 0, 30);
             this.Refresh();
 
-            ToolTipHelp.AddToolTip(this, "Filter users by role, status, or search by username/name/email");
+            
         }
 
         private void HandleThemeUpdate()

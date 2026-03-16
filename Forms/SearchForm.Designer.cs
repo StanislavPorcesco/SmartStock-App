@@ -31,26 +31,20 @@
             base_pnl = new Panel();
             ai_pnl = new Panel();
             main_dgv = new DataGridView();
-            theme_pnl = new Panel();
-            preferences_gb = new GroupBox();
-            tableLayoutPanel1 = new TableLayoutPanel();
-            search_btn = new Button();
-            regex_value_tb = new TextBox();
-            regex_ck = new CheckBox();
             path_pnl = new Panel();
             paths_gb = new GroupBox();
             filters_pnl = new Panel();
+            panel2 = new Panel();
+            reset_btn = new Button();
             panel1 = new Panel();
             selector_cb = new ComboBox();
             settings_lbl = new Label();
             base_pnl.SuspendLayout();
             ai_pnl.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)main_dgv).BeginInit();
-            theme_pnl.SuspendLayout();
-            preferences_gb.SuspendLayout();
-            tableLayoutPanel1.SuspendLayout();
             path_pnl.SuspendLayout();
             paths_gb.SuspendLayout();
+            panel2.SuspendLayout();
             panel1.SuspendLayout();
             SuspendLayout();
             // 
@@ -72,16 +66,18 @@
             // ai_pnl
             // 
             ai_pnl.Controls.Add(main_dgv);
-            ai_pnl.Controls.Add(theme_pnl);
             ai_pnl.Dock = DockStyle.Fill;
-            ai_pnl.Location = new Point(442, 20);
+            ai_pnl.Location = new Point(508, 20);
             ai_pnl.Name = "ai_pnl";
             ai_pnl.Padding = new Padding(10, 20, 10, 10);
-            ai_pnl.Size = new Size(809, 703);
+            ai_pnl.Size = new Size(743, 703);
             ai_pnl.TabIndex = 7;
             // 
             // main_dgv
             // 
+            main_dgv.AllowUserToAddRows = false;
+            main_dgv.AllowUserToDeleteRows = false;
+            main_dgv.AllowUserToOrderColumns = true;
             main_dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.ColumnHeader;
             main_dgv.BackgroundColor = Color.FromArgb(54, 54, 54);
             main_dgv.BorderStyle = BorderStyle.Fixed3D;
@@ -92,96 +88,10 @@
             main_dgv.Name = "main_dgv";
             main_dgv.ReadOnly = true;
             main_dgv.RowHeadersWidth = 51;
-            main_dgv.Size = new Size(789, 529);
+            main_dgv.Size = new Size(723, 673);
             main_dgv.TabIndex = 10;
             main_dgv.CellDoubleClick += main_dgv_CellDoubleClick;
             main_dgv.CellFormatting += main_dgv_CellFormatting;
-            // 
-            // theme_pnl
-            // 
-            theme_pnl.Controls.Add(preferences_gb);
-            theme_pnl.Dock = DockStyle.Bottom;
-            theme_pnl.Location = new Point(10, 549);
-            theme_pnl.Margin = new Padding(0);
-            theme_pnl.Name = "theme_pnl";
-            theme_pnl.Padding = new Padding(0, 10, 0, 0);
-            theme_pnl.Size = new Size(789, 144);
-            theme_pnl.TabIndex = 9;
-            // 
-            // preferences_gb
-            // 
-            preferences_gb.Controls.Add(tableLayoutPanel1);
-            preferences_gb.Dock = DockStyle.Fill;
-            preferences_gb.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            preferences_gb.ForeColor = Color.White;
-            preferences_gb.Location = new Point(0, 10);
-            preferences_gb.Margin = new Padding(0);
-            preferences_gb.Name = "preferences_gb";
-            preferences_gb.Padding = new Padding(10);
-            preferences_gb.Size = new Size(789, 134);
-            preferences_gb.TabIndex = 3;
-            preferences_gb.TabStop = false;
-            preferences_gb.Text = "Advanced Search";
-            // 
-            // tableLayoutPanel1
-            // 
-            tableLayoutPanel1.ColumnCount = 2;
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 23.8461533F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 76.15385F));
-            tableLayoutPanel1.Controls.Add(search_btn, 1, 0);
-            tableLayoutPanel1.Controls.Add(regex_value_tb, 0, 0);
-            tableLayoutPanel1.Controls.Add(regex_ck, 0, 1);
-            tableLayoutPanel1.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Location = new Point(10, 30);
-            tableLayoutPanel1.Margin = new Padding(0);
-            tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 2;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 48.50746F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 38F));
-            tableLayoutPanel1.Size = new Size(769, 94);
-            tableLayoutPanel1.TabIndex = 2;
-            // 
-            // search_btn
-            // 
-            search_btn.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            search_btn.BackColor = Color.FromArgb(54, 54, 54);
-            search_btn.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            search_btn.ForeColor = Color.White;
-            search_btn.Location = new Point(193, 12);
-            search_btn.Margin = new Padding(10, 0, 10, 0);
-            search_btn.MaximumSize = new Size(0, 70);
-            search_btn.MinimumSize = new Size(0, 70);
-            search_btn.Name = "search_btn";
-            tableLayoutPanel1.SetRowSpan(search_btn, 2);
-            search_btn.Size = new Size(566, 70);
-            search_btn.TabIndex = 16;
-            search_btn.Text = "Search";
-            search_btn.UseVisualStyleBackColor = false;
-            search_btn.Click += search_btn_Click;
-            // 
-            // regex_value_tb
-            // 
-            regex_value_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            regex_value_tb.BackColor = Color.FromArgb(54, 54, 54);
-            regex_value_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            regex_value_tb.ForeColor = Color.White;
-            regex_value_tb.Location = new Point(10, 12);
-            regex_value_tb.Margin = new Padding(10, 0, 10, 0);
-            regex_value_tb.Name = "regex_value_tb";
-            regex_value_tb.Size = new Size(163, 31);
-            regex_value_tb.TabIndex = 13;
-            // 
-            // regex_ck
-            // 
-            regex_ck.AutoSize = true;
-            regex_ck.Dock = DockStyle.Fill;
-            regex_ck.Location = new Point(10, 56);
-            regex_ck.Margin = new Padding(10, 0, 10, 0);
-            regex_ck.Name = "regex_ck";
-            regex_ck.Size = new Size(163, 38);
-            regex_ck.TabIndex = 15;
-            regex_ck.Text = "Regex";
-            regex_ck.UseVisualStyleBackColor = true;
             // 
             // path_pnl
             // 
@@ -191,12 +101,13 @@
             path_pnl.Margin = new Padding(0);
             path_pnl.Name = "path_pnl";
             path_pnl.Padding = new Padding(10);
-            path_pnl.Size = new Size(422, 703);
+            path_pnl.Size = new Size(488, 703);
             path_pnl.TabIndex = 6;
             // 
             // paths_gb
             // 
             paths_gb.Controls.Add(filters_pnl);
+            paths_gb.Controls.Add(panel2);
             paths_gb.Controls.Add(panel1);
             paths_gb.Dock = DockStyle.Fill;
             paths_gb.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
@@ -205,7 +116,7 @@
             paths_gb.Margin = new Padding(0);
             paths_gb.Name = "paths_gb";
             paths_gb.Padding = new Padding(10, 20, 10, 20);
-            paths_gb.Size = new Size(402, 683);
+            paths_gb.Size = new Size(468, 683);
             paths_gb.TabIndex = 4;
             paths_gb.TabStop = false;
             paths_gb.Text = "Search Filters";
@@ -215,8 +126,34 @@
             filters_pnl.Dock = DockStyle.Fill;
             filters_pnl.Location = new Point(10, 73);
             filters_pnl.Name = "filters_pnl";
-            filters_pnl.Size = new Size(382, 590);
+            filters_pnl.Size = new Size(448, 515);
             filters_pnl.TabIndex = 1;
+            // 
+            // panel2
+            // 
+            panel2.Controls.Add(reset_btn);
+            panel2.Dock = DockStyle.Bottom;
+            panel2.Location = new Point(10, 588);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(448, 75);
+            panel2.TabIndex = 2;
+            // 
+            // reset_btn
+            // 
+            reset_btn.BackColor = Color.FromArgb(54, 54, 54);
+            reset_btn.Dock = DockStyle.Bottom;
+            reset_btn.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            reset_btn.ForeColor = Color.White;
+            reset_btn.Location = new Point(0, 5);
+            reset_btn.Margin = new Padding(10, 0, 0, 0);
+            reset_btn.MaximumSize = new Size(0, 70);
+            reset_btn.MinimumSize = new Size(0, 70);
+            reset_btn.Name = "reset_btn";
+            reset_btn.Size = new Size(448, 70);
+            reset_btn.TabIndex = 18;
+            reset_btn.Text = "Reset Filters";
+            reset_btn.UseVisualStyleBackColor = false;
+            reset_btn.Click += reset_btn_Click;
             // 
             // panel1
             // 
@@ -226,8 +163,8 @@
             panel1.Location = new Point(10, 40);
             panel1.Margin = new Padding(0);
             panel1.Name = "panel1";
-            panel1.Padding = new Padding(10, 0, 10, 0);
-            panel1.Size = new Size(382, 33);
+            panel1.Padding = new Padding(10, 0, 55, 0);
+            panel1.Size = new Size(448, 33);
             panel1.TabIndex = 0;
             // 
             // selector_cb
@@ -238,10 +175,10 @@
             selector_cb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             selector_cb.ForeColor = Color.White;
             selector_cb.FormattingEnabled = true;
-            selector_cb.Location = new Point(190, 0);
+            selector_cb.Location = new Point(194, 0);
             selector_cb.Margin = new Padding(0, 5, 0, 5);
             selector_cb.Name = "selector_cb";
-            selector_cb.Size = new Size(182, 33);
+            selector_cb.Size = new Size(199, 33);
             selector_cb.TabIndex = 14;
             selector_cb.SelectedIndexChanged += selector_cb_SelectedIndexChanged;
             // 
@@ -272,12 +209,9 @@
             base_pnl.ResumeLayout(false);
             ai_pnl.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)main_dgv).EndInit();
-            theme_pnl.ResumeLayout(false);
-            preferences_gb.ResumeLayout(false);
-            tableLayoutPanel1.ResumeLayout(false);
-            tableLayoutPanel1.PerformLayout();
             path_pnl.ResumeLayout(false);
             paths_gb.ResumeLayout(false);
+            panel2.ResumeLayout(false);
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ResumeLayout(false);
@@ -291,13 +225,9 @@
         private Panel path_pnl;
         private ComboBox selector_cb;
         private DataGridView main_dgv;
-        private Panel theme_pnl;
-        private GroupBox preferences_gb;
-        private TableLayoutPanel tableLayoutPanel1;
-        private Button search_btn;
-        private TextBox regex_value_tb;
-        private CheckBox regex_ck;
         private Panel panel1;
         private Panel filters_pnl;
+        private Panel panel2;
+        private Button reset_btn;
     }
 }

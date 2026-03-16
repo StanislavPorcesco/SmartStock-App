@@ -1,0 +1,109 @@
+﻿using SmartStock.Classes.Models;
+using SmartStock.Classes.Utils;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace SmartStock.Forms
+{
+    public partial class DetailsPopupForm : Form
+    {
+        public DetailsPopupForm(object dataSource, string title)
+        {
+            InitializeComponent();
+            this.Text = $"Details: {title}";
+            this.StartPosition = FormStartPosition.CenterParent;
+            this.Width = 600;
+            this.Height = 400;
+
+            LoadData(dataSource);
+            ThemeManager.Apply(this);
+            ThemeManager.OnThemeChanged += HandleThemeUpdate;
+        }
+        private void LoadData(object dataSource)
+        {
+            details_dgv.DataSource = dataSource;
+            details_dgv.ReadOnly = true;
+            details_dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            details_dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            details_dgv.AllowUserToAddRows = false;
+
+            // Ascundem automat coloanele de navigare (obiectele complexe)
+            DataGridViewColumn productColumnToHide = null;
+            DataGridViewColumn insertAfterColumn = null;
+
+            foreach (DataGridViewColumn col in details_dgv.Columns)
+            {
+                // Daca tipul proprietatii este o clasa custom sau o colectie, o ascundem
+                if (col.ValueType.IsClass && col.ValueType != typeof(string))
+                {
+                    // Keep track of Product column to potentially show ProductName instead
+                    if (col.DataPropertyName == "Product")
+                    {
+                        productColumnToHide = col;
+                    }
+                    col.Visible = false;
+                }
+
+                // Track the ProductId column so we can insert ProductName after it
+                if (col.DataPropertyName == "ProductId")
+                {
+                    insertAfterColumn = col;
+                }
+            }
+
+            // If we have SaleDetails with Product data, add a ProductName column after ProductId
+            if (productColumnToHide != null && insertAfterColumn != null)
+            {
+                AddProductNameColumn(insertAfterColumn);
+            }
+
+            // Aplicam tema aplicatiei
+            ThemeManager.Apply(this);
+        }
+
+        /// <summary>
+        /// Adaugă o coloană cu ProductName după ProductId.
+        /// Extrage ProductName din obiectul Product din fiecare rând.
+        /// </summary>
+        private void AddProductNameColumn(DataGridViewColumn afterColumn)
+        {
+            // Creează o coloană nouă pentru ProductName
+            var productNameColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "ProductName",
+                HeaderText = "Product Name",
+                ReadOnly = true,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            };
+
+            // Găsește indexul coloanei ProductId
+            int insertIndex = details_dgv.Columns.IndexOf(afterColumn);
+            if (insertIndex >= 0)
+            {
+                // Inserează noua coloană imediat după ProductId
+                details_dgv.Columns.Insert(insertIndex + 1, productNameColumn);
+            }
+
+            // Populează coloana cu ProductName din datele legate
+            foreach (DataGridViewRow row in details_dgv.Rows)
+            {
+                if (row.DataBoundItem is SaleDetails saleDetail && saleDetail.Product != null)
+                {
+                    row.Cells[productNameColumn.Name].Value = saleDetail.Product.ProductName;
+                }
+            }
+        }
+        private void HandleThemeUpdate()
+        {
+            ThemeManager.Apply(this);
+            this.Refresh();
+        }
+    }
+}

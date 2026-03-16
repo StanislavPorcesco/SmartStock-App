@@ -1,0 +1,80 @@
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace SmartStock.Classes.Models
+{
+    /// <summary>
+    /// Entitatea de domeniu Product - curată de orice logică de bază de date.
+    /// Logica de acces la date este delegată ProductService.
+    /// 
+    /// SOLID Principle: Single Responsibility - Product doar stochează și expune date,
+    /// filtrarea/validarea se face în Service.
+    /// </summary>
+    public class Product
+    {
+        [Key]
+        public int ProductId { get; set; }
+
+        [Required]
+        [StringLength(100)]
+        public string ProductName { get; set; }
+
+        [Required]
+        public int CategoryId { get; set; }
+
+        [Required]
+        public int SupplierId { get; set; }
+
+        [Required]
+        [Column(TypeName = "decimal(18, 2)")]
+        public decimal UnitPrice { get; set; }
+
+        [Required]
+        public int CurrentStock { get; set; }
+
+        [Required]
+        public int SafetyStock { get; set; }
+
+        [Required]
+        [StringLength(50)]
+        public string UnitOfMeasure { get; set; }
+
+        [Required]
+        public bool IsActive { get; set; }
+
+        // Proprietăți de navigare pentru EF Core
+        [ForeignKey("CategoryId")]
+        public virtual Category Category { get; set; }
+
+        [ForeignKey("SupplierId")]
+        public virtual Supplier Supplier { get; set; }
+
+        /// <summary>
+        /// Proprietate calculată (nu mapată în DB) - verifica disponibilitatea produsului.
+        /// 
+        /// Regula: Un produs este disponibil NUMAI dacă:
+        /// 1. Produsul însuși este activ (IsActive == true)
+        /// 2. Categoria părintelui este activ (Category.IsActive == true)
+        /// 
+        /// Scopul: Implementează cascading availability - dacă categoria este dezactivată,
+        /// produsele devin automat indisponibile din perspectiva UI, fără a schimba
+        /// statusul individual al fiecărui produs în baza de date.
+        /// 
+        /// SOLID: Single Responsibility - Product expune stare calculată
+        /// Service-ul se responsabilizează de filtrare.
+        /// </summary>
+        [NotMapped]
+        public bool IsAvailable
+        {
+            get
+            {
+                // Null-safe check pentru Category (în caz că nu este încărcată)
+                return this.IsActive && (this.Category?.IsActive ?? false);
+            }
+        }
+    }
+}
+
+        public bool IsUnderSafetyLimit => CurrentStock < SafetyStock;
+    }
+}

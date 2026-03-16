@@ -1,0 +1,405 @@
+﻿using Microsoft.EntityFrameworkCore;
+using SmartStock.Classes.Data.DTOs;
+using SmartStock.Classes.Data.Interfaces;
+using SmartStock.Classes.Models;
+
+namespace SmartStock.Classes.Data.Services
+{
+    /// <summary>
+    /// Serviciu pentru logica de business a entității ExternalFactor.
+    /// Conține toate query-urile LINQ, calculele și logica de filtrare.
+    /// Gestionează factori externi (Economic, Social, Weather) care influențează vânzările.
+    /// </summary>
+    public class ExternalFactorService
+    {
+        private readonly IRepository<ExternalFactor> _factorRepository;
+
+        public ExternalFactorService(IRepository<ExternalFactor> factorRepository)
+        {
+            _factorRepository = factorRepository ?? throw new ArgumentNullException(nameof(factorRepository));
+        }
+
+        /// <summary>
+        /// Obține toți factorii activi, sorțați după dată descrescător.
+        /// </summary>
+        public async Task<List<ExternalFactor>> GetAllActiveAsync()
+        {
+            return await _factorRepository
+                .GetAll()
+                .Where(f => f.IsActive)
+                .OrderByDescending(f => f.Date)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        /// <summary>
+        /// Obține toți factorii (inclusiv inactivi).
+        /// </summary>
+        public async Task<List<ExternalFactor>> GetAllAsync()
+        {
+            return await _factorRepository
+                .GetAll()
+                .OrderByDescending(f => f.Date)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        /// <summary>
+        /// Filtrează factorii conform criteriilor furnizate.
+        /// </summary>
+        public async Task<List<ExternalFactor>> GetFilteredAsync(ExternalFactorFilterCriteria criteria)
+        {
+            if (criteria == null)
+                throw new ArgumentNullException(nameof(criteria));
+
+            IQueryable<ExternalFactor> query = _factorRepository.GetAll();
+
+            // Filtru după tip factor
+            if (!string.IsNullOrWhiteSpace(criteria.FactorType))
+            {
+                var typeLower = criteria.FactorType.ToLower();
+                query = query.Where(f => f.FactorType.ToLower() == typeLower);
+            }
+
+            // Filtru după regiune
+            if (!string.IsNullOrWhiteSpace(criteria.Region))
+            {
+                var regionLower = criteria.Region.ToLower();
+                query = query.Where(f => f.Region.ToLower() == regionLower);
+            }
+
+            // Filtru după dată (de la)
+            if (criteria.DateFrom.HasValue)
+            {
+                query = query.Where(f => f.Date >= criteria.DateFrom.Value);
+            }
+
+            // Filtru după dată (până la)
+            if (criteria.DateTo.HasValue)
+            {
+                var endDate = criteria.DateTo.Value.AddDays(1); // Include entire day
+                query = query.Where(f => f.Date < endDate);
+            }
+
+            // Filtru după valoare impact (minim)
+            if (criteria.ImpactValueMin.HasValue)
+            {
+                query = query.Where(f => f.ImpactValue >= criteria.ImpactValueMin.Value);
+            }
+
+            // Filtru după valoare impact (maxim)
+            if (criteria.ImpactValueMax.HasValue)
+            {
+                query = query.Where(f => f.ImpactValue <= criteria.ImpactValueMax.Value);
+            }
+
+            // Filtru după tip valoare (Absolute, Percentage, Multiplier)
+            if (!string.IsNullOrWhiteSpace(criteria.ValueType))
+            {
+                var valueTypeLower = criteria.ValueType.ToLower();
+                query = query.Where(f => f.ValueType.ToLower() == valueTypeLower);
+            }
+
+            // Filtru după stare (activ/inactiv)
+            if (criteria.IsActive.HasValue)
+            {
+                query = query.Where(f => f.IsActive == criteria.IsActive.Value);
+            }
+
+            // Sortare
+            query = ApplySorting(query, criteria.SortBy, criteria.SortOrder);
+
+            // Paginare
+            if (criteria.PageSize > 0)
+            {
+                query = query.Skip((criteria.PageNumber - 1) * criteria.PageSize)
+                             .Take(criteria.PageSize);
+            }
+
+            return await query.AsNoTracking().ToListAsync();
+        }
+
+        /// <summary>
+        /// Obține factori din perioada specificată (pentru analize temporale).
+        /// </summary>
+        public async Task<List<ExternalFactor>> GetFactorsByPeriodAsync(DateTime startDate, DateTime endDate, string region = null)
+        {
+            var query = _factorRepository
+                .GetAll()
+                .Where(f => f.Date >= startDate && f.Date < endDate.AddDays(1) && f.IsActive);
+
+            if (!string.IsNullOrWhiteSpace(region))
+            {
+                query = query.Where(f => f.Region == region);
+            }
+
+            return await query
+                .OrderByDescending(f => f.Date)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        /// <summary>
+        /// Obține factorii dintr-o regiune specifică.
+        /// </summary>
+        public async Task<List<ExternalFactor>> GetFactorsByRegionAsync(string region)
+        {
+            if (string.IsNullOrWhiteSpace(region))
+                throw new ArgumentException("Region is required.");
+
+            return await _factorRepository
+                .GetAll()
+                .Where(f => f.Region == region && f.IsActive)
+                .OrderByDescending(f => f.Date)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        /// <summary>
+        /// Obține factorii de tip specific (Economic, Social, Weather, etc.).
+        /// </summary>
+        public async Task<List<ExternalFactor>> GetFactorsByTypeAsync(string factorType)
+        {
+            if (string.IsNullOrWhiteSpace(factorType))
+                throw new ArgumentException("Factor type is required.");
+
+            return await _factorRepository
+                .GetAll()
+                .Where(f => f.FactorType == factorType && f.IsActive)
+                .OrderByDescending(f => f.Date)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        /// <summary>
+        /// Obține rezumatul impactului factorilor pe regiuni și tipuri.
+        /// SQLite compatible - conversie la double pentru agregări.
+        /// </summary>
+        public async Task<dynamic> GetImpactSummaryByRegionAsync(string region)
+        {
+            if (string.IsNullOrWhiteSpace(region))
+                throw new ArgumentException("Region is required.");
+
+            var summary = await _factorRepository
+                .GetAll()
+                .Where(f => f.Region == region && f.IsActive)
+                .GroupBy(f => f.FactorType)
+                .Select(g => new
+                {
+                    Type = g.Key,
+                    Count = g.Count(),
+                    AvgImpact = g.Average(f => (double?)f.ImpactValue) ?? 0.0,  // SQLite compatible
+                    MaxImpact = (double?)g.Max(f => f.ImpactValue) ?? 0.0,
+                    MinImpact = (double?)g.Min(f => f.ImpactValue) ?? 0.0,
+                    TotalImpact = g.Sum(f => (double?)f.ImpactValue) ?? 0.0
+                })
+                .AsNoTracking()
+                .ToListAsync();
+
+            return summary;
+        }
+
+        /// <summary>
+        /// Obține factorii cel mai recent adăugați (pentru dashboard).
+        /// </summary>
+        public async Task<List<ExternalFactor>> GetRecentFactorsAsync(int count = 10)
+        {
+            return await _factorRepository
+                .GetAll()
+                .Where(f => f.IsActive)
+                .OrderByDescending(f => f.Date)
+                .Take(count)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        /// <summary>
+        /// Adaugă un nou factor extern.
+        /// </summary>
+        public async Task<bool> AddFactorAsync(ExternalFactor factor)
+        {
+            if (factor == null)
+                throw new ArgumentNullException(nameof(factor));
+
+            ValidateFactor(factor);
+
+            try
+            {
+                _factorRepository.Add(factor);
+                await _factorRepository.SaveAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Failed to add external factor.", ex);
+            }
+        }
+
+        /// <summary>
+        /// Actualizează un factor extern.
+        /// </summary>
+        public async Task<bool> UpdateFactorAsync(ExternalFactor factor)
+        {
+            if (factor == null)
+                throw new ArgumentNullException(nameof(factor));
+
+            ValidateFactor(factor);
+
+            try
+            {
+                _factorRepository.Update(factor);
+                await _factorRepository.SaveAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Failed to update external factor.", ex);
+            }
+        }
+
+        /// <summary>
+        /// Dezactivează un factor (soft delete).
+        /// Factorul nu mai este folosit în predicții AI, dar datele rămân pentru audit.
+        /// </summary>
+        public async Task<bool> DeactivateFactorAsync(int factorId)
+        {
+            var factor = await _factorRepository.GetByIdAsync(factorId);
+
+            if (factor == null)
+                return false;
+
+            factor.IsActive = false;
+
+            try
+            {
+                _factorRepository.Update(factor);
+                await _factorRepository.SaveAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Failed to deactivate factor.", ex);
+            }
+        }
+
+        /// <summary>
+        /// Reactivează un factor dezactivat.
+        /// </summary>
+        public async Task<bool> ActivateFactorAsync(int factorId)
+        {
+            var factor = await _factorRepository.GetByIdAsync(factorId);
+
+            if (factor == null)
+                return false;
+
+            factor.IsActive = true;
+
+            try
+            {
+                _factorRepository.Update(factor);
+                await _factorRepository.SaveAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Failed to activate factor.", ex);
+            }
+        }
+
+        /// <summary>
+        /// Obține factor după ID.
+        /// </summary>
+        public async Task<ExternalFactor> GetByIdAsync(int factorId)
+        {
+            return await _factorRepository.GetByIdAsync(factorId);
+        }
+
+        /// <summary>
+        /// Obține numărul total de factori activi.
+        /// </summary>
+        public async Task<int> GetActiveFactorCountAsync()
+        {
+            return await _factorRepository
+                .GetAll()
+                .Where(f => f.IsActive)
+                .CountAsync();
+        }
+
+        /// <summary>
+        /// Obține statistici despre factori externi.
+        /// SQLite compatible - conversie la double pentru agregări.
+        /// </summary>
+        public async Task<dynamic> GetFactorStatsAsync()
+        {
+            var stats = await _factorRepository
+                .GetAll()
+                .GroupBy(f => 1)
+                .Select(g => new
+                {
+                    TotalFactors = g.Count(),
+                    ActiveFactors = g.Count(f => f.IsActive),
+                    InactiveFactors = g.Count(f => !f.IsActive),
+                    AvgImpactValue = g.Average(f => (double?)f.ImpactValue) ?? 0.0,  // SQLite compatible
+                    MaxImpactValue = (double?)g.Max(f => f.ImpactValue) ?? 0.0,
+                    DistinctTypes = g.Select(f => f.FactorType).Distinct().Count(),
+                    DistinctRegions = g.Select(f => f.Region).Distinct().Count()
+                })
+                .FirstOrDefaultAsync();
+
+            return stats ?? new { TotalFactors = 0, ActiveFactors = 0, InactiveFactors = 0, AvgImpactValue = 0.0, MaxImpactValue = 0.0, DistinctTypes = 0, DistinctRegions = 0 };
+        }
+
+        /// <summary>
+        /// Validează datele factorului.
+        /// </summary>
+        private void ValidateFactor(ExternalFactor factor)
+        {
+            if (string.IsNullOrWhiteSpace(factor.FactorType))
+                throw new ArgumentException("Factor type is required.");
+
+            if (string.IsNullOrWhiteSpace(factor.Region))
+                throw new ArgumentException("Region is required.");
+
+            if (factor.ImpactValue < 0)
+                throw new ArgumentException("Impact value cannot be negative.");
+
+            var validValueTypes = new[] { "Absolute", "Percentage", "Multiplier" };
+            if (string.IsNullOrWhiteSpace(factor.ValueType) || !validValueTypes.Contains(factor.ValueType))
+                throw new ArgumentException($"Invalid value type. Must be one of: {string.Join(", ", validValueTypes)}");
+
+            if (factor.Date == default(DateTime))
+                throw new ArgumentException("Date is required.");
+        }
+
+        /// <summary>
+        /// Aplică sortarea query-ului.
+        /// </summary>
+        private IQueryable<ExternalFactor> ApplySorting(IQueryable<ExternalFactor> query, string sortBy, string sortOrder)
+        {
+            if (string.IsNullOrWhiteSpace(sortBy))
+                sortBy = "Date";
+
+            var isDescending = sortOrder?.ToLower() == "desc";
+
+            return sortBy.ToLower() switch
+            {
+                "date" => isDescending
+                    ? query.OrderByDescending(f => f.Date)
+                    : query.OrderBy(f => f.Date),
+                "factortype" => isDescending
+                    ? query.OrderByDescending(f => f.FactorType)
+                    : query.OrderBy(f => f.FactorType),
+                "region" => isDescending
+                    ? query.OrderByDescending(f => f.Region)
+                    : query.OrderBy(f => f.Region),
+                "impactvalue" => isDescending
+                    ? query.OrderByDescending(f => f.ImpactValue)
+                    : query.OrderBy(f => f.ImpactValue),
+                "valuetype" => isDescending
+                    ? query.OrderByDescending(f => f.ValueType)
+                    : query.OrderBy(f => f.ValueType),
+                _ => query.OrderByDescending(f => f.Date)
+            };
+        }
+    }
+}

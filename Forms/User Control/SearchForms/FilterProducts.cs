@@ -5,30 +5,65 @@ using SmartStock.Classes.Data.Services;
 using SmartStock.Classes.Models;
 using SmartStock.Classes.Utils;
 using SmartStock.Utils;
+using System.Text.RegularExpressions;
+using Microsoft.EntityFrameworkCore;
 
 namespace SmartStock.Forms.User_Control.SearchForms
 {
     /// <summary>
     /// Passive View: Implementează IFilterControl și delegă logica de filtrare serviciului.
-    /// Responsabil doar de colectarea datelor din controale și afișare.
+    /// Responsabil de colectarea datelor din controale și declanșarea filtrelor dinamice.
+    /// 
+    /// SOLID Principle - Cascading Availability & Single Responsibility:
+    /// FilterProducts se ocupa NUMAI de UI și colectare de criterii,
+    /// logica de cascadă (produse în categorii inactive) este în ProductService.
     /// </summary>
     public partial class FilterProducts : UserControl, IFilterControl
     {
         private ProductService _productService;
+        private CategoryService _categoryService;
+        private SupplierService _supplierService;
+        private SaleService _saleService;
+
+        // Debounce timer for search (avoid excessive queries)
+        private System.Windows.Forms.Timer _filterDebounceTimer;
+        private const int DEBOUNCE_DELAY_MS = 100;
 
         public event Action FilterChanged;
 
         public FilterProducts()
         {
             InitializeComponent();
-            InitializeService();
+            InitializeServices();
+            InitializeDebounceTimer();
             LoadUI();
+            // IMPORTANT: Call OnFilterChanged AFTER LoadUI() so event handlers are already wired up
+            // However, SearchForm will connect to FilterChanged AFTER this constructor completes,
+            // so we rely on SearchForm to load default data
         }
 
-        private void InitializeService()
+        private void InitializeServices()
         {
-            var repository = new GenericRepository<Product>(new SmartStockContext());
-            _productService = new ProductService(repository);
+            var productRepository = new GenericRepository<Product>(new SmartStockContext());
+            var categoryRepository = new GenericRepository<Category>(new SmartStockContext());
+            var supplierRepository = new GenericRepository<Supplier>(new SmartStockContext());
+            var saleRepository = new GenericRepository<Sale>(new SmartStockContext());
+
+            _productService = new ProductService(productRepository);
+            _categoryService = new CategoryService(categoryRepository, productRepository);
+            _supplierService = new SupplierService(supplierRepository);
+            _saleService = new SaleService(saleRepository);
+        }
+
+        private void InitializeDebounceTimer()
+        {
+            _filterDebounceTimer = new System.Windows.Forms.Timer();
+            _filterDebounceTimer.Interval = DEBOUNCE_DELAY_MS;
+            _filterDebounceTimer.Tick += (s, e) =>
+            {
+                _filterDebounceTimer.Stop();
+                OnFilterChanged();
+            };
         }
 
         private void LoadUI()
@@ -36,21 +71,99 @@ namespace SmartStock.Forms.User_Control.SearchForms
             ThemeManager.Apply(this);
             ThemeManager.OnThemeChanged += HandleThemeUpdate;
 
-            this.Refresh();
+            LoadCategoriesAsync();
+            SetDefaultValues();
+
+            // Wire up event handlers for dynamic filtering with debounce
+            product_name_tb.TextChanged += (s, e) => RestartDebounceTimer();
+            category_cb.SelectedIndexChanged += (s, e) => OnFilterChanged();
+            supplier_tb.TextChanged += (s, e) => RestartDebounceTimer();
+            under_limit_ck.CheckedChanged += (s, e) => OnFilterChanged();
+            min_numeric.ValueChanged += (s, e) => OnFilterChanged();
+            max_numeric.ValueChanged += (s, e) => OnFilterChanged();
+            top_sellers_ck.CheckedChanged += (s, e) => OnFilterChanged();
+            range_min.ValueChanged += (s, e) => OnFilterChanged();
+            range_max.ValueChanged += (s, e) => OnFilterChanged();
+            dead_stock_min.ValueChanged += (s, e) => OnFilterChanged();
+            dead_stock_max.ValueChanged += (s, e) => OnFilterChanged();
 
             // Add tooltips for user guidance
-            ToolTipHelp.AddToolTip(category_lbl, "Filters products by their assigned group or department for easier inventory organization.");
-            ToolTipHelp.AddToolTip(supplier_lbl, "Displays products provided by a specific partner or manufacturer.");
-            ToolTipHelp.AddToolTip(safety_lbl, "Shows items where the current stock is lower than the predefined minimum threshold.");
-            ToolTipHelp.AddToolTip(dead_lbl, "Identifies products with zero sales or movement during the last X days.");
-            ToolTipHelp.AddToolTip(range_lbl, "Filters results based on the unit price, between the specified minimum and maximum values.");
-            ToolTipHelp.AddToolTip(top_lbl, "Highlights the most popular products with the highest sales volume in the selected period.");
+            ToolTipHelp.AddToolTip(name_lbl, "Filter products by product name (partial match).");
+            ToolTipHelp.AddToolTip(category_lbl, "Filter products by category. Inactive categories will hide their products (Cascading Availability).");
+            ToolTipHelp.AddToolTip(supplier_lbl, "Filter products by supplier name (partial match).");
+            ToolTipHelp.AddToolTip(safety_lbl, "Show only products below their safety stock threshold.");
+            ToolTipHelp.AddToolTip(dead_lbl, "Filter products with no sales between the specified dates.");
+            ToolTipHelp.AddToolTip(range_lbl, "Price range filter - enter minimum and maximum unit price.");
+            ToolTipHelp.AddToolTip(top_lbl, "Show top-selling products within the date range (active only).");
+
+            tableLayoutPanel1.Padding = new Padding(0, 0, 25, 0);
+            panel1.Padding = new Padding(0, 10, 0, 30);
+
+            this.Refresh();
+        }
+
+        private void SetDefaultValues()
+        {
+            // Set default date range (last 30 days for top sellers)
+            range_max.Value = DateTime.Now;
+            range_min.Value = DateTime.Now.AddMonths(-1);
+
+            // Set default date range for dead stock (last 30 days)
+            dead_stock_max.Value = DateTime.Now;
+            dead_stock_min.Value = DateTime.Now;
+
+            // Clear numeric controls
+            min_numeric.Value = 0;
+            max_numeric.Value = 0;
+
+            // All other controls default to empty/unchecked
+            product_name_tb.Clear();
+            supplier_tb.Clear();
+            under_limit_ck.Checked = false;
+            top_sellers_ck.Checked = false;
         }
 
         private void HandleThemeUpdate()
         {
             ThemeManager.Apply(this);
             this.Refresh();
+        }
+
+        /// <summary>
+        /// Debounce timer restart - prevents excessive queries while user is typing.
+        /// </summary>
+        private void RestartDebounceTimer()
+        {
+            _filterDebounceTimer.Stop();
+            _filterDebounceTimer.Start();
+        }
+
+        /// <summary>
+        /// Încarcă categoriile active din baza de date.
+        /// </summary>
+        private async void LoadCategoriesAsync()
+        {
+            try
+            {
+                var categories = await _categoryService.GetAllActiveAsync();
+
+                // Add "All Categories" option at the beginning
+                var categoryList = new List<Category>
+                {
+                    new Category { CategoryId = 0, CategoryName = "All Categories", IsActive = true }
+                };
+                categoryList.AddRange(categories);
+
+                category_cb.DataSource = categoryList;
+                category_cb.DisplayMember = "CategoryName";
+                category_cb.ValueMember = "CategoryId";
+                category_cb.SelectedIndex = 0; // Default: "All Categories"
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading categories: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         /// <summary>
@@ -64,55 +177,141 @@ namespace SmartStock.Forms.User_Control.SearchForms
 
         /// <summary>
         /// Construiește criteriile de filtrare din controale.
+        /// Respectă SOLID: doar colectează date din UI, nu execută logică.
         /// </summary>
         private ProductFilterCriteria BuildFilterCriteria()
         {
-            var criteria = new ProductFilterCriteria();
+            var criteria = new ProductFilterCriteria
+            {
+                IsActive = true, // Always filter for active products
+                PageSize = 0,    // No paging for DataGridView
+                PageNumber = 1
+            };
 
-            // Categoria (dacă este selectată)
-            if (category_lbl.Tag is int categoryId && categoryId > 0)
+            // 1. FILTRU NUME PRODUS (Text search - case insensitive)
+            if (!string.IsNullOrWhiteSpace(product_name_tb.Text))
+            {
+                criteria.SearchText = product_name_tb.Text.Trim();
+            }
+
+            // 2. FILTRU CATEGORIE (Include "All Categories" = null)
+            if (category_cb.SelectedIndex > 0 && category_cb.SelectedValue is int categoryId && categoryId > 0)
             {
                 criteria.CategoryId = categoryId;
             }
+            // If "All Categories" is selected, CategoryId remains null (no filter)
 
-            // Furnizor (dacă este selectat)
-            if (supplier_lbl.Tag is int supplierId && supplierId > 0)
+            // 3. FILTRU FURNIZOR (partial match - handled in GetFilteredProductsAsync)
+            // NOTE: Supplier filtering is applied as post-processing since ProductFilterCriteria
+            // doesn't have a dedicated supplier filter field
+
+            // 4. FILTRU STOC SUB LIMITA
+            criteria.OnlyUnderSafetyLimit = under_limit_ck.Checked;
+
+            // 5. INTERVAL DE PREȚ
+            if (min_numeric.Value > 0)
+                criteria.MinPrice = (decimal)min_numeric.Value;
+            if (max_numeric.Value > 0)
+                criteria.MaxPrice = (decimal)max_numeric.Value;
+
+            // 6. TOP SELLERS (with date range)
+            if (top_sellers_ck.Checked)
             {
-                criteria.SupplierId = supplierId;
+                criteria.SortBy = "currentstock";
+                criteria.SortOrder = "desc";
             }
-
-            // Doar produse active (implicit)
-            criteria.IsActive = true;
-
-            // Doar produse sub limita de siguranță
-            // (Presupunem că ai un checkbox "safety_chk" pentru aceasta)
-            // criteria.OnlyUnderSafetyLimit = safety_chk?.Checked ?? false;
-
-            // Interval de preț (dacă sunt setate)
-            // (Presupunem că ai controale minPrice_tb și maxPrice_tb)
-            // if (decimal.TryParse(minPrice_tb?.Text, out decimal minPrice))
-            //     criteria.MinPrice = minPrice;
-            // if (decimal.TryParse(maxPrice_tb?.Text, out decimal maxPrice))
-            //     criteria.MaxPrice = maxPrice;
-
-            // Interval de stoc
-            // (Presupunem că ai controale minStock_tb și maxStock_tb)
-            // if (int.TryParse(minStock_tb?.Text, out int minStock))
-            //     criteria.MinStock = minStock;
-            // if (int.TryParse(maxStock_tb?.Text, out int maxStock))
-            //     criteria.MaxStock = maxStock;
 
             return criteria;
         }
 
         /// <summary>
         /// Obține produsele filtrate folosind serviciul.
+        /// Serviciul implementează cascading availability (produse în categorii inactive sunt ascunse).
+        /// 
+        /// SOLID Principle: Post-processing filters (supplier, dead stock, top sellers) sunt aplicate DUPĂ
+        /// rezultatele din service pentru a menține separarea responsabilităților.
         /// </summary>
         private async Task<List<Product>> GetFilteredProductsAsync(ProductFilterCriteria criteria)
         {
             try
             {
-                return await _productService.GetFilteredAsync(criteria);
+                var products = await _productService.GetFilteredAsync(criteria);
+
+                // POST-PROCESSING FILTER 1: Furnizor (partial match)
+                if (!string.IsNullOrWhiteSpace(supplier_tb.Text))
+                {
+                    var supplierFilter = supplier_tb.Text.ToLower();
+                    products = products
+                        .Where(p => p.Supplier != null && p.Supplier.SupplierName.ToLower().Contains(supplierFilter))
+                        .ToList();
+                }
+
+                // POST-PROCESSING FILTER 2: Dead Stock (no sales between dead_stock_min and dead_stock_max)
+                // This filter shows products with NO sales activity in the specified period
+                if (dead_stock_min.Value != dead_stock_max.Value)
+                {
+                    var deadStockStart = dead_stock_min.Value;
+                    var deadStockEnd = dead_stock_max.Value;
+
+                    // Get database context to query sales data
+                    using (var db = new SmartStockContext())
+                    {
+                        // Get all products that HAD sales in the period
+                        var productsWithSalesInPeriod = await db.SaleDetails
+                            .AsNoTracking()
+                            .Where(sd => sd.Sale.SaleDate >= deadStockStart && 
+                                        sd.Sale.SaleDate <= deadStockEnd &&
+                                        sd.Sale.PaymentStatus == "Paid")
+                            .Select(sd => sd.ProductId)
+                            .Distinct()
+                            .ToListAsync();
+
+                        // Filter to products that did NOT have sales in the period (dead stock)
+                        products = products
+                            .Where(p => !productsWithSalesInPeriod.Contains(p.ProductId) &&
+                                       p.IsActive && p.Category.IsActive) // Cascading availability
+                            .ToList();
+                    }
+                }
+
+                // POST-PROCESSING FILTER 3: Top Sellers
+                // This filter shows products with the highest sales volume in the date range
+                if (top_sellers_ck.Checked)
+                {
+                    var topSellerStart = range_min.Value;
+                    var topSellerEnd = range_max.Value.AddDays(1); // Include entire last day
+
+                    // Get database context to query sales data
+                    using (var db = new SmartStockContext())
+                    {
+                        // Get products sorted by total quantity sold in the period
+                        var topProducts = await db.SaleDetails
+                            .AsNoTracking()
+                            .Include(sd => sd.Sale)
+                            .Where(sd => sd.Sale.SaleDate >= topSellerStart && 
+                                        sd.Sale.SaleDate < topSellerEnd &&
+                                        sd.Sale.PaymentStatus == "Paid")
+                            .GroupBy(sd => sd.ProductId)
+                            .Select(g => new
+                            {
+                                ProductId = g.Key,
+                                TotalQuantity = g.Sum(sd => sd.Quantity)
+                            })
+                            .OrderByDescending(x => x.TotalQuantity)
+                            .Take(10)
+                            .Select(x => x.ProductId)
+                            .ToListAsync();
+
+                        // Filter to only top selling products
+                        products = products
+                            .Where(p => topProducts.Contains(p.ProductId) &&
+                                       p.IsActive && p.Category.IsActive) // Cascading availability
+                            .OrderByDescending(p => topProducts.IndexOf(p.ProductId)) // Maintain sort order
+                            .ToList();
+                    }
+                }
+
+                return products;
             }
             catch (Exception ex)
             {
@@ -123,21 +322,39 @@ namespace SmartStock.Forms.User_Control.SearchForms
         }
 
         /// <summary>
-        /// Implementează IFilterControl: Resetează filtrele.
+        /// Declanșator pentru evenimentul FilterChanged - actualizează DataGridView dinamic.
         /// </summary>
-        public void ResetFilters()
+        private void OnFilterChanged()
         {
-            category_lbl.Tag = 0;
-            supplier_lbl.Tag = 0;
             FilterChanged?.Invoke();
         }
 
         /// <summary>
-        /// Declanșator pentru evenimentul FilterChanged.
+        /// Încarcă datele default în grid. Apelată de SearchForm după ce s-a conectat la FilterChanged.
         /// </summary>
-        protected void OnFilterChanged()
+        public void LoadDefaultData()
         {
-            FilterChanged?.Invoke();
+            OnFilterChanged();
+        }
+
+        /// <summary>
+        /// Implementează IFilterControl: Resetează toate filtrele.
+        /// </summary>
+        public void ResetFilters()
+        {
+            product_name_tb.Clear();
+            category_cb.SelectedIndex = 0; // "All Categories"
+            supplier_tb.Clear();
+            under_limit_ck.Checked = false;
+            min_numeric.Value = 0;
+            max_numeric.Value = 0;
+            range_min.Value = DateTime.Now;
+            range_max.Value = DateTime.Now;
+            dead_stock_min.Value = DateTime.Now;
+            dead_stock_max.Value = DateTime.Now;
+            top_sellers_ck.Checked = false;
+
+            OnFilterChanged();
         }
     }
 }

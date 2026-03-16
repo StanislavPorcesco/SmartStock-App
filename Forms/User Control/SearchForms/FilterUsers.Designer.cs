@@ -41,15 +41,12 @@
             panel3 = new Panel();
             label5 = new Label();
             max_numeric = new NumericUpDown();
-            panel4 = new Panel();
-            reset_btn = new Button();
             panel1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)min_numeric).BeginInit();
             panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)max_numeric).BeginInit();
-            panel4.SuspendLayout();
             SuspendLayout();
             // 
             // panel1
@@ -74,7 +71,6 @@
             tableLayoutPanel1.Controls.Add(status_lbl, 0, 0);
             tableLayoutPanel1.Controls.Add(panel2, 1, 4);
             tableLayoutPanel1.Controls.Add(panel3, 1, 5);
-            tableLayoutPanel1.Controls.Add(panel4, 0, 7);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 10);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -229,40 +225,13 @@
             max_numeric.Size = new Size(128, 27);
             max_numeric.TabIndex = 0;
             // 
-            // panel4
-            // 
-            tableLayoutPanel1.SetColumnSpan(panel4, 2);
-            panel4.Controls.Add(reset_btn);
-            panel4.Dock = DockStyle.Bottom;
-            panel4.Location = new Point(3, 499);
-            panel4.Name = "panel4";
-            panel4.Padding = new Padding(10, 0, 10, 0);
-            panel4.Size = new Size(523, 70);
-            panel4.TabIndex = 27;
-            // 
-            // reset_btn
-            // 
-            reset_btn.BackColor = Color.FromArgb(54, 54, 54);
-            reset_btn.Dock = DockStyle.Bottom;
-            reset_btn.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            reset_btn.ForeColor = Color.White;
-            reset_btn.Location = new Point(10, 0);
-            reset_btn.Margin = new Padding(10, 0, 0, 0);
-            reset_btn.MaximumSize = new Size(0, 70);
-            reset_btn.MinimumSize = new Size(0, 70);
-            reset_btn.Name = "reset_btn";
-            reset_btn.Size = new Size(503, 70);
-            reset_btn.TabIndex = 17;
-            reset_btn.Text = "Reset Filters";
-            reset_btn.UseVisualStyleBackColor = false;
-            // 
-            // FilterCategories
+            // FilterUsers
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(64, 64, 64);
             Controls.Add(panel1);
-            Name = "FilterCategories";
+            Name = "FilterUsers";
             Size = new Size(529, 582);
             panel1.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
@@ -273,7 +242,6 @@
             panel3.ResumeLayout(false);
             panel3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)max_numeric).EndInit();
-            panel4.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -291,8 +259,6 @@
         private NumericUpDown max_numeric;
         private CheckBox total_ck;
         private Label total_lbl;
-        private Panel panel4;
-        private Button reset_btn;
         private CheckBox status_ck;
     }
 }

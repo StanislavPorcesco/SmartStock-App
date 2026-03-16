@@ -1,25 +1,29 @@
-﻿using SmartStock.Classes.Data.DTOs;
+using SmartStock.Classes.Data.DTOs;
 using SmartStock.Classes.Data.Interfaces;
 using SmartStock.Classes.Data.Repositories;
 using SmartStock.Classes.Data.Services;
 using SmartStock.Classes.Models;
 using SmartStock.Classes.Utils;
 using SmartStock.Utils;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using Microsoft.EntityFrameworkCore;
 
 namespace SmartStock.Forms.User_Control.SearchForms
 {
+    /// <summary>
+    /// Passive View: Implementează IFilterControl și delegă logica de filtrare serviciului.
+    /// Responsabil de colectarea datelor din controale și declanșarea filtrelor dinamice.
+    /// 
+    /// SOLID Principle - Single Responsibility:
+    /// FilterCategories se ocupa NUMAI de UI și colectare de criterii,
+    /// logica de filtrare este în CategoryService.
+    /// </summary>
     public partial class FilterCategories : UserControl, IFilterControl
     {
         private CategoryService _categoryService;
+
+        // Debounce timer for search (avoid excessive queries)
+        private System.Windows.Forms.Timer _filterDebounceTimer;
+        private const int DEBOUNCE_DELAY_MS = 100;
 
         public event Action FilterChanged;
 
@@ -27,29 +31,83 @@ namespace SmartStock.Forms.User_Control.SearchForms
         {
             InitializeComponent();
             InitializeService();
+            InitializeDebounceTimer();
             LoadUI();
         }
 
         private void InitializeService()
         {
-            var repository = new GenericRepository<Category>(new SmartStockContext());
-            _categoryService = new CategoryService(repository);
+            var categoryRepository = new GenericRepository<Category>(new SmartStockContext());
+            var productRepository = new GenericRepository<Product>(new SmartStockContext());
+            _categoryService = new CategoryService(categoryRepository, productRepository);
+        }
+
+        private void InitializeDebounceTimer()
+        {
+            _filterDebounceTimer = new System.Windows.Forms.Timer();
+            _filterDebounceTimer.Interval = DEBOUNCE_DELAY_MS;
+            _filterDebounceTimer.Tick += (s, e) =>
+            {
+                _filterDebounceTimer.Stop();
+                OnFilterChanged();
+            };
         }
 
         private void LoadUI()
         {
             ThemeManager.Apply(this);
             ThemeManager.OnThemeChanged += HandleThemeUpdate;
-            this.Refresh();
+            SetDefaultValues();
 
-            // Tooltips
-            ToolTipHelp.AddToolTip(this, "Filter categories by name or status");
+            // Wire up event handlers for dynamic filtering with debounce
+            category_name_tb.TextChanged += (s, e) => RestartDebounceTimer();
+            all_rb.CheckedChanged += (s, e) => OnFilterChanged();
+            active_rb.CheckedChanged += (s, e) => OnFilterChanged();
+            inactive_rb.CheckedChanged += (s, e) => OnFilterChanged();
+            min_numeric.ValueChanged += (s, e) => OnFilterChanged();
+            max_numeric.ValueChanged += (s, e) => OnFilterChanged();
+            total_ck.CheckedChanged += (s, e) => OnFilterChanged();
+            value_min.ValueChanged += (s, e) => OnFilterChanged();
+            value_max.ValueChanged += (s, e) => OnFilterChanged();
+
+            // Add tooltips for user guidance
+            //ToolTipHelp.AddToolTip(this, "Filter categories by name, status, product count, or total inventory value.");
+            ToolTipHelp.AddToolTip(status_lbl, "Filter categories by activity status.");
+            ToolTipHelp.AddToolTip(name_lbl, "Filter categories by their name (partial match).");
+            ToolTipHelp.AddToolTip(range_lbl, "Filter categories by number of products.");
+            ToolTipHelp.AddToolTip(total_lbl, "Filter categories by total inventory value of their products.");
+
+            tableLayoutPanel1.Padding = new Padding(0, 0, 45, 0);
+            panel1.Padding = new Padding(0, 10, 0, 30);
+            this.Refresh();
+        }
+
+        private void SetDefaultValues()
+        {
+            category_name_tb.Clear();
+            all_rb.Checked = true;
+            active_rb.Checked = false;
+            inactive_rb.Checked = false;
+            min_numeric.Value = 0;
+            max_numeric.Value = 0;
+            total_ck.Checked = false;
+            value_min.Value = 0;
+            value_max.Value = 0;
         }
 
         private void HandleThemeUpdate()
         {
             ThemeManager.Apply(this);
             this.Refresh();
+        }
+
+        /// <summary>
+        /// Debounce timer restart - prevents excessive queries while user is typing.
+        /// </summary>
+        private void RestartDebounceTimer()
+        {
+            _filterDebounceTimer.Stop();
+            _filterDebounceTimer.Start();
         }
 
         /// <summary>
@@ -63,49 +121,116 @@ namespace SmartStock.Forms.User_Control.SearchForms
 
         /// <summary>
         /// Construiește criteriile de filtrare din controale.
+        /// Respectă SOLID: doar colectează date din UI, nu execută logică.
         /// </summary>
         private CategoryFilterCriteria BuildFilterCriteria()
         {
-            var criteria = new CategoryFilterCriteria();
+            var criteria = new CategoryFilterCriteria
+            {
+                PageSize = 0,    // No paging for DataGridView
+                PageNumber = 1
+            };
 
-            // Doar categorii active (implicit)
-            criteria.IsActive = true;
+            // 1. FILTRU STARE (All, Active, Inactive)
+            // RadioButton Group Logic: Only one can be checked at a time
+            if (all_rb.Checked)
+            {
+                // All categories - don't filter by IsActive (keep null)
+                criteria.IsActive = null;
+            }
+            else if (active_rb.Checked)
+            {
+                criteria.IsActive = true;
+            }
+            else if (inactive_rb.Checked)
+            {
+                criteria.IsActive = false;
+            }
+            else
+            {
+                // Safety fallback - show all
+                criteria.IsActive = null;
+            }
+
+            // 2. FILTRU NUME CATEGORIE (Text search - case insensitive)
+            if (!string.IsNullOrWhiteSpace(category_name_tb.Text))
+            {
+                criteria.SearchText = category_name_tb.Text.Trim();
+            }
+
+            // 3. FILTRU NUMAR DE PRODUSE (min/max product count - handled in post-processing)
+            // NOTE: Product count filtering is applied as post-processing
+
+            // 4. FILTRU VALOARE TOTALA INVENTAR (total inventory value - handled in post-processing)
+            // NOTE: Inventory value filtering is applied as post-processing
 
             return criteria;
         }
 
         /// <summary>
         /// Obține categoriile filtrate folosind serviciul.
+        /// 
+        /// SOLID Principle: Post-processing filters (product count, inventory value) sunt aplicate DUPĂ
+        /// rezultatele din service pentru a menține separarea responsabilităților.
         /// </summary>
         private async Task<List<Category>> GetFilteredCategoriesAsync(CategoryFilterCriteria criteria)
         {
             try
             {
-                return await _categoryService.GetFilteredAsync(criteria);
+                // 1. Pregătim criteriile din input-urile de pe formă
+                criteria.MinProducts = min_numeric.Value > 0 ? (int)min_numeric.Value : null;
+                criteria.MaxProducts = max_numeric.Value > 0 ? (int)max_numeric.Value : null;
+
+                if (total_ck.Checked)
+                {
+                    criteria.MinValue = value_min.Value > 0 ? value_min.Value : null;
+                    criteria.MaxValue = value_max.Value > 0 ? value_max.Value : null;
+                }
+
+                // 2. Apelăm serviciul (Filtrarea se întâmplă în baza de date)
+                var results = await _categoryService.GetFilteredAsync(criteria);
+
+                return results;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading filtered categories: {ex.Message}", "Database Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error: {ex.Message}", "Search Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return new List<Category>();
             }
         }
 
         /// <summary>
-        /// Implementează IFilterControl: Resetează filtrele.
+        /// Declanșator pentru evenimentul FilterChanged - actualizează DataGridView dinamic.
         /// </summary>
-        public void ResetFilters()
+        private void OnFilterChanged()
         {
-            // Resetează controale de filtrare dacă sunt necesare
             FilterChanged?.Invoke();
         }
 
         /// <summary>
-        /// Declanșator pentru evenimentul FilterChanged.
+        /// Încarcă datele default în grid. Apelată de SearchForm după ce s-a conectat la FilterChanged.
         /// </summary>
-        protected void OnFilterChanged()
+        public void LoadDefaultData()
         {
-            FilterChanged?.Invoke();
+            OnFilterChanged();
+        }
+
+        /// <summary>
+        /// Implementează IFilterControl: Resetează toate filtrele.
+        /// </summary>
+        public void ResetFilters()
+        {
+            category_name_tb.Clear();
+            all_rb.Checked = true;  // Reset to "All" as default
+            active_rb.Checked = false;
+            inactive_rb.Checked = false;
+            min_numeric.Value = 0;
+            max_numeric.Value = 0;
+            total_ck.Checked = false;
+            value_min.Value = 0;
+            value_max.Value = 0;
+
+            OnFilterChanged();
         }
     }
 }

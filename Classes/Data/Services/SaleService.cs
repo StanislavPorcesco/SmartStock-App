@@ -59,22 +59,33 @@ namespace SmartStock.Classes.Data.Services
 
         /// <summary>
         /// Filtrează vânzările conform criteriilor furnizate.
+        /// IMPORTANT: Include SaleDetails.Product pentru a suporta filtrele de product și category.
         /// </summary>
         public async Task<List<Sale>> GetFilteredAsync(SaleFilterCriteria criteria)
         {
             if (criteria == null)
                 throw new ArgumentNullException(nameof(criteria));
 
-            IQueryable<Sale> query = _saleRepository.GetAll();
+            IQueryable<Sale> query = _saleRepository.GetAll()
+                .Include(s => s.Customer)
+                .Include(s => s.User)
+                .Include(s => s.SaleDetails)
+                    .ThenInclude(sd => sd.Product)
+                        .ThenInclude(p => p.Category);  // ✅ IMPORTANT: Eager load for product/category filtering
 
             // Filtru după stare
             if (criteria.IsActive.HasValue)
             {
                 query = query.Where(s => s.IsActive == criteria.IsActive.Value);
             }
-            else
+            // If IsActive is null, don't filter - show all sales regardless of status
+
+            // Căutare text (Customer Name sau User Name)
+            if (!string.IsNullOrWhiteSpace(criteria.SearchText))
             {
-                query = query.Where(s => s.IsActive);
+                var searchLower = criteria.SearchText.ToLower();
+                query = query.Where(s => s.Customer.FullName.ToLower().Contains(searchLower) ||
+                                         s.User.Username.ToLower().Contains(searchLower));
             }
 
             // Filtru după client
@@ -128,17 +139,53 @@ namespace SmartStock.Classes.Data.Services
                 query = query.Where(s => s.TotalAmount <= criteria.TotalAmountMax.Value);
             }
 
+            // POST-PROCESSING FILTERS (after materialization due to complexity with SaleDetails)
+            var results = await query.AsNoTracking().ToListAsync();
+
+            // Filtru după produs (vânzări care conțin acest produs)
+            if (criteria.ContainsProductId.HasValue)
+            {
+                results = results
+                    .Where(s => s.SaleDetails != null && 
+                               s.SaleDetails.Any(sd => sd.ProductId == criteria.ContainsProductId.Value))
+                    .ToList();
+            }
+
+            // Filtru după categorie (vânzări cu produse din această categorie)
+            if (criteria.ContainsCategoryId.HasValue)
+            {
+                results = results
+                    .Where(s => s.SaleDetails != null && 
+                               s.SaleDetails.Any(sd => sd.Product != null && 
+                                                      sd.Product.CategoryId == criteria.ContainsCategoryId.Value))
+                    .ToList();
+            }
+
+            // Filtru după numărul de itemi (min-max)
+            if (criteria.MinItemsCount.HasValue || criteria.MaxItemsCount.HasValue)
+            {
+                var minCount = criteria.MinItemsCount ?? 0;
+                var maxCount = criteria.MaxItemsCount ?? int.MaxValue;
+
+                results = results
+                    .Where(s => (s.SaleDetails?.Count ?? 0) >= minCount && 
+                               (s.SaleDetails?.Count ?? 0) <= maxCount)
+                    .ToList();
+            }
+
             // Sortare
-            query = ApplySorting(query, criteria.SortBy, criteria.SortOrder);
+            var sortedResults = ApplySortingLocal(results, criteria.SortBy, criteria.SortOrder);
 
             // Paginare
             if (criteria.PageSize > 0)
             {
-                query = query.Skip((criteria.PageNumber - 1) * criteria.PageSize)
-                             .Take(criteria.PageSize);
+                sortedResults = sortedResults
+                    .Skip((criteria.PageNumber - 1) * criteria.PageSize)
+                    .Take(criteria.PageSize)
+                    .ToList();
             }
 
-            return await query.AsNoTracking().ToListAsync();
+            return sortedResults;
         }
 
         /// <summary>
@@ -152,6 +199,7 @@ namespace SmartStock.Classes.Data.Services
             return await _saleDetailsRepository
                 .GetAll()
                 .Where(d => d.SaleId == saleId)
+                .Include(d => d.Product)  // ✅ Include Product to display ProductName
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -423,9 +471,10 @@ namespace SmartStock.Classes.Data.Services
         }
 
         /// <summary>
-        /// Aplică sortarea query-ului.
+        /// Aplică sortarea pentru o listă în memorie (după materialization).
+        /// Folosit pentru post-processing filtering complex.
         /// </summary>
-        private IQueryable<Sale> ApplySorting(IQueryable<Sale> query, string sortBy, string sortOrder)
+        private List<Sale> ApplySortingLocal(List<Sale> items, string sortBy, string sortOrder)
         {
             if (string.IsNullOrWhiteSpace(sortBy))
                 sortBy = "SaleDate";
@@ -435,21 +484,21 @@ namespace SmartStock.Classes.Data.Services
             return sortBy.ToLower() switch
             {
                 "saledate" => isDescending
-                    ? query.OrderByDescending(s => s.SaleDate)
-                    : query.OrderBy(s => s.SaleDate),
+                    ? items.OrderByDescending(s => s.SaleDate).ToList()
+                    : items.OrderBy(s => s.SaleDate).ToList(),
                 "saleid" => isDescending
-                    ? query.OrderByDescending(s => s.SaleId)
-                    : query.OrderBy(s => s.SaleId),
+                    ? items.OrderByDescending(s => s.SaleId).ToList()
+                    : items.OrderBy(s => s.SaleId).ToList(),
                 "totalamount" => isDescending
-                    ? query.OrderByDescending(s => s.TotalAmount)
-                    : query.OrderBy(s => s.TotalAmount),
+                    ? items.OrderByDescending(s => s.TotalAmount).ToList()
+                    : items.OrderBy(s => s.TotalAmount).ToList(),
                 "customerid" => isDescending
-                    ? query.OrderByDescending(s => s.CustomerId)
-                    : query.OrderBy(s => s.CustomerId),
+                    ? items.OrderByDescending(s => s.CustomerId).ToList()
+                    : items.OrderBy(s => s.CustomerId).ToList(),
                 "paymentstatus" => isDescending
-                    ? query.OrderByDescending(s => s.PaymentStatus)
-                    : query.OrderBy(s => s.PaymentStatus),
-                _ => query.OrderByDescending(s => s.SaleDate)
+                    ? items.OrderByDescending(s => s.PaymentStatus).ToList()
+                    : items.OrderBy(s => s.PaymentStatus).ToList(),
+                _ => items.OrderByDescending(s => s.SaleDate).ToList()
             };
         }
     }

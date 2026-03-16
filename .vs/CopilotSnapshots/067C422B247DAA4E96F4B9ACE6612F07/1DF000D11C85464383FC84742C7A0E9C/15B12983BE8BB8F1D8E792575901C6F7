@@ -1,0 +1,286 @@
+﻿using SmartStock.Classes.Data.DTOs;
+using SmartStock.Classes.Data.Interfaces;
+using SmartStock.Classes.Data.Repositories;
+using SmartStock.Classes.Data.Services;
+using SmartStock.Classes.Models;
+using SmartStock.Classes.Utils;
+using SmartStock.Utils;
+using Microsoft.EntityFrameworkCore;
+
+namespace SmartStock.Forms.User_Control.SearchForms
+{
+    /// <summary>
+    /// Passive View: Implementează IFilterControl și delegă logica de filtrare serviciului.
+    /// Responsabil de colectarea datelor din controale și declanșarea filtrelor dinamice.
+    /// 
+    /// SOLID Principle - Single Responsibility:
+    /// FilterSuppliers se ocupa NUMAI de UI și colectare de criterii,
+    /// logica de filtrare este în SupplierService.
+    /// </summary>
+    public partial class FilterSuppliers : UserControl, IFilterControl
+    {
+        private SupplierService _supplierService;
+        private CategoryService _categoryService;
+
+        // Debounce timer for search (avoid excessive queries)
+        private System.Windows.Forms.Timer _filterDebounceTimer;
+        private const int DEBOUNCE_DELAY_MS = 100;
+
+        public event Action FilterChanged;
+
+        public FilterSuppliers()
+        {
+            InitializeComponent();
+            InitializeServices();
+            InitializeDebounceTimer();
+            LoadUI();
+        }
+
+        private void InitializeServices()
+        {
+            var supplierRepository = new GenericRepository<Supplier>(new SmartStockContext());
+            var productRepository = new GenericRepository<Product>(new SmartStockContext());
+            var categoryRepository = new GenericRepository<Category>(new SmartStockContext());
+
+            _supplierService = new SupplierService(supplierRepository, productRepository);
+            _categoryService = new CategoryService(categoryRepository, productRepository);
+        }
+
+        private void InitializeDebounceTimer()
+        {
+            _filterDebounceTimer = new System.Windows.Forms.Timer();
+            _filterDebounceTimer.Interval = DEBOUNCE_DELAY_MS;
+            _filterDebounceTimer.Tick += (s, e) =>
+            {
+                _filterDebounceTimer.Stop();
+                OnFilterChanged();
+            };
+        }
+
+        private void LoadUI()
+        {
+            ThemeManager.Apply(this);
+            ThemeManager.OnThemeChanged += HandleThemeUpdate;
+            LoadCategoriesAsync();
+            SetDefaultValues();
+
+            // Wire up event handlers for dynamic filtering with debounce
+            supplier_name_tb.TextChanged += (s, e) => RestartDebounceTimer();
+            contact_name_tb.TextChanged += (s, e) => RestartDebounceTimer();
+            category_cb.SelectedIndexChanged += (s, e) => OnFilterChanged();
+            min_numeric.ValueChanged += (s, e) => OnFilterChanged();
+            max_numeric.ValueChanged += (s, e) => OnFilterChanged();
+            all_rb.CheckedChanged += (s, e) => OnFilterChanged();
+            active_rb.CheckedChanged += (s, e) => OnFilterChanged();
+            inactive_rb.CheckedChanged += (s, e) => OnFilterChanged();
+            reset_btn.Click += (s, e) => ResetFilters();
+
+            // Add tooltips for user guidance
+            ToolTipHelp.AddToolTip(supplier_lbl, "Filter suppliers by name (partial match).");
+            ToolTipHelp.AddToolTip(contact_lbl, "Filter suppliers by contact person name.");
+            ToolTipHelp.AddToolTip(categories_lbl, "Filter suppliers that provide products in this category.");
+            ToolTipHelp.AddToolTip(range_lbl, "Filter suppliers by product count range.");
+            ToolTipHelp.AddToolTip(status_lbl, "Filter suppliers by activity status (All, Active, Inactive).");
+
+            this.Refresh();
+        }
+
+        private void SetDefaultValues()
+        {
+            supplier_name_tb.Clear();
+            contact_name_tb.Clear();
+            all_rb.Checked = true;
+            active_rb.Checked = false;
+            inactive_rb.Checked = false;
+            min_numeric.Value = 0;
+            max_numeric.Value = 0;
+        }
+
+        private void HandleThemeUpdate()
+        {
+            ThemeManager.Apply(this);
+            this.Refresh();
+        }
+
+        /// <summary>
+        /// Debounce timer restart - prevents excessive queries while user is typing.
+        /// </summary>
+        private void RestartDebounceTimer()
+        {
+            _filterDebounceTimer.Stop();
+            _filterDebounceTimer.Start();
+        }
+
+        /// <summary>
+        /// Încarcă categoriile active din baza de date.
+        /// </summary>
+        private async void LoadCategoriesAsync()
+        {
+            try
+            {
+                var categories = await _categoryService.GetAllActiveAsync();
+
+                // Add "All Categories" option at the beginning
+                var categoryList = new List<Category>
+                {
+                    new Category { CategoryId = 0, CategoryName = "All Categories", IsActive = true }
+                };
+                categoryList.AddRange(categories);
+
+                category_cb.DataSource = categoryList;
+                category_cb.DisplayMember = "CategoryName";
+                category_cb.ValueMember = "CategoryId";
+                category_cb.SelectedIndex = 0; // Default: "All Categories"
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading categories: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Implementează IFilterControl: Obține datele filtrate.
+        /// </summary>
+        public object GetFilteredData()
+        {
+            var criteria = BuildFilterCriteria();
+            return GetFilteredSuppliersAsync(criteria);
+        }
+
+        /// <summary>
+        /// Construiește criteriile de filtrare din controale.
+        /// Respectă SOLID: doar colectează date din UI, nu execută logică.
+        /// </summary>
+        private SupplierFilterCriteria BuildFilterCriteria()
+        {
+            var criteria = new SupplierFilterCriteria
+            {
+                PageSize = 0,    // No paging for DataGridView
+                PageNumber = 1
+            };
+
+            // 1. FILTRU STARE (All, Active, Inactive)
+            if (all_rb.Checked)
+            {
+                criteria.IsActive = null;  // All suppliers
+            }
+            else if (active_rb.Checked)
+            {
+                criteria.IsActive = true;
+            }
+            else if (inactive_rb.Checked)
+            {
+                criteria.IsActive = false;
+            }
+            else
+            {
+                criteria.IsActive = null;  // Safety fallback
+            }
+
+            // 2. FILTRU NUME FURNIZOR
+            if (!string.IsNullOrWhiteSpace(supplier_name_tb.Text))
+            {
+                criteria.SupplierName = supplier_name_tb.Text.Trim();
+            }
+
+            // 3. FILTRU PERSOANĂ DE CONTACT
+            if (!string.IsNullOrWhiteSpace(contact_name_tb.Text))
+            {
+                criteria.ContactPerson = contact_name_tb.Text.Trim();
+            }
+
+            // 4. FILTRU CATEGORIE (handled in post-processing)
+            if (category_cb.SelectedIndex > 0 && category_cb.SelectedValue is int categoryId && categoryId > 0)
+            {
+                criteria.CategoryId = categoryId;
+            }
+
+            // 5. FILTRU NUMAR DE PRODUSE (handled in post-processing)
+            if (min_numeric.Value > 0)
+                criteria.MinProducts = (int)min_numeric.Value;
+            if (max_numeric.Value > 0)
+                criteria.MaxProducts = (int)max_numeric.Value;
+
+            return criteria;
+        }
+
+        /// <summary>
+        /// Obține furnizorii filtrați folosind serviciul.
+        /// 
+        /// SOLID Principle: Post-processing filters (category, product count) sunt aplicate DUPĂ
+        /// rezultatele din service pentru a menține separarea responsabilităților.
+        /// </summary>
+        private async Task<List<Supplier>> GetFilteredSuppliersAsync(SupplierFilterCriteria criteria)
+        {
+            try
+            {
+                var suppliers = await _supplierService.GetFilteredAsync(criteria);
+
+                // POST-PROCESSING FILTER 1: Product Count Range
+                if (min_numeric.Value > 0 || max_numeric.Value > 0)
+                {
+                    var minCount = (int)min_numeric.Value;
+                    var maxCount = max_numeric.Value > 0 ? (int)max_numeric.Value : int.MaxValue;
+
+                    suppliers = suppliers
+                        .Where(s => s.Products != null && 
+                                   s.Products.Count >= minCount && 
+                                   s.Products.Count <= maxCount)
+                        .ToList();
+                }
+
+                // POST-PROCESSING FILTER 2: Category Filter
+                if (category_cb.SelectedIndex > 0 && category_cb.SelectedValue is int categoryId && categoryId > 0)
+                {
+                    suppliers = suppliers
+                        .Where(s => s.Products != null && 
+                                   s.Products.Any(p => p.CategoryId == categoryId))
+                        .ToList();
+                }
+
+                return suppliers;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading filtered suppliers: {ex.Message}", "Database Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return new List<Supplier>();
+            }
+        }
+
+        /// <summary>
+        /// Declanșator pentru evenimentul FilterChanged - actualizează DataGridView dinamic.
+        /// </summary>
+        private void OnFilterChanged()
+        {
+            FilterChanged?.Invoke();
+        }
+
+        /// <summary>
+        /// Încarcă datele default în grid. Apelată de SearchForm după ce s-a conectat la FilterChanged.
+        /// </summary>
+        public void LoadDefaultData()
+        {
+            OnFilterChanged();
+        }
+
+        /// <summary>
+        /// Implementează IFilterControl: Resetează toate filtrele.
+        /// </summary>
+        public void ResetFilters()
+        {
+            supplier_name_tb.Clear();
+            contact_name_tb.Clear();
+            category_cb.SelectedIndex = 0;  // All Categories
+            min_numeric.Value = 0;
+            max_numeric.Value = 0;
+            all_rb.Checked = true;
+            active_rb.Checked = false;
+            inactive_rb.Checked = false;
+
+            OnFilterChanged();
+        }
+    }
+}
+

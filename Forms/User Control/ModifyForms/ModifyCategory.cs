@@ -118,7 +118,11 @@ namespace SmartStock.Forms.AddForms
         }
 
         /// <summary>
-        /// Deactivează categoria.
+        /// Deactivează categoria cu verificare cascadă.
+        /// 
+        /// SOLID Principle - Cascading Availability:
+        /// Serviciul returnează un sumar cu produsele care vor deveni indisponibile.
+        /// Aceasta permite UI-ului să afișeze un avertisment informativ.
         /// </summary>
         private async void DeactivateCategory(int categoryId)
         {
@@ -126,17 +130,19 @@ namespace SmartStock.Forms.AddForms
             {
                 Cursor = Cursors.WaitCursor;
 
-                bool success = await _categoryService.DeactivateCategoryAsync(categoryId);
+                // Serviciul returnează (Success, Message) cu sumar cascadă
+                var (success, message) = await _categoryService.DeactivateCategoryAsync(categoryId);
 
                 if (success)
                 {
-                    MessageBox.Show("Category has been deactivated successfully.", "Success", 
+                    // Afișează avertismentul informativ cu sumar
+                    MessageBox.Show(message, "Category Deactivated", 
                                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                     ClearControls();
                 }
                 else
                 {
-                    MessageBox.Show("Category not found.", "Search Error", 
+                    MessageBox.Show(message, "Error", 
                                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                     ClearControls();
                 }

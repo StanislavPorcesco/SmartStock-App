@@ -8,6 +8,10 @@ namespace SmartStock.Classes.Data.Services
     /// <summary>
     /// Serviciu pentru logica de business a entității Category.
     /// Conține toate query-urile LINQ, calculele și logica de filtrare.
+    /// 
+    /// SOLID Principle - Single Responsibility:
+    /// CategoryService gestionează NUMAI logica categoriilor.
+    /// Dezactivarea cascadă a produselor este implementată în ProductService (GetFiltered).
     /// </summary>
     public class CategoryService
     {
@@ -48,40 +52,49 @@ namespace SmartStock.Classes.Data.Services
 
         /// <summary>
         /// Filtrează categoriile conform criteriilor furnizate.
+        /// 
+        /// IMPORTANT: Dacă criteria.IsActive este null, returnează TOATE categoriile (active + inactive).
+        /// Aceasta permite filtrarea "All" din FilterCategories să funcționeze corect.
         /// </summary>
         public async Task<List<Category>> GetFilteredAsync(CategoryFilterCriteria criteria)
         {
-            if (criteria == null)
-                throw new ArgumentNullException(nameof(criteria));
+            if (criteria == null) throw new ArgumentNullException(nameof(criteria));
 
-            IQueryable<Category> query = _categoryRepository.GetAll();
+            // 1. Includem produsele pentru a putea face calculele
+            IQueryable<Category> query = _categoryRepository.GetAll().Include(c => c.Products);
 
-            // Filtru după stare
+            // 2. Filtre de bază (le ai deja)
             if (criteria.IsActive.HasValue)
-            {
                 query = query.Where(c => c.IsActive == criteria.IsActive.Value);
-            }
-            else
-            {
-                query = query.Where(c => c.IsActive);
-            }
 
-            // Căutare text
             if (!string.IsNullOrWhiteSpace(criteria.SearchText))
+                query = query.Where(c => c.CategoryName.ToLower().Contains(criteria.SearchText.ToLower()));
+
+            // --- FILTRE NOI (Calculați în SQL) ---
+
+            // 3. Filtru număr produse
+            if (criteria.MinProducts.HasValue)
+                query = query.Where(c => c.Products.Count >= criteria.MinProducts.Value);
+
+            if (criteria.MaxProducts.HasValue)
+                query = query.Where(c => c.Products.Count <= criteria.MaxProducts.Value);
+
+            // 4. Filtru valoare inventar (Sumă UnitPrice * Stock)
+            // Folosim (double) pentru compatibilitate SQLite la SUM
+            if (criteria.MinValue.HasValue)
             {
-                var searchLower = criteria.SearchText.ToLower();
-                query = query.Where(c => c.CategoryName.ToLower().Contains(searchLower));
+                var min = (double)criteria.MinValue.Value;
+                query = query.Where(c => c.Products.Sum(p => (double)p.UnitPrice * p.CurrentStock) >= min);
             }
 
-            // Sortare
+            if (criteria.MaxValue.HasValue)
+            {
+                var max = (double)criteria.MaxValue.Value;
+                query = query.Where(c => c.Products.Sum(p => (double)p.UnitPrice * p.CurrentStock) <= max);
+            }
+
+            // Sortare și Paginare
             query = ApplySorting(query, criteria.SortBy, criteria.SortOrder);
-
-            // Paginare
-            if (criteria.PageSize > 0)
-            {
-                query = query.Skip((criteria.PageNumber - 1) * criteria.PageSize)
-                             .Take(criteria.PageSize);
-            }
 
             return await query.AsNoTracking().ToListAsync();
         }
@@ -195,25 +208,78 @@ namespace SmartStock.Classes.Data.Services
 
         /// <summary>
         /// Deactivează o categorie (soft delete).
+        /// 
+        /// IMPORTANT: Nu modifica statusul produselor individuale din baza de date.
+        /// Produsele rămân cu IsActive = true, dar vor fi filtrate la nivel de Service
+        /// deoarece logica de filtrare va exclude produse ale căror categorii sunt inactive.
+        /// 
+        /// SOLID Principle: Single Responsibility - Serviciul gestionează operații pe DB,
+        /// Filtrarea este responsabilitatea GetFiltered() din ProductService.
+        /// 
+        /// Regula de aur: Dezactivare CASCADĂ logic, nu fizic.
         /// </summary>
-        public async Task<bool> DeactivateCategoryAsync(int categoryId)
+        /// <param name="categoryId">ID-ul categoriei de dezactivat</param>
+        /// <returns>Tuple cu (succes, mesaj informativ)</returns>
+        public async Task<(bool Success, string Message)> DeactivateCategoryAsync(int categoryId)
         {
             var category = await _categoryRepository.GetByIdAsync(categoryId);
 
             if (category == null)
-                return false;
+                return (false, $"Category with ID {categoryId} not found.");
 
-            category.IsActive = false;
+            if (!category.IsActive)
+                return (false, $"Category '{category.CategoryName}' is already inactive.");
+
+            // VERIFICARE PREALABILĂ: Numără produsele active care vor deveni indisponibile
+            int activeProductCount = 0;
+            string affectedProductsSummary = string.Empty;
+
+            if (_productRepository != null)
+            {
+                var activeProducts = await _productRepository
+                    .GetAll()
+                    .Where(p => p.CategoryId == categoryId && p.IsActive)
+                    .AsNoTracking()
+                    .ToListAsync();
+
+                activeProductCount = activeProducts.Count;
+
+                if (activeProductCount > 0)
+                {
+                    // Construiește sumar informativ
+                    var productNames = activeProducts
+                        .Take(5) // Arată primele 5 produse
+                        .Select(p => p.ProductName)
+                        .ToList();
+
+                    affectedProductsSummary = string.Join(", ", productNames);
+                    if (activeProductCount > 5)
+                        affectedProductsSummary += $", ... and {activeProductCount - 5} more";
+                }
+            }
 
             try
             {
+                // Dezactivează categoria
+                category.IsActive = false;
                 _categoryRepository.Update(category);
                 await _categoryRepository.SaveAsync();
-                return true;
+
+                // Construiește mesaj de confirmare
+                string message = $"Category '{category.CategoryName}' has been deactivated successfully.";
+                
+                if (activeProductCount > 0)
+                {
+                    message += $"\n\n{activeProductCount} product(s) will now be unavailable in Sales screens:\n{affectedProductsSummary}";
+                    message += $"\n\nNote: Product data remains unchanged in the database. " +
+                               $"They will be hidden until this category is reactivated.";
+                }
+
+                return (true, message);
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("Failed to deactivate category.", ex);
+                return (false, $"Error deactivating category: {ex.Message}");
             }
         }
 
@@ -242,7 +308,7 @@ namespace SmartStock.Classes.Data.Services
         }
 
         /// <summary>
-        /// Obține número de categorii active.
+        /// Obține numărul de categorii active.
         /// </summary>
         public async Task<int> GetActiveCategoryCountAsync()
         {

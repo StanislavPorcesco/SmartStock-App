@@ -5,11 +5,15 @@ namespace SmartStock.Classes.Data.DTOs
     /// </summary>
     public class CategoryFilterCriteria
     {
-        public bool? IsActive { get; set; }
         public string SearchText { get; set; }
-        public string SortBy { get; set; } = "CategoryName";
-        public string SortOrder { get; set; } = "asc";
-        public int PageSize { get; set; } = 50;
+        public bool? IsActive { get; set; }
+        public int? MinProducts { get; set; }
+        public int? MaxProducts { get; set; }
+        public decimal? MinValue { get; set; }
+        public decimal? MaxValue { get; set; }
         public int PageNumber { get; set; } = 1;
+        public int PageSize { get; set; } = 0;
+        public string SortBy { get; set; }
+        public string SortOrder { get; set; }
     }
 }

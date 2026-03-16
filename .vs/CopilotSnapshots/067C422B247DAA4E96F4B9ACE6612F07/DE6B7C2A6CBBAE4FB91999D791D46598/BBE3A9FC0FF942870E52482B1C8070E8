@@ -1,0 +1,121 @@
+﻿using SmartStock.Classes.Data.DTOs;
+using SmartStock.Classes.Data.Interfaces;
+using SmartStock.Classes.Data.Repositories;
+using SmartStock.Classes.Data.Services;
+using SmartStock.Classes.Models;
+using SmartStock.Classes.Utils;
+using SmartStock.Utils;
+
+namespace SmartStock.Forms.User_Control.SearchForms
+{
+    /// <summary>
+    /// Passive View: Implementează IFilterControl și delegă logica de filtrare serviciului.
+    /// Responsabil doar de colectarea datelor din controale și afișare.
+    /// </summary>
+    public partial class FilterCustomers : UserControl, IFilterControl
+    {
+        private CustomerService _customerService;
+
+        public event Action FilterChanged;
+
+        public FilterCustomers()
+        {
+            InitializeComponent();
+            InitializeService();
+            LoadUI();
+        }
+
+        private void InitializeService()
+        {
+            var repository = new GenericRepository<Customer>(new SmartStockContext());
+            _customerService = new CustomerService(repository);
+        }
+
+        private void LoadUI()
+        {
+            ThemeManager.Apply(this);
+            ThemeManager.OnThemeChanged += HandleThemeUpdate;
+            this.Refresh();
+
+            // Tooltips
+            ToolTipHelp.AddToolTip(this, "Filter customers by name, email, phone, or city");
+        }
+
+        private void HandleThemeUpdate()
+        {
+            ThemeManager.Apply(this);
+            this.Refresh();
+        }
+
+        /// <summary>
+        /// Implementează IFilterControl: Obține datele filtrate.
+        /// </summary>
+        public object GetFilteredData()
+        {
+            var criteria = BuildFilterCriteria();
+            return GetFilteredCustomersAsync(criteria);
+        }
+
+        /// <summary>
+        /// Construiește criteriile de filtrare din controale.
+        /// </summary>
+        private CustomerFilterCriteria BuildFilterCriteria()
+        {
+            var criteria = new CustomerFilterCriteria();
+
+            // Doar clienți activi (implicit)
+            criteria.IsActive = true;
+
+            return criteria;
+        }
+
+        /// <summary>
+        /// Obține clienții filtrați folosind serviciul.
+        /// </summary>
+        private async Task<List<Customer>> GetFilteredCustomersAsync(CustomerFilterCriteria criteria)
+        {
+            try
+            {
+                return await _customerService.GetFilteredAsync(criteria);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading filtered customers: {ex.Message}", "Database Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return new List<Customer>();
+            }
+        }
+
+        /// <summary>
+        /// Implementează IFilterControl: Resetează filtrele.
+        /// </summary>
+        public void ResetFilters()
+        {
+            // Resetează controale de filtrare dacă sunt necesare
+            FilterChanged?.Invoke();
+        }
+
+        /// <summary>
+        /// Declanșator pentru evenimentul FilterChanged.
+        /// </summary>
+        protected void OnFilterChanged()
+        {
+            FilterChanged?.Invoke();
+            name_or_phone_tb.Text = string.Empty;
+            city_cb.SelectedIndex = 0;
+            registration_start.Value = DateTime.Now;
+            registration_end.Value = DateTime.Now;
+            dead_stock_start.Value = DateTime.Now;
+            dead_stock_end.Value = DateTime.Now;
+            sale_count_min.Value = 0;
+            sale_count_max.Value = 0;
+            spent_min.Value = 0;
+            spent_max.Value = 0;
+        }
+        private void reset_btn_Click(object sender, EventArgs e)
+        {
+            ResetFilters();
+        }
+    }
+}
+

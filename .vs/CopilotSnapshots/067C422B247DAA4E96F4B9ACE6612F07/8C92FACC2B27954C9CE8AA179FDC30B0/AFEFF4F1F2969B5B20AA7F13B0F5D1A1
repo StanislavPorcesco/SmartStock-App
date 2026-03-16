@@ -1,0 +1,123 @@
+﻿using SmartStock.Classes.Data.DTOs;
+using SmartStock.Classes.Data.Interfaces;
+using SmartStock.Classes.Data.Repositories;
+using SmartStock.Classes.Data.Services;
+using SmartStock.Classes.Models;
+using SmartStock.Classes.Utils;
+using SmartStock.Utils;
+
+namespace SmartStock.Forms.User_Control.SearchForms
+{
+    /// <summary>
+    /// Passive View: Implementează IFilterControl și delegă logica de filtrare serviciului.
+    /// Responsabil doar de colectarea datelor din controale și afișare.
+    /// </summary>
+    public partial class FilterSales : UserControl, IFilterControl
+    {
+        private SaleService _saleService;
+
+        public event Action FilterChanged;
+
+        public FilterSales()
+        {
+            InitializeComponent();
+            InitializeService();
+            LoadUI();
+        }
+
+        private void InitializeService()
+        {
+            var repository = new GenericRepository<Sale>(new SmartStockContext());
+            _saleService = new SaleService(repository);
+        }
+
+        private void LoadUI()
+        {
+            ThemeManager.Apply(this);
+            ThemeManager.OnThemeChanged += HandleThemeUpdate;
+            this.Refresh();
+
+            ToolTipHelp.AddToolTip(this, "Filter sales by date range, customer, payment method, or payment status");
+        }
+
+        private void HandleThemeUpdate()
+        {
+            ThemeManager.Apply(this);
+            this.Refresh();
+        }
+
+        /// <summary>
+        /// Implementează IFilterControl: Obține datele filtrate.
+        /// </summary>
+        public object GetFilteredData()
+        {
+            var criteria = BuildFilterCriteria();
+            return GetFilteredSalesAsync(criteria);
+        }
+
+        /// <summary>
+        /// Construiește criteriile de filtrare din controale.
+        /// </summary>
+        private SaleFilterCriteria BuildFilterCriteria()
+        {
+            var criteria = new SaleFilterCriteria();
+
+            // Doar vânzări active (implicit)
+            criteria.IsActive = true;
+
+            return criteria;
+        }
+
+        /// <summary>
+        /// Obține vânzările filtrate folosind serviciul.
+        /// </summary>
+        private async Task<List<Sale>> GetFilteredSalesAsync(SaleFilterCriteria criteria)
+        {
+            try
+            {
+                return await _saleService.GetFilteredAsync(criteria);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading filtered sales: {ex.Message}", "Database Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return new List<Sale>();
+            }
+        }
+
+        /// <summary>
+        /// Implementează IFilterControl: Resetează filtrele.
+        /// </summary>
+        public void ResetFilters()
+        {
+            name_or_supplier_tb.Text = string.Empty;
+            customer_id_tb.Text = string.Empty;
+            user_id_tb.Text = string.Empty;
+            payment_status_cb.SelectedIndex = 0;
+            payment_method_cb.SelectedIndex = 0;
+            sale_date_start.Value = DateTime.Now.AddMonths(-1);
+            sale_date_end.Value = DateTime.Now;
+            total_amount_min.Value = 0;
+            total_amount_max.Value = 0;
+            contains_prod_tb.Text = string.Empty;
+            contains_cat_tb.Text = string.Empty;
+            items_count_min.Value = 0;
+            items_count_max.Value = 0;
+
+            FilterChanged?.Invoke();
+        }
+
+        /// <summary>
+        /// Declanșator pentru evenimentul FilterChanged.
+        /// </summary>
+        protected void OnFilterChanged()
+        {
+            FilterChanged?.Invoke();
+        }
+
+        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+    }
+}

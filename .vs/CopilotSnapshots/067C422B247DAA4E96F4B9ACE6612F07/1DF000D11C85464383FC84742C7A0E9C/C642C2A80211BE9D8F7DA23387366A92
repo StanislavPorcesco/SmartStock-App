@@ -1,0 +1,338 @@
+﻿using Microsoft.EntityFrameworkCore;
+using SmartStock.Classes.Data.DTOs;
+using SmartStock.Classes.Data.Interfaces;
+using SmartStock.Classes.Models;
+
+namespace SmartStock.Classes.Data.Services
+{
+    /// <summary>
+    /// Serviciu pentru logica de business a entității Supplier.
+    /// Conține toate query-urile LINQ, calculele și logica de filtrare.
+    /// </summary>
+    public class SupplierService
+    {
+        private readonly IRepository<Supplier> _supplierRepository;
+        private readonly IRepository<Product> _productRepository;
+
+        public SupplierService(IRepository<Supplier> supplierRepository, IRepository<Product> productRepository = null)
+        {
+            _supplierRepository = supplierRepository ?? throw new ArgumentNullException(nameof(supplierRepository));
+            _productRepository = productRepository;
+        }
+
+        /// <summary>
+        /// Obține toți furnizorii activi.
+        /// </summary>
+        public async Task<List<Supplier>> GetAllActiveAsync()
+        {
+            return await _supplierRepository
+                .GetAll()
+                .Where(s => s.IsActive)
+                .OrderBy(s => s.SupplierName)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        /// <summary>
+        /// Obține un furnizor cu produsele sale.
+        /// </summary>
+        public async Task<Supplier> GetWithProductsAsync(int supplierId)
+        {
+            return await _supplierRepository
+                .GetAll()
+                .Where(s => s.SupplierId == supplierId)
+                .Include(s => s.Products)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+        }
+
+        /// <summary>
+        /// Filtrează furnizorii conform criteriilor furnizate.
+        /// 
+        /// IMPORTANT: Dacă criteria.IsActive este null, returnează TOTI furnizorii (activi + inactivi).
+        /// </summary>
+        public async Task<List<Supplier>> GetFilteredAsync(SupplierFilterCriteria criteria)
+        {
+            if (criteria == null)
+                throw new ArgumentNullException(nameof(criteria));
+
+            IQueryable<Supplier> query = _supplierRepository.GetAll()
+                .Include(s => s.Products);
+
+            // Filtru după stare - IMPORTANT: null = ALL
+            if (criteria.IsActive.HasValue)
+            {
+                query = query.Where(s => s.IsActive == criteria.IsActive.Value);
+            }
+            // Dacă IsActive este null, NU se aplică filtrare - returnează TOTI furnizorii
+
+            // Căutare text (în nume sau contact person)
+            if (!string.IsNullOrWhiteSpace(criteria.SearchText))
+            {
+                var searchLower = criteria.SearchText.ToLower();
+                query = query.Where(s => s.SupplierName.ToLower().Contains(searchLower) || 
+                                         s.ContactPerson.ToLower().Contains(searchLower));
+            }
+
+            // Căutare după nume furnizor specific
+            if (!string.IsNullOrWhiteSpace(criteria.SupplierName))
+            {
+                var nameLower = criteria.SupplierName.ToLower();
+                query = query.Where(s => s.SupplierName.ToLower().Contains(nameLower));
+            }
+
+            // Căutare după persoană de contact
+            if (!string.IsNullOrWhiteSpace(criteria.ContactPerson))
+            {
+                var contactLower = criteria.ContactPerson.ToLower();
+                query = query.Where(s => s.ContactPerson.ToLower().Contains(contactLower));
+            }
+
+            // Sortare
+            query = ApplySorting(query, criteria.SortBy, criteria.SortOrder);
+
+            // Paginare
+            if (criteria.PageSize > 0)
+            {
+                query = query.Skip((criteria.PageNumber - 1) * criteria.PageSize)
+                             .Take(criteria.PageSize);
+            }
+
+            return await query.AsNoTracking().ToListAsync();
+        }
+
+        /// <summary>
+        /// Obține statistici pe furnizori (count produse pe furnizor).
+        /// </summary>
+        public async Task<List<dynamic>> GetSupplierStatsAsync()
+        {
+            return await _supplierRepository
+                .GetAll()
+                .Where(s => s.IsActive)
+                .Include(s => s.Products)
+                .AsNoTracking()
+                .Select(s => new
+                {
+                    SupplierId = s.SupplierId,
+                    SupplierName = s.SupplierName,
+                    ProductCount = s.Products.Count,
+                    ActiveProductCount = s.Products.Count(p => p.IsActive)
+                })
+                .Cast<dynamic>()
+                .ToListAsync();
+        }
+
+        /// <summary>
+        /// Obține produsele dintr-un furnizor.
+        /// </summary>
+        public async Task<List<Product>> GetProductsFromSupplierAsync(int supplierId)
+        {
+            if (_productRepository == null)
+                throw new InvalidOperationException("ProductRepository not provided");
+
+            return await _productRepository
+                .GetAll()
+                .Where(p => p.SupplierId == supplierId && p.IsActive)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        /// <summary>
+        /// Verifică dacă un nume de furnizor există deja (case-insensitive).
+        /// </summary>
+        public async Task<bool> SupplierNameExistsAsync(string supplierName, int? excludeId = null)
+        {
+            if (string.IsNullOrWhiteSpace(supplierName))
+                return false;
+
+            var nameLower = supplierName.ToLower();
+            var query = _supplierRepository
+                .GetAll()
+                .Where(s => s.SupplierName.ToLower() == nameLower);
+
+            if (excludeId.HasValue)
+                query = query.Where(s => s.SupplierId != excludeId.Value);
+
+            return await query.AnyAsync();
+        }
+
+        /// <summary>
+        /// Validează un email (format de bază).
+        /// </summary>
+        public bool IsValidEmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return true; // Email optional
+
+            return email.Contains("@") && email.Contains(".");
+        }
+
+        /// <summary>
+        /// Adaugă un nou furnizor.
+        /// </summary>
+        public async Task<bool> AddSupplierAsync(Supplier supplier)
+        {
+            if (supplier == null)
+                throw new ArgumentNullException(nameof(supplier));
+
+            ValidateSupplier(supplier);
+
+            // Verifică duplicate
+            if (await SupplierNameExistsAsync(supplier.SupplierName))
+                throw new InvalidOperationException($"Supplier '{supplier.SupplierName}' already exists.");
+
+            try
+            {
+                _supplierRepository.Add(supplier);
+                await _supplierRepository.SaveAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Failed to add supplier.", ex);
+            }
+        }
+
+        /// <summary>
+        /// Actualizează un furnizor existent.
+        /// </summary>
+        public async Task<bool> UpdateSupplierAsync(Supplier supplier)
+        {
+            if (supplier == null)
+                throw new ArgumentNullException(nameof(supplier));
+
+            ValidateSupplier(supplier);
+
+            // Verifică duplicate (excluzând ID-ul curent)
+            if (await SupplierNameExistsAsync(supplier.SupplierName, supplier.SupplierId))
+                throw new InvalidOperationException($"Another supplier with name '{supplier.SupplierName}' already exists.");
+
+            try
+            {
+                _supplierRepository.Update(supplier);
+                await _supplierRepository.SaveAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Failed to update supplier.", ex);
+            }
+        }
+
+        /// <summary>
+        /// Deactivează un furnizor (soft delete).
+        /// </summary>
+        public async Task<bool> DeactivateSupplierAsync(int supplierId)
+        {
+            var supplier = await _supplierRepository.GetByIdAsync(supplierId);
+
+            if (supplier == null)
+                return false;
+
+            supplier.IsActive = false;
+
+            try
+            {
+                _supplierRepository.Update(supplier);
+                await _supplierRepository.SaveAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Failed to deactivate supplier.", ex);
+            }
+        }
+
+        /// <summary>
+        /// Activează un furnizor deactivat.
+        /// </summary>
+        public async Task<bool> ActivateSupplierAsync(int supplierId)
+        {
+            var supplier = await _supplierRepository.GetByIdAsync(supplierId);
+
+            if (supplier == null)
+                return false;
+
+            supplier.IsActive = true;
+
+            try
+            {
+                _supplierRepository.Update(supplier);
+                await _supplierRepository.SaveAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Failed to activate supplier.", ex);
+            }
+        }
+
+        /// <summary>
+        /// Obține furnizorul după ID.
+        /// </summary>
+        public async Task<Supplier> GetByIdAsync(int supplierId)
+        {
+            return await _supplierRepository.GetByIdAsync(supplierId);
+        }
+
+        /// <summary>
+        /// Obține numărul de furnizori activi.
+        /// </summary>
+        public async Task<int> GetActiveSupplierCountAsync()
+        {
+            return await _supplierRepository
+                .GetAll()
+                .Where(s => s.IsActive)
+                .CountAsync();
+        }
+
+        /// <summary>
+        /// Validează datele furnizorului.
+        /// </summary>
+        private void ValidateSupplier(Supplier supplier)
+        {
+            if (string.IsNullOrWhiteSpace(supplier.SupplierName))
+                throw new ArgumentException("Supplier name is required.");
+
+            if (supplier.SupplierName.Length > 150)
+                throw new ArgumentException("Supplier name cannot exceed 150 characters.");
+
+            if (!string.IsNullOrWhiteSpace(supplier.Email) && !IsValidEmail(supplier.Email))
+                throw new ArgumentException("Invalid email format.");
+
+            if (!string.IsNullOrWhiteSpace(supplier.ContactPerson) && supplier.ContactPerson.Length > 100)
+                throw new ArgumentException("Contact person name cannot exceed 100 characters.");
+
+            if (!string.IsNullOrWhiteSpace(supplier.Phone) && supplier.Phone.Length > 20)
+                throw new ArgumentException("Phone number cannot exceed 20 characters.");
+
+            if (!string.IsNullOrWhiteSpace(supplier.Address) && supplier.Address.Length > 250)
+                throw new ArgumentException("Address cannot exceed 250 characters.");
+        }
+
+        /// <summary>
+        /// Aplică sortarea query-ului.
+        /// </summary>
+        private IQueryable<Supplier> ApplySorting(IQueryable<Supplier> query, string sortBy, string sortOrder)
+        {
+            if (string.IsNullOrWhiteSpace(sortBy))
+                sortBy = "SupplierName";
+
+            var isDescending = sortOrder?.ToLower() == "desc";
+
+            return sortBy.ToLower() switch
+            {
+                "suppliername" => isDescending 
+                    ? query.OrderByDescending(s => s.SupplierName) 
+                    : query.OrderBy(s => s.SupplierName),
+                "supplierid" => isDescending 
+                    ? query.OrderByDescending(s => s.SupplierId) 
+                    : query.OrderBy(s => s.SupplierId),
+                "email" => isDescending 
+                    ? query.OrderByDescending(s => s.Email) 
+                    : query.OrderBy(s => s.Email),
+                _ => query.OrderBy(s => s.SupplierName)
+            };
+        }
+    }
+}

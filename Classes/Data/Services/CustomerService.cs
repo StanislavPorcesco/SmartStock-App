@@ -48,13 +48,15 @@ namespace SmartStock.Classes.Data.Services
 
         /// <summary>
         /// Filtrează clienții conform criteriilor furnizate.
+        /// IMPORTANT: Include Sales pentru calculele de vânzări și valoare totală.
         /// </summary>
         public async Task<List<Customer>> GetFilteredAsync(CustomerFilterCriteria criteria)
         {
             if (criteria == null)
                 throw new ArgumentNullException(nameof(criteria));
 
-            IQueryable<Customer> query = _customerRepository.GetAll();
+            IQueryable<Customer> query = _customerRepository.GetAll()
+                .Include(c => c.Sales);  // ✅ IMPORTANT: Eager load Sales
 
             // Filtru după stare
             if (criteria.IsActive.HasValue)
@@ -83,29 +85,60 @@ namespace SmartStock.Classes.Data.Services
             }
 
             // Filtru după dată de înregistrare (de la)
-            if (criteria.RegistrationDateFrom.HasValue)
+            if (criteria.RegisteredFrom.HasValue)
             {
-                query = query.Where(c => c.RegistrationDate >= criteria.RegistrationDateFrom.Value);
+                query = query.Where(c => c.RegistrationDate >= criteria.RegisteredFrom.Value);
             }
 
             // Filtru după dată de înregistrare (până la)
-            if (criteria.RegistrationDateTo.HasValue)
+            if (criteria.RegisteredTo.HasValue)
             {
-                var endDate = criteria.RegistrationDateTo.Value.AddDays(1); // Include the entire day
+                var endDate = criteria.RegisteredTo.Value.AddDays(1); // Include the entire day
                 query = query.Where(c => c.RegistrationDate < endDate);
             }
 
+            // POST-PROCESSING FILTERS (after materialization due to complexity with Sales calculations)
+            var results = await query.AsNoTracking().ToListAsync();
+
+            // Filtru după numărul de vânzări (min-max)
+            if (criteria.MinSalesCount.HasValue || criteria.MaxSalesCount.HasValue)
+            {
+                var minCount = criteria.MinSalesCount ?? 0;
+                var maxCount = criteria.MaxSalesCount ?? int.MaxValue;
+
+                results = results
+                    .Where(c => (c.Sales?.Count ?? 0) >= minCount && (c.Sales?.Count ?? 0) <= maxCount)
+                    .ToList();
+            }
+
+            // Filtru după valoare totală cheltuită (min-max)
+            if (criteria.MinTotalSpent.HasValue || criteria.MaxTotalSpent.HasValue)
+            {
+                var minSpent = criteria.MinTotalSpent ?? 0;
+                var maxSpent = criteria.MaxTotalSpent ?? decimal.MaxValue;
+
+                results = results
+                    .Where(c => 
+                    {
+                        var totalSpent = (decimal)(c.Sales?.Sum(s => (double?)s.TotalAmount) ?? 0.0);
+                        return totalSpent >= minSpent && totalSpent <= maxSpent;
+                    })
+                    .ToList();
+            }
+
             // Sortare
-            query = ApplySorting(query, criteria.SortBy, criteria.SortOrder);
+            results = ApplySortingLocal(results, criteria.SortBy, criteria.SortOrder);
 
             // Paginare
             if (criteria.PageSize > 0)
             {
-                query = query.Skip((criteria.PageNumber - 1) * criteria.PageSize)
-                             .Take(criteria.PageSize);
+                results = results
+                    .Skip((criteria.PageNumber - 1) * criteria.PageSize)
+                    .Take(criteria.PageSize)
+                    .ToList();
             }
 
-            return await query.AsNoTracking().ToListAsync();
+            return results;
         }
 
         /// <summary>
@@ -375,6 +408,35 @@ namespace SmartStock.Classes.Data.Services
                     ? query.OrderByDescending(c => c.City) 
                     : query.OrderBy(c => c.City),
                 _ => query.OrderBy(c => c.FullName)
+            };
+        }
+
+        /// <summary>
+        /// Aplică sortarea pentru o listă în memorie (după materialization).
+        /// Folosit pentru post-processing filtering complex.
+        /// </summary>
+        private List<Customer> ApplySortingLocal(List<Customer> items, string sortBy, string sortOrder)
+        {
+            if (string.IsNullOrWhiteSpace(sortBy))
+                sortBy = "FullName";
+
+            var isDescending = sortOrder?.ToLower() == "desc";
+
+            return sortBy.ToLower() switch
+            {
+                "fullname" => isDescending 
+                    ? items.OrderByDescending(c => c.FullName).ToList() 
+                    : items.OrderBy(c => c.FullName).ToList(),
+                "customerid" => isDescending 
+                    ? items.OrderByDescending(c => c.CustomerId).ToList() 
+                    : items.OrderBy(c => c.CustomerId).ToList(),
+                "registrationdate" => isDescending 
+                    ? items.OrderByDescending(c => c.RegistrationDate).ToList() 
+                    : items.OrderBy(c => c.RegistrationDate).ToList(),
+                "city" => isDescending 
+                    ? items.OrderByDescending(c => c.City).ToList() 
+                    : items.OrderBy(c => c.City).ToList(),
+                _ => items.OrderBy(c => c.FullName).ToList()
             };
         }
     }

@@ -54,11 +54,18 @@ namespace SmartStock.Classes.Data.Services
 
             IQueryable<ExternalFactor> query = _factorRepository.GetAll();
 
-            // Filtru după tip factor
-            if (!string.IsNullOrWhiteSpace(criteria.FactorType))
+            // Filtru după tip factor (multiple types supported)
+            if (criteria.FactorTypes != null && criteria.FactorTypes.Count > 0)
             {
-                var typeLower = criteria.FactorType.ToLower();
-                query = query.Where(f => f.FactorType.ToLower() == typeLower);
+                query = query.Where(f => criteria.FactorTypes.Contains(f.FactorType));
+            }
+
+            // Filtru după căutare text (Description sau Region)
+            if (!string.IsNullOrWhiteSpace(criteria.SearchText))
+            {
+                var searchLower = criteria.SearchText.ToLower();
+                query = query.Where(f => f.Description.ToLower().Contains(searchLower) ||
+                                         f.Region.ToLower().Contains(searchLower));
             }
 
             // Filtru după regiune
@@ -94,10 +101,22 @@ namespace SmartStock.Classes.Data.Services
             }
 
             // Filtru după tip valoare (Absolute, Percentage, Multiplier)
-            if (!string.IsNullOrWhiteSpace(criteria.ValueType))
+            if (criteria.ValueTypes != null && criteria.ValueTypes.Count > 0)
             {
-                var valueTypeLower = criteria.ValueType.ToLower();
-                query = query.Where(f => f.ValueType.ToLower() == valueTypeLower);
+                query = query.Where(f => criteria.ValueTypes.Contains(f.ValueType));
+            }
+
+            // Filtru după direcție impact
+            if (criteria.Direction.HasValue && criteria.Direction.Value != ImpactDirection.Any)
+            {
+                if (criteria.Direction.Value == ImpactDirection.Positive)
+                {
+                    query = query.Where(f => f.ImpactValue > 0);
+                }
+                else if (criteria.Direction.Value == ImpactDirection.Negative)
+                {
+                    query = query.Where(f => f.ImpactValue < 0);
+                }
             }
 
             // Filtru după stare (activ/inactiv)
@@ -106,17 +125,34 @@ namespace SmartStock.Classes.Data.Services
                 query = query.Where(f => f.IsActive == criteria.IsActive.Value);
             }
 
+            // POST-PROCESSING FILTERS (apply in-memory due to complexity)
+            var results = await query.AsNoTracking().ToListAsync();
+
+            // Filtru după luni specifice
+            if (criteria.SpecificMonths != null && criteria.SpecificMonths.Count > 0)
+            {
+                results = results.Where(f => criteria.SpecificMonths.Contains(f.Date.Month)).ToList();
+            }
+
+            // Filtru după zile ale săptămânii
+            if (criteria.SpecificDays != null && criteria.SpecificDays.Count > 0)
+            {
+                results = results.Where(f => criteria.SpecificDays.Contains(f.Date.DayOfWeek)).ToList();
+            }
+
             // Sortare
-            query = ApplySorting(query, criteria.SortBy, criteria.SortOrder);
+            results = ApplySortingLocal(results, criteria.SortBy, criteria.SortOrder).ToList();
 
             // Paginare
             if (criteria.PageSize > 0)
             {
-                query = query.Skip((criteria.PageNumber - 1) * criteria.PageSize)
-                             .Take(criteria.PageSize);
+                results = results
+                    .Skip((criteria.PageNumber - 1) * criteria.PageSize)
+                    .Take(criteria.PageSize)
+                    .ToList();
             }
 
-            return await query.AsNoTracking().ToListAsync();
+            return results;
         }
 
         /// <summary>
@@ -399,6 +435,37 @@ namespace SmartStock.Classes.Data.Services
                     ? query.OrderByDescending(f => f.ValueType)
                     : query.OrderBy(f => f.ValueType),
                 _ => query.OrderByDescending(f => f.Date)
+            };
+        }
+
+        /// <summary>
+        /// Aplică sortarea pe o List<ExternalFactor> (in-memory).
+        /// </summary>
+        private IEnumerable<ExternalFactor> ApplySortingLocal(IEnumerable<ExternalFactor> items, string sortBy, string sortOrder)
+        {
+            if (string.IsNullOrWhiteSpace(sortBy))
+                sortBy = "Date";
+
+            var isDescending = sortOrder?.ToLower() == "desc";
+
+            return sortBy.ToLower() switch
+            {
+                "date" => isDescending
+                    ? items.OrderByDescending(f => f.Date)
+                    : items.OrderBy(f => f.Date),
+                "factortype" => isDescending
+                    ? items.OrderByDescending(f => f.FactorType)
+                    : items.OrderBy(f => f.FactorType),
+                "region" => isDescending
+                    ? items.OrderByDescending(f => f.Region)
+                    : items.OrderBy(f => f.Region),
+                "impactvalue" => isDescending
+                    ? items.OrderByDescending(f => f.ImpactValue)
+                    : items.OrderBy(f => f.ImpactValue),
+                "valuetype" => isDescending
+                    ? items.OrderByDescending(f => f.ValueType)
+                    : items.OrderBy(f => f.ValueType),
+                _ => items.OrderByDescending(f => f.Date)
             };
         }
     }

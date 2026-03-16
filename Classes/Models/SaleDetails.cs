@@ -32,50 +32,5 @@ namespace SmartStock.Classes.Models
         // Proprietate calculată pentru UI (Subtotal per linie)
         [NotMapped]
         public decimal LineTotal => Quantity * UnitPrice;
-        public List<SaleDetails> GetItemsBySaleId(int saleId)
-        {
-            using (var db = new SmartStockContext())
-            {
-                return db.SaleDetails
-                    .AsNoTracking()
-                    .Include(sd => sd.Product) // Aduce denumirea produsului
-                    .Where(sd => sd.SaleId == saleId)
-                    .ToList();
-            }
-        }
-        public dynamic GetTopSellingProducts(int limit = 5)
-        {
-            using (var db = new SmartStockContext())
-            {
-                return db.SaleDetails
-                    .AsNoTracking()
-                    .GroupBy(sd => sd.Product.ProductId)
-                    .Select(group => new
-                    {
-                        ProductId = group.Key,
-                        TotalQuantity = group.Sum(sd => sd.Quantity),
-                        TotalRevenue = group.Sum(sd => sd.Quantity * sd.UnitPrice)
-                    })
-                    .OrderByDescending(x => x.TotalQuantity)
-                    .Take(limit)
-                    .ToList();
-            }
-        }
-        public List<Product> GetDeadStock(DateTime sinceDate)
-        {
-            using (var db = new SmartStockContext())
-            {
-                var soldProductIds = db.SaleDetails
-                    .Where(sd => sd.Sale.SaleDate >= sinceDate)
-                    .Select(sd => sd.ProductId)
-                    .Distinct()
-                    .ToList();
-
-                return db.Products
-                    .AsNoTracking()
-                    .Where(p => !soldProductIds.Contains(p.ProductId))
-                    .ToList();
-            }
-        }
     }
 }

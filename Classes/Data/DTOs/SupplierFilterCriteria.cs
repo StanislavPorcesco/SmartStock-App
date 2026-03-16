@@ -6,10 +6,16 @@ namespace SmartStock.Classes.Data.DTOs
     public class SupplierFilterCriteria
     {
         public bool? IsActive { get; set; }
-        public string SearchText { get; set; }
+        public string SupplierName { get; set; }  // Search by supplier name
+        public string ContactPerson { get; set; }  // Search by contact person
+        public int? CategoryId { get; set; }  // Filter by category (suppliers for specific category)
+        public int? MinProducts { get; set; }  // Minimum product count
+        public int? MaxProducts { get; set; }  // Maximum product count
+        public string SearchText { get; set; }  // General search (name or contact)
         public string SortBy { get; set; } = "SupplierName";
         public string SortOrder { get; set; } = "asc";
-        public int PageSize { get; set; } = 50;
+        public int PageSize { get; set; } = 0;  // 0 = no paging
         public int PageNumber { get; set; } = 1;
     }
 }
+

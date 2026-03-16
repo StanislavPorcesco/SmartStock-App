@@ -48,23 +48,23 @@ namespace SmartStock.Classes.Data.Services
 
         /// <summary>
         /// Filtrează furnizorii conform criteriilor furnizate.
+        /// 
+        /// IMPORTANT: Dacă criteria.IsActive este null, returnează TOTI furnizorii (activi + inactivi).
         /// </summary>
         public async Task<List<Supplier>> GetFilteredAsync(SupplierFilterCriteria criteria)
         {
             if (criteria == null)
                 throw new ArgumentNullException(nameof(criteria));
 
-            IQueryable<Supplier> query = _supplierRepository.GetAll();
+            IQueryable<Supplier> query = _supplierRepository.GetAll()
+                .Include(s => s.Products);
 
-            // Filtru după stare
+            // Filtru după stare - IMPORTANT: null = ALL
             if (criteria.IsActive.HasValue)
             {
                 query = query.Where(s => s.IsActive == criteria.IsActive.Value);
             }
-            else
-            {
-                query = query.Where(s => s.IsActive);
-            }
+            // Dacă IsActive este null, NU se aplică filtrare - returnează TOTI furnizorii
 
             // Căutare text (în nume sau contact person)
             if (!string.IsNullOrWhiteSpace(criteria.SearchText))
@@ -72,6 +72,20 @@ namespace SmartStock.Classes.Data.Services
                 var searchLower = criteria.SearchText.ToLower();
                 query = query.Where(s => s.SupplierName.ToLower().Contains(searchLower) || 
                                          s.ContactPerson.ToLower().Contains(searchLower));
+            }
+
+            // Căutare după nume furnizor specific
+            if (!string.IsNullOrWhiteSpace(criteria.SupplierName))
+            {
+                var nameLower = criteria.SupplierName.ToLower();
+                query = query.Where(s => s.SupplierName.ToLower().Contains(nameLower));
+            }
+
+            // Căutare după persoană de contact
+            if (!string.IsNullOrWhiteSpace(criteria.ContactPerson))
+            {
+                var contactLower = criteria.ContactPerson.ToLower();
+                query = query.Where(s => s.ContactPerson.ToLower().Contains(contactLower));
             }
 
             // Sortare

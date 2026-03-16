@@ -1,4 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using SmartStock.Classes.Data.Interfaces;
+using SmartStock.Classes.Data.Repositories;
+using SmartStock.Classes.Data.Services;
 using SmartStock.Classes.Models;
 using SmartStock.Classes.Utils;
 using SmartStock.Forms;
@@ -9,13 +12,39 @@ namespace SmartStock
 {
     public partial class SearchForm : Form
     {
+        // Service injections - initialized once at form creation
+        private CategoryService _categoryService;
+        private SupplierService _supplierService;
+        private SaleService _saleService;
+        private CustomerService _customerService;
+
         public SearchForm()
         {
             InitializeComponent();
+            InitializeServices();
             ThemeManager.Apply(this);
             ThemeManager.OnThemeChanged += HandleThemeUpdate;
             DataLayer.PopulateSelector(selector_cb);
             DataLayer.setRightIndex(selector_cb);
+        }
+
+        /// <summary>
+        /// Inițializează serviciile o singură dată - evită crearea repetată de context-uri.
+        /// SOLID Principle: Dependency Injection
+        /// </summary>
+        private void InitializeServices()
+        {
+            var categoryRepo = new GenericRepository<Category>(new SmartStockContext());
+            var productRepo = new GenericRepository<Product>(new SmartStockContext());
+            var supplierRepo = new GenericRepository<Supplier>(new SmartStockContext());
+            var saleRepo = new GenericRepository<Sale>(new SmartStockContext());
+            var saleDetailsRepo = new GenericRepository<SaleDetails>(new SmartStockContext());
+            var customerRepo = new GenericRepository<Customer>(new SmartStockContext());
+
+            _categoryService = new CategoryService(categoryRepo, productRepo);
+            _supplierService = new SupplierService(supplierRepo, productRepo);
+            _saleService = new SaleService(saleRepo, saleDetailsRepo);
+            _customerService = new CustomerService(customerRepo, saleRepo);
         }
 
         private void HandleThemeUpdate()
@@ -25,93 +54,287 @@ namespace SmartStock
         }
         private void selector_cb_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ThemeManager.Apply(this);
             string selectedOption = selector_cb.SelectedItem as string;
             if (selectedOption == null) return;
 
-            if (selectedOption == "User" && (SessionManager.CurrentUser == null || SessionManager.CurrentUser.Role != "Admin"))
-            {
-                MessageBox.Show("Unauthorized access! Only administrators can manage user accounts.",
-                                "Access Denied", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                return;
-            }
-
+            // 1. Curățăm panel-ul și oprim layout-ul pentru viteză
             filters_pnl.SuspendLayout();
             filters_pnl.Controls.Clear();
+            main_dgv.DataSource = null;
 
             UserControl controlToOpen = null;
 
             try
             {
-                using (var db = new SmartStockContext())
+                switch (selectedOption)
                 {
-                    // Resetăm sursa de date a Grid-ului înainte de noua încărcare
-                    main_dgv.DataSource = null;
+                    case "Product":
+                        controlToOpen = new FilterProducts();
+                        // Subscribe to filter changes for dynamic updates
+                        if (controlToOpen is IFilterControl filterControl)
+                        {
+                            filterControl.FilterChanged += async () => await UpdateDataGridAsync(filterControl, selectedOption);
 
-                    switch (selectedOption)
+                            // Load default data immediately after subscribing
+                            if (controlToOpen is FilterProducts filterProducts)
+                            {
+                                filterProducts.LoadDefaultData();
+                            }
+                        }
+                        break;
+
+                    case "Category":
+                        controlToOpen = new FilterCategories();
+                        // Subscribe to filter changes for dynamic updates
+                        if (controlToOpen is IFilterControl filterControlCat)
+                        {
+                            filterControlCat.FilterChanged += async () => await UpdateDataGridAsync(filterControlCat, selectedOption);
+
+                            // Load default data immediately after subscribing
+                            if (controlToOpen is FilterCategories filterCategories)
+                            {
+                                filterCategories.LoadDefaultData();
+                            }
+                        }
+                        break;
+
+                    case "Supplier":
+                        controlToOpen = new FilterSuppliers();
+                        // Subscribe to filter changes for dynamic updates
+                        if (controlToOpen is IFilterControl filterControlSup)
+                        {
+                            filterControlSup.FilterChanged += async () => await UpdateDataGridAsync(filterControlSup, selectedOption);
+
+                            // Load default data immediately after subscribing
+                            if (controlToOpen is FilterSuppliers filterSuppliers)
+                            {
+                                filterSuppliers.LoadDefaultData();
+                            }
+                        }
+                        break;
+
+                    case "Transaction":
+                        controlToOpen = new FilterTransactions();
+                        // Subscribe to filter changes for dynamic updates
+                        if (controlToOpen is IFilterControl filterControlTrans)
+                        {
+                            filterControlTrans.FilterChanged += async () => await UpdateDataGridAsync(filterControlTrans, selectedOption);
+
+                            // Load default data immediately after subscribing
+                            if (controlToOpen is FilterTransactions filterTransactions)
+                            {
+                                filterTransactions.LoadDefaultData();
+                            }
+                        }
+                        break;
+
+                    case "Customer":
+                        controlToOpen = new FilterCustomers();
+                        // Subscribe to filter changes for dynamic updates
+                        if (controlToOpen is IFilterControl filterControlCust)
+                        {
+                            filterControlCust.FilterChanged += async () => await UpdateDataGridAsync(filterControlCust, selectedOption);
+
+                            // Load default data immediately after subscribing
+                            if (controlToOpen is FilterCustomers filterCustomers)
+                            {
+                                filterCustomers.LoadDefaultData();
+                            }
+                        }
+                        break;
+
+                    case "Sale":
+                        controlToOpen = new FilterSales();
+                        // Subscribe to filter changes for dynamic updates
+                        if (controlToOpen is IFilterControl filterControlSale)
+                        {
+                            filterControlSale.FilterChanged += async () => await UpdateDataGridAsync(filterControlSale, selectedOption);
+
+                            // Load default data immediately after subscribing
+                            if (controlToOpen is FilterSales filterSales)
+                            {
+                                filterSales.LoadDefaultData();
+                            }
+                        }
+                        break;
+
+                    case "ExternalFactor":
+                        controlToOpen = new FilterFactors();
+                        // Subscribe to filter changes for dynamic updates
+                        if (controlToOpen is IFilterControl filterControlFactor)
+                        {
+                            filterControlFactor.FilterChanged += async () => await UpdateDataGridAsync(filterControlFactor, selectedOption);
+
+                            // Load default data immediately after subscribing
+                            if (controlToOpen is FilterFactors filterFactors)
+                            {
+                                filterFactors.LoadDefaultData();
+                            }
+                        }
+                        break;
+
+                    case "User":
+                        controlToOpen = new FilterUsers();
+                        // Load initial data - synchronous to avoid timing issues
+                        LoadUsersData();
+                        break;
+                }
+                if (controlToOpen != null)
+                {
+                    controlToOpen.Dock = DockStyle.Fill;
+                    filters_pnl.Controls.Add(controlToOpen); // ADĂUGĂM ÎNTÂI
+
+                    ThemeManager.Apply(controlToOpen);
+
+                    // ACUM încărcăm datele, după ce controlul este "viu" în UI
+                    if (controlToOpen is IFilterControl filterControl)
                     {
-                        case "Product":
-                            controlToOpen = new FilterProducts();
-                            //main_dgv.DataSource = db.Products.AsNoTracking().ToList();
-                            main_dgv.DataSource = db.Products.Include(p => p.Category)
-                                                             .Include(p => p.Supplier)
-                                                             .AsNoTracking()
-                                                             .ToList();
-                            break;
-                        case "Category":
-                            controlToOpen = new FilterCategories();
-                            // LoadCategoriesAsync() - să fie implementată în nou pattern
-                            break;
-                        case "Supplier":
-                            controlToOpen = new FilterSuppliers();
-                            main_dgv.DataSource = db.Suppliers.AsNoTracking().ToList();
-                            break;
-                        case "Transaction":
-                            controlToOpen = new FilterTransactions();
-                            main_dgv.DataSource = db.Transactions.AsNoTracking().ToList();
-                            break;
-                        case "Customer":
-                            controlToOpen = new FilterCustomers();
-                            main_dgv.DataSource = db.Customers.AsNoTracking().ToList();
-                            break;
-                        case "Sale":
-                            controlToOpen = new FilterSales();
-                            main_dgv.DataSource = db.Sales.AsNoTracking().ToList();
-                            break;
-                        case "ExternalFactor":
-                            controlToOpen = new FilterFactors();
-                            main_dgv.DataSource = db.ExternalFactors.AsNoTracking().ToList();
-                            break;
-                        case "User":
-                            controlToOpen = new FilterUsers();
-                            main_dgv.DataSource = db.Users.AsNoTracking().ToList();
-                            break;
+                        // Declanșăm prima filtrare (cea implicită)
+                        Task.Run(() => this.Invoke(new Action(async () =>
+                        {
+                            await UpdateDataGridAsync(filterControl, selectedOption);
+                        })));
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading data: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error: {ex.Message}");
             }
-
-            if (controlToOpen != null)
+            finally
             {
-                controlToOpen.Dock = DockStyle.Fill;
-                filters_pnl.Controls.Add(controlToOpen);
-                ThemeManager.Apply(controlToOpen);
+                filters_pnl.ResumeLayout(true);
             }
+        }
 
-            filters_pnl.ResumeLayout(true);
+        /// <summary>
+        /// Încarcă datele pentru Customers - synchronous to ensure complete loading.
+        /// </summary>
+        private void LoadCustomersData()
+        {
+            try
+            {
+                using (var db = new SmartStockContext())
+                {
+                    var customers = db.Customers
+                        .AsNoTracking()
+                        .ToList();
+
+                    main_dgv.DataSource = customers;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading customers: {ex.Message}", "Database Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Încarcă datele pentru Sales - synchronous with eager loading of relations.
+        /// </summary>
+        private void LoadSalesData()
+        {
+            try
+            {
+                using (var db = new SmartStockContext())
+                {
+                    var sales = db.Sales
+                        .Include(s => s.Customer)
+                        .Include(s => s.User)
+                        .AsNoTracking()
+                        .ToList();
+
+                    main_dgv.DataSource = sales;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading sales: {ex.Message}", "Database Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Încarcă datele pentru ExternalFactors - synchronous to ensure complete loading.
+        /// </summary>
+        private void LoadExternalFactorsData()
+        {
+            try
+            {
+                using (var db = new SmartStockContext())
+                {
+                    var factors = db.ExternalFactors
+                        .AsNoTracking()
+                        .ToList();
+
+                    main_dgv.DataSource = factors;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading external factors: {ex.Message}", "Database Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Încarcă datele pentru Users - synchronous to ensure complete loading.
+        /// </summary>
+        private void LoadUsersData()
+        {
+            try
+            {
+                using (var db = new SmartStockContext())
+                {
+                    var users = db.Users
+                        .AsNoTracking()
+                        .ToList();
+
+                    main_dgv.DataSource = users;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading users: {ex.Message}", "Database Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private async Task UpdateDataGridAsync(IFilterControl filterControl, string type)
+        {
+            try
+            {
+                var filteredData = filterControl.GetFilteredData();
+
+                // Dacă GetFilteredData returnează un Task (pentru că serviciul e asincron)
+                if (filteredData is Task task)
+                {
+                    await task;
+                    // Extragem rezultatul din Task folosind Reflection
+                    var result = task.GetType().GetProperty("Result")?.GetValue(task);
+                    main_dgv.DataSource = result;
+                }
+                else
+                {
+                    // Dacă returnează direct lista (sincron)
+                    main_dgv.DataSource = filteredData;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error updating the table: {ex.Message}", "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         private void main_dgv_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            // 1. Siguranță: Validăm rândul și obiectul de date
+            // 1. Validări de siguranță
             if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
+
             var dgv = (DataGridView)sender;
             var boundItem = dgv.Rows[e.RowIndex].DataBoundItem;
             if (boundItem == null) return;
 
-            // 2. Identificăm proprietatea din clasa Model
             var column = dgv.Columns[e.ColumnIndex];
             string dataPropName = column.DataPropertyName;
             if (string.IsNullOrEmpty(dataPropName)) return;
@@ -124,26 +347,22 @@ namespace SmartStock
             // --- CAZUL 1: RELAȚIE 1:M (Colecții - Ex: Category.Products) ---
             if (typeof(System.Collections.IEnumerable).IsAssignableFrom(propType) && propType != typeof(string))
             {
-                e.Value = "See more";
-                e.FormattingApplied = true;
+                var collection = propInfo.GetValue(boundItem) as System.Collections.IEnumerable;
+                int count = (collection?.Cast<object>().Count()) ?? 0;
 
-                // Stilizare Link
+                e.Value = $"View ({count})";
+                e.FormattingApplied = true;
                 e.CellStyle.ForeColor = ThemeManager.GetCurrentPalette().Text;
                 e.CellStyle.Font = new Font(dgv.Font, FontStyle.Underline);
-
-                // Redenumim Header-ul dacă este cazul
-                if (column.HeaderText == dataPropName) column.HeaderText = "Linked " + dataPropName;
-                ThemeManager.Apply(dgv);
             }
             // --- CAZUL 2: RELAȚIE M:1 / 1:1 (Obiecte - Ex: Product.Category) ---
             else if (propType.IsClass && propType != typeof(string))
             {
-                // Preluăm obiectul de navigare (ex: instanța de Category sau Supplier)
                 var relatedObj = propInfo.GetValue(boundItem);
 
                 if (relatedObj != null)
                 {
-                    // Căutăm automat o proprietate care conține "Name" sau "Username" [cite: 1, 11, 15]
+                    // Căutăm automat proprietatea "Name" din entitatea corelată
                     var nameProp = relatedObj.GetType().GetProperties()
                         .FirstOrDefault(p => p.Name.Contains("Name") || p.Name.Contains("Username"));
 
@@ -151,24 +370,20 @@ namespace SmartStock
                     {
                         e.Value = nameProp.GetValue(relatedObj);
                         e.FormattingApplied = true;
-
-                        // Actualizăm Header-ul pentru a fi mai explicit (ex: "Category Name")
-                        if (column.HeaderText == dataPropName)
-                        {
-                            column.HeaderText = dataPropName + "Name";
-                            ThemeManager.Apply(dgv);
-                        }
                     }
                 }
                 else
                 {
-                    // Dacă obiectul este null, înseamnă că lipsește .Include() în interogare
-                    e.Value = "Not Loaded";
+                    e.Value = "[Not Loaded]";
+                    e.FormattingApplied = true;
                 }
             }
-            ThemeManager.Apply(dgv);
         }
-        private void main_dgv_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        /// <summary>
+        /// Gestionează double-click pe celulele cu relații (1:M, M:1).
+        /// Deschide popup cu datele corelate.
+        /// </summary>
+        private async void main_dgv_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
 
@@ -178,44 +393,156 @@ namespace SmartStock
 
             if (boundItem == null) return;
 
-            object detailsList = null;
-            string popupTitle = "";
-            switch (selectedType)
+            try
             {
-                case "Category" when columnName == "Products":
-                    var cat = (Category)boundItem;
-                    // NOTE: GetRelatedProducts() moved to CategoryService
-                    // Use CategoryService.GetProductsInCategoryAsync(cat.CategoryId) instead
-                    detailsList = null; // TODO: Implement via service
-                    popupTitle = $"Products in {cat.CategoryName}";
-                    break;
+                // Determină ce tip de date și coloană sunt selectate
+                switch (selectedType)
+                {
+                    case "Category" when columnName == "Products":
+                        {
+                            var cat = (Category)boundItem;
+                            await HandleCategoryProductsClick(cat);
+                            break;
+                        }
 
-                case "Supplier" when columnName == "Products":
-                    var sup = (Supplier)boundItem;
-                    // NOTE: GetRelatedProducts() moved to SupplierService
-                    // Use SupplierService.GetProductsFromSupplierAsync(sup.SupplierId) instead
-                    detailsList = null; // TODO: Implement via service
-                    popupTitle = $"Products supplied by {sup.SupplierName}";
-                    break;
-                case "Sale" when columnName == "SaleDetails":
-                    var sale = (Sale)boundItem;
-                    // NOTE: GetRelatedDetails() moved to SaleService
-                    // Use SaleService.GetSaleDetailsAsync(sale.SaleId) instead
-                    detailsList = null; // TODO: Implement via service
-                    popupTitle = $"Items in Sale #{sale.SaleId}";
-                    break;
-                case "Customer" when columnName == "Sales":
-                    var cust = (Customer)boundItem;
-                    // NOTE: GetCustomerSales() moved to CustomerService
-                    // Use CustomerService.GetCustomerSalesAsync(cust.CustomerId) instead
-                    detailsList = null; // TODO: Implement via service
-                    popupTitle = $"Transactions for {cust.FullName}";
-                    break;
+                    case "Supplier" when columnName == "Products":
+                        {
+                            var sup = (Supplier)boundItem;
+                            await HandleSupplierProductsClick(sup);
+                            break;
+                        }
+
+                    case "Sale" when columnName == "SaleDetails":
+                        {
+                            var sale = (Sale)boundItem;
+                            await HandleSaleDetailsClick(sale);
+                            break;
+                        }
+
+                    case "Customer" when columnName == "Sales":
+                        {
+                            var cust = (Customer)boundItem;
+                            await HandleCustomerSalesClick(cust);
+                            break;
+                        }
+                }
             }
-
-            if (detailsList != null)
+            catch (Exception ex)
             {
-                OpenDetailsPopup(detailsList, popupTitle);
+                MessageBox.Show($"Error opening details: {ex.Message}", "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Afișează produsele dintr-o categorie.
+        /// Reutilizează serviciile injectate - evită crearea repetată de contexte.
+        /// SOLID Principle: Dependency Injection
+        /// </summary>
+        private async Task HandleCategoryProductsClick(Category category)
+        {
+            try
+            {
+                var products = await _categoryService.GetProductsInCategoryAsync(category.CategoryId);
+
+                if (products.Count > 0)
+                {
+                    OpenDetailsPopup(products, $"Products in {category.CategoryName} ({products.Count})");
+                }
+                else
+                {
+                    MessageBox.Show($"No products found in category '{category.CategoryName}'.", "Information",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading products: {ex.Message}", "Database Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Afișează produsele de la un furnizor.
+        /// Reutilizează serviciile injectate - evită crearea repetată de contexte.
+        /// SOLID Principle: Dependency Injection
+        /// </summary>
+        private async Task HandleSupplierProductsClick(Supplier supplier)
+        {
+            try
+            {
+                var products = await _supplierService.GetProductsFromSupplierAsync(supplier.SupplierId);
+
+                if (products.Count > 0)
+                {
+                    OpenDetailsPopup(products, $"Products from {supplier.SupplierName} ({products.Count})");
+                }
+                else
+                {
+                    MessageBox.Show($"No products found for supplier '{supplier.SupplierName}'.", "Information",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading products: {ex.Message}", "Database Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Afișează detaliile unei vânzări.
+        /// Reutilizează serviciile injectate - evită crearea repetată de contexte.
+        /// SOLID Principle: Dependency Injection
+        /// </summary>
+        private async Task HandleSaleDetailsClick(Sale sale)
+        {
+            try
+            {
+                var saleDetails = await _saleService.GetSaleDetailsAsync(sale.SaleId);
+
+                if (saleDetails.Count > 0)
+                {
+                    OpenDetailsPopup(saleDetails, $"Items in Sale #{sale.SaleId} (Total: {saleDetails.Count} items)");
+                }
+                else
+                {
+                    MessageBox.Show($"No items found in sale #{sale.SaleId}.", "Information",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading sale details: {ex.Message}", "Database Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Afișează vânzările unui client.
+        /// Reutilizează serviciile injectate - evită crearea repetată de contexte.
+        /// SOLID Principle: Dependency Injection
+        /// </summary>
+        private async Task HandleCustomerSalesClick(Customer customer)
+        {
+            try
+            {
+                var sales = await _customerService.GetCustomerSalesAsync(customer.CustomerId);
+
+                if (sales.Count > 0)
+                {
+                    OpenDetailsPopup(sales, $"Sales for {customer.FullName} ({sales.Count} transactions)");
+                }
+                else
+                {
+                    MessageBox.Show($"No sales found for customer '{customer.FullName}'.", "Information",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading customer sales: {ex.Message}", "Database Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void OpenDetailsPopup(object data, string title)
@@ -234,9 +561,17 @@ namespace SmartStock
                                 MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
-        private void search_btn_Click(object sender, EventArgs e)
-        {
 
+        private void reset_btn_Click(object sender, EventArgs e)
+        {
+            if (filters_pnl.Controls.Count > 0)
+            {
+                var activeControl = filters_pnl.Controls[0];
+                if (activeControl is IFilterControl filterControl)
+                {
+                    filterControl.ResetFilters();
+                }
+            }
         }
     }
 }

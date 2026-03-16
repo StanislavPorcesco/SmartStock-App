@@ -20,14 +20,24 @@ namespace SmartStock.Classes.Data.Services
 
         /// <summary>
         /// Obține toate produsele active cu Include-urile necesare.
+        /// 
+        /// SOLID Principle - Cascading Availability:
+        /// Include Category pentru a verifica statusul părintelui.
+        /// Filtrează NUMAI produsele care sunt:
+        /// 1. Activ individual (IsActive == true)
+        /// 2. În categorii active (Category.IsActive == true)
+        /// 
+        /// Aceasta implementează regula cascadă: dacă o categorie este dezactivată,
+        /// toate produsele ei devin indisponibile din perspectiva UI,
+        /// fără a schimba statusul individual al fiecărui produs în baza de date.
         /// </summary>
         public async Task<List<Product>> GetAllActiveProductsAsync()
         {
             return await _productRepository
                 .GetAll()
-                .Where(p => p.IsActive)
-                .Include(p => p.Category)
+                .Include(p => p.Category)  // MANDATORY: Pentru a verifica statusul părintelui
                 .Include(p => p.Supplier)
+                .Where(p => p.IsActive && p.Category.IsActive)  // CASCADING: Ambele trebuie active
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -48,6 +58,10 @@ namespace SmartStock.Classes.Data.Services
 
         /// <summary>
         /// Filtrează produsele conform criteriilor furnizate.
+        /// 
+        /// SOLID Principle - Cascading Availability:
+        /// Include Category pentru a verifica disponibilitatea cascadă.
+        /// Filtrare: produse active ÎN CATEGORII ACTIVE.
         /// </summary>
         public async Task<List<Product>> GetFilteredAsync(ProductFilterCriteria criteria)
         {
@@ -55,7 +69,7 @@ namespace SmartStock.Classes.Data.Services
                 throw new ArgumentNullException(nameof(criteria));
 
             IQueryable<Product> query = _productRepository.GetAll()
-                .Include(p => p.Category)
+                .Include(p => p.Category)  // MANDATORY: Pentru cascading availability
                 .Include(p => p.Supplier);
 
             // Filtru după categorie
@@ -70,15 +84,15 @@ namespace SmartStock.Classes.Data.Services
                 query = query.Where(p => p.SupplierId == criteria.SupplierId.Value);
             }
 
-            // Filtru după stare (activ/inactiv)
+            // CASCADING AVAILABILITY: Filtrează NUMAI produse active ÎN CATEGORII ACTIVE
             if (criteria.IsActive.HasValue)
             {
-                query = query.Where(p => p.IsActive == criteria.IsActive.Value);
+                query = query.Where(p => p.IsActive == criteria.IsActive.Value && p.Category.IsActive);
             }
             else
             {
-                // Implicit, arătăm doar produsele active
-                query = query.Where(p => p.IsActive);
+                // Implicit, arătăm doar produsele active din categorii active
+                query = query.Where(p => p.IsActive && p.Category.IsActive);
             }
 
             // Filtru pentru produse sub limita de siguranță
@@ -133,14 +147,16 @@ namespace SmartStock.Classes.Data.Services
 
         /// <summary>
         /// Obține produsele cu stoc sub limita de siguranță.
+        /// 
+        /// CASCADING AVAILABILITY: Include Category pentru filtrare cascadă.
         /// </summary>
         public async Task<List<Product>> GetLowStockProductsAsync()
         {
             return await _productRepository
                 .GetAll()
-                .Where(p => p.IsActive && p.CurrentStock < p.SafetyStock)
-                .Include(p => p.Category)
+                .Include(p => p.Category)  // Include for cascading availability check
                 .Include(p => p.Supplier)
+                .Where(p => p.IsActive && p.Category.IsActive && p.CurrentStock < p.SafetyStock)
                 .AsNoTracking()
                 .ToListAsync();
         }

@@ -1,0 +1,122 @@
+﻿using SmartStock.Classes.Data.DTOs;
+using SmartStock.Classes.Data.Interfaces;
+using SmartStock.Classes.Data.Repositories;
+using SmartStock.Classes.Data.Services;
+using SmartStock.Classes.Models;
+using SmartStock.Classes.Utils;
+using SmartStock.Utils;
+
+namespace SmartStock.Forms.User_Control.SearchForms
+{
+    /// <summary>
+    /// Passive View: Implementează IFilterControl și delegă logica de filtrare serviciului.
+    /// Responsabil doar de colectarea datelor din controale și afișare.
+    /// </summary>
+    public partial class FilterSuppliers : UserControl, IFilterControl
+    {
+        private SupplierService _supplierService;
+
+        public event Action FilterChanged;
+
+        public FilterSuppliers()
+        {
+            InitializeComponent();
+            InitializeService();
+            LoadUI();
+        }
+
+        private void InitializeService()
+        {
+            var repository = new GenericRepository<Supplier>(new SmartStockContext());
+            _supplierService = new SupplierService(repository);
+        }
+
+        private void LoadUI()
+        {
+            ThemeManager.Apply(this);
+            ThemeManager.OnThemeChanged += HandleThemeUpdate;
+            this.Refresh();
+
+            // Tooltips
+            ToolTipHelp.AddToolTip(supplier_lbl, "Filters the list to show only products or transactions associated with a specific vendor or company.");
+            ToolTipHelp.AddToolTip(contact_lbl, "Displays suppliers based on the primary contact person's name for easier communication.");
+            ToolTipHelp.AddToolTip(categories_lbl, "Filters suppliers according to the specific types of products they provide (e.g., Electronics, Perishables).");
+            ToolTipHelp.AddToolTip(range_lbl, "Filters vendors based on the total quantity of items they have delivered within the selected period.\"");
+            ToolTipHelp.AddToolTip(status_lbl, "Shows partners with whom you have an active contract or ongoing business relationship.");
+        }
+
+        private void HandleThemeUpdate()
+        {
+            ThemeManager.Apply(this);
+            this.Refresh();
+        }
+
+        /// <summary>
+        /// Implementează IFilterControl: Obține datele filtrate.
+        /// </summary>
+        public object GetFilteredData()
+        {
+            var criteria = BuildFilterCriteria();
+            return GetFilteredSuppliersAsync(criteria);
+        }
+
+        /// <summary>
+        /// Construiește criteriile de filtrare din controale.
+        /// </summary>
+        private SupplierFilterCriteria BuildFilterCriteria()
+        {
+            var criteria = new SupplierFilterCriteria();
+
+            // Doar furnizori activi (implicit)
+            criteria.IsActive = true;
+
+            return criteria;
+        }
+
+        /// <summary>
+        /// Obține furnizorii filtrați folosind serviciul.
+        /// </summary>
+        private async Task<List<Supplier>> GetFilteredSuppliersAsync(SupplierFilterCriteria criteria)
+        {
+            try
+            {
+                return await _supplierService.GetFilteredAsync(criteria);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading filtered suppliers: {ex.Message}", "Database Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return new List<Supplier>();
+            }
+        }
+
+        /// <summary>
+        /// Implementează IFilterControl: Resetează filtrele.
+        /// </summary>
+        public void ResetFilters()
+        {
+            supplier_name_tb.Text = string.Empty;
+            contact_name_tb.Text= string.Empty;
+            // De resetat la "All Categories" category_cb.SelectedIndex = -1;
+            max_numeric.Value = 0;
+            min_numeric.Value = 0;
+            all_rb.Checked = true;
+            active_rb.Checked = false;
+            inactive_rb.Checked = false;
+            FilterChanged?.Invoke();
+        }
+
+        /// <summary>
+        /// Declanșator pentru evenimentul FilterChanged.
+        /// </summary>
+        protected void OnFilterChanged()
+        {
+            FilterChanged?.Invoke();
+        }
+
+        private void reset_btn_Click(object sender, EventArgs e)
+        {
+            ResetFilters();
+        }
+    }
+}

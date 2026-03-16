@@ -44,8 +44,8 @@ namespace SmartStock.Classes.Models
         /// Proprietate de navigare către Utilizator.
         /// Lazy loading - se încarcă cu Include() în serviciu.
         /// </summary>
-        [ForeignKey("UserId")]
-        public virtual User User { get; set; }
+       /* [ForeignKey("UserId")]
+        public virtual User User { get; set; }*/
     }
 }
 

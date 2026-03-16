@@ -1,0 +1,408 @@
+﻿using SmartStock.Classes.Data.DTOs;
+using SmartStock.Classes.Data.Interfaces;
+using SmartStock.Classes.Data.Repositories;
+using SmartStock.Classes.Data.Services;
+using SmartStock.Classes.Models;
+using SmartStock.Classes.Utils;
+using SmartStock.Utils;
+using Microsoft.EntityFrameworkCore;
+
+namespace SmartStock.Forms.User_Control.SearchForms
+{
+    /// <summary>
+    /// Passive View: Implementează IFilterControl și delegă logica de filtrare serviciului.
+    /// Responsabil de colectarea datelor din controale și declanșarea filtrelor dinamice.
+    /// 
+    /// SOLID Principle - Single Responsibility:
+    /// FilterFactors se ocupa NUMAI de UI și colectare de criterii,
+    /// logica de filtrare este în ExternalFactorService.
+    /// </summary>
+    public partial class FilterFactors : UserControl, IFilterControl
+    {
+        private ExternalFactorService _factorService;
+
+        // Debounce timer for search (avoid excessive queries)
+        private System.Windows.Forms.Timer _filterDebounceTimer;
+        private const int DEBOUNCE_DELAY_MS = 100;
+
+        public event Action FilterChanged;
+
+        public FilterFactors()
+        {
+            InitializeComponent();
+            InitializeService();
+            InitializeDebounceTimer();
+            LoadUI();
+            this.PerformLayout();
+        }
+
+        private void InitializeService()
+        {
+            var repository = new GenericRepository<ExternalFactor>(new SmartStockContext());
+            _factorService = new ExternalFactorService(repository);
+        }
+
+        private void InitializeDebounceTimer()
+        {
+            _filterDebounceTimer = new System.Windows.Forms.Timer();
+            _filterDebounceTimer.Interval = DEBOUNCE_DELAY_MS;
+            _filterDebounceTimer.Tick += (s, e) =>
+            {
+                _filterDebounceTimer.Stop();
+                OnFilterChanged();
+            };
+        }
+
+        private void LoadUI()
+        {
+            ThemeManager.Apply(this);
+            ThemeManager.OnThemeChanged += HandleThemeUpdate;
+            PopulateFactorTypes();
+            PopulateRegions();
+            PopulateComboBoxes();
+            SetDefaultValues();
+
+            // Wire up event handlers for dynamic filtering with debounce
+            search_text_tb.TextChanged += (s, e) => RestartDebounceTimer();
+            factor_types_clb.ItemCheck += (s, e) => RestartDebounceTimer();
+            region_cb.SelectedIndexChanged += (s, e) => OnFilterChanged();
+            date_from_dtp.ValueChanged += (s, e) => OnFilterChanged();
+            date_to_dtp.ValueChanged += (s, e) => OnFilterChanged();
+            months_clb.ItemCheck += (s, e) => RestartDebounceTimer();
+            days_clb.ItemCheck += (s, e) => RestartDebounceTimer();
+            impact_min_nud.ValueChanged += (s, e) => OnFilterChanged();
+            impact_max_nud.ValueChanged += (s, e) => OnFilterChanged();
+            value_type_cb.SelectedIndexChanged += (s, e) => OnFilterChanged();
+            direction_cb.SelectedIndexChanged += (s, e) => OnFilterChanged();
+            all_rb.CheckedChanged += (s, e) => OnFilterChanged();
+            active_rb.CheckedChanged += (s, e) => OnFilterChanged();
+            inactive_rb.CheckedChanged += (s, e) => OnFilterChanged();
+
+            tableLayoutPanel1.Padding = new Padding(0, 0, 25, 0);
+            panel1.Padding = new Padding(0, 10, 0, 30);
+            ToolTipHelp.AddToolTip(this, "Filter external factors by type, region, date range, impact value, and status");
+
+            this.Refresh();
+        }
+
+        private void SetDefaultValues()
+        {
+            search_text_tb.Clear();
+            date_from_dtp.Value = DateTime.Now.AddMonths(-1);
+            date_to_dtp.Value = DateTime.Now;
+            impact_min_nud.Value = 0;
+            impact_max_nud.Value = 0;
+            region_cb.SelectedIndex = 0;  // All Regions
+            value_type_cb.SelectedIndex = 0;  // All Value Types
+            direction_cb.SelectedIndex = 0;  // Any Direction
+            all_rb.Checked = true;
+            active_rb.Checked = false;
+            inactive_rb.Checked = false;
+        }
+
+        /// <summary>
+        /// Populates factor types dynamically from the database.
+        /// Shows "No factors available" if no factors exist in the database.
+        /// </summary>
+        private void PopulateFactorTypes()
+        {
+            try
+            {
+                factor_types_clb.Items.Clear();
+
+                using (var db = new SmartStockContext())
+                {
+                    var types = db.ExternalFactors
+                        .AsNoTracking()
+                        .Where(f => f.FactorType != null)
+                        .Select(f => f.FactorType)
+                        .Distinct()
+                        .OrderBy(t => t)
+                        .ToList();
+
+                    if (types.Count == 0)
+                    {
+                        factor_types_clb.Items.Add("No factors available", false);
+                        factor_types_clb.Enabled = false;
+                    }
+                    else
+                    {
+                        foreach (var type in types)
+                        {
+                            factor_types_clb.Items.Add(type, false);
+                        }
+                        factor_types_clb.Enabled = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading factor types: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                factor_types_clb.Items.Add("Error loading factor types", false);
+                factor_types_clb.Enabled = false;
+            }
+        }
+
+        /// <summary>
+        /// Populates regions from database.
+        /// </summary>
+        private void PopulateRegions()
+        {
+            try
+            {
+                value_type_cb.Items.Clear();
+                value_type_cb.Items.Add("All Regions");
+
+                using (var db = new SmartStockContext())
+                {
+                    var regions = db.ExternalFactors
+                        .AsNoTracking()
+                        .Where(f => f.Region != null)
+                        .Select(f => f.Region)
+                        .Distinct()
+                        .OrderBy(r => r)
+                        .ToList();
+
+                    foreach (var region in regions)
+                    {
+                        value_type_cb.Items.Add(region);
+                    }
+                }
+
+                value_type_cb.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading regions: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Populates value type and direction comboboxes.
+        /// </summary>
+        private void PopulateComboBoxes()
+        {
+            try
+            {
+                // Value Type ComboBox (payment_status_cb)
+                region_cb.Items.Clear();
+                region_cb.Items.AddRange(new object[] { "All Value Types", "Absolute", "Percentage", "Multiplier" });
+                region_cb.SelectedIndex = 0;
+
+                // Direction ComboBox (comboBox2)
+                direction_cb.Items.Clear();
+                direction_cb.Items.AddRange(new object[] { "Any Direction", "Positive", "Negative" });
+                direction_cb.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error populating comboboxes: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void HandleThemeUpdate()
+        {
+            ThemeManager.Apply(this);
+            this.Refresh();
+        }
+
+        /// <summary>
+        /// Debounce timer restart - prevents excessive queries while user is typing.
+        /// </summary>
+        private void RestartDebounceTimer()
+        {
+            _filterDebounceTimer.Stop();
+            _filterDebounceTimer.Start();
+        }
+
+        /// <summary>
+        /// Implementează IFilterControl: Obține datele filtrate.
+        /// </summary>
+        public object GetFilteredData()
+        {
+            var criteria = BuildFilterCriteria();
+            return GetFilteredFactorsAsync(criteria);
+        }
+
+        /// <summary>
+        /// Construiește criteriile de filtrare din controale.
+        /// Respectă SOLID: doar colectează date din UI, nu execută logică.
+        /// </summary>
+        private ExternalFactorFilterCriteria BuildFilterCriteria()
+        {
+            var criteria = new ExternalFactorFilterCriteria
+            {
+                PageSize = 0,    // No paging for DataGridView
+                PageNumber = 1,
+                SortBy = "Date",
+                SortOrder = "desc"
+            };
+
+            // 1. FILTRU SEARCH TEXT
+            if (!string.IsNullOrWhiteSpace(search_text_tb.Text))
+            {
+                criteria.SearchText = search_text_tb.Text.Trim();
+            }
+
+            // 2. FILTRU FACTOR TYPES
+            var checkedTypes = new List<string>();
+            foreach (int index in factor_types_clb.CheckedIndices)
+            {
+                checkedTypes.Add(factor_types_clb.Items[index].ToString());
+            }
+            if (checkedTypes.Count > 0)
+            {
+                criteria.FactorTypes = checkedTypes;
+            }
+
+            // 3. FILTRU REGION
+            if (value_type_cb.SelectedIndex > 0 && value_type_cb.SelectedItem is string region)
+            {
+                criteria.Region = region;
+            }
+
+            // 4. FILTRU DATE RANGE
+            criteria.DateFrom = date_from_dtp.Value;
+            criteria.DateTo = date_to_dtp.Value;
+
+            // 5. FILTRU SPECIFIC MONTHS
+            var checkedMonths = new List<int>();
+            for (int i = 0; i < months_clb.CheckedIndices.Count; i++)
+            {
+                checkedMonths.Add(months_clb.CheckedIndices[i] + 1);  // Months are 1-12
+            }
+            if (checkedMonths.Count > 0)
+            {
+                criteria.SpecificMonths = checkedMonths;
+            }
+
+            // 6. FILTRU SPECIFIC DAYS
+            var checkedDays = new List<DayOfWeek>();
+            string[] dayNames = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+            for (int i = 0; i < 7 && i < days_clb.CheckedIndices.Count; i++)
+            {
+                if (days_clb.CheckedIndices.Contains(i))
+                {
+                    checkedDays.Add((DayOfWeek)((i + 1) % 7));  // DayOfWeek: Sunday=0, Monday=1, etc.
+                }
+            }
+            if (checkedDays.Count > 0)
+            {
+                criteria.SpecificDays = checkedDays;
+            }
+
+            // 7. FILTRU IMPACT VALUE RANGE
+            if (impact_min_nud.Value > 0)
+                criteria.ImpactValueMin = (decimal)impact_min_nud.Value;
+            if (impact_max_nud.Value > 0)
+                criteria.ImpactValueMax = (decimal)impact_max_nud.Value;
+
+            // 8. FILTRU VALUE TYPE
+            if (region_cb.SelectedIndex > 0 && region_cb.SelectedItem is string valueType)
+            {
+                criteria.ValueTypes = new List<string> { valueType };
+            }
+
+            // 9. FILTRU DIRECTION
+            if (direction_cb.SelectedIndex > 0 && direction_cb.SelectedItem is string directionStr)
+            {
+                criteria.Direction = directionStr == "Positive" ? ImpactDirection.Positive : ImpactDirection.Negative;
+            }
+
+            // 10. FILTRU ACTIVITY STATUS
+            if (all_rb.Checked)
+            {
+                criteria.IsActive = null;
+            }
+            else if (active_rb.Checked)
+            {
+                criteria.IsActive = true;
+            }
+            else if (inactive_rb.Checked)
+            {
+                criteria.IsActive = false;
+            }
+            else
+            {
+                criteria.IsActive = null;
+            }
+
+            return criteria;
+        }
+
+        /// <summary>
+        /// Obține factorii filtrați folosind serviciul.
+        /// </summary>
+        private async Task<List<ExternalFactor>> GetFilteredFactorsAsync(ExternalFactorFilterCriteria criteria)
+        {
+            try
+            {
+                return await _factorService.GetFilteredAsync(criteria);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading filtered factors: {ex.Message}", "Database Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return new List<ExternalFactor>();
+            }
+        }
+
+        /// <summary>
+        /// Declanșator pentru evenimentul FilterChanged - actualizează DataGridView dinamic.
+        /// </summary>
+        private void OnFilterChanged()
+        {
+            FilterChanged?.Invoke();
+        }
+
+        /// <summary>
+        /// Încarcă datele default în grid. Apelată de SearchForm după ce s-a conectat la FilterChanged.
+        /// </summary>
+        public void LoadDefaultData()
+        {
+            OnFilterChanged();
+        }
+
+        /// <summary>
+        /// Implementează IFilterControl: Resetează toate filtrele.
+        /// </summary>
+        public void ResetFilters()
+        {
+            search_text_tb.Text = string.Empty;
+
+            // Uncheck all factor types
+            for (int i = 0; i < factor_types_clb.Items.Count; i++)
+            {
+                factor_types_clb.SetItemCheckState(i, CheckState.Unchecked);
+            }
+
+            // Uncheck all months
+            for (int i = 0; i < months_clb.Items.Count; i++)
+            {
+                months_clb.SetItemCheckState(i, CheckState.Unchecked);
+            }
+
+            // Uncheck all days
+            for (int i = 0; i < days_clb.Items.Count; i++)
+            {
+                days_clb.SetItemCheckState(i, CheckState.Unchecked);
+            }
+
+            date_from_dtp.Value = DateTime.Now.AddMonths(-1);
+            date_to_dtp.Value = DateTime.Now;
+            impact_min_nud.Value = 0;
+            impact_max_nud.Value = 0;
+            value_type_cb.SelectedIndex = 0;  // region_cb
+            region_cb.SelectedIndex = 0;  // value_type_cb
+            direction_cb.SelectedIndex = 0;  // direction_cb
+            all_rb.Checked = true;
+            active_rb.Checked = false;
+            inactive_rb.Checked = false;
+
+            OnFilterChanged();
+        }
+    }
+}

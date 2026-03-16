@@ -44,20 +44,21 @@ namespace SmartStock.Classes.Data.Services
                 .GetAll()
                 .Where(t => t.TransactionId == transactionId)
                 .Include(t => t.Product)
-                .Include(t => t.User)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
         }
 
         /// <summary>
         /// Filtrează tranzacțiile conform criteriilor furnizate.
+        /// IMPORTANT: Include Product pentru a evita Lazy Loading issues.
         /// </summary>
         public async Task<List<Transaction>> GetFilteredAsync(TransactionFilterCriteria criteria)
         {
             if (criteria == null)
                 throw new ArgumentNullException(nameof(criteria));
 
-            IQueryable<Transaction> query = _transactionRepository.GetAll();
+            IQueryable<Transaction> query = _transactionRepository.GetAll()
+                .Include(t => t.Product);  // ✅ IMPORTANT: Eager load Product
 
             // Filtru după produs
             if (criteria.ProductId.HasValue)
@@ -130,7 +131,6 @@ namespace SmartStock.Classes.Data.Services
             return await _transactionRepository
                 .GetAll()
                 .Where(t => t.ProductId == productId)
-                .Include(t => t.User)
                 .OrderByDescending(t => t.Date)
                 .AsNoTracking()
                 .ToListAsync();
@@ -145,7 +145,6 @@ namespace SmartStock.Classes.Data.Services
                 .GetAll()
                 .Where(t => t.Type == "Adjustment")
                 .Include(t => t.Product)
-                .Include(t => t.User)
                 .OrderByDescending(t => t.Date)
                 .AsNoTracking()
                 .ToListAsync();

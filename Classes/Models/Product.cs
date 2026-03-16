@@ -6,6 +6,9 @@ namespace SmartStock.Classes.Models
     /// <summary>
     /// Entitatea de domeniu Product - curată de orice logică de bază de date.
     /// Logica de acces la date este delegată ProductService.
+    /// 
+    /// SOLID Principle: Single Responsibility - Product doar stochează și expune date,
+    /// filtrarea/validarea se face în Service.
     /// </summary>
     public class Product
     {
@@ -46,7 +49,29 @@ namespace SmartStock.Classes.Models
         [ForeignKey("SupplierId")]
         public virtual Supplier Supplier { get; set; }
 
-        // Proprietate calculată pentru UI (nu necesită DB access)
+        /// <summary>
+        /// Proprietate calculată (nu mapată în DB) - verifica disponibilitatea produsului.
+        /// 
+        /// Regula: Un produs este disponibil NUMAI dacă:
+        /// 1. Produsul însuși este activ (IsActive == true)
+        /// 2. Categoria părintelui este activ (Category.IsActive == true)
+        /// 
+        /// Scopul: Implementează cascading availability - dacă categoria este dezactivată,
+        /// produsele devin automat indisponibile din perspectiva UI, fără a schimba
+        /// statusul individual al fiecărui produs în baza de date.
+        /// 
+        /// SOLID: Single Responsibility - Product expune stare calculată
+        /// Service-ul se responsabilizează de filtrare.
+        /// </summary>
+        [NotMapped]
+        public bool IsAvailable
+        {
+            get
+            {
+                // Null-safe check pentru Category (în caz că nu este încărcată)
+                return this.IsActive && (this.Category?.IsActive ?? false);
+            }
+        }
         [NotMapped]
         public bool IsUnderSafetyLimit => CurrentStock < SafetyStock;
     }

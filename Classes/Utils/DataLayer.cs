@@ -33,7 +33,7 @@ namespace SmartStock.Classes.Utils
             if (selector != null)
             {
                 selector.Items.Clear();
-                selector.Items.AddRange(new string[] { "Paid", "Pending", "Overdue" });
+                selector.Items.AddRange(new string[] { "Paid", "Pending", "Cancelled" });
                 selector.Text = "Select a payment status";
             }
         }   
