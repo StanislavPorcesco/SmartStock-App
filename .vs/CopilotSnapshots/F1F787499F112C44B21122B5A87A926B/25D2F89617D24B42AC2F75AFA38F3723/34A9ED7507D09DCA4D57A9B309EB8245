@@ -1,0 +1,339 @@
+﻿
+using SmartStock.Classes.Data.DTOs;
+using SmartStock.Classes.Data.Interfaces;
+using SmartStock.Classes.Data.Repositories;
+using SmartStock.Classes.Data.Services;
+using SmartStock.Classes.Models;
+using SmartStock.Classes.Settings;
+using SmartStock.Classes.Utils;
+using SmartStock.Forms.User_Control.AnalysisForms;
+
+namespace SmartStock.Forms
+{
+    public partial class AnalyzeForm : Form
+    {
+        private readonly AnalyticsFacade _analyticsFacade;
+        private readonly ProductService _productService;
+        private readonly ExternalFactorService _externalFactorService;
+        private IAnalysisParameterControl? _currentParameterControl;
+        private UserControl? _currentParameterView;
+        private CancellationTokenSource? _analysisCancellationTokenSource;
+        private readonly List<decimal> _historicalSeries = new();
+        private readonly List<decimal> _trendSeries = new();
+
+        public AnalyzeForm() : this(CreateDefaultFacade(), CreateDefaultProductService(), CreateDefaultExternalFactorService())
+        {
+        }
+
+        public AnalyzeForm(AnalyticsFacade analyticsFacade, ProductService productService)
+            : this(analyticsFacade, productService, CreateDefaultExternalFactorService())
+        {
+        }
+
+        public AnalyzeForm(AnalyticsFacade analyticsFacade, ProductService productService, ExternalFactorService externalFactorService)
+        {
+            InitializeComponent();
+
+            _analyticsFacade = analyticsFacade ?? throw new ArgumentNullException(nameof(analyticsFacade));
+            _productService = productService ?? throw new ArgumentNullException(nameof(productService));
+            _externalFactorService = externalFactorService ?? throw new ArgumentNullException(nameof(externalFactorService));
+
+            chart_pnl.Paint += chart_pnl_Paint;
+            chart_pnl.Resize += (_, _) => chart_pnl.Invalidate();
+
+            ThemeManager.OnThemeChanged += HandleThemeUpdate;
+
+            InitializeUi();
+            ThemeManager.Apply(this);
+        }
+
+        private void InitializeUi()
+        {
+            analysis_type_cb.Items.Clear();
+            analysis_type_cb.Items.AddRange(new object[]
+            {
+                "Demand Forecast",
+                "Correlation Analysis",
+                "Stock Optimization"
+            });
+
+            analysis_type_cb.SelectedIndexChanged += analysis_type_cb_SelectedIndexChanged;
+
+            var now = DateTime.Now.Date;
+            start_date_dtp.Value = now.AddMonths(-6);
+            end_date_dtp.Value = now;
+
+            status_lbl.Text = "Ready";
+            progressBar1.Visible = false;
+
+            _ = LoadProductsAsync();
+
+            if (analysis_type_cb.Items.Count > 0)
+            {
+                analysis_type_cb.SelectedIndex = 0;
+            }
+        }
+
+        private async Task LoadProductsAsync()
+        {
+            var products = await _productService.GetAllActiveProductsAsync();
+            target_subject_cb.DataSource = products;
+            target_subject_cb.DisplayMember = nameof(Product.ProductName);
+            target_subject_cb.ValueMember = nameof(Product.ProductId);
+            target_subject_cb.SelectedIndex = products.Count > 0 ? 0 : -1;
+        }
+
+        private void analysis_type_cb_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            LoadDynamicParameterControl(analysis_type_cb.SelectedIndex);
+        }
+
+        private void LoadDynamicParameterControl(int selectedIndex)
+        {
+            _currentParameterView?.Dispose();
+            dynamic_params_pnl.Controls.Clear();
+
+            _currentParameterView = selectedIndex switch
+            {
+                0 => new DemandForecast(_externalFactorService),
+                1 => new CorrelationAnalysis(),
+                2 => new StockOptimization(),
+                _ => null
+            };
+
+            if (_currentParameterView == null)
+            {
+                _currentParameterControl = null;
+                return;
+            }
+
+            _currentParameterView.Dock = DockStyle.Fill;
+            dynamic_params_pnl.Controls.Add(_currentParameterView);
+            _currentParameterControl = _currentParameterView as IAnalysisParameterControl;
+            ThemeManager.Apply(_currentParameterView);
+        }
+
+        private void HandleThemeUpdate()
+        {
+            ThemeManager.Apply(this);
+            if (_currentParameterView != null)
+            {
+                ThemeManager.Apply(_currentParameterView);
+                _currentParameterView.Refresh();
+            }
+
+            Refresh();
+        }
+
+        private async void run_btn_Click(object sender, EventArgs e)
+        {
+            if (_analysisCancellationTokenSource != null)
+            {
+                _analysisCancellationTokenSource.Cancel();
+                return;
+            }
+
+            if (target_subject_cb.SelectedValue is not int productId)
+            {
+                MessageBox.Show("Please select a valid product.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var baseContext = _currentParameterControl?.GetParameters() ?? new AnalysisContext();
+            baseContext.ProductId = productId;
+            baseContext.AnalysisType = analysis_type_cb.SelectedItem?.ToString() ?? string.Empty;
+            baseContext.StartDate = start_date_dtp.Value.Date;
+            baseContext.EndDate = end_date_dtp.Value.Date;
+
+            _analysisCancellationTokenSource = new CancellationTokenSource();
+            SetBusyState(true, "Collecting data...");
+
+            try
+            {
+                var result = await _analyticsFacade.RunAnalysisAsync(baseContext, _analysisCancellationTokenSource.Token);
+
+                UpdateChart(result.HistoricalSales, result.TrendValues);
+                UpdateBadges(result);
+                ApplyMarkdownLikeFormatting(result.AiInsights);
+
+                status_lbl.Text = "Analysis complete.";
+            }
+            catch (OperationCanceledException)
+            {
+                status_lbl.Text = "Analysis cancelled.";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Analysis failed: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                status_lbl.Text = "Analysis failed.";
+            }
+            finally
+            {
+                SetBusyState(false, status_lbl.Text);
+                _analysisCancellationTokenSource.Dispose();
+                _analysisCancellationTokenSource = null;
+            }
+        }
+
+        private void SetBusyState(bool isBusy, string status)
+        {
+            status_lbl.Text = status;
+            progressBar1.Visible = isBusy;
+            progressBar1.Style = isBusy ? ProgressBarStyle.Marquee : ProgressBarStyle.Continuous;
+
+            run_btn.Text = isBusy ? "Cancel" : "Run Analysis";
+            analysis_type_cb.Enabled = !isBusy;
+            target_subject_cb.Enabled = !isBusy;
+            start_date_dtp.Enabled = !isBusy;
+            end_date_dtp.Enabled = !isBusy;
+            reset_btn.Enabled = !isBusy;
+        }
+
+        private void UpdateChart(List<decimal> historicalSales, List<decimal> trendValues)
+        {
+            _historicalSeries.Clear();
+            _trendSeries.Clear();
+            _historicalSeries.AddRange(historicalSales);
+            _trendSeries.AddRange(trendValues);
+            chart_pnl.Invalidate();
+        }
+
+        private void UpdateBadges(AnalyticsResult result)
+        {
+            reliability_lbl.Text = $"{result.Reliability:P0}";
+            trend_lbl.Text = result.TrendLabel;
+            confidence_lbl.Text = $"{result.AiConfidence:P0}";
+        }
+
+        private void ApplyMarkdownLikeFormatting(string markdown)
+        {
+            ai_insights_rtb.Clear();
+
+            var normalized = (markdown ?? string.Empty)
+                .Replace("###", string.Empty)
+                .Replace("##", string.Empty)
+                .Replace("**", string.Empty)
+                .Replace("- ", "• ");
+
+            ai_insights_rtb.Text = normalized;
+        }
+
+        private void reset_btn_Click(object sender, EventArgs e)
+        {
+            analysis_type_cb.SelectedIndex = analysis_type_cb.Items.Count > 0 ? 0 : -1;
+            target_subject_cb.SelectedIndex = target_subject_cb.Items.Count > 0 ? 0 : -1;
+
+            var now = DateTime.Now.Date;
+            start_date_dtp.Value = now.AddMonths(-6);
+            end_date_dtp.Value = now;
+
+            _currentParameterControl?.Reset();
+
+            _historicalSeries.Clear();
+            _trendSeries.Clear();
+            chart_pnl.Invalidate();
+            ai_insights_rtb.Clear();
+
+            status_lbl.Text = "Ready";
+            trend_lbl.Text = "0";
+            reliability_lbl.Text = "0";
+            confidence_lbl.Text = "0";
+        }
+
+        private static AnalyticsFacade CreateDefaultFacade()
+        {
+            var econometricEngine = new EconometricEngine(
+                new GenericRepository<SaleDetails>(new SmartStockContext()),
+                new GenericRepository<ExternalFactor>(new SmartStockContext()));
+
+            var externalDataProvider = new ExternalDataProvider(
+                new GenericRepository<ExternalFactor>(new SmartStockContext()));
+
+            IAIReasoningProvider aiReasoningProvider;
+            try
+            {
+                var apiKey = SettingsManager.Current.DeepSeekApiKey;
+                aiReasoningProvider = new DeepSeekAiProvider(new HttpClient(), apiKey);
+            }
+            catch
+            {
+                aiReasoningProvider = new FallbackAiReasoningProvider();
+            }
+
+            var promptBuilder = new PromptBuilder();
+
+            return new AnalyticsFacade(
+                econometricEngine,
+                externalDataProvider,
+                aiReasoningProvider,
+                promptBuilder,
+                new GenericRepository<SaleDetails>(new SmartStockContext()),
+                new GenericRepository<AiForecast>(new SmartStockContext()),
+                new GenericRepository<Product>(new SmartStockContext()));
+        }
+
+        private static ProductService CreateDefaultProductService()
+        {
+            return new ProductService(new GenericRepository<Product>(new SmartStockContext()));
+        }
+
+        private static ExternalFactorService CreateDefaultExternalFactorService()
+        {
+            return new ExternalFactorService(
+                new GenericRepository<ExternalFactor>(new SmartStockContext()));
+        }
+
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            ThemeManager.OnThemeChanged -= HandleThemeUpdate;
+            base.OnFormClosed(e);
+        }
+
+        private void chart_pnl_Paint(object? sender, PaintEventArgs e)
+        {
+            e.Graphics.Clear(Color.FromArgb(54, 54, 54));
+
+            if (_historicalSeries.Count == 0 && _trendSeries.Count == 0)
+                return;
+
+            var allValues = _historicalSeries.Concat(_trendSeries).ToList();
+            var maxValue = allValues.Max();
+            var minValue = allValues.Min();
+            var valueRange = maxValue - minValue;
+            if (valueRange <= 0)
+                valueRange = 1;
+
+            var chartRect = new Rectangle(40, 20, Math.Max(10, chart_pnl.Width - 60), Math.Max(10, chart_pnl.Height - 40));
+            using var axisPen = new Pen(Color.Gray, 1);
+            e.Graphics.DrawRectangle(axisPen, chartRect);
+
+            DrawSeries(e.Graphics, chartRect, _historicalSeries, minValue, valueRange, Color.LightSkyBlue);
+            DrawSeries(e.Graphics, chartRect, _trendSeries, minValue, valueRange, Color.Orange);
+
+            using var historicalBrush = new SolidBrush(Color.LightSkyBlue);
+            using var trendBrush = new SolidBrush(Color.Orange);
+            e.Graphics.DrawString("Historical Sales", Font, historicalBrush, chartRect.Left + 8, chartRect.Top + 8);
+            e.Graphics.DrawString("Prediction/Trend", Font, trendBrush, chartRect.Left + 8, chartRect.Top + 28);
+        }
+
+        private static void DrawSeries(Graphics graphics, Rectangle chartRect, List<decimal> values, decimal minValue, decimal range, Color color)
+        {
+            if (values.Count < 2)
+                return;
+
+            using var pen = new Pen(color, 2f);
+            var points = new PointF[values.Count];
+
+            for (var i = 0; i < values.Count; i++)
+            {
+                var xRatio = values.Count == 1 ? 0 : (float)i / (values.Count - 1);
+                var yRatio = (float)((values[i] - minValue) / range);
+                points[i] = new PointF(
+                    chartRect.Left + (xRatio * chartRect.Width),
+                    chartRect.Bottom - (yRatio * chartRect.Height));
+            }
+
+            graphics.DrawLines(pen, points);
+        }
+    }
+}

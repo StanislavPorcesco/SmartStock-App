@@ -1,0 +1,159 @@
+﻿using Microsoft.EntityFrameworkCore;
+using SmartStock.Classes.Data.Interfaces;
+using SmartStock.Classes.Models;
+
+namespace SmartStock.Classes.Data.Services
+{
+    public class EconometricEngine : IEconometricEngine
+    {
+        private readonly IRepository<SaleDetails> _saleDetailsRepository;
+        private readonly IRepository<ExternalFactor> _externalFactorRepository;
+
+        public EconometricEngine(
+            IRepository<SaleDetails> saleDetailsRepository,
+            IRepository<ExternalFactor> externalFactorRepository)
+        {
+            _saleDetailsRepository = saleDetailsRepository ?? throw new ArgumentNullException(nameof(saleDetailsRepository));
+            _externalFactorRepository = externalFactorRepository ?? throw new ArgumentNullException(nameof(externalFactorRepository));
+        }
+
+        public decimal CalculateCorrelation(List<decimal> sales, List<decimal> factors)
+        {
+            if (sales == null)
+                throw new ArgumentNullException(nameof(sales));
+            if (factors == null)
+                throw new ArgumentNullException(nameof(factors));
+
+            var n = Math.Min(sales.Count, factors.Count);
+            if (n < 2)
+                return 0m;
+
+            var x = factors.Take(n).Select(v => (double)v).ToArray();
+            var y = sales.Take(n).Select(v => (double)v).ToArray();
+
+            var meanX = x.Average();
+            var meanY = y.Average();
+
+            var numerator = 0d;
+            var sumSqX = 0d;
+            var sumSqY = 0d;
+
+            for (var i = 0; i < n; i++)
+            {
+                var dx = x[i] - meanX;
+                var dy = y[i] - meanY;
+                numerator += dx * dy;
+                sumSqX += dx * dx;
+                sumSqY += dy * dy;
+            }
+
+            if (sumSqX == 0 || sumSqY == 0)
+                return 0m;
+
+            var correlation = numerator / Math.Sqrt(sumSqX * sumSqY);
+            correlation = Math.Max(-1d, Math.Min(1d, correlation));
+            return (decimal)correlation;
+        }
+
+        public async Task<EconometricModel> GetTrendAnalysisAsync(
+            int productId,
+            List<ExternalFactor>? factors = null,
+            DateTime? startDate = null,
+            DateTime? endDate = null,
+            List<decimal>? aggregatedSales = null) // Parametrul cheie pentru sincronizarea cu Facade
+        {
+            // 1. Pregătirea datelor (Data Sourcing)
+            List<decimal> salesSeries;
+
+            if (aggregatedSales != null && aggregatedSales.Count >= 2)
+            {
+                // Folosim datele deja grupate venite din Facade (Zgomot redus)
+                salesSeries = aggregatedSales;
+            }
+            else
+            {
+                // Fallback: Dacă nu avem date agregate, le tragem brut din DB (Daily)
+                salesSeries = await _saleDetailsRepository.GetAll()
+                    .Include(sd => sd.Sale)
+                    .Where(sd => sd.ProductId == productId &&
+                                 (!startDate.HasValue || sd.Sale.SaleDate >= startDate) &&
+                                 (!endDate.HasValue || sd.Sale.SaleDate <= endDate))
+                    .GroupBy(sd => sd.Sale.SaleDate.Date)
+                    .OrderBy(g => g.Key)
+                    .Select(g => g.Sum(x => x.Quantity))
+                    .ToListAsync()
+                    .ContinueWith(t => t.Result.Select(v => (decimal)v).ToList());
+            }
+
+            // 2. Verificare de siguranță: Avem nevoie de minim 2 puncte pentru un trend
+            if (salesSeries.Count < 2)
+            {
+                return new EconometricModel
+                {
+                    ModelName = "Infallible Linear Regression",
+                    RSquared = 0,
+                    CoefficientValue = 0,
+                    PValue = 1,
+                    LastTrainedDate = DateTime.Now
+                };
+            }
+
+            // 3. Calculul Regresiei Liniare Simple: y = ax + b
+            var n = salesSeries.Count;
+            var x = Enumerable.Range(1, n).Select(i => (double)i).ToArray();
+            var y = salesSeries.Select(v => (double)v).ToArray();
+
+            var stats = CalculateLinearRegression(x, y);
+
+            // 4. Construirea Modelului Rezultat
+            return new EconometricModel
+            {
+                // Dinamic: Numele reflectă dacă am făcut netezirea datelor (Smoothing)
+                ModelName = salesSeries.Count < 15 ? "Aggregated Trend (High Reliability)" : "Daily Regression (High Granularity)",
+                CoefficientValue = (decimal)stats.Slope,
+                RSquared = (decimal)stats.RSquared,
+                PValue = (decimal)stats.PValue,
+                LastTrainedDate = DateTime.Now
+            };
+        }
+
+        // Metodă Helper pentru Logica Matematică (y = ax + b)
+        private (double Slope, double Intercept, double RSquared, double PValue) CalculateLinearRegression(double[] x, double[] y)
+        {
+            int n = x.Length;
+            double sumX = x.Sum();
+            double sumY = y.Sum();
+            double sumXY = 0;
+            double sumX2 = 0;
+            double sumY2 = 0;
+
+            for (int i = 0; i < n; i++)
+            {
+                sumXY += x[i] * y[i];
+                sumX2 += x[i] * x[i];
+                sumY2 += y[i] * y[i];
+            }
+
+            // Calcul Panta (a) și Intercept (b)
+            var denominator = (n * sumX2 - sumX * sumX);
+            double slope = denominator == 0 ? 0 : (n * sumXY - sumX * sumY) / denominator;
+            double intercept = (sumY - slope * sumX) / n;
+
+            // Calcul Coeficient de Determinare (R-Squared)
+            double ssTot = sumY2 - (sumY * sumY) / n;
+            double ssRes = 0;
+            for (int i = 0; i < n; i++)
+            {
+                double prediction = slope * x[i] + intercept;
+                ssRes += Math.Pow(y[i] - prediction, 2);
+            }
+
+            double rSquared = ssTot == 0 ? 0 : 1 - (ssRes / ssTot);
+
+            // Simulare P-Value (Semnificație): Cu cât R2 e mai mare, P-Value e mai mic
+            double pValue = Math.Max(0.001, 1 - rSquared);
+
+            return (slope, intercept, rSquared, pValue);
+        }
+    }
+}

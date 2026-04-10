@@ -75,8 +75,8 @@
             panel2.Location = new Point(21, 449);
             panel2.Name = "panel2";
             panel2.Size = new Size(848, 75);
-            panel2.TabIndex = 24;
-            // 
+            panel2.TabIndex = 23;
+            //
             // login_btn
             // 
             login_btn.BackColor = Color.FromArgb(54, 54, 54);
@@ -102,7 +102,7 @@
             panel1.Location = new Point(21, 524);
             panel1.Name = "panel1";
             panel1.Size = new Size(848, 40);
-            panel1.TabIndex = 23;
+            panel1.TabIndex = 24;
             // 
             // settings_btn
             // 

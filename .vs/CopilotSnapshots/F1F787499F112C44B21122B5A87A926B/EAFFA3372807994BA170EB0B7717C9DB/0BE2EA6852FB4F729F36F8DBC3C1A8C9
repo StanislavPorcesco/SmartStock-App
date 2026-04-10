@@ -1,0 +1,237 @@
+﻿using Microsoft.EntityFrameworkCore;
+using SmartStock.Classes.Data.Interfaces;
+using SmartStock.Classes.Models;
+
+namespace SmartStock.Classes.Data.Services
+{
+    public class EconometricEngine : IEconometricEngine
+    {
+        private readonly IRepository<SaleDetails> _saleDetailsRepository;
+        private readonly IRepository<ExternalFactor> _externalFactorRepository;
+
+        public EconometricEngine(
+            IRepository<SaleDetails> saleDetailsRepository,
+            IRepository<ExternalFactor> externalFactorRepository)
+        {
+            _saleDetailsRepository = saleDetailsRepository ?? throw new ArgumentNullException(nameof(saleDetailsRepository));
+            _externalFactorRepository = externalFactorRepository ?? throw new ArgumentNullException(nameof(externalFactorRepository));
+        }
+
+        public decimal CalculateCorrelation(List<decimal> sales, List<decimal> factors)
+        {
+            if (sales == null)
+                throw new ArgumentNullException(nameof(sales));
+            if (factors == null)
+                throw new ArgumentNullException(nameof(factors));
+
+            var n = Math.Min(sales.Count, factors.Count);
+            if (n < 2)
+                return 0m;
+
+            var x = factors.Take(n).Select(v => (double)v).ToArray();
+            var y = sales.Take(n).Select(v => (double)v).ToArray();
+
+            var meanX = x.Average();
+            var meanY = y.Average();
+
+            var numerator = 0d;
+            var sumSqX = 0d;
+            var sumSqY = 0d;
+
+            for (var i = 0; i < n; i++)
+            {
+                var dx = x[i] - meanX;
+                var dy = y[i] - meanY;
+                numerator += dx * dy;
+                sumSqX += dx * dx;
+                sumSqY += dy * dy;
+            }
+
+            if (sumSqX == 0 || sumSqY == 0)
+                return 0m;
+
+            var correlation = numerator / Math.Sqrt(sumSqX * sumSqY);
+            correlation = Math.Max(-1d, Math.Min(1d, correlation));
+            return (decimal)correlation;
+        }
+
+        public async Task<EconometricModel> GetTrendAnalysisAsync(
+            int productId,
+            List<ExternalFactor>? factors = null,
+            DateTime? startDate = null,
+            DateTime? endDate = null)
+        {
+            if (productId <= 0)
+                throw new ArgumentException("ProductId must be positive.", nameof(productId));
+
+            var salesQuery = _saleDetailsRepository
+                .GetAll()
+                .Include(sd => sd.Sale)
+                .Where(sd => sd.ProductId == productId)
+                .AsQueryable();
+
+            if (startDate.HasValue)
+            {
+                salesQuery = salesQuery.Where(sd => sd.Sale.SaleDate >= startDate.Value);
+            }
+
+            if (endDate.HasValue)
+            {
+                salesQuery = salesQuery.Where(sd => sd.Sale.SaleDate <= endDate.Value);
+            }
+
+            var salesSeries = await salesQuery
+                .GroupBy(sd => sd.Sale.SaleDate.Date)
+                .Select(sd => new
+                {
+                    Date = sd.Key,
+                    Quantity = sd.Sum(x => (decimal)x.Quantity)
+                })
+                .OrderBy(sd => sd.Date)
+                .ToListAsync();
+
+            var factorSeries = factors != null && factors.Count > 0
+                ? factors
+                    .Where(f => f.IsActive)
+                    .OrderBy(f => f.Date)
+                    .Select(f => new
+                    {
+                        Date = f.Date.Date,
+                        Value = f.ImpactValue
+                    })
+                    .ToList()
+                : await _externalFactorRepository
+                    .GetAll()
+                    .Where(f => f.IsActive)
+                    .OrderBy(f => f.Date)
+                    .Select(f => new
+                    {
+                        Date = f.Date.Date,
+                        Value = f.ImpactValue
+                    })
+                    .ToListAsync();
+
+            var alignedSales = new List<decimal>();
+            var alignedFactors = new List<decimal>();
+
+            foreach (var sale in salesSeries)
+            {
+                var matchingFactor = factorSeries
+                    .Where(f => f.Date <= sale.Date)
+                    .OrderByDescending(f => f.Date)
+                    .FirstOrDefault();
+
+                if (matchingFactor == null)
+                    continue;
+
+                alignedSales.Add(sale.Quantity);
+                alignedFactors.Add(matchingFactor.Value);
+            }
+
+            var n = Math.Min(alignedSales.Count, alignedFactors.Count);
+            if (n < 2)
+            {
+                if (salesSeries.Count >= 2)
+                {
+                    return BuildSalesOnlyTrendModel(salesSeries.Select(s => s.Quantity).ToList());
+                }
+
+                return new EconometricModel
+                {
+                    ModelName = "Linear Regression",
+                    CoefficientValue = 0m,
+                    RSquared = 0m,
+                    PValue = 1m,
+                    LastTrainedDate = DateTime.Now
+                };
+            }
+
+            var x = alignedFactors.Take(n).Select(v => (double)v).ToArray();
+            var y = alignedSales.Take(n).Select(v => (double)v).ToArray();
+
+            var meanX = x.Average();
+            var meanY = y.Average();
+
+            var sxy = 0d;
+            var sxx = 0d;
+
+            for (var i = 0; i < n; i++)
+            {
+                var dx = x[i] - meanX;
+                sxy += dx * (y[i] - meanY);
+                sxx += dx * dx;
+            }
+
+            var slope = sxx == 0d ? 0d : sxy / sxx;
+            var intercept = meanY - (slope * meanX);
+
+            var ssTot = y.Sum(v => Math.Pow(v - meanY, 2));
+            var ssRes = 0d;
+
+            for (var i = 0; i < n; i++)
+            {
+                var prediction = intercept + (slope * x[i]);
+                ssRes += Math.Pow(y[i] - prediction, 2);
+            }
+
+            var rSquared = ssTot == 0d ? 0d : 1d - (ssRes / ssTot);
+            rSquared = Math.Max(0d, Math.Min(1d, rSquared));
+
+            var correlation = CalculateCorrelation(alignedSales, alignedFactors);
+            var pValue = 1m - Math.Min(1m, Math.Abs(correlation));
+
+            return new EconometricModel
+            {
+                ModelName = "Linear Regression",
+                CoefficientValue = (decimal)slope,
+                RSquared = (decimal)rSquared,
+                PValue = Math.Max(0.000001m, pValue),
+                LastTrainedDate = DateTime.Now
+            };
+        }
+
+        private static EconometricModel BuildSalesOnlyTrendModel(List<decimal> sales)
+        {
+            var n = sales.Count;
+            var x = Enumerable.Range(1, n).Select(i => (double)i).ToArray();
+            var y = sales.Select(v => (double)v).ToArray();
+
+            var meanX = x.Average();
+            var meanY = y.Average();
+
+            var sxy = 0d;
+            var sxx = 0d;
+
+            for (var i = 0; i < n; i++)
+            {
+                var dx = x[i] - meanX;
+                sxy += dx * (y[i] - meanY);
+                sxx += dx * dx;
+            }
+
+            var slope = sxx == 0d ? 0d : sxy / sxx;
+            var intercept = meanY - (slope * meanX);
+
+            var ssTot = y.Sum(v => Math.Pow(v - meanY, 2));
+            var ssRes = 0d;
+
+            for (var i = 0; i < n; i++)
+            {
+                var prediction = intercept + (slope * x[i]);
+                ssRes += Math.Pow(y[i] - prediction, 2);
+            }
+
+            var rSquared = ssTot == 0d ? 0d : 1d - (ssRes / ssTot);
+            rSquared = Math.Max(0d, Math.Min(1d, rSquared));
+
+            return new EconometricModel
+            {
+                ModelName = "Linear Regression (Sales Trend)",
+                CoefficientValue = (decimal)slope,
+                RSquared = (decimal)rSquared,
+                PValue = 1m - (decimal)rSquared,
+                LastTrainedDate = DateTime.Now
+            };
+        }
+    }
+}

@@ -1,0 +1,28 @@
+﻿using SmartStock.Classes.Models;
+
+namespace SmartStock.Classes.Data.Interfaces
+{
+    /// <summary>
+    /// Interfață pentru motorul econometric care efectuează analize statistice.
+    /// Responsabilă pentru calculul corelațiilor, analiza tendințelor și evaluarea modelelor.
+    /// </summary>
+    public interface IEconometricEngine
+    {
+        /// <summary>
+        /// Calculează corelația între vânzări și factori externi.
+        /// </summary>
+        /// <param name="sales">Lista valorilor de vânzări</param>
+        /// <param name="factors">Lista valorilor factorilor externi</param>
+        /// <returns>Valoarea corelației (între -1 și 1)</returns>
+        decimal CalculateCorrelation(List<decimal> sales, List<decimal> factors);
+
+        /// <summary>
+        /// Obține analiza tendințelor pentru un produs specific.
+        /// Incluzând trend liniar, sezonalitate și anomalii.
+        /// </summary>
+        /// <param name="productId">ID-ul produsului pentru care se efectuează analiza</param>
+        /// <param name="factors">Factori externi deja pregătiți/filtrați (opțional)</param>
+        /// <returns>Task cu analiza tendințelor</returns>
+        Task<EconometricModel> GetTrendAnalysisAsync(int productId, List<ExternalFactor>? factors = null);
+    }
+}

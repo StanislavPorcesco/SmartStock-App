@@ -3,36 +3,64 @@
   "WorkspaceRootPath": "D:\\Files\\Degree\\App\\SmartStock\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\forms\\searchform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:forms\\searchform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\classes\\utils\\dataseeder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:classes\\utils\\dataseeder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\forms\\searchform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:forms\\searchform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\forms\\analyzeform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:forms\\analyzeform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\classes\\utils\\thememanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:classes\\utils\\thememanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\classes\\data\\dtos\\analyticsresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:classes\\data\\dtos\\analyticsresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\forms\\user control\\searchforms\\filterfactors.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:forms\\user control\\searchforms\\filterfactors.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\classes\\data\\services\\econometricengine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:classes\\data\\services\\econometricengine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\forms\\user control\\searchforms\\filterfactors.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:forms\\user control\\searchforms\\filterfactors.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\classes\\data\\services\\analyticsfacade.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:classes\\data\\services\\analyticsfacade.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\forms\\user control\\searchforms\\filtersales.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:forms\\user control\\searchforms\\filtersales.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\classes\\data\\interfaces\\ieconometricengine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:classes\\data\\interfaces\\ieconometricengine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\classes\\data\\dtos\\externalfactorfiltercriteria.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:classes\\data\\dtos\\externalfactorfiltercriteria.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\classes\\models\\sale.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:classes\\models\\sale.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\classes\\models\\externalfactor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:classes\\models\\externalfactor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\classes\\models\\saledetails.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:classes\\models\\saledetails.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\classes\\utils\\smartstockcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:classes\\utils\\smartstockcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\classes\\models\\supplier.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:classes\\models\\supplier.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\forms\\user control\\analysisforms\\correlationanalysis.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:forms\\user control\\analysisforms\\correlationanalysis.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\classes\\data\\services\\promptbuilder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:classes\\data\\services\\promptbuilder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\classes\\data\\services\\externaldataprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:classes\\data\\services\\externaldataprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\classes\\data\\dtos\\analysiscontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:classes\\data\\dtos\\analysiscontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|D:\\Files\\Degree\\App\\SmartStock\\forms\\analyzeform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:forms\\analyzeform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     }
   ],
   "DocumentGroupContainers": [
@@ -41,72 +69,20 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedHeight": 298,
-          "SelectedChildIndex": 4,
+          "DockedHeight": 288,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "FilterSales.cs [Design]",
-              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\User Control\\SearchForms\\FilterSales.cs",
-              "RelativeDocumentMoniker": "Forms\\User Control\\SearchForms\\FilterSales.cs",
-              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\User Control\\SearchForms\\FilterSales.cs [Design]",
-              "RelativeToolTip": "Forms\\User Control\\SearchForms\\FilterSales.cs [Design]",
+              "DocumentIndex": 14,
+              "Title": "AnalyzeForm.cs [Design]",
+              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\AnalyzeForm.cs",
+              "RelativeDocumentMoniker": "Forms\\AnalyzeForm.cs",
+              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\AnalyzeForm.cs [Design]",
+              "RelativeToolTip": "Forms\\AnalyzeForm.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-16T18:09:41.619Z",
-              "IsPinned": true,
-              "EditorCaption": " [Design]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "FilterFactors.cs [Design]",
-              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\User Control\\SearchForms\\FilterFactors.cs",
-              "RelativeDocumentMoniker": "Forms\\User Control\\SearchForms\\FilterFactors.cs",
-              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\User Control\\SearchForms\\FilterFactors.cs [Design]",
-              "RelativeToolTip": "Forms\\User Control\\SearchForms\\FilterFactors.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-16T18:08:59.395Z",
-              "IsPinned": true,
-              "EditorCaption": " [Design]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "SearchForm.cs",
-              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\SearchForm.cs",
-              "RelativeDocumentMoniker": "Forms\\SearchForm.cs",
-              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\SearchForm.cs",
-              "RelativeToolTip": "Forms\\SearchForm.cs",
-              "ViewState": "AgIAAJQAAAAAAAAAAAApwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-16T19:44:26.504Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ThemeManager.cs",
-              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Utils\\ThemeManager.cs",
-              "RelativeDocumentMoniker": "Classes\\Utils\\ThemeManager.cs",
-              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Utils\\ThemeManager.cs",
-              "RelativeToolTip": "Classes\\Utils\\ThemeManager.cs",
-              "ViewState": "AgIAAHgAAAAAAAAAAAAAAJUAAABVAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-16T19:19:07.99Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "SearchForm.cs [Design]",
-              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\SearchForm.cs",
-              "RelativeDocumentMoniker": "Forms\\SearchForm.cs",
-              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\SearchForm.cs [Design]",
-              "RelativeToolTip": "Forms\\SearchForm.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-16T19:05:28.893Z",
-              "EditorCaption": " [Design]"
+              "WhenOpened": "2026-03-18T18:49:18.515Z",
+              "IsPinned": true
             },
             {
               "$type": "Bookmark",
@@ -114,42 +90,186 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "FilterFactors.cs",
-              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\User Control\\SearchForms\\FilterFactors.cs",
-              "RelativeDocumentMoniker": "Forms\\User Control\\SearchForms\\FilterFactors.cs",
-              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\User Control\\SearchForms\\FilterFactors.cs",
-              "RelativeToolTip": "Forms\\User Control\\SearchForms\\FilterFactors.cs",
-              "ViewState": "AgIAAA8BAAAAAAAAAAAAAEUAAABEAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "DataSeeder.cs",
+              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Utils\\DataSeeder.cs",
+              "RelativeDocumentMoniker": "Classes\\Utils\\DataSeeder.cs",
+              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Utils\\DataSeeder.cs",
+              "RelativeToolTip": "Classes\\Utils\\DataSeeder.cs",
+              "ViewState": "AgIAAHwAAAAAAAAAAAAgwIsAAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-16T18:25:03.733Z",
+              "WhenOpened": "2026-04-09T17:59:03.896Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "ExternalFactor.cs",
-              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Models\\ExternalFactor.cs",
-              "RelativeDocumentMoniker": "Classes\\Models\\ExternalFactor.cs",
-              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Models\\ExternalFactor.cs",
-              "RelativeToolTip": "Classes\\Models\\ExternalFactor.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAiwAsAAAAFAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "AnalyticsResult.cs",
+              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Data\\DTOs\\AnalyticsResult.cs",
+              "RelativeDocumentMoniker": "Classes\\Data\\DTOs\\AnalyticsResult.cs",
+              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Data\\DTOs\\AnalyticsResult.cs",
+              "RelativeToolTip": "Classes\\Data\\DTOs\\AnalyticsResult.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAIwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-16T18:01:54.205Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-20T19:50:43.209Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "IEconometricEngine.cs",
+              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Data\\Interfaces\\IEconometricEngine.cs",
+              "RelativeDocumentMoniker": "Classes\\Data\\Interfaces\\IEconometricEngine.cs",
+              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Data\\Interfaces\\IEconometricEngine.cs",
+              "RelativeToolTip": "Classes\\Data\\Interfaces\\IEconometricEngine.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAB8AAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-20T18:00:22.958Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "EconometricEngine.cs",
+              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Data\\Services\\EconometricEngine.cs",
+              "RelativeDocumentMoniker": "Classes\\Data\\Services\\EconometricEngine.cs",
+              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Data\\Services\\EconometricEngine.cs",
+              "RelativeToolTip": "Classes\\Data\\Services\\EconometricEngine.cs",
+              "ViewState": "AgIAAGgAAAAAAAAAAAAAAL4AAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-20T17:56:58.871Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 6,
-              "Title": "ExternalFactorFilterCriteria.cs",
-              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Data\\DTOs\\ExternalFactorFilterCriteria.cs",
-              "RelativeDocumentMoniker": "Classes\\Data\\DTOs\\ExternalFactorFilterCriteria.cs",
-              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Data\\DTOs\\ExternalFactorFilterCriteria.cs",
-              "RelativeToolTip": "Classes\\Data\\DTOs\\ExternalFactorFilterCriteria.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAABLAAAAAAAAAA==",
+              "Title": "Sale.cs",
+              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Models\\Sale.cs",
+              "RelativeDocumentMoniker": "Classes\\Models\\Sale.cs",
+              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Models\\Sale.cs",
+              "RelativeToolTip": "Classes\\Models\\Sale.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAYwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-16T18:00:05.946Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-20T17:31:56.344Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "SaleDetails.cs",
+              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Models\\SaleDetails.cs",
+              "RelativeDocumentMoniker": "Classes\\Models\\SaleDetails.cs",
+              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Models\\SaleDetails.cs",
+              "RelativeToolTip": "Classes\\Models\\SaleDetails.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-20T17:19:11.436Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Supplier.cs",
+              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Models\\Supplier.cs",
+              "RelativeDocumentMoniker": "Classes\\Models\\Supplier.cs",
+              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Models\\Supplier.cs",
+              "RelativeToolTip": "Classes\\Models\\Supplier.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAxwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-20T16:57:28.261Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "SmartStockContext.cs",
+              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Utils\\SmartStockContext.cs",
+              "RelativeDocumentMoniker": "Classes\\Utils\\SmartStockContext.cs",
+              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Utils\\SmartStockContext.cs",
+              "RelativeToolTip": "Classes\\Utils\\SmartStockContext.cs",
+              "ViewState": "AgIAAEsAAAAAAAAAAAAYwGsAAABSAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-20T16:52:29.334Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "CorrelationAnalysis.cs",
+              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\User Control\\AnalysisForms\\CorrelationAnalysis.cs",
+              "RelativeDocumentMoniker": "Forms\\User Control\\AnalysisForms\\CorrelationAnalysis.cs",
+              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\User Control\\AnalysisForms\\CorrelationAnalysis.cs",
+              "RelativeToolTip": "Forms\\User Control\\AnalysisForms\\CorrelationAnalysis.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAhwAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-20T16:05:43.048Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AnalyzeForm.cs",
+              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\AnalyzeForm.cs",
+              "RelativeDocumentMoniker": "Forms\\AnalyzeForm.cs",
+              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\AnalyzeForm.cs",
+              "RelativeToolTip": "Forms\\AnalyzeForm.cs",
+              "ViewState": "AgIAAJoBAAAAAAAAAAAlwBAAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-18T21:32:48.296Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "PromptBuilder.cs",
+              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Data\\Services\\PromptBuilder.cs",
+              "RelativeDocumentMoniker": "Classes\\Data\\Services\\PromptBuilder.cs",
+              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Data\\Services\\PromptBuilder.cs",
+              "RelativeToolTip": "Classes\\Data\\Services\\PromptBuilder.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAhwH4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-18T21:25:17.773Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "ExternalDataProvider.cs",
+              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Data\\Services\\ExternalDataProvider.cs",
+              "RelativeDocumentMoniker": "Classes\\Data\\Services\\ExternalDataProvider.cs",
+              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Data\\Services\\ExternalDataProvider.cs",
+              "RelativeToolTip": "Classes\\Data\\Services\\ExternalDataProvider.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAjwCYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-18T21:25:03.244Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "AnalysisContext.cs",
+              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Data\\DTOs\\AnalysisContext.cs",
+              "RelativeDocumentMoniker": "Classes\\Data\\DTOs\\AnalysisContext.cs",
+              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Data\\DTOs\\AnalysisContext.cs",
+              "RelativeToolTip": "Classes\\Data\\DTOs\\AnalysisContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-18T21:24:41.536Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "AnalyticsFacade.cs",
+              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Data\\Services\\AnalyticsFacade.cs",
+              "RelativeDocumentMoniker": "Classes\\Data\\Services\\AnalyticsFacade.cs",
+              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Data\\Services\\AnalyticsFacade.cs",
+              "RelativeToolTip": "Classes\\Data\\Services\\AnalyticsFacade.cs",
+              "ViewState": "AgIAABwAAAAAAAAAAAAmwHgAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-18T21:24:20.089Z"
+            }
+          ]
+        },
+        {
+          "DockedHeight": 112,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
             }
           ]
         }

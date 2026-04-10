@@ -1,0 +1,18 @@
+﻿using SmartStock.Classes.Models;
+
+namespace SmartStock.Classes.Data.DTOs
+{
+    public class AnalyticsResult
+    {
+        public EconometricModel EconometricModel { get; set; } = new EconometricModel();
+        public List<AiForecast> Forecasts { get; set; } = new();
+        public List<decimal> HistoricalSales { get; set; } = new();
+        public List<decimal> TrendValues { get; set; } = new();
+        public List<string> ChartLabels { get; set; } = new();
+        public List<ExternalFactor> Factors { get; set; } = new();
+        public string AiInsights { get; set; } = string.Empty;
+        public decimal Reliability { get; set; }
+        public string TrendLabel { get; set; } = "Stable";
+        public decimal AiConfidence { get; set; }
+    }
+}

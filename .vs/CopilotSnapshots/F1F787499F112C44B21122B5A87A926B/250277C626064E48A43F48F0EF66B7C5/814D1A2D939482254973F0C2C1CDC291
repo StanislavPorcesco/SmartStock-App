@@ -1,0 +1,508 @@
+﻿namespace SmartStock.Forms
+{
+    partial class AnalyzeForm
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            base_pnl = new Panel();
+            main_split = new SplitContainer();
+            paths_gb = new GroupBox();
+            dynamic_params_pnl = new Panel();
+            panel2 = new Panel();
+            run_btn = new Button();
+            reset_btn = new Button();
+            panel1 = new Panel();
+            tableLayoutPanel1 = new TableLayoutPanel();
+            label2 = new Label();
+            label1 = new Label();
+            analisys_lbl = new Label();
+            analysis_type_cb = new ComboBox();
+            target_subject_cb = new ComboBox();
+            start_date_dtp = new DateTimePicker();
+            end_date_dtp = new DateTimePicker();
+            groupBox1 = new GroupBox();
+            panel3 = new Panel();
+            label3 = new Label();
+            progressBar1 = new ProgressBar();
+            result_split = new SplitContainer();
+            richTextBox1 = new RichTextBox();
+            splitContainer1 = new SplitContainer();
+            quick_stats_pnl = new FlowLayoutPanel();
+            panel4 = new Panel();
+            panel5 = new Panel();
+            label4 = new Label();
+            label5 = new Label();
+            base_pnl.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)main_split).BeginInit();
+            splitContainer1.Panel1.SuspendLayout();
+            splitContainer1.Panel2.SuspendLayout();
+            main_split.SuspendLayout();
+            paths_gb.SuspendLayout();
+            panel2.SuspendLayout();
+            panel1.SuspendLayout();
+            tableLayoutPanel1.SuspendLayout();
+            groupBox1.SuspendLayout();
+            panel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)result_split).BeginInit();
+            splitContainer1.Panel1.SuspendLayout();
+            splitContainer1.Panel2.SuspendLayout();
+            result_split.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
+            splitContainer1.Panel2.SuspendLayout();
+            splitContainer1.SuspendLayout();
+            quick_stats_pnl.SuspendLayout();
+            panel4.SuspendLayout();
+            panel5.SuspendLayout();
+            SuspendLayout();
+            // 
+            // base_pnl
+            // 
+            base_pnl.AutoScroll = true;
+            base_pnl.BackColor = Color.FromArgb(64, 64, 64);
+            base_pnl.Controls.Add(main_split);
+            base_pnl.Dock = DockStyle.Fill;
+            base_pnl.Location = new Point(30, 30);
+            base_pnl.Margin = new Padding(30);
+            base_pnl.Name = "base_pnl";
+            base_pnl.Padding = new Padding(20);
+            base_pnl.Size = new Size(1320, 739);
+            base_pnl.TabIndex = 3;
+            base_pnl.Tag = "base";
+            // 
+            // main_split
+            // 
+            main_split.Dock = DockStyle.Fill;
+            main_split.Location = new Point(20, 20);
+            main_split.Name = "main_split";
+            // 
+            // main_split.Panel1
+            // 
+            splitContainer1.Panel1.Controls.Add(paths_gb);
+            // 
+            // main_split.Panel2
+            // 
+            splitContainer1.Panel2.Controls.Add(groupBox1);
+            main_split.Size = new Size(1280, 699);
+            main_split.SplitterDistance = 471;
+            main_split.TabIndex = 0;
+            // 
+            // paths_gb
+            // 
+            paths_gb.Controls.Add(dynamic_params_pnl);
+            paths_gb.Controls.Add(panel2);
+            paths_gb.Controls.Add(panel1);
+            paths_gb.Dock = DockStyle.Fill;
+            paths_gb.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            paths_gb.ForeColor = Color.White;
+            paths_gb.Location = new Point(0, 0);
+            paths_gb.Margin = new Padding(0);
+            paths_gb.Name = "paths_gb";
+            paths_gb.Padding = new Padding(10, 20, 10, 20);
+            paths_gb.Size = new Size(471, 699);
+            paths_gb.TabIndex = 5;
+            paths_gb.TabStop = false;
+            paths_gb.Text = "Analysis Parameters";
+            // 
+            // dynamic_params_pnl
+            // 
+            dynamic_params_pnl.Dock = DockStyle.Fill;
+            dynamic_params_pnl.Location = new Point(10, 205);
+            dynamic_params_pnl.Name = "dynamic_params_pnl";
+            dynamic_params_pnl.Size = new Size(451, 323);
+            dynamic_params_pnl.TabIndex = 1;
+            // 
+            // panel2
+            // 
+            panel2.Controls.Add(run_btn);
+            panel2.Controls.Add(reset_btn);
+            panel2.Dock = DockStyle.Bottom;
+            panel2.Location = new Point(10, 528);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(451, 151);
+            panel2.TabIndex = 2;
+            // 
+            // run_btn
+            // 
+            run_btn.BackColor = Color.FromArgb(54, 54, 54);
+            run_btn.Dock = DockStyle.Top;
+            run_btn.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            run_btn.ForeColor = Color.White;
+            run_btn.Location = new Point(0, 0);
+            run_btn.Margin = new Padding(10, 0, 0, 0);
+            run_btn.MaximumSize = new Size(0, 70);
+            run_btn.MinimumSize = new Size(0, 70);
+            run_btn.Name = "run_btn";
+            run_btn.Size = new Size(451, 70);
+            run_btn.TabIndex = 19;
+            run_btn.Text = "Run Analysis";
+            run_btn.UseVisualStyleBackColor = false;
+            run_btn.Click += run_btn_Click;
+            // 
+            // reset_btn
+            // 
+            reset_btn.BackColor = Color.FromArgb(54, 54, 54);
+            reset_btn.Dock = DockStyle.Bottom;
+            reset_btn.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            reset_btn.ForeColor = Color.White;
+            reset_btn.Location = new Point(0, 81);
+            reset_btn.Margin = new Padding(10, 0, 0, 0);
+            reset_btn.MaximumSize = new Size(0, 70);
+            reset_btn.MinimumSize = new Size(0, 70);
+            reset_btn.Name = "reset_btn";
+            reset_btn.Size = new Size(451, 70);
+            reset_btn.TabIndex = 18;
+            reset_btn.Text = "Reset Parameters";
+            reset_btn.UseVisualStyleBackColor = false;
+            reset_btn.Click += reset_btn_Click;
+            // 
+            // panel1
+            // 
+            panel1.Controls.Add(tableLayoutPanel1);
+            panel1.Dock = DockStyle.Top;
+            panel1.Location = new Point(10, 40);
+            panel1.Margin = new Padding(0);
+            panel1.Name = "panel1";
+            panel1.Padding = new Padding(10, 0, 10, 0);
+            panel1.Size = new Size(451, 165);
+            panel1.TabIndex = 0;
+            // 
+            // tableLayoutPanel1
+            // 
+            tableLayoutPanel1.ColumnCount = 2;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.Controls.Add(label2, 0, 2);
+            tableLayoutPanel1.Controls.Add(label1, 0, 1);
+            tableLayoutPanel1.Controls.Add(analisys_lbl, 0, 0);
+            tableLayoutPanel1.Controls.Add(analysis_type_cb, 1, 0);
+            tableLayoutPanel1.Controls.Add(target_subject_cb, 1, 1);
+            tableLayoutPanel1.Controls.Add(start_date_dtp, 1, 2);
+            tableLayoutPanel1.Controls.Add(end_date_dtp, 1, 3);
+            tableLayoutPanel1.Dock = DockStyle.Fill;
+            tableLayoutPanel1.Location = new Point(10, 0);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 4;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle());
+            tableLayoutPanel1.RowStyles.Add(new RowStyle());
+            tableLayoutPanel1.RowStyles.Add(new RowStyle());
+            tableLayoutPanel1.RowStyles.Add(new RowStyle());
+            tableLayoutPanel1.Size = new Size(431, 165);
+            tableLayoutPanel1.TabIndex = 15;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Dock = DockStyle.Left;
+            label2.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            label2.Location = new Point(0, 81);
+            label2.Margin = new Padding(0, 0, 3, 0);
+            label2.Name = "label2";
+            tableLayoutPanel1.SetRowSpan(label2, 2);
+            label2.Size = new Size(152, 84);
+            label2.TabIndex = 44;
+            label2.Text = "Historical Range";
+            label2.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Dock = DockStyle.Left;
+            label1.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            label1.Location = new Point(0, 48);
+            label1.Margin = new Padding(0, 0, 3, 0);
+            label1.Name = "label1";
+            label1.Size = new Size(134, 33);
+            label1.TabIndex = 16;
+            label1.Text = "Target Subject";
+            label1.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // analisys_lbl
+            // 
+            analisys_lbl.AutoSize = true;
+            analisys_lbl.Dock = DockStyle.Left;
+            analisys_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            analisys_lbl.Location = new Point(0, 0);
+            analisys_lbl.Margin = new Padding(0, 0, 3, 0);
+            analisys_lbl.Name = "analisys_lbl";
+            analisys_lbl.Size = new Size(165, 48);
+            analisys_lbl.TabIndex = 7;
+            analisys_lbl.Text = "Analysis Selection";
+            analisys_lbl.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // analysis_type_cb
+            // 
+            analysis_type_cb.BackColor = Color.FromArgb(54, 54, 54);
+            analysis_type_cb.Dock = DockStyle.Fill;
+            analysis_type_cb.FlatStyle = FlatStyle.Flat;
+            analysis_type_cb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            analysis_type_cb.ForeColor = Color.White;
+            analysis_type_cb.FormattingEnabled = true;
+            analysis_type_cb.Location = new Point(215, 5);
+            analysis_type_cb.Margin = new Padding(0, 5, 10, 10);
+            analysis_type_cb.Name = "analysis_type_cb";
+            analysis_type_cb.Size = new Size(206, 33);
+            analysis_type_cb.TabIndex = 14;
+            // 
+            // target_subject_cb
+            // 
+            target_subject_cb.BackColor = Color.FromArgb(54, 54, 54);
+            target_subject_cb.Dock = DockStyle.Fill;
+            target_subject_cb.FlatStyle = FlatStyle.Flat;
+            target_subject_cb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            target_subject_cb.ForeColor = Color.White;
+            target_subject_cb.FormattingEnabled = true;
+            target_subject_cb.Location = new Point(215, 48);
+            target_subject_cb.Margin = new Padding(0, 0, 10, 0);
+            target_subject_cb.Name = "target_subject_cb";
+            target_subject_cb.Size = new Size(206, 33);
+            target_subject_cb.TabIndex = 15;
+            // 
+            // start_date_dtp
+            // 
+            start_date_dtp.Dock = DockStyle.Fill;
+            start_date_dtp.DropDownAlign = LeftRightAlignment.Right;
+            start_date_dtp.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            start_date_dtp.Format = DateTimePickerFormat.Custom;
+            start_date_dtp.Location = new Point(215, 86);
+            start_date_dtp.Margin = new Padding(0, 5, 10, 5);
+            start_date_dtp.Name = "start_date_dtp";
+            start_date_dtp.Size = new Size(206, 31);
+            start_date_dtp.TabIndex = 42;
+            // 
+            // end_date_dtp
+            // 
+            end_date_dtp.Dock = DockStyle.Fill;
+            end_date_dtp.DropDownAlign = LeftRightAlignment.Right;
+            end_date_dtp.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            end_date_dtp.Format = DateTimePickerFormat.Custom;
+            end_date_dtp.Location = new Point(215, 127);
+            end_date_dtp.Margin = new Padding(0, 5, 10, 0);
+            end_date_dtp.Name = "end_date_dtp";
+            end_date_dtp.Size = new Size(206, 31);
+            end_date_dtp.TabIndex = 43;
+            // 
+            // groupBox1
+            // 
+            groupBox1.Controls.Add(result_split);
+            groupBox1.Controls.Add(panel3);
+            groupBox1.Dock = DockStyle.Fill;
+            groupBox1.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            groupBox1.ForeColor = Color.White;
+            groupBox1.Location = new Point(0, 0);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(805, 699);
+            groupBox1.TabIndex = 10;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Results";
+            // 
+            // panel3
+            // 
+            panel3.Controls.Add(label3);
+            panel3.Controls.Add(progressBar1);
+            panel3.Dock = DockStyle.Bottom;
+            panel3.Location = new Point(3, 669);
+            panel3.Name = "panel3";
+            panel3.Size = new Size(799, 27);
+            panel3.TabIndex = 10;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Dock = DockStyle.Left;
+            label3.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            label3.ForeColor = Color.White;
+            label3.Location = new Point(0, 0);
+            label3.Margin = new Padding(0, 0, 3, 0);
+            label3.Name = "label3";
+            label3.Size = new Size(143, 25);
+            label3.TabIndex = 8;
+            label3.Text = "Progress Status";
+            label3.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // progressBar1
+            // 
+            progressBar1.Dock = DockStyle.Right;
+            progressBar1.Location = new Point(245, 0);
+            progressBar1.Name = "progressBar1";
+            progressBar1.Size = new Size(554, 27);
+            progressBar1.TabIndex = 0;
+            // 
+            // result_split
+            // 
+            result_split.Dock = DockStyle.Fill;
+            result_split.Location = new Point(3, 23);
+            result_split.Name = "result_split";
+            result_split.Orientation = Orientation.Horizontal;
+            // 
+            // result_split.Panel1
+            // 
+            splitContainer1.Panel1.Controls.Add(splitContainer1);
+            // 
+            // result_split.Panel2
+            // 
+            splitContainer1.Panel2.Controls.Add(richTextBox1);
+            result_split.Size = new Size(799, 646);
+            result_split.SplitterDistance = 325;
+            result_split.TabIndex = 11;
+            // 
+            // richTextBox1
+            // 
+            richTextBox1.Location = new Point(37, 30);
+            richTextBox1.Name = "richTextBox1";
+            richTextBox1.Size = new Size(724, 255);
+            richTextBox1.TabIndex = 0;
+            richTextBox1.Text = "";
+            // 
+            // splitContainer1
+            // 
+            splitContainer1.Dock = DockStyle.Fill;
+            splitContainer1.Location = new Point(0, 0);
+            splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel2
+            // 
+            splitContainer1.Panel2.Controls.Add(quick_stats_pnl);
+            splitContainer1.Size = new Size(799, 325);
+            splitContainer1.SplitterDistance = 662;
+            splitContainer1.TabIndex = 0;
+            // 
+            // quick_stats_pnl
+            // 
+            quick_stats_pnl.Controls.Add(panel5);
+            quick_stats_pnl.Controls.Add(panel4);
+            quick_stats_pnl.Dock = DockStyle.Fill;
+            quick_stats_pnl.Location = new Point(0, 0);
+            quick_stats_pnl.Name = "quick_stats_pnl";
+            quick_stats_pnl.Size = new Size(133, 325);
+            quick_stats_pnl.TabIndex = 0;
+            // 
+            // panel4
+            // 
+            panel4.Controls.Add(label4);
+            panel4.Location = new Point(3, 130);
+            panel4.Name = "panel4";
+            panel4.Size = new Size(135, 121);
+            panel4.TabIndex = 0;
+            // 
+            // panel5
+            // 
+            panel5.Controls.Add(label5);
+            panel5.Location = new Point(3, 3);
+            panel5.Name = "panel5";
+            panel5.Size = new Size(131, 121);
+            panel5.TabIndex = 1;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(36, 42);
+            label4.Name = "label4";
+            label4.Size = new Size(51, 20);
+            label4.TabIndex = 0;
+            label4.Text = "label4";
+            label4.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(37, 42);
+            label5.Name = "label5";
+            label5.Size = new Size(51, 20);
+            label5.TabIndex = 1;
+            label5.Text = "label5";
+            label5.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // AnalyzeForm
+            // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.FromArgb(54, 54, 54);
+            ClientSize = new Size(1380, 799);
+            Controls.Add(base_pnl);
+            Name = "AnalyzeForm";
+            Padding = new Padding(30);
+            Text = "AnalyzeForm";
+            base_pnl.ResumeLayout(false);
+            splitContainer1.Panel1.ResumeLayout(false);
+            splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)main_split).EndInit();
+            main_split.ResumeLayout(false);
+            paths_gb.ResumeLayout(false);
+            panel2.ResumeLayout(false);
+            panel1.ResumeLayout(false);
+            tableLayoutPanel1.ResumeLayout(false);
+            tableLayoutPanel1.PerformLayout();
+            groupBox1.ResumeLayout(false);
+            panel3.ResumeLayout(false);
+            panel3.PerformLayout();
+            splitContainer1.Panel1.ResumeLayout(false);
+            splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)result_split).EndInit();
+            result_split.ResumeLayout(false);
+            splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
+            splitContainer1.ResumeLayout(false);
+            quick_stats_pnl.ResumeLayout(false);
+            panel4.ResumeLayout(false);
+            panel4.PerformLayout();
+            panel5.ResumeLayout(false);
+            panel5.PerformLayout();
+            ResumeLayout(false);
+        }
+
+        #endregion
+
+        private Panel base_pnl;
+        private SplitContainer main_split;
+        private GroupBox paths_gb;
+        private Panel dynamic_params_pnl;
+        private Panel panel2;
+        private Button reset_btn;
+        private Panel panel1;
+        private ComboBox analysis_type_cb;
+        private Label analisys_lbl;
+        private TableLayoutPanel tableLayoutPanel1;
+        private Label label1;
+        private ComboBox target_subject_cb;
+        private Button run_btn;
+        private Label label2;
+        private DateTimePicker start_date_dtp;
+        private DateTimePicker end_date_dtp;
+        private GroupBox groupBox1;
+        private Panel panel3;
+        private Label label3;
+        private ProgressBar progressBar1;
+        private SplitContainer result_split;
+        private SplitContainer splitContainer1;
+        private FlowLayoutPanel quick_stats_pnl;
+        private Panel panel4;
+        private Panel panel5;
+        private RichTextBox richTextBox1;
+        private Label label4;
+        private Label label5;
+    }
+}

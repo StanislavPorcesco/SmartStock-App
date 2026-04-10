@@ -1,0 +1,110 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FontAwesome.Sharp" Version="6.3.0" />
+    <PackageReference Include="LiveChartsCore.SkiaSharpView.WinForms" Version="2.0.0-rc6.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.24">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.24" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.24">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Forms\User Control\AddForms\AddUser.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\ModifyForms\BaseModifyInstance.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\LoginForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\SearchForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\LoginForms\MailConfirmation.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\LoginForms\Settings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\LoginForms\AddAccount.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\AddForms\AddExternalFactor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\AddForms\AddCustomer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\AddForms\AddTransaction.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\AddForms\AddSupplier.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\AddForms\BaseAddInstance.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\ModifyForms\ModifyCustomer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\ModifyForms\ModifyProduct.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\ModifyForms\ModifySupplier.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\SearchForms\FilterUsers.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\SearchForms\FilterCategories.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\SearchForms\FilterCustomers.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\SearchForms\FilterFactors.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\SearchForms\FilterSales.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\SearchForms\FilterTransactions.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\User Control\SearchForms\FilterSuppliers.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Tests\Services\" />
+  </ItemGroup>
+
+</Project>

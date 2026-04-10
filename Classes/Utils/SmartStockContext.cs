@@ -60,6 +60,79 @@ namespace SmartStock.Classes.Models
                 IsActive = true,
                 IsLoggedIn = 0
             });
+            modelBuilder.Entity<Customer>().HasData(new Customer
+            {
+                CustomerId = 1,
+                FullName = "Default Customer",
+                City = "Default City",
+                Email = "default@gmail.com",
+                Phone = "0000000000",
+                RegistrationDate = DateTime.Now,
+                IsActive = true
+            });
+            modelBuilder.Entity<Category>().HasData(new Category
+            {
+                CategoryId = 1,
+                CategoryName = "Coffee",
+                IsActive = true
+            });
+            modelBuilder.Entity<Supplier>().HasData(new Supplier
+            {
+                SupplierId = 1,
+                SupplierName = "Coffee Supplier Inc.",
+                ContactPerson = "John Doe",
+                Email = "coffee.john@gmail.com",
+                Phone = "1234567890",
+                Address = "123 Coffee St, Caffeine City",
+                IsActive = true
+            });
+            modelBuilder.Entity<Product>().HasData(
+                new Product
+                {
+                    ProductId = 1,
+                    ProductName = "Americano Coffee",
+                    CategoryId = 1,
+                    SupplierId = 1,
+                    UnitPrice = 20,
+                    UnitOfMeasure = "cup",
+                    CurrentStock = 500,
+                    SafetyStock = 100,
+                    IsActive = true
+                },
+                new Product
+                {
+                    ProductId = 2,
+                    ProductName = "Espresso",
+                    CategoryId = 1,
+                    SupplierId = 1,
+                    UnitPrice = 18,
+                    UnitOfMeasure = "cup",
+                    CurrentStock = 350,
+                    SafetyStock = 70,
+                    IsActive = true
+                },
+                new Product
+                {
+                    ProductId = 3,
+                    ProductName = "Cold Brew",
+                    CategoryId = 1,
+                    SupplierId = 1,
+                    UnitPrice = 25,
+                    UnitOfMeasure = "cup",
+                    CurrentStock = 180,
+                    SafetyStock = 40,
+                    IsActive = true
+                });
+
+            var factorData = DataSeeder.GenerateFactors();
+            var forecastData = DataSeeder.GenerateForecasts();
+            var (saleData, detailData, transactionData) = DataSeeder.GenerateTransactionalData();
+
+            modelBuilder.Entity<ExternalFactor>().HasData(factorData.ToArray());
+            modelBuilder.Entity<AiForecast>().HasData(forecastData.ToArray());
+            modelBuilder.Entity<Sale>().HasData(saleData.ToArray());
+            modelBuilder.Entity<SaleDetails>().HasData(detailData.ToArray());
+            modelBuilder.Entity<Transaction>().HasData(transactionData.ToArray());
             base.OnModelCreating(modelBuilder);
         }
     }

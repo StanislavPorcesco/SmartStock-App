@@ -1,0 +1,56 @@
+﻿using SmartStock.Classes.Data.DTOs;
+using SmartStock.Classes.Data.Interfaces;
+
+namespace SmartStock.Forms.User_Control.AnalysisForms
+{
+    public partial class CorrelationAnalysis : UserControl, IAnalysisParameterControl
+    {
+        public CorrelationAnalysis()
+        {
+            InitializeComponent();
+            InitializeDefaults();
+        }
+
+        public AnalysisContext GetParameters()
+        {
+            return new AnalysisContext
+            {
+                Parameters = new Dictionary<string, object>
+                {
+                    ["PrimaryFactor"] = factor_type_cb.SelectedItem?.ToString() ?? string.Empty,
+                    ["LagDays"] = (int)lag_nud.Value,
+                    ["AggregationLevel"] = interval_cb.SelectedItem?.ToString() ?? string.Empty
+                }
+            };
+        }
+
+        public void Reset()
+        {
+            factor_type_cb.SelectedIndex = 0;
+            interval_cb.SelectedIndex = 0;
+            lag_nud.Value = 0;
+        }
+
+        private void InitializeDefaults()
+        {
+            if (factor_type_cb.Items.Count == 0)
+            {
+                factor_type_cb.Items.AddRange(new object[] { "Economic", "Weather", "Social", "Market" });
+            }
+
+            if (interval_cb.Items.Count == 0)
+            {
+                interval_cb.Items.AddRange(new object[] { "Daily", "Weekly", "Monthly" });
+            }
+
+            lag_nud.Minimum = 0;
+            lag_nud.Maximum = 90;
+            lag_nud.Value = 0;
+
+            if (factor_type_cb.Items.Count > 0)
+                factor_type_cb.SelectedIndex = 0;
+            if (interval_cb.Items.Count > 0)
+                interval_cb.SelectedIndex = 0;
+        }
+    }
+}

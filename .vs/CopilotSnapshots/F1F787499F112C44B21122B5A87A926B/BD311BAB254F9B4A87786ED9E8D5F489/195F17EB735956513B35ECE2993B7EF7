@@ -1,0 +1,229 @@
+﻿using Microsoft.EntityFrameworkCore;
+using SmartStock.Classes.Data.DTOs;
+using SmartStock.Classes.Data.Interfaces;
+using SmartStock.Classes.Models;
+
+namespace SmartStock.Classes.Data.Services
+{
+    public class AnalyticsFacade
+    {
+        private readonly IEconometricEngine _econometricEngine;
+        private readonly IExternalDataProvider _externalDataProvider;
+        private readonly IAIReasoningProvider _aiReasoningProvider;
+        private readonly ILLMPromptBuilder _promptBuilder;
+        private readonly IRepository<SaleDetails> _saleDetailsRepository;
+        private readonly IRepository<AiForecast> _forecastRepository;
+        private readonly IRepository<Product> _productRepository;
+
+        public AnalyticsFacade(
+            IEconometricEngine econometricEngine,
+            IExternalDataProvider externalDataProvider,
+            IAIReasoningProvider aiReasoningProvider,
+            ILLMPromptBuilder promptBuilder,
+            IRepository<SaleDetails> saleDetailsRepository,
+            IRepository<AiForecast> forecastRepository,
+            IRepository<Product> productRepository)
+        {
+            _econometricEngine = econometricEngine ?? throw new ArgumentNullException(nameof(econometricEngine));
+            _externalDataProvider = externalDataProvider ?? throw new ArgumentNullException(nameof(externalDataProvider));
+            _aiReasoningProvider = aiReasoningProvider ?? throw new ArgumentNullException(nameof(aiReasoningProvider));
+            _promptBuilder = promptBuilder ?? throw new ArgumentNullException(nameof(promptBuilder));
+            _saleDetailsRepository = saleDetailsRepository ?? throw new ArgumentNullException(nameof(saleDetailsRepository));
+            _forecastRepository = forecastRepository ?? throw new ArgumentNullException(nameof(forecastRepository));
+            _productRepository = productRepository ?? throw new ArgumentNullException(nameof(productRepository));
+        }
+
+        public async Task<AnalyticsResult> RunAnalysisAsync(AnalysisContext context, CancellationToken cancellationToken = default)
+        {
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
+
+            if (context.ProductId <= 0)
+                throw new InvalidOperationException("A valid product must be selected.");
+
+            var selectedFactors = GetSelectedFactors(context.Parameters);
+            var lagDays = GetIntParameter(context.Parameters, "LagDays");
+            var forecastHorizonDays = GetIntParameter(context.Parameters, "ForecastHorizonDays", 30);
+
+            var product = await _productRepository
+                .GetAll()
+                .AsNoTracking()
+                .FirstOrDefaultAsync(p => p.ProductId == context.ProductId, cancellationToken)
+                ?? throw new InvalidOperationException("Selected product was not found.");
+
+            var historicalSales = await _saleDetailsRepository
+                .GetAll()
+                .Include(sd => sd.Sale)
+                .Where(sd => sd.ProductId == context.ProductId &&
+                             sd.Sale.SaleDate >= context.StartDate &&
+                             sd.Sale.SaleDate <= context.EndDate)
+                .OrderBy(sd => sd.Sale.SaleDate)
+                .Select(sd => (decimal)sd.Quantity)
+                .ToListAsync(cancellationToken);
+
+            var forecastEndDate = context.AnalysisType.Equals("Demand Forecast", StringComparison.OrdinalIgnoreCase)
+                ? context.EndDate.AddDays(Math.Max(1, forecastHorizonDays))
+                : context.EndDate;
+
+            var forecasts = await _forecastRepository
+                .GetAll()
+                .Where(f => f.ProductId == context.ProductId &&
+                            f.ForecastDate >= context.StartDate &&
+                            f.ForecastDate <= forecastEndDate)
+                .OrderBy(f => f.ForecastDate)
+                .AsNoTracking()
+                .ToListAsync(cancellationToken);
+
+            var factors = await _externalDataProvider.GetFactorsAsync(context.StartDate, context.EndDate, cancellationToken);
+            factors = FilterFactors(factors, selectedFactors);
+
+            if (lagDays != 0)
+            {
+                factors = factors
+                    .Select(f => new ExternalFactor
+                    {
+                        FactorId = f.FactorId,
+                        FactorType = f.FactorType,
+                        Description = f.Description,
+                        Region = f.Region,
+                        ImpactValue = f.ImpactValue,
+                        ValueType = f.ValueType,
+                        Date = f.Date.AddDays(lagDays),
+                        IsActive = f.IsActive
+                    })
+                    .ToList();
+            }
+
+            var econometricModel = await _econometricEngine.GetTrendAnalysisAsync(context.ProductId, factors);
+
+            var trendValues = BuildTrendValues(
+                historicalSales,
+                econometricModel.CoefficientValue,
+                context.AnalysisType,
+                forecasts,
+                context.EndDate);
+
+            var prompt = _promptBuilder.BuildInventoryPrompt(product, factors, forecasts);
+            var recommendation = await _aiReasoningProvider.GetRecommendationAsync(prompt);
+
+            return new AnalyticsResult
+            {
+                EconometricModel = econometricModel,
+                Forecasts = forecasts,
+                Factors = factors,
+                HistoricalSales = historicalSales,
+                TrendValues = trendValues,
+                AiInsights = recommendation.Reasoning,
+                Reliability = econometricModel.RSquared,
+                TrendLabel = GetTrendPercentageLabel(historicalSales, trendValues),
+                AiConfidence = forecasts.Count == 0 ? 0m : forecasts.Average(f => f.ConfidenceScore)
+            };
+        }
+
+        private static List<decimal> BuildTrendValues(
+            List<decimal> historicalSales,
+            decimal slope,
+            string analysisType,
+            List<AiForecast> forecasts,
+            DateTime endDate)
+        {
+            if (historicalSales == null || historicalSales.Count == 0)
+                return new List<decimal>();
+
+            var meanX = (historicalSales.Count + 1) / 2m;
+            var meanY = historicalSales.Average();
+            var intercept = meanY - (slope * meanX);
+
+            var trendValues = new List<decimal>(historicalSales.Count + forecasts.Count);
+            for (var i = 0; i < historicalSales.Count; i++)
+            {
+                var x = i + 1;
+                var y = (slope * x) + intercept;
+                trendValues.Add(y);
+            }
+
+            if (analysisType.Equals("Demand Forecast", StringComparison.OrdinalIgnoreCase) && forecasts.Count > 0)
+            {
+                var futureForecasts = forecasts
+                    .Where(f => f.ForecastDate > endDate)
+                    .OrderBy(f => f.ForecastDate)
+                    .Select(f => f.PredictedDemand);
+
+                trendValues.AddRange(futureForecasts);
+            }
+
+            return trendValues;
+        }
+
+        private static List<ExternalFactor> FilterFactors(List<ExternalFactor> factors, List<string> selectedFactors)
+        {
+            if (factors == null || factors.Count == 0)
+                return new List<ExternalFactor>();
+
+            if (selectedFactors.Count == 0)
+                return factors;
+
+            return factors
+                .Where(f => selectedFactors.Any(selected =>
+                    (!string.IsNullOrWhiteSpace(f.Description) &&
+                     f.Description.Contains(selected, StringComparison.OrdinalIgnoreCase)) ||
+                    (!string.IsNullOrWhiteSpace(f.FactorType) &&
+                     f.FactorType.Contains(selected, StringComparison.OrdinalIgnoreCase))))
+                .ToList();
+        }
+
+        private static List<string> GetSelectedFactors(Dictionary<string, object> parameters)
+        {
+            if (parameters == null || !parameters.TryGetValue("SelectedFactors", out var selectedFactorsValue) || selectedFactorsValue == null)
+                return new List<string>();
+
+            if (selectedFactorsValue is List<string> stringList)
+                return stringList.Where(v => !string.IsNullOrWhiteSpace(v)).ToList();
+
+            if (selectedFactorsValue is IEnumerable<object> objectList)
+                return objectList.Select(x => x?.ToString() ?? string.Empty)
+                                 .Where(v => !string.IsNullOrWhiteSpace(v))
+                                 .ToList();
+
+            return new List<string>();
+        }
+
+        private static int GetIntParameter(Dictionary<string, object> parameters, string key, int defaultValue = 0)
+        {
+            if (parameters == null || !parameters.TryGetValue(key, out var rawValue) || rawValue == null)
+                return defaultValue;
+
+            if (rawValue is int intValue)
+                return intValue;
+
+            if (int.TryParse(rawValue.ToString(), out var parsed))
+                return parsed;
+
+            return defaultValue;
+        }
+
+        private static string GetTrendPercentageLabel(List<decimal> historicalSales, List<decimal> trendValues)
+        {
+            if (historicalSales == null || trendValues == null || historicalSales.Count == 0 || trendValues.Count == 0)
+                return "0.00%";
+
+            var baseValue = historicalSales.First();
+            var lastTrend = trendValues.Last();
+
+            if (baseValue == 0)
+            {
+                if (lastTrend > 0)
+                    return "+100.00%";
+                if (lastTrend < 0)
+                    return "-100.00%";
+
+                return "0.00%";
+            }
+
+            var trendPercentage = ((lastTrend - baseValue) / Math.Abs(baseValue)) * 100m;
+            return trendPercentage >= 0
+                ? $"+{trendPercentage:F2}%"
+                : $"{trendPercentage:F2}%";
+        }
+    }
+}

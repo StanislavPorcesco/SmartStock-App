@@ -1,0 +1,30 @@
+Lista funcționalități
+1. Modulul de autentificare și securitate
+Sistem de logare securizat: Interfață de acces bazată pe credențiale, cu suport pentru controlul accesului bazat pe roluri (RBAC - Administrator/Operator).
+Protecție multi-eșec: Implementarea unui contor de eșecuri care blochează automat contul de utilizator după 3 tentative nereușite pentru a preveni atacurile de tip Brute Force.
+Gestiunea sesiunilor: Verificarea și menținerea unui fișier de sesiune locală criptat pentru securizarea stării de autentificare.
+Securizarea datelor: Utilizarea algoritmilor de hashing (ex: SHA-256 cu salt) pentru stocarea parolelor în baza de date.
+2. Modulul de configurare (Setări)
+Personalizarea interfeței: Suport multilingvisitc (Română/Engleză) și motor de schimbare a temei vizuale (Light/Dark Mode).
+Management API AI: Interfață pentru configurarea cheii de acces (API Key) și a parametrilor de funcționare ai agentului.
+Persistența Setărilor: Integrare cu fișierul appSettings.json pentru importul/exportul dinamic al configurațiilor de sistem.
+Infrastructură de date: Setarea dinamică a căii către baza de date SQLite (.db) pentru portabilitatea aplicației.
+Sistem de monitorizare (Logging): Modul de jurnalizare a activității aplicației cu posibilitatea definirii manuale a căii pentru fișierele de log.
+3. Modulul de Gestiune a Stocurilor (CRUD și Căutare)
+Operări în baza de date: Controale optimizate pentru adăugarea, modificarea și ștergerea instanțelor (produse, furnizori, tranzacții).
+Validarea datelor: Motor de validare a input-ului pentru asigurarea integrității datelor înainte de adăugarea în baza de date.
+Căutare avansată (regex): Motor de căutare performant bazat pe expresii regulate, permițând interogări complexe.
+Filtrare după criterii: Filtre de căutare avansată în funcție de Categorie, Stare stoc și Interval de preț, cu afișare în control de tip ListView sau GridView.
+
+
+
+
+4. Modulul de analiză predictivă și inteligență artificială
+Analiza seriilor de timp (Prognoza vânzărilor): Implementarea de modele econometrice pentru estimarea vânzărilor viitoare, identificarea riscului de sold-out și prognozarea trendurilor sezoniere.
+Corelația și regresia liniară: Analiza impactului factorilor externi (ex: prețuri, campanii de marketing) asupra volumului de vânzări prin modele de regresie.
+Optimizarea stocurilor (Modelul EOQ): Calculul automat al Cantității Economice de Comandă (Economic Order Quantity) pentru minimizarea costurilor de stocare și comandă.
+Determinarea punctului de aprovizionare (Reorder point): Calculul automat al momentului optim de reaprovizionare, incluzând determinarea stocului de siguranță pe baza variației cererii.
+Generare SQL asistată (Text-to-SQL): Traducerea cerințelor utilizatorului în query-uri SQL rulate automat în fundal, cu strat de validare pentru prevenirea erorilor.
+Detectarea anomaliilor: Identificarea automată a variațiilor stranii în datele istorice, precum vânzări suspecte sau scăderi drastice de cerere.
+Raportare și vizualizare: Generarea automată de grafice dinamice (corelograme, linii de trend) și rapoarte periodice (săptămânale/lunare/anuale).
+Comunicare automată: Modul integrat pentru trimiterea rapoartelor de analiză econometrică direct prin e-mail.

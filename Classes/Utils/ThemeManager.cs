@@ -231,6 +231,17 @@ namespace SmartStock.Classes.Utils
                     ck.BackColor = theme.DarkColor;
                     ck.ForeColor = theme.Text;
                     break;
+                case TrackBar tr:
+                    tr.BackColor = theme.DarkColor;
+                    break;
+                case RichTextBox rtb:
+                    rtb.BackColor = theme.LightColor;
+                    rtb.ForeColor = theme.Text;
+                    break;
+                case LiveChartsCore.SkiaSharpView.WinForms.CartesianChart chart:
+                    chart.BackColor = theme.LightColor;
+                    chart.ForeColor = theme.Text;
+                    break;
                 default:
                     c.BackColor = Color.Black;
                     break;

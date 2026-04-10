@@ -1,0 +1,9 @@
+{
+  "capabilities": {
+    "fileRead": true,
+    "fileWrite": true,
+    "terminalExecute": true
+  },
+  "preferredModel": "claude-3-7-sonnet-latest",
+  "autoContext": true
+}
