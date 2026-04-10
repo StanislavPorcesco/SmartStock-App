@@ -13,6 +13,155 @@ All logic must reside in Services/Facade, never in UI (Forms).
 ## Guidelines
 - Follow the modular rules in `.claude/rules/`
 - Use custom commands from `.claude/commands/`
+- Always refer to the folder structure in Classes/Data/Services for business logic and Forms/User Control for modular UI elements.
+
+---
+
+# 📂 SmartStock Project Structure
+
+root/
+│
+├── 📂 Classes/            
+│   ├── 📂 Data/
+│   │   ├── 📂 DTOs/
+│   │   │   ├── 📄 AnalysisContext.cs
+│   │   │   ├── 📄 AnalyticsResult.cs
+│   │   │   ├── 📄 CategoryFilterCriteria.cs
+│   │   │   ├── 📄 CustomerFilterCriteria.cs
+│   │   │   ├── 📄 EoqResult.cs
+│   │   │   ├── 📄 ExternalFactorFilterCriteria.cs
+│   │   │   ├── 📄 ProductFilterCriteria.cs
+│   │   │   ├── 📄 SaleFilterCriteria.cs
+│   │   │   ├── 📄 SupplierFilterCriteria.cs
+│   │   │   ├── 📄 TransactionFilterCriteria.cs
+│   │   │   └── 📄 UserFilterCriteria.cs
+│   │   │
+│   │   ├── 📂 Interfaces/
+│   │   │   ├── 📄 IAIReasoningProvider.cs
+│   │   │   ├── 📄 IAnalysisParameterControl.cs
+│   │   │   ├── 📄 IEconometricEngine.cs
+│   │   │   ├── 📄 IExternalDataProvider.cs
+│   │   │   ├── 📄 IFilterControl.cs
+│   │   │   ├── 📄 ILLMPromptBuilder.cs
+│   │   │   ├── 📄 IRepository.cs
+│   │   │   └── 📄 ITextToSqlProvider.cs
+│   │   │
+│   │   ├── 📂 Repositories/
+│   │   │   └── 📄 GenericRepository.cs
+│   │   │
+│   │   └── 📂 Services/
+│   │       ├── 📄 AnalyticsFacade.cs
+│   │       ├── 📄 CategoryService.cs
+│   │       ├── 📄 CustomerService.cs
+│   │       ├── 📄 DeepSeekAiProvider.cs
+│   │       ├── 📄 EconometricEngine.cs
+│   │       ├── 📄 EconometricService.cs
+│   │       ├── 📄 ExternalDataProvider.cs
+│   │       ├── 📄 ExternalFactorService.cs
+│   │       ├── 📄 FallbackAiReasoningProvider.cs
+│   │       ├── 📄 ForecastService.cs
+│   │       ├── 📄 ProductService.cs
+│   │       ├── 📄 PromptBuilder.cs
+│   │       ├── 📄 RecommendationService.cs
+│   │       ├── 📄 SaleService.cs
+│   │       ├── 📄 SupplierService.cs
+│   │       ├── 📄 TextToSqlService.cs
+│   │       ├── 📄 TransactionService.cs
+│   │       └── 📄 UserService.cs
+│   │
+│   ├── 📂 Models/
+│   │   ├── 📄 AiForecast.cs
+│   │   ├── 📄 AiStockRecommendation.cs
+│   │   ├── 📄 Category.cs
+│   │   ├── 📄 Customer.cs
+│   │   ├── 📄 EconometricModel.cs
+│   │   ├── 📄 ExternalFactor.cs
+│   │   ├── 📄 Product.cs
+│   │   ├── 📄 Sale.cs
+│   │   ├── 📄 SaleDetails.cs
+│   │   ├── 📄 Supplier.cs
+│   │   ├── 📄 Transactions.cs
+│   │   └── 📄 User.cs
+│   │
+│   ├── 📂 Settings/
+│   │   ├── 📄 AppSettings.cs
+│   │   └── 📄 SettingsManager.cs
+│   │
+│   └── 📂 Utils/
+│       ├── 📄 ComboBoxHelper.cs
+│       ├── 📄 DataLayer.cs
+│       ├── 📄 DataSeeder.cs
+│       ├── 📄 EmailService.cs
+│       ├── 📄 SecurityService.cs
+│       ├── 📄 SessionManager.cs
+│       ├── 📄 SmartStockContext.cs
+│       ├── 📄 ThemeManager.cs
+│       ├── 📄 ToolTipHelp.cs
+│       └── 📄 UISpaceHelper.cs
+│
+├── 📂 Forms/
+│   ├── 📂 User Control/
+│   │   ├── 📂 AddForms/
+│   │   │   ├── 📄 AddCategory.cs
+│   │   │   ├── 📄 AddCustomer.cs
+│   │   │   ├── 📄 AddExternalFactor.cs
+│   │   │   ├── 📄 AddProduct.cs
+│   │   │   ├── 📄 AddSale.cs
+│   │   │   ├── 📄 AddSupplier.cs
+│   │   │   ├── 📄 AddTransaction.cs
+│   │   │   ├── 📄 AddUser.cs
+│   │   │   └── 📄 BaseAddInstance.cs
+│   │   │
+│   │   ├── 📂 AnalysisForms/
+│   │   │   ├── 📄 CorrelationAnalysis.cs
+│   │   │   ├── 📄 DemandForecast.cs
+│   │   │   ├── 📄 LanguageQuery.cs
+│   │   │   └── 📄 StockOptimization.cs
+│   │   │
+│   │   ├── 📂 LoginForms/
+│   │   │   ├── 📄 AddAccount.cs
+│   │   │   ├── 📄 Login.cs
+│   │   │   ├── 📄 MailConfirmation.cs
+│   │   │   └── 📄 Settings.cs
+│   │   │
+│   │   ├── 📂 ModifyForms/
+│   │   │   ├── 📄 ModifyCategory.cs
+│   │   │   ├── 📄 ModifyCustomer.cs
+│   │   │   ├── 📄 ModifyExternalFactor.cs
+│   │   │   ├── 📄 ModifyProduct.cs
+│   │   │   ├── 📄 ModifySale.cs
+│   │   │   ├── 📄 ModifySupplier.cs
+│   │   │   ├── 📄 ModifyTransaction.cs
+│   │   │   ├── 📄 ModifyUser.cs
+│   │   │   └── 📄 BaseModifyInstance.cs
+│   │   │
+│   │   └── 📂 SearchForms/
+│   │       ├── 📄 FilterCategories.cs
+│   │       ├── 📄 FilterCustomers.cs
+│   │       ├── 📄 FilterExternalFactors.cs
+│   │       ├── 📄 FilterProducts.cs
+│   │       ├── 📄 FilterSales.cs
+│   │       ├── 📄 FilterSuppliers.cs
+│   │       ├── 📄 FilterTransactions.cs
+│   │       └── 📄 FilterUsers.cs
+│   │
+│   ├── 📄 AnalyzeForm.cs
+│   ├── 📄 DetailsPopupForm.cs
+│   ├── 📄 LoginForm.cs
+│   ├── 📄 MenuForm.cs
+│   ├── 📄 SearchForm.cs
+│   └── 📄 SettingsForm.cs
+│
+├── 📂 .claude/
+│   ├── 📄 CLAUDE.md
+│   ├── 📂 agents/
+│   ├── 📂 commands/
+│   ├── 📂 rules/
+│   └── 📄 settings.json
+│
+├── 📄 .claudeignore
+├── 📄 SmartStock.slnx
+└── 📄 Program.cs
 
 ---
 
@@ -44,7 +193,34 @@ All logic must reside in Services/Facade, never in UI (Forms).
 - [X] UI pentru optimizarea stocurilor — `StockOptimization` control cu parametri (HoldingCost, OrderingCost, LeadTime, RiskTolerance)
 - [X] Modelul EOQ complet (Economic Order Quantity) — `Q* = √(2DS/H)`, `SS = z·σ_d·√L`, `ROP = d̄·L + SS`, curba de cost U-shaped în `AnalyticsFacade.ComputeEoq`
 - [X] Determinarea punctului de reaprovizionare (Reorder Point) — calculat statistic în modelul EOQ
-- [ ] Generare SQL asistată de AI (Text-to-SQL) — nicio infrastructură
+- [X] Generare SQL asistată de AI (Text-to-SQL) — `TextToSqlService` + `LanguageQuery` UC + `ITextToSqlProvider`
 - [ ] Detectarea anomaliilor în date istorice — nicio infrastructură
 - [X] Vizualizare grafică dinamică — `AnalyzeForm` cu LiveCharts (linii trend, benzi CI/PI, prognoză)
 - [ ] Trimitere automată de rapoarte prin e-mail — `EmailService` există pentru confirmarea contului, nu pentru rapoarte econometrice
+
+---
+
+## UI Architecture Notes — `AnalyzeForm`
+
+### Contextual Parameter Panel (NLQ Mode)
+When **Natural Language Query** is selected (`analysis_type_cb` index 3), `LoadDynamicParameterControl` hides:
+- `label1` + `target_subject_cb` (Target Subject)
+- `label2` + `start_date_dtp` + `end_date_dtp` (Historical Range)
+
+These fields are irrelevant for free-text SQL queries and are restored when any other analysis type is selected.
+
+### Shared Status/Progress Bar (`panel3`) — Runtime Reparenting
+`panel3` (contains `status_lbl` + `progressBar1`, `Dock = Bottom`, height = 35 px) is a **single shared control** that is reparented at runtime between `groupBox1` (analysis results) and `query_results_gb` (NLQ results) inside `LoadDynamicParameterControl`:
+
+```csharp
+var targetBox = isNlq ? (Control)query_results_gb : groupBox1;
+if (panel3.Parent != targetBox)
+{
+    panel3.Parent?.Controls.Remove(panel3);
+    targetBox.Controls.Add(panel3);
+}
+```
+
+**Why reparenting instead of duplicating:** Duplicating would require two separate `status_lbl`/`progressBar1` references and double updates in `SetBusyState`. A single shared control keeps state management in one place (SRP).
+
+**Padding alignment:** `query_results_gb.Padding = new Padding(10, 10, 10, 3)` — the bottom is 3 px (not 10) to match `groupBox1`'s effective bottom inset (Windows GroupBox default), ensuring `panel3` docks at the same visual position in both modes.

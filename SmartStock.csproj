@@ -91,6 +91,9 @@
     <Compile Update="Forms\User Control\SearchForms\FilterSuppliers.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="Forms\User Control\AnalysisForms\LanguageQuery.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -111,6 +114,13 @@
 
   <ItemGroup>
     <None Include=".github\copilot-instructions.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include=".claude\agents\sql-expert.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Resources\sql-expert.md</TargetPath>
+    </None>
   </ItemGroup>
 
 </Project>

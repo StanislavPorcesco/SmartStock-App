@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             base_pnl = new Panel();
             main_split = new SplitContainer();
             paths_gb = new GroupBox();
@@ -64,6 +66,8 @@
             panel3 = new Panel();
             status_lbl = new Label();
             progressBar1 = new ProgressBar();
+            query_results_gb = new GroupBox();
+            query_dgv = new DataGridView();
             base_pnl.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)main_split).BeginInit();
             main_split.Panel1.SuspendLayout();
@@ -86,6 +90,8 @@
             confidence_pnl.SuspendLayout();
             confidence_table.SuspendLayout();
             panel3.SuspendLayout();
+            query_results_gb.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)query_dgv).BeginInit();
             SuspendLayout();
             // 
             // base_pnl
@@ -115,6 +121,7 @@
             // main_split.Panel2
             // 
             main_split.Panel2.Controls.Add(groupBox1);
+            main_split.Panel2.Controls.Add(query_results_gb);
             main_split.Size = new Size(1280, 699);
             main_split.SplitterDistance = 471;
             main_split.TabIndex = 0;
@@ -553,6 +560,56 @@
             progressBar1.Size = new Size(554, 25);
             progressBar1.TabIndex = 0;
             // 
+            // query_results_gb
+            // 
+            query_results_gb.Controls.Add(query_dgv);
+            query_results_gb.Dock = DockStyle.Fill;
+            query_results_gb.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            query_results_gb.ForeColor = Color.White;
+            query_results_gb.Location = new Point(0, 0);
+            query_results_gb.Name = "query_results_gb";
+            query_results_gb.Padding = new Padding(10, 10, 10, 3);
+            query_results_gb.Size = new Size(805, 699);
+            query_results_gb.TabIndex = 11;
+            query_results_gb.TabStop = false;
+            query_results_gb.Text = "Query Results";
+            query_results_gb.Visible = false;
+            // 
+            // query_dgv
+            // 
+            query_dgv.AllowUserToAddRows = false;
+            query_dgv.AllowUserToDeleteRows = false;
+            query_dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            query_dgv.BackgroundColor = Color.FromArgb(54, 54, 54);
+            query_dgv.BorderStyle = BorderStyle.None;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = Color.FromArgb(40, 40, 40);
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            dataGridViewCellStyle1.ForeColor = Color.White;
+            dataGridViewCellStyle1.SelectionBackColor = Color.FromArgb(40, 40, 40);
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            query_dgv.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            query_dgv.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = Color.FromArgb(54, 54, 54);
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle2.ForeColor = Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(90, 90, 130);
+            dataGridViewCellStyle2.SelectionForeColor = Color.White;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+            query_dgv.DefaultCellStyle = dataGridViewCellStyle2;
+            query_dgv.Dock = DockStyle.Fill;
+            query_dgv.EnableHeadersVisualStyles = false;
+            query_dgv.GridColor = Color.FromArgb(80, 80, 80);
+            query_dgv.Location = new Point(10, 30);
+            query_dgv.Name = "query_dgv";
+            query_dgv.ReadOnly = true;
+            query_dgv.RowHeadersVisible = false;
+            query_dgv.RowHeadersWidth = 51;
+            query_dgv.Size = new Size(785, 659);
+            query_dgv.TabIndex = 0;
+            // 
             // AnalyzeForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -590,6 +647,8 @@
             confidence_table.PerformLayout();
             panel3.ResumeLayout(false);
             panel3.PerformLayout();
+            query_results_gb.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)query_dgv).EndInit();
             ResumeLayout(false);
         }
 
@@ -631,5 +690,7 @@
         private Label label6;
         private Label confidence_lbl;
         private Panel chart_pnl;
+        private GroupBox query_results_gb;
+        private DataGridView query_dgv;
     }
 }

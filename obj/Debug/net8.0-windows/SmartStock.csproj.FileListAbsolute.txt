@@ -179,3 +179,5 @@ D:\Files\Degree\App\SmartStock\bin\Debug\net8.0-windows\runtimes\osx\native\libS
 D:\Files\Degree\App\SmartStock\bin\Debug\net8.0-windows\runtimes\win-arm64\native\libSkiaSharp.dll
 D:\Files\Degree\App\SmartStock\bin\Debug\net8.0-windows\runtimes\win-x64\native\libSkiaSharp.dll
 D:\Files\Degree\App\SmartStock\bin\Debug\net8.0-windows\runtimes\win-x86\native\libSkiaSharp.dll
+D:\Files\Degree\App\SmartStock\bin\Debug\net8.0-windows\Resources\sql-expert.md
+D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.User_Control.AnalysisForms.LanguageQuery.resources

@@ -27,6 +27,7 @@ namespace SmartStock.Forms
         private readonly SmartStockContext? _ownedAnalyticsContext;
         private readonly SmartStockContext? _ownedProductContext;
         private readonly SmartStockContext? _ownedFactorContext;
+        private readonly ITextToSqlProvider? _textToSqlService;
 
         public AnalyzeForm()
         {
@@ -40,6 +41,7 @@ namespace SmartStock.Forms
             _productService = CreateDefaultProductService(_ownedProductContext);
             _externalFactorService = CreateDefaultExternalFactorService(_ownedFactorContext);
             _externalDataProvider = CreateDefaultExternalDataProvider(_ownedFactorContext);
+            _textToSqlService = CreateDefaultTextToSqlService();
 
             _analysisChart = CreateAnalysisChart();
             chart_pnl.Controls.Add(_analysisChart);
@@ -61,6 +63,7 @@ namespace SmartStock.Forms
             _productService = productService ?? throw new ArgumentNullException(nameof(productService));
             _externalFactorService = CreateDefaultExternalFactorService(_ownedFactorContext);
             _externalDataProvider = CreateDefaultExternalDataProvider(_ownedFactorContext);
+            _textToSqlService = CreateDefaultTextToSqlService();
 
             _analysisChart = CreateAnalysisChart();
             chart_pnl.Controls.Add(_analysisChart);
@@ -82,6 +85,7 @@ namespace SmartStock.Forms
             _productService = productService ?? throw new ArgumentNullException(nameof(productService));
             _externalFactorService = externalFactorService ?? throw new ArgumentNullException(nameof(externalFactorService));
             _externalDataProvider = CreateDefaultExternalDataProvider(_ownedFactorContext);
+            _textToSqlService = CreateDefaultTextToSqlService();
 
             _analysisChart = CreateAnalysisChart();
             chart_pnl.Controls.Add(_analysisChart);
@@ -100,7 +104,8 @@ namespace SmartStock.Forms
             {
                 "Demand Forecast",
                 "Correlation Analysis",
-                "Stock Optimization"
+                "Stock Optimization",
+                "Natural Language Query"
             });
 
             analysis_type_cb.SelectedIndexChanged += analysis_type_cb_SelectedIndexChanged;
@@ -139,11 +144,30 @@ namespace SmartStock.Forms
             _currentParameterView?.Dispose();
             dynamic_params_pnl.Controls.Clear();
 
+            var isNlq = selectedIndex == 3;
+            groupBox1.Visible = !isNlq;
+            query_results_gb.Visible = isNlq;
+
+            label1.Visible = !isNlq;
+            target_subject_cb.Visible = !isNlq;
+            label2.Visible = !isNlq;
+            start_date_dtp.Visible = !isNlq;
+            end_date_dtp.Visible = !isNlq;
+
+            // Reparent the shared status/progress panel into whichever GroupBox is active
+            var targetBox = isNlq ? (Control)query_results_gb : groupBox1;
+            if (panel3.Parent != targetBox)
+            {
+                panel3.Parent?.Controls.Remove(panel3);
+                targetBox.Controls.Add(panel3);
+            }
+
             _currentParameterView = selectedIndex switch
             {
                 0 => new DemandForecast(_externalFactorService),
                 1 => new CorrelationAnalysis(),
                 2 => new StockOptimization(),
+                3 => new LanguageQuery(),
                 _ => null
             };
 
@@ -202,6 +226,12 @@ namespace SmartStock.Forms
             if (_analysisCancellationTokenSource != null)
             {
                 _analysisCancellationTokenSource.Cancel();
+                return;
+            }
+
+            if (analysis_type_cb.SelectedIndex == 3)
+            {
+                await RunNaturalLanguageQueryAsync();
                 return;
             }
 
@@ -312,6 +342,14 @@ namespace SmartStock.Forms
 
         private void reset_btn_Click(object sender, EventArgs e)
         {
+            if (analysis_type_cb.SelectedIndex == 3)
+            {
+                _currentParameterControl?.Reset();
+                query_dgv.DataSource = null;
+                status_lbl.Text = "Ready";
+                return;
+            }
+
             analysis_type_cb.SelectedIndex = analysis_type_cb.Items.Count > 0 ? 0 : -1;
             target_subject_cb.SelectedIndex = target_subject_cb.Items.Count > 0 ? 0 : -1;
 
@@ -394,6 +432,71 @@ namespace SmartStock.Forms
             _ownedProductContext?.Dispose();
             _ownedFactorContext?.Dispose();
             base.OnFormClosed(e);
+        }
+
+        private async Task RunNaturalLanguageQueryAsync()
+        {
+            if (_textToSqlService == null)
+            {
+                MessageBox.Show(
+                    "Natural Language Query requires a valid DeepSeek API key.\nPlease configure it in Settings.",
+                    "API Key Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string nlQuery = string.Empty;
+            var parameters = _currentParameterControl?.GetParameters().Parameters;
+            if (parameters != null && parameters.TryGetValue("NaturalLanguageQuery", out var q))
+                nlQuery = q?.ToString() ?? string.Empty;
+
+            if (string.IsNullOrWhiteSpace(nlQuery))
+            {
+                MessageBox.Show("Please enter a natural language query.", "Input Required",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            _analysisCancellationTokenSource = new CancellationTokenSource();
+            SetBusyState(true, "Generating SQL...");
+
+            try
+            {
+                var sql = await _textToSqlService.GenerateSqlAsync(nlQuery, _analysisCancellationTokenSource.Token);
+                status_lbl.Text = "Executing query...";
+                var dataTable = await _textToSqlService.ExecuteQueryAsync(sql, _analysisCancellationTokenSource.Token);
+                query_dgv.DataSource = dataTable;
+                status_lbl.Text = $"Query returned {dataTable.Rows.Count} row(s).";
+            }
+            catch (OperationCanceledException)
+            {
+                status_lbl.Text = "Query cancelled.";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Query failed: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                status_lbl.Text = "Query failed.";
+            }
+            finally
+            {
+                SetBusyState(false, status_lbl.Text);
+                _analysisCancellationTokenSource?.Dispose();
+                _analysisCancellationTokenSource = null;
+            }
+        }
+
+        private static ITextToSqlProvider? CreateDefaultTextToSqlService()
+        {
+            try
+            {
+                var apiKey = SettingsManager.Current.DeepSeekApiKey;
+                if (string.IsNullOrWhiteSpace(apiKey))
+                    return null;
+                return new TextToSqlService(new HttpClient(), apiKey);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         private static CartesianChart CreateAnalysisChart()

@@ -1,0 +1,15 @@
+# Foldere de build
+bin/
+obj/
+.vs/
+*.user
+*.suo
+
+# Resurse și imagini (pe care Claude nu le poate "înțelege" oricum)
+*.png
+*.jpg
+*.ico
+
+# Fișiere de baze de date (nu vrei să citească 50MB de SQLite în context!)
+*.db
+*.sqlite
