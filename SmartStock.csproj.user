@@ -22,6 +22,9 @@
     <Compile Update="Forms\User Control\AddForms\AddSale.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="Forms\User Control\AnalysisForms\AnomalyDetection.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="Forms\User Control\AnalysisForms\CorrelationAnalysis.cs">
       <SubType>UserControl</SubType>
     </Compile>

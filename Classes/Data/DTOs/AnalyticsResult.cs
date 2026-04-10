@@ -34,5 +34,16 @@ namespace SmartStock.Classes.Data.DTOs
         /// Conține toate rezultatele modelului EOQ.
         /// </summary>
         public EoqResult? Eoq { get; set; }
+
+        /// <summary>
+        /// Populat doar când AnalysisType = "Anomaly Detection".
+        /// Lista punctelor de date identificate ca anomalii Z-score.
+        /// </summary>
+        public List<AnomalyPoint> Anomalies { get; set; } = new();
+
+        /// <summary>
+        /// Scorul Z maxim (în valoare absolută) din toate anomaliile detectate.
+        /// </summary>
+        public decimal MaxSeverityZScore { get; set; }
     }
 }

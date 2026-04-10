@@ -185,7 +185,6 @@ root/
 - [X] Operații CRUD pentru toate entitățile (8 controale Add + 8 controale Modify)
 - [X] Validarea datelor la input — implementată în toate formularele Add/Modify
 - [X] Filtrare avansată după criterii — 8 controale `Filter*` cu `IFilterControl` (categorie, stoc, preț, dată etc.)
-- [ ] Motor de căutare bazat pe expresii regulate (regex) — filtrele curente folosesc comparație text simplă, nu regex
 
 ### 4. Modulul de Analiză Predictivă și Inteligență Artificială
 - [X] Prognoza vânzărilor (serii de timp) — `DemandForecast`, `AnalyticsFacade`, `EconometricEngine` (OLS + trend bands)
@@ -194,7 +193,7 @@ root/
 - [X] Modelul EOQ complet (Economic Order Quantity) — `Q* = √(2DS/H)`, `SS = z·σ_d·√L`, `ROP = d̄·L + SS`, curba de cost U-shaped în `AnalyticsFacade.ComputeEoq`
 - [X] Determinarea punctului de reaprovizionare (Reorder Point) — calculat statistic în modelul EOQ
 - [X] Generare SQL asistată de AI (Text-to-SQL) — `TextToSqlService` + `LanguageQuery` UC + `ITextToSqlProvider`
-- [ ] Detectarea anomaliilor în date istorice — nicio infrastructură
+- [X] Detectarea anomaliilor în date istorice — `AnomalyDetection` UC + `AnalyticsFacade.ComputeAnomalyDetection` (Z-score, tolerance band μ±Nσ, scatter overlay în LiveCharts, raport text generat programatic)
 - [X] Vizualizare grafică dinamică — `AnalyzeForm` cu LiveCharts (linii trend, benzi CI/PI, prognoză)
 - [ ] Trimitere automată de rapoarte prin e-mail — `EmailService` există pentru confirmarea contului, nu pentru rapoarte econometrice
 - [X] Persistența automată a rezultatelor analitice — `AiForecasts`, `EconometricModels`, `AiStockRecommendations` populate după fiecare analiză via `AnalyticsFacade` (trei helpers: `PersistForecastsAsync`, `PersistEconometricModelAsync`, `PersistStockRecommendationAsync`)
@@ -250,3 +249,56 @@ catch
 ```
 
 **Rule:** Any time multiple sequential `SaveAsync` calls are made on repositories sharing a single `DbContext`, always `ClearChanges()` on failure — never rely on bare `catch { }` swallowing.
+
+---
+
+## Anomaly Detection — `AnalyzeForm` (index 4 in `analysis_type_cb`)
+
+### Algorithm
+`AnalyticsFacade.ComputeAnomalyDetection()` — pure static method, no DB or AI calls:
+1. Computes `μ` (mean) and `σ` (sample std dev, Bessel-corrected) over the aggregated sales series.
+2. Z-scores each point: `Z = (x − μ) / σ`. Points where `|Z| ≥ threshold` are flagged as `AnomalyPoint`.
+3. Tolerance band: two constant lines at `μ + N·σ` (upper) and `max(0, μ − N·σ)` (lower) — stored in `UpperBond`/`LowerBond`.
+4. Returns `AnalyticsResult` with `Anomalies`, `MaxSeverityZScore`, and a pre-built text report in `AiInsights`.
+
+### DTOs
+- `AnomalyPoint` — `Date`, `ActualValue`, `ExpectedValue`, `ZScore`, `Description`, `DataIndex`
+- `AnalyticsResult` extended with `List<AnomalyPoint> Anomalies` and `decimal MaxSeverityZScore`
+
+### UC Parameters (`AnomalyDetection.cs`)
+| Parameter | Key | Values |
+|---|---|---|
+| Sensitivity | `SensitivityThreshold` | 1.5 / 2.0 / 2.5 / 3.0 (decimal) |
+| Aggregation | `AggregationLevel` | Daily / Weekly / Monthly |
+
+### Chart (`SetAnomalyChartSeries`)
+5 `ISeries[]` entries set via reflection on `CartesianChart.Series`:
+1. `LineSeries<double>` — sales (SteelBlue)
+2. `LineSeries<double>` — mean line (light gray)
+3. `LineSeries<double>` — upper tolerance (orange, semi-transparent fill)
+4. `LineSeries<double>` — lower tolerance (orange)
+5. `ScatterSeries<ObservablePoint>` — anomaly dots (Red, 16px) with `YToolTipLabelFormatter` showing date/actual/expected/Z-score
+
+### Badges (`UpdateAnomalyBadges`)
+| Badge | Label | Color rule |
+|---|---|---|
+| `reliability_lbl` | Anomalies (count) | Green=0, Orange≤2, Red>2 |
+| `trend_lbl` | Max Z-Score | Orange<2.5, OrangeRed<3.0, Red≥3.0 |
+| `confidence_lbl` | Anomaly Rate % | Green<5%, Orange<15%, Red≥15% |
+
+---
+
+## Secret Management — `.env` + `SettingsManager`
+
+### `.env` file (project root, git-ignored)
+```
+DEEPSEEK_API_KEY=<key>
+```
+
+### Load priority in `SettingsManager.Load()`
+1. Deserialize `Resources/appSettings.json` (persisted via Settings UI — always wins).
+2. If `DeepSeekApiKey` is still empty, call `ReadKeyFromDotEnv("DEEPSEEK_API_KEY")`.
+3. `ReadKeyFromDotEnv` walks up from `AppDomain.BaseDirectory` up to 4 parent directories looking for `.env` — finds both the runtime-output copy and the project-root file during development.
+4. Key is loaded into `Current.DeepSeekApiKey` in memory only — **not written back to `appSettings.json`**. Saving via the UI persists it explicitly.
+
+**`SettingsForm`** pre-fills `api_tb.Text = SettingsManager.Current.DeepSeekApiKey` in the constructor so the loaded key is visible for verification.

@@ -56,6 +56,8 @@ namespace SmartStock.Classes.Data.Services
             var confidencePercent = GetConfidencePercent(context.Parameters);
             var isDemandForecast = context.AnalysisType.Equals("Demand Forecast", StringComparison.OrdinalIgnoreCase);
             var isStockOptimization = context.AnalysisType.Equals("Stock Optimization", StringComparison.OrdinalIgnoreCase);
+            var isAnomalyDetection = context.AnalysisType.Equals("Anomaly Detection", StringComparison.OrdinalIgnoreCase);
+            var sensitivityThreshold = (double)GetDecimalParameter(context.Parameters, "SensitivityThreshold", 2.0m);
 
             var product = await _productRepository
                 .GetAll()
@@ -124,6 +126,9 @@ namespace SmartStock.Classes.Data.Services
 
             var historicalDates = aggregatedData.Select(x => x.Date).ToList();
             var historicalSales = aggregatedData.Select(x => (decimal)x.TotalQuantity).ToList();
+
+            if (isAnomalyDetection)
+                return ComputeAnomalyDetection(historicalSales, historicalDates, sensitivityThreshold);
 
             var forecastEndDate = isDemandForecast
                 ? context.EndDate.AddDays(Math.Max(1, forecastHorizonDays))
@@ -676,6 +681,106 @@ namespace SmartStock.Classes.Data.Services
             {
                 _stockRecommendationRepository.ClearChanges();
             }
+        }
+
+        // ── Anomaly Detection ────────────────────────────────────────────────────
+
+        private static AnalyticsResult ComputeAnomalyDetection(
+            List<decimal> sales,
+            List<DateTime> dates,
+            double threshold)
+        {
+            if (sales.Count < 3)
+                throw new InvalidOperationException(
+                    "Insufficient data for anomaly detection. Select a date range with at least 3 data points.");
+
+            var mean     = sales.Average();
+            var variance = sales.Sum(x => (x - mean) * (x - mean)) / Math.Max(1, sales.Count - 1);
+            var stdDev   = (decimal)Math.Sqrt((double)variance);
+
+            var anomalies = new List<AnomalyPoint>();
+            for (var i = 0; i < sales.Count; i++)
+            {
+                var zScore = stdDev > 0 ? (sales[i] - mean) / stdDev : 0m;
+                if (Math.Abs(zScore) >= (decimal)threshold)
+                {
+                    var deviationPct = mean > 0 ? ((sales[i] - mean) / mean) * 100m : 0m;
+                    var description  = zScore > 0
+                        ? $"Unexpected sales spike (+{deviationPct:F0}% vs. average). Check for active promotions."
+                        : $"Unusual drop ({deviationPct:F0}% vs. average). Possible stockout or reporting error.";
+
+                    anomalies.Add(new AnomalyPoint
+                    {
+                        Date          = dates[i],
+                        ActualValue   = sales[i],
+                        ExpectedValue = Math.Round(mean, 2),
+                        ZScore        = Math.Round(zScore, 2),
+                        Description   = description,
+                        DataIndex     = i
+                    });
+                }
+            }
+
+            var upperBand  = Enumerable.Repeat(mean + (decimal)threshold * stdDev, sales.Count).ToList();
+            var lowerBand  = Enumerable.Repeat(Math.Max(0m, mean - (decimal)threshold * stdDev), sales.Count).ToList();
+            var meanLine   = Enumerable.Repeat(mean, sales.Count).ToList();
+            var maxZScore  = anomalies.Count > 0 ? anomalies.Max(a => Math.Abs(a.ZScore)) : 0m;
+
+            return new AnalyticsResult
+            {
+                HistoricalSales   = sales,
+                TrendValues       = meanLine,
+                UpperBond         = upperBand,
+                LowerBond         = lowerBand,
+                ChartLabels       = dates.Select(d => d.ToString("dd MMM")).ToList(),
+                Anomalies         = anomalies,
+                MaxSeverityZScore = maxZScore,
+                Reliability       = 1m,
+                TrendLabel        = anomalies.Count.ToString(),
+                AiConfidence      = maxZScore > 0 ? Math.Min(1m, 1m - (maxZScore - (decimal)threshold) / 5m) : 1m,
+                AiInsights        = BuildAnomalyInsightsText(anomalies, mean, stdDev, threshold, sales.Count)
+            };
+        }
+
+        private static string BuildAnomalyInsightsText(
+            List<AnomalyPoint> anomalies,
+            decimal mean,
+            decimal stdDev,
+            double threshold,
+            int totalCount)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("ANOMALY DETECTION REPORT");
+            sb.AppendLine($"Tolerance Band: [{Math.Max(0m, mean - (decimal)threshold * stdDev):F1}, {mean + (decimal)threshold * stdDev:F1}] units  ({threshold}σ threshold)");
+            sb.AppendLine();
+            sb.AppendLine($"• Total Anomalies Detected: {anomalies.Count}");
+
+            if (anomalies.Count == 0)
+            {
+                sb.AppendLine("• No anomalies detected. All data points fall within the expected tolerance band.");
+                return sb.ToString();
+            }
+
+            var maxSeverity   = anomalies.Max(a => Math.Abs(a.ZScore));
+            var severityLabel = maxSeverity >= 3.0m ? "Critical" : maxSeverity >= 2.5m ? "High" : "Medium";
+            var anomalyRate   = totalCount > 0 ? (decimal)anomalies.Count / totalCount * 100m : 0m;
+
+            sb.AppendLine($"• Maximum Severity: {maxSeverity:F1} Z-Score ({severityLabel})");
+            sb.AppendLine($"• Anomaly Rate: {anomalyRate:F1}% of all data points");
+            sb.AppendLine();
+            sb.AppendLine("DETECTED ANOMALIES:");
+            sb.AppendLine();
+
+            foreach (var a in anomalies.OrderBy(x => x.Date))
+            {
+                var dir = a.ZScore > 0 ? "↑ SPIKE" : "↓ DROP";
+                sb.AppendLine($"{dir}  {a.Date:MMM dd, yyyy}");
+                sb.AppendLine($"   Actual: {a.ActualValue:F0} units  |  Expected: {a.ExpectedValue:F0} units  |  Z = {a.ZScore:+0.00;-0.00}");
+                sb.AppendLine($"   {a.Description}");
+                sb.AppendLine();
+            }
+
+            return sb.ToString();
         }
 
         // ── EOQ ───────────────────────────────────────────────────────────────────

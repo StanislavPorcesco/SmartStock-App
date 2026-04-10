@@ -1,4 +1,6 @@
 ﻿
+using LiveChartsCore;
+using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.WinForms;
 using LiveChartsCore.SkiaSharpView.Painting;
@@ -24,6 +26,7 @@ namespace SmartStock.Forms
         private UserControl? _currentParameterView;
         private CancellationTokenSource? _analysisCancellationTokenSource;
         private readonly CartesianChart _analysisChart;
+        private Dictionary<int, AnomalyPoint> _anomalyLookup = new();
         private readonly SmartStockContext? _ownedAnalyticsContext;
         private readonly SmartStockContext? _ownedProductContext;
         private readonly SmartStockContext? _ownedFactorContext;
@@ -105,7 +108,8 @@ namespace SmartStock.Forms
                 "Demand Forecast",
                 "Correlation Analysis",
                 "Stock Optimization",
-                "Natural Language Query"
+                "Natural Language Query",
+                "Anomaly Detection"
             });
 
             analysis_type_cb.SelectedIndexChanged += analysis_type_cb_SelectedIndexChanged;
@@ -168,6 +172,7 @@ namespace SmartStock.Forms
                 1 => new CorrelationAnalysis(),
                 2 => new StockOptimization(),
                 3 => new LanguageQuery(),
+                4 => new AnomalyDetection(),
                 _ => null
             };
 
@@ -259,6 +264,11 @@ namespace SmartStock.Forms
                 {
                     SetEoqChartSeries(result.Eoq);
                     UpdateEoqBadges(result.Eoq);
+                }
+                else if (baseContext.AnalysisType.Equals("Anomaly Detection", StringComparison.OrdinalIgnoreCase))
+                {
+                    SetAnomalyChartSeries(result);
+                    UpdateAnomalyBadges(result);
                 }
                 else
                 {
@@ -661,6 +671,110 @@ namespace SmartStock.Forms
             {
                 property.SetValue(target, parsed);
             }
+        }
+
+        // ── Anomaly Detection chart & badges ─────────────────────────────────────
+
+        private void SetAnomalyChartSeries(AnalyticsResult result)
+        {
+            var seriesProperty = _analysisChart.GetType().GetProperty("Series");
+            if (seriesProperty == null) return;
+
+            _anomalyLookup = result.Anomalies.ToDictionary(a => a.DataIndex);
+
+            var salesValues  = result.HistoricalSales.Select(x => (double)x).ToArray();
+            var meanValues   = result.TrendValues.Select(x => (double)x).ToArray();
+            var upperValues  = result.UpperBond.Select(x => (double)x).ToArray();
+            var lowerValues  = result.LowerBond.Select(x => (double)x).ToArray();
+
+            var anomalyPoints = result.Anomalies
+                .Select(a => new ObservablePoint(a.DataIndex, (double)a.ActualValue))
+                .ToArray();
+
+            var lookup = _anomalyLookup;
+            var series = new ISeries[]
+            {
+                new LineSeries<double>
+                {
+                    Name        = "Daily Sales",
+                    Fill        = null,
+                    GeometrySize = 4,
+                    Stroke      = new SolidColorPaint(SKColors.SteelBlue) { StrokeThickness = 2 },
+                    Values      = salesValues
+                },
+                new LineSeries<double>
+                {
+                    Name        = $"Mean ({meanValues.FirstOrDefault():F1})",
+                    Fill        = null,
+                    GeometrySize = 0,
+                    Stroke      = new SolidColorPaint(new SKColor(200, 200, 200, 200)) { StrokeThickness = 1.5f },
+                    Values      = meanValues
+                },
+                new LineSeries<double>
+                {
+                    Name        = "Upper Tolerance",
+                    Fill        = new SolidColorPaint(new SKColor(255, 165, 0, 35)),
+                    GeometrySize = 0,
+                    Stroke      = new SolidColorPaint(new SKColor(255, 165, 0, 200)) { StrokeThickness = 1.5f },
+                    Values      = upperValues
+                },
+                new LineSeries<double>
+                {
+                    Name        = "Lower Tolerance",
+                    Fill        = null,
+                    GeometrySize = 0,
+                    Stroke      = new SolidColorPaint(new SKColor(255, 165, 0, 200)) { StrokeThickness = 1.5f },
+                    Values      = lowerValues
+                },
+                new ScatterSeries<ObservablePoint>
+                {
+                    Name        = "Anomaly",
+                    Fill        = new SolidColorPaint(SKColors.Red),
+                    Stroke      = new SolidColorPaint(SKColors.DarkRed) { StrokeThickness = 2 },
+                    GeometrySize = 16,
+                    Values      = anomalyPoints,
+                    YToolTipLabelFormatter = point =>
+                    {
+                        var idx = (int)Math.Round(point.Model?.X ?? 0);
+                        if (!lookup.TryGetValue(idx, out var a))
+                            return $"Value: {point.Model?.Y:F0} units";
+
+                        var direction = a.ZScore > 0 ? "Spike" : "Drop";
+                        return $"[{direction}] {a.Date:dd/MM/yyyy} | " +
+                               $"Actual: {a.ActualValue:F0}  Expected: {a.ExpectedValue:F0}  " +
+                               $"Z={a.ZScore:+0.00;-0.00}";
+                    }
+                }
+            };
+
+            seriesProperty.SetValue(_analysisChart, series);
+            ConfigureAxes(result.ChartLabels);
+        }
+
+        private void UpdateAnomalyBadges(AnalyticsResult result)
+        {
+            label5.Text = "Anomalies";
+            label4.Text = "Max Z-Score";
+            label6.Text = "Anomaly Rate";
+
+            var totalPoints  = result.HistoricalSales.Count;
+            var anomalyRate  = totalPoints > 0
+                ? (decimal)result.Anomalies.Count / totalPoints * 100m
+                : 0m;
+            var maxZ = result.MaxSeverityZScore;
+
+            reliability_lbl.Text = result.Anomalies.Count.ToString();
+            trend_lbl.Text       = maxZ > 0 ? $"{maxZ:F1}" : "0.0";
+            confidence_lbl.Text  = $"{anomalyRate:F1}%";
+
+            reliability_lbl.ForeColor = result.Anomalies.Count == 0 ? Color.LimeGreen
+                : result.Anomalies.Count <= 2 ? Color.Orange : Color.Red;
+
+            trend_lbl.ForeColor = maxZ < 2.5m ? Color.Orange
+                : maxZ < 3.0m ? Color.OrangeRed : Color.Red;
+
+            confidence_lbl.ForeColor = anomalyRate < 5m ? Color.LimeGreen
+                : anomalyRate < 15m ? Color.Orange : Color.Red;
         }
 
         // ── EOQ chart & badges ────────────────────────────────────────────────────

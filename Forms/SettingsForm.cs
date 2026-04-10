@@ -10,6 +10,7 @@ namespace SmartStock
             InitializeComponent();
             DataLayer.populateOptions(themes_cb);
             DataLayer.setRightIndex(themes_cb);
+            api_tb.Text = SettingsManager.Current.DeepSeekApiKey;
             ThemeManager.Apply(this);
             ThemeManager.OnThemeChanged += HandleThemeUpdate;
         }
