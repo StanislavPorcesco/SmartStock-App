@@ -15,6 +15,8 @@ namespace SmartStock.Classes.Data.Services
         private readonly IRepository<SaleDetails> _saleDetailsRepository;
         private readonly IRepository<AiForecast> _forecastRepository;
         private readonly IRepository<Product> _productRepository;
+        private readonly IRepository<EconometricModel> _econometricModelRepository;
+        private readonly IRepository<AiStockRecommendation> _stockRecommendationRepository;
 
         public AnalyticsFacade(
             IEconometricEngine econometricEngine,
@@ -23,7 +25,9 @@ namespace SmartStock.Classes.Data.Services
             ILLMPromptBuilder promptBuilder,
             IRepository<SaleDetails> saleDetailsRepository,
             IRepository<AiForecast> forecastRepository,
-            IRepository<Product> productRepository)
+            IRepository<Product> productRepository,
+            IRepository<EconometricModel> econometricModelRepository,
+            IRepository<AiStockRecommendation> stockRecommendationRepository)
         {
             _econometricEngine = econometricEngine ?? throw new ArgumentNullException(nameof(econometricEngine));
             _externalDataProvider = externalDataProvider ?? throw new ArgumentNullException(nameof(externalDataProvider));
@@ -32,6 +36,8 @@ namespace SmartStock.Classes.Data.Services
             _saleDetailsRepository = saleDetailsRepository ?? throw new ArgumentNullException(nameof(saleDetailsRepository));
             _forecastRepository = forecastRepository ?? throw new ArgumentNullException(nameof(forecastRepository));
             _productRepository = productRepository ?? throw new ArgumentNullException(nameof(productRepository));
+            _econometricModelRepository = econometricModelRepository ?? throw new ArgumentNullException(nameof(econometricModelRepository));
+            _stockRecommendationRepository = stockRecommendationRepository ?? throw new ArgumentNullException(nameof(stockRecommendationRepository));
         }
 
         public async Task<AnalyticsResult> RunAnalysisAsync(AnalysisContext context, CancellationToken cancellationToken = default)
@@ -86,6 +92,8 @@ namespace SmartStock.Classes.Data.Services
 
                 var eoqPrompt = BuildEoqPrompt(product, eoq);
                 var eoqReco   = await _aiReasoningProvider.GetRecommendationAsync(eoqPrompt);
+
+                await PersistStockRecommendationAsync(context.ProductId, eoq, eoqReco.Reasoning, product, cancellationToken);
 
                 return new AnalyticsResult
                 {
@@ -179,6 +187,10 @@ namespace SmartStock.Classes.Data.Services
                 forecasts);
 
             var recommendation = await _aiReasoningProvider.GetRecommendationAsync(prompt);
+
+            await PersistEconometricModelAsync(econometricModel, cancellationToken);
+            if (isDemandForecast)
+                await PersistForecastsAsync(context.ProductId, trendBands.TrendValues, historicalSales.Count, context.EndDate, forecastHorizonDays, econometricModel.RSquared, cancellationToken);
 
             return new AnalyticsResult
             {
@@ -556,6 +568,114 @@ namespace SmartStock.Classes.Data.Services
             }
 
             return value.ToString() ?? string.Empty;
+        }
+
+        // ── Persistence helpers ───────────────────────────────────────────────────
+
+        private async Task PersistEconometricModelAsync(EconometricModel model, CancellationToken cancellationToken)
+        {
+            try
+            {
+                _econometricModelRepository.Add(new EconometricModel
+                {
+                    ModelName        = model.ModelName,
+                    CoefficientValue = model.CoefficientValue,
+                    PValue           = model.PValue,
+                    RSquared         = model.RSquared,
+                    LastTrainedDate  = DateTime.Now
+                });
+                await _econometricModelRepository.SaveAsync(cancellationToken);
+            }
+            catch
+            {
+                // Clear the change tracker so the stuck entity doesn't contaminate
+                // the subsequent PersistForecastsAsync call on the same shared context.
+                _econometricModelRepository.ClearChanges();
+            }
+        }
+
+        private async Task PersistForecastsAsync(
+            int productId,
+            List<decimal> allTrendValues,
+            int historicalCount,
+            DateTime endDate,
+            int horizonDays,
+            decimal rSquared,
+            CancellationToken cancellationToken)
+        {
+            try
+            {
+                var horizon      = Math.Max(1, horizonDays);
+                var forecastStart = endDate.Date.AddDays(1);
+                var forecastEnd   = endDate.Date.AddDays(horizon);
+
+                var existing = await _forecastRepository.FindAsync(
+                    f => f.ProductId == productId &&
+                         f.ForecastDate >= forecastStart &&
+                         f.ForecastDate <= forecastEnd);
+
+                if (existing.Count > 0)
+                    _forecastRepository.DeleteRange(existing);
+
+                var futureTrend = allTrendValues.Skip(historicalCount).ToList();
+                var confidenceScore = Math.Max(0m, Math.Min(1m, rSquared));
+
+                var newForecasts = futureTrend
+                    .Take(horizon)
+                    .Select((value, i) => new AiForecast
+                    {
+                        ProductId       = productId,
+                        ForecastDate    = forecastStart.AddDays(i),
+                        PredictedDemand = Math.Max(0m, Math.Round(value, 2)),
+                        ConfidenceScore = Math.Round(confidenceScore, 4),
+                        ModelVersion    = "OLS-v1"
+                    })
+                    .ToList();
+
+                if (newForecasts.Count > 0)
+                    _forecastRepository.AddRange(newForecasts);
+
+                await _forecastRepository.SaveAsync(cancellationToken);
+            }
+            catch
+            {
+                _forecastRepository.ClearChanges();
+            }
+        }
+
+        private async Task PersistStockRecommendationAsync(
+            int productId,
+            EoqResult eoq,
+            string aiReasoning,
+            Product product,
+            CancellationToken cancellationToken)
+        {
+            try
+            {
+                var priorityLevel = product.CurrentStock < (double)eoq.ReorderPoint
+                    ? "High"
+                    : product.CurrentStock < (double)(eoq.ReorderPoint * 1.5m)
+                        ? "Medium"
+                        : "Low";
+
+                var reasoning = string.IsNullOrWhiteSpace(aiReasoning)
+                    ? $"EOQ={eoq.EoqQuantity:F0} units, ROP={eoq.ReorderPoint:F0} units, SS={eoq.SafetyStock:F0} units."
+                    : aiReasoning.Length > 500 ? aiReasoning[..500] : aiReasoning;
+
+                _stockRecommendationRepository.Add(new AiStockRecommendation
+                {
+                    ProductId        = productId,
+                    SuggestedQuantity = (int)Math.Round(eoq.EoqQuantity),
+                    PriorityLevel    = priorityLevel,
+                    Reasoning        = reasoning,
+                    CreatedAt        = DateTime.Now
+                });
+                await _stockRecommendationRepository.SaveAsync(cancellationToken);
+            }
+            catch
+            {
+                _stockRecommendationRepository.ClearChanges();
+            }
         }
 
         // ── EOQ ───────────────────────────────────────────────────────────────────

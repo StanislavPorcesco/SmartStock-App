@@ -143,5 +143,11 @@ namespace SmartStock.Classes.Data.Repositories
                 throw new InvalidOperationException("An unexpected error occurred while saving.", ex);
             }
         }
+
+        /// <summary>
+        /// Detașează toate entitățile urmărite din change tracker.
+        /// Previne eșecurile în cascadă când un SaveAsync eșuează pe contextul partajat.
+        /// </summary>
+        public virtual void ClearChanges() => _context.ChangeTracker.Clear();
     }
 }

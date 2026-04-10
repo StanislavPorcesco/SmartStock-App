@@ -319,6 +319,10 @@ namespace SmartStock.Forms
 
         private void UpdateBadges(AnalyticsResult result)
         {
+            label5.Text = "Reliability (R²)";
+            label4.Text = "Sales Trend (%)";
+            label6.Text = "AI Confidence";
+
             var rSquared = result.EconometricModel?.RSquared ?? result.Reliability;
             reliability_lbl.Text = $"{rSquared:F3}";
             trend_lbl.Text = result.TrendLabel;
@@ -405,7 +409,9 @@ namespace SmartStock.Forms
                 promptBuilder,
                 new GenericRepository<SaleDetails>(context),
                 new GenericRepository<AiForecast>(context),
-                new GenericRepository<Product>(context));
+                new GenericRepository<Product>(context),
+                new GenericRepository<EconometricModel>(context),
+                new GenericRepository<AiStockRecommendation>(context));
         }
 
         private static ProductService CreateDefaultProductService(SmartStockContext context)

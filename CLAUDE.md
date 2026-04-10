@@ -197,6 +197,7 @@ root/
 - [ ] Detectarea anomaliilor în date istorice — nicio infrastructură
 - [X] Vizualizare grafică dinamică — `AnalyzeForm` cu LiveCharts (linii trend, benzi CI/PI, prognoză)
 - [ ] Trimitere automată de rapoarte prin e-mail — `EmailService` există pentru confirmarea contului, nu pentru rapoarte econometrice
+- [X] Persistența automată a rezultatelor analitice — `AiForecasts`, `EconometricModels`, `AiStockRecommendations` populate după fiecare analiză via `AnalyticsFacade` (trei helpers: `PersistForecastsAsync`, `PersistEconometricModelAsync`, `PersistStockRecommendationAsync`)
 
 ---
 
@@ -224,3 +225,28 @@ if (panel3.Parent != targetBox)
 **Why reparenting instead of duplicating:** Duplicating would require two separate `status_lbl`/`progressBar1` references and double updates in `SetBusyState`. A single shared control keeps state management in one place (SRP).
 
 **Padding alignment:** `query_results_gb.Padding = new Padding(10, 10, 10, 3)` — the bottom is 3 px (not 10) to match `groupBox1`'s effective bottom inset (Windows GroupBox default), ensuring `panel3` docks at the same visual position in both modes.
+
+---
+
+## Repository Pattern — `IRepository<T>` / `GenericRepository<T>`
+
+### `ClearChanges()` — Cascade Failure Guard
+
+`IRepository<T>` exposes `void ClearChanges()`, implemented in `GenericRepository<T>` as:
+
+```csharp
+public virtual void ClearChanges() => _context.ChangeTracker.Clear();
+```
+
+**Why it exists:** All five repositories injected into `AnalyticsFacade` share the **same `SmartStockContext` instance**. If a `SaveAsync` call fails (e.g., a constraint violation in `PersistEconometricModelAsync`), the failed entity remains in `Added` state in the change tracker. The next `SaveAsync` on any other repository (e.g., `PersistForecastsAsync`) would inherit the poisoned context, retry the stuck INSERT, and roll back the entire transaction — silently, because each helper has a `catch` block.
+
+**How to apply:** Call `repository.ClearChanges()` inside every persistence `catch` block before the method returns. This detaches all tracked entities and ensures subsequent persist helpers start from a clean slate:
+
+```csharp
+catch
+{
+    _econometricModelRepository.ClearChanges(); // detaches stuck entities from shared context
+}
+```
+
+**Rule:** Any time multiple sequential `SaveAsync` calls are made on repositories sharing a single `DbContext`, always `ClearChanges()` on failure — never rely on bare `catch { }` swallowing.

@@ -70,5 +70,12 @@ namespace SmartStock.Classes.Data.Interfaces
         /// Anulează toate modificările din sesiunea curentă.
         /// </summary>
         Task<int> SaveAsync(CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Detașează toate entitățile urmărite din change tracker.
+        /// Folosit pentru a preveni eșecurile în cascadă când un SaveAsync eșuează
+        /// și entitățile rămân în stare Added pe contextul partajat.
+        /// </summary>
+        void ClearChanges();
     }
 }
