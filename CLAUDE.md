@@ -195,7 +195,7 @@ root/
 - [X] Generare SQL asistată de AI (Text-to-SQL) — `TextToSqlService` + `LanguageQuery` UC + `ITextToSqlProvider`
 - [X] Detectarea anomaliilor în date istorice — `AnomalyDetection` UC + `AnalyticsFacade.ComputeAnomalyDetection` (Z-score, tolerance band μ±Nσ, scatter overlay în LiveCharts, raport text generat programatic)
 - [X] Vizualizare grafică dinamică — `AnalyzeForm` cu LiveCharts (linii trend, benzi CI/PI, prognoză)
-- [ ] Trimitere automată de rapoarte prin e-mail — `EmailService` există pentru confirmarea contului, nu pentru rapoarte econometrice
+- [X] Trimitere automată de rapoarte prin e-mail — `WeeklyReportService` + `ReportScheduler` (7-day cooldown, ±5-min window); HTML report cu Sales Snapshot, AI Alerts (anomalii Z-score + stoc critic 3 zile), Action Plan (top 3 EOQ recs); chart PNG atașat din `AnalyzeForm.SaveChartSnapshot()`; UI în `SettingsForm.section_b_pnl` (enable, recipient, time, test button)
 - [X] Persistența automată a rezultatelor analitice — `AiForecasts`, `EconometricModels`, `AiStockRecommendations` populate după fiecare analiză via `AnalyticsFacade` (trei helpers: `PersistForecastsAsync`, `PersistEconometricModelAsync`, `PersistStockRecommendationAsync`)
 
 ---

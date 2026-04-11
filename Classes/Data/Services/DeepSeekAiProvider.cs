@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json;
 using SmartStock.Classes.Data.Interfaces;
 using SmartStock.Classes.Models;
+using SmartStock.Classes.Settings;
 
 namespace SmartStock.Classes.Data.Services
 {
@@ -12,21 +13,36 @@ namespace SmartStock.Classes.Data.Services
         private static readonly TimeSpan RequestTimeout = TimeSpan.FromSeconds(30);
 
         private readonly HttpClient _httpClient;
-        private readonly string _apiKey;
+
+        // Key provided explicitly at construction time (e.g. from tests).
+        // May be empty — ResolveApiKey() falls back to SettingsManager at call time.
+        private readonly string _constructorApiKey;
 
         public DeepSeekAiProvider(HttpClient httpClient, string? apiKey = null)
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             _httpClient.BaseAddress ??= new Uri("https://api.deepseek.com/");
+            _constructorApiKey = apiKey ?? string.Empty;
+            // No throw here — key resolution is deferred to GetRecommendationAsync
+            // so the provider works even when the form is constructed before the key is saved.
+        }
 
-            _apiKey = string.IsNullOrWhiteSpace(apiKey)
-                ? Environment.GetEnvironmentVariable("DEEPSEEK_API_KEY") ?? string.Empty
-                : apiKey;
+        /// <summary>
+        /// Resolves the effective API key at call time:
+        /// 1. Constructor-supplied key (if non-empty)
+        /// 2. Current SettingsManager value (handles key saved after form was opened)
+        /// 3. DEEPSEEK_API_KEY environment variable
+        /// </summary>
+        private string ResolveApiKey()
+        {
+            if (!string.IsNullOrWhiteSpace(_constructorApiKey))
+                return _constructorApiKey;
 
-            if (string.IsNullOrWhiteSpace(_apiKey))
-            {
-                throw new InvalidOperationException("DeepSeek API key is missing. Set DEEPSEEK_API_KEY or provide apiKey in constructor.");
-            }
+            var settingsKey = SettingsManager.Current.DeepSeekApiKey;
+            if (!string.IsNullOrWhiteSpace(settingsKey))
+                return settingsKey;
+
+            return Environment.GetEnvironmentVariable("DEEPSEEK_API_KEY") ?? string.Empty;
         }
 
         public async Task<AiStockRecommendation> GetRecommendationAsync(string prompt)
@@ -34,11 +50,16 @@ namespace SmartStock.Classes.Data.Services
             if (string.IsNullOrWhiteSpace(prompt))
                 throw new ArgumentException("Prompt cannot be null or empty.", nameof(prompt));
 
+            var apiKey = ResolveApiKey();
+            if (string.IsNullOrWhiteSpace(apiKey))
+                throw new InvalidOperationException(
+                    "DeepSeek API key is not configured. Please add your API key in Settings and retry.");
+
             using var cts = new CancellationTokenSource(RequestTimeout);
 
             try
             {
-                using var request = BuildRequest(prompt);
+                using var request = BuildRequest(prompt, apiKey);
                 using var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cts.Token);
 
                 var responseContent = await response.Content.ReadAsStringAsync(cts.Token);
@@ -66,7 +87,7 @@ namespace SmartStock.Classes.Data.Services
             }
         }
 
-        private HttpRequestMessage BuildRequest(string prompt)
+        private static HttpRequestMessage BuildRequest(string prompt, string apiKey)
         {
             const string systemMessage =
                 "You are an inventory optimization assistant. " +
@@ -90,7 +111,7 @@ namespace SmartStock.Classes.Data.Services
                 Content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json")
             };
 
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _apiKey);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
             return request;
         }
 

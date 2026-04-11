@@ -278,6 +278,9 @@ namespace SmartStock.Forms
 
                 ApplyMarkdownLikeFormatting(result.AiInsights);
                 status_lbl.Text = "Analysis complete.";
+
+                // Best-effort chart snapshot for the weekly report email attachment.
+                _ = Task.Delay(1000).ContinueWith(_ => BeginInvoke(SaveChartSnapshot));
             }
             catch (OperationCanceledException)
             {
@@ -294,6 +297,30 @@ namespace SmartStock.Forms
                 _analysisCancellationTokenSource.Dispose();
                 _analysisCancellationTokenSource = null;
             }
+        }
+
+        /// <summary>
+        /// Saves a PNG snapshot of the current chart to Resources/last_chart.png.
+        /// Called ~1 second after analysis completes so LiveCharts has time to render.
+        /// Failures are silently swallowed — the snapshot is best-effort.
+        /// </summary>
+        private void SaveChartSnapshot()
+        {
+            try
+            {
+                if (_analysisChart.Width <= 0 || _analysisChart.Height <= 0) return;
+
+                var bmp = new Bitmap(_analysisChart.Width, _analysisChart.Height);
+                _analysisChart.DrawToBitmap(bmp, new Rectangle(0, 0, _analysisChart.Width, _analysisChart.Height));
+
+                var snapshotPath = Path.Combine(
+                    AppDomain.CurrentDomain.BaseDirectory, "Resources", "last_chart.png");
+                bmp.Save(snapshotPath, System.Drawing.Imaging.ImageFormat.Png);
+                bmp.Dispose();
+
+                SmartStock.Classes.Utils.ReportScheduler.LastChartSnapshotPath = snapshotPath;
+            }
+            catch { /* best-effort — never crash the UI */ }
         }
 
         private void SetBusyState(bool isBusy, string status)
@@ -399,16 +426,9 @@ namespace SmartStock.Forms
             var externalDataProvider = new ExternalDataProvider(
                 new GenericRepository<ExternalFactor>(context));
 
-            IAIReasoningProvider aiReasoningProvider;
-            try
-            {
-                var apiKey = SettingsManager.Current.DeepSeekApiKey;
-                aiReasoningProvider = new DeepSeekAiProvider(new HttpClient(), apiKey);
-            }
-            catch
-            {
-                aiReasoningProvider = new FallbackAiReasoningProvider();
-            }
+            // Key is resolved at call time inside DeepSeekAiProvider.ResolveApiKey(),
+            // so this works even when the form is opened before the key is saved in Settings.
+            IAIReasoningProvider aiReasoningProvider = new DeepSeekAiProvider(new HttpClient());
 
             var promptBuilder = new PromptBuilder();
 

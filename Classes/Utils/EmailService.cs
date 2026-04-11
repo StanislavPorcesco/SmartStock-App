@@ -2,55 +2,65 @@
 namespace SmartStock.Classes.Utils
 {
     using System;
+    using System.IO;
     using System.Net;
     using System.Net.Mail;
 
     public static class EmailService
     {
-        // Configurează aceste date în appSettings.json 
-        private static readonly string SenderEmail = "smartstock.auth@gmail.com";
-        private static readonly string SenderPassword = "atpmqdmhoglkariy";
+        private static readonly string AuthEmail    = "smartstock.auth@gmail.com";
+        private static readonly string AuthPassword = "atpmqdmhoglkariy";
+
+        private static readonly string ReportsEmail    = "smartstock.reports@gmail.com";
+        private static readonly string ReportsPassword = "clhycbnyrxbqqfjh";
 
         public static string SendVerificationCode(string receiverEmail)
         {
             Random random = new Random();
             string verificationCode = random.Next(100000, 999999).ToString();
 
-            // Șablonul HTML (păstrat într-un string sau fișier local)
-            // Modifică string-ul HTML astfel (observă acoladele duble la CSS):
-            string htmlTemplate = @"
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <style>
-                        body {{ background-color: #1a1a1a; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }}
-                        .container {{ max-width: 600px; margin: 40px auto; background-color: #252525; border: 1px solid #333; border-radius: 8px; overflow: hidden; }}
-                        .header {{ background-color: #333; padding: 20px; text-align: center; border-bottom: 2px solid #ffffff; }}
-                        .header h1 {{ color: #ffffff; margin: 0; font-size: 24px; letter-spacing: 2px; }}
-                        .content {{ padding: 40px; text-align: center; color: #cccccc; }}
-                        .code-box {{ background-color: #111; border: 1px dashed #ffffff; color: #ffffff; font-size: 36px; font-weight: bold; letter-spacing: 10px; padding: 20px; margin: 30px 0; display: inline-block; border-radius: 4px; }}
-                        .footer {{ padding: 20px; text-align: center; color: #666; font-size: 12px; background-color: #1f1f1f; }}
-                    </style>
-                </head>
-                <body>
-                    <div class='container'>
-                        <div class='header'><h1>SMART STOCK</h1></div>
-                        <div class='content'>
-                            <p>Hello! Use the following code to verify your new account:</p>
-                            <div class='code-box'>{0}</div>
-                            <p>If you didn't request this code, please ignore this email.</p>
-                        </div>
-                        <div class='footer'>&copy; 2026 SmartStock Security Team</div>
-                    </div>
-                </body>
-                </html>";
+            string htmlTemplate = @"<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>SmartStock Verification</title>
+<style>
+  * {{ box-sizing: border-box; margin: 0; padding: 0; }}
+  body {{ background-color: #121212; font-family: 'Segoe UI', Tahoma, sans-serif; color: #ccc; padding: 20px; }}
+  .container {{ max-width: 520px; margin: 40px auto; background: #1e1e1e; border: 1px solid #2d2d2d; border-radius: 10px; overflow: hidden; }}
+  .header {{ background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 28px 32px; text-align: center; border-bottom: 2px solid #4CAF50; }}
+  .header h1 {{ color: #fff; font-size: 26px; letter-spacing: 4px; font-weight: 800; }}
+  .header .subtitle {{ color: #4CAF50; font-size: 12px; margin-top: 6px; letter-spacing: 1.5px; text-transform: uppercase; }}
+  .content {{ padding: 36px 32px; text-align: center; }}
+  .content p {{ color: #aaa; font-size: 14px; line-height: 1.7; }}
+  .code-box {{ background: #252525; border: 1px solid #333; border-left: 3px solid #4CAF50; color: #fff; font-size: 38px; font-weight: 800; letter-spacing: 14px; padding: 20px 28px; margin: 28px auto; display: inline-block; border-radius: 6px; font-family: 'Courier New', monospace; }}
+  .note {{ color: #555; font-size: 12px; margin-top: 20px; }}
+  .footer {{ padding: 16px 28px; text-align: center; color: #444; font-size: 11px; background: #161616; border-top: 1px solid #2a2a2a; }}
+</style>
+</head>
+<body>
+<div class='container'>
+  <div class='header'>
+    <h1>SMART STOCK</h1>
+    <div class='subtitle'>Account Verification</div>
+  </div>
+  <div class='content'>
+    <p>Hello! Use the code below to verify your new SmartStock account.</p>
+    <div class='code-box'>{0}</div>
+    <p class='note'>This code is valid for a single use.<br>If you didn't request this, please ignore this email.</p>
+  </div>
+  <div class='footer'>&copy; {1} SmartStock Security Team</div>
+</div>
+</body>
+</html>";
 
             // Această linie va funcționa acum corect:
-            string finalBody = string.Format(htmlTemplate, verificationCode);
+            string finalBody = string.Format(htmlTemplate, verificationCode, DateTime.Now.Year);
             try
             {
                 var msg = new MailMessage();
-                msg.From = new MailAddress(SenderEmail, "SmartStock Security");
+                msg.From = new MailAddress(AuthEmail, "SmartStock Security");
                 msg.To.Add(receiverEmail);
                 msg.Subject = "Your SmartStock Access Code: " + verificationCode;
                 msg.Body = finalBody;
@@ -59,7 +69,7 @@ namespace SmartStock.Classes.Utils
                 var smtpClient = new SmtpClient("smtp.gmail.com")
                 {
                     Port = 587,
-                    Credentials = new NetworkCredential(SenderEmail, SenderPassword),
+                    Credentials = new NetworkCredential(AuthEmail, AuthPassword),
                     EnableSsl = true,
                 };
 
@@ -70,6 +80,40 @@ namespace SmartStock.Classes.Utils
             {
                 Console.WriteLine($"Error: {ex.Message}");
                 return null;
+            }
+        }
+
+        /// <summary>
+        /// Sends an HTML report email with an optional PNG chart attachment.
+        /// </summary>
+        public static void SendReport(string recipientEmail, string subject, string htmlBody, string? attachmentPath = null)
+        {
+            try
+            {
+                var msg = new MailMessage();
+                msg.From = new MailAddress(ReportsEmail, "SmartStock Reports");
+                msg.To.Add(recipientEmail);
+                msg.Subject = subject;
+                msg.Body = htmlBody;
+                msg.IsBodyHtml = true;
+
+                if (!string.IsNullOrEmpty(attachmentPath) && File.Exists(attachmentPath))
+                    msg.Attachments.Add(new Attachment(attachmentPath, "image/png"));
+
+                var smtpClient = new SmtpClient("smtp.gmail.com")
+                {
+                    Port = 587,
+                    Credentials = new NetworkCredential(ReportsEmail, ReportsPassword),
+                    EnableSsl = true,
+                };
+
+                smtpClient.Send(msg);
+                Console.WriteLine($"Report sent to {recipientEmail}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Report send error: {ex.Message}");
+                throw;
             }
         }
     }

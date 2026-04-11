@@ -124,7 +124,7 @@ namespace SmartStock.Forms.User_Control
                 if (digitsOnly.Length >= 6)
                 {
                     // IMPORTANT: Asigură-te că numele acestor controale coincid cu cele din Designer-ul tău
-                    TextBox[] boxes = { textBox0, textBox1, textBox2, textBox5, textBox4, textBox3 };
+                    TextBox[] boxes = { textBox0, textBox1, textBox2, textBox3, textBox4, textBox5 };
 
                     for (int i = 0; i < 6; i++)
                     {

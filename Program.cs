@@ -39,8 +39,11 @@ namespace SmartStock
 
             SettingsManager.Load();
             ThemeManager.SetTheme(SettingsManager.Current.Theme);
+            ReportScheduler.Start();
+
             LoginForm loginForm = new LoginForm();
             ThemeManager.Apply(loginForm);
+            Application.ApplicationExit += (_, __) => ReportScheduler.Stop();
             Application.Run(loginForm);
             
         }
