@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SmartStock": {
+      "commandName": "Project",
+      "console": "internalConsole"
+    }
+  }
+}

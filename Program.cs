@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using Microsoft.EntityFrameworkCore;
 using SmartStock.Classes.Models;
 using SmartStock.Classes.Settings;
@@ -8,9 +9,16 @@ namespace SmartStock
 {
     internal static class Program
     {
+        [DllImport("kernel32.dll")]
+        private static extern bool FreeConsole();
+
         [STAThread]
         static void Main()
         {
+            FreeConsole();
+            Console.SetOut(TextWriter.Null);
+            Console.SetError(TextWriter.Null);
+
             ApplicationConfiguration.Initialize();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -21,6 +29,9 @@ namespace SmartStock
             {
                 Directory.CreateDirectory(resourcesPath);
             }
+
+            // Must run first — every other component reads paths from here.
+            PathsManager.Load();
 
             try
             {

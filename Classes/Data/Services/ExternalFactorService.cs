@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using SmartStock.Classes.Data.DTOs;
 using SmartStock.Classes.Data.Interfaces;
 using SmartStock.Classes.Models;
+using SmartStock.Classes.Utils;
 
 namespace SmartStock.Classes.Data.Services
 {
@@ -263,6 +264,7 @@ namespace SmartStock.Classes.Data.Services
             {
                 _factorRepository.Add(factor);
                 await _factorRepository.SaveAsync();
+                ActivityLogger.LogUserAction("ADD", "ExternalFactor", factor.FactorType, factor.FactorId);
                 return true;
             }
             catch (Exception ex)
@@ -285,6 +287,7 @@ namespace SmartStock.Classes.Data.Services
             {
                 _factorRepository.Update(factor);
                 await _factorRepository.SaveAsync();
+                ActivityLogger.LogUserAction("MODIFY", "ExternalFactor", factor.FactorType, factor.FactorId);
                 return true;
             }
             catch (Exception ex)
@@ -310,6 +313,7 @@ namespace SmartStock.Classes.Data.Services
             {
                 _factorRepository.Update(factor);
                 await _factorRepository.SaveAsync();
+                ActivityLogger.LogUserAction("ARCHIVE", "ExternalFactor", factor.FactorType, factor.FactorId);
                 return true;
             }
             catch (Exception ex)
@@ -334,6 +338,7 @@ namespace SmartStock.Classes.Data.Services
             {
                 _factorRepository.Update(factor);
                 await _factorRepository.SaveAsync();
+                ActivityLogger.LogUserAction("RESTORE", "ExternalFactor", factor.FactorType, factor.FactorId);
                 return true;
             }
             catch (Exception ex)

@@ -23,11 +23,7 @@ namespace SmartStock.Classes.Models
         // Configurarea conexiunii către fișierul SQLite local
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            // Construim calea completă: Debug/net8.0-windows/Resources/SmartStock.db
-            string folderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources");
-            string dbPath = Path.Combine(folderPath, "SmartStock.db");
-
-            optionsBuilder.UseSqlite($"Data Source={dbPath}");
+            optionsBuilder.UseSqlite($"Data Source={SmartStock.Classes.Settings.PathsManager.DatabasePath}");
         }
 
         // Definirea relațiilor complexe și a constrângerilor (Fluent API)

@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using Microsoft.Data.Sqlite;
 using SmartStock.Classes.Data.Interfaces;
+using SmartStock.Classes.Utils;
 
 namespace SmartStock.Classes.Data.Services
 {
@@ -87,7 +88,10 @@ namespace SmartStock.Classes.Data.Services
                 .GetProperty("content")
                 .GetString() ?? string.Empty;
 
-            return ExtractSql(aiMessage);
+            var sql = ExtractSql(aiMessage);
+            ActivityLogger.LogAiAction("TEXT_TO_SQL",
+                $"Query: \"{(naturalLanguageQuery.Length > 100 ? naturalLanguageQuery[..100] + "…" : naturalLanguageQuery)}\"");
+            return sql;
         }
 
         public async Task<DataTable> ExecuteQueryAsync(string sql, CancellationToken cancellationToken = default)

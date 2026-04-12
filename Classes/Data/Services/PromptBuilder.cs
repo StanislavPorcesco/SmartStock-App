@@ -1,4 +1,3 @@
-using System.Text.Json;
 using SmartStock.Classes.Data.Interfaces;
 using SmartStock.Classes.Models;
 
@@ -16,89 +15,40 @@ namespace SmartStock.Classes.Data.Services
 
             var limitedFactors = factors
                 .OrderByDescending(f => f.Date)
-                .Take(12)
+                .Take(6)
                 .ToList();
 
-            var averageHistoricalDemand = forecasts.Count == 0 ? 0m : forecasts.Average(f => f.PredictedDemand);
-            var maxDemandObserved = forecasts.Count == 0 ? 0m : forecasts.Max(f => f.PredictedDemand);
-            var trendSlopeDescription = BuildTrendSlopeDescription(forecasts);
+            var avgDemand        = forecasts.Count == 0 ? 0m : Math.Round(forecasts.Average(f => f.PredictedDemand), 1);
+            var peakDemand       = forecasts.Count == 0 ? 0m : Math.Round(forecasts.Max(f => f.PredictedDemand), 1);
+            var trendDescription = BuildTrendSlopeDescription(forecasts);
+            var stockGap         = product.CurrentStock - product.SafetyStock;
 
-            var factorDescriptions = limitedFactors.Count == 0
-                ? "None"
-                : string.Join("; ", limitedFactors
-                    .Select(f => string.IsNullOrWhiteSpace(f.Description) ? f.FactorType : f.Description));
+            var upcomingForecasts = forecasts
+                .OrderBy(f => f.ForecastDate)
+                .Take(7)
+                .Select(f => $"{f.ForecastDate:MMM d}: {Math.Round(f.PredictedDemand, 1)}")
+                .ToList();
 
-            var latestForecast = forecasts
-                .OrderByDescending(f => f.ForecastDate)
-                .FirstOrDefault();
-
-            var predictedDemand = latestForecast?.PredictedDemand ?? 0m;
-
-            var userMessage =
-                $"Current inventory for {product.ProductName} is {product.CurrentStock}. " +
-                $"External factors identified: {factorDescriptions}. " +
-                $"Predicted demand: {predictedDemand}. " +
-                "Provide a recommended restock quantity and reasoning.";
-
-            var payload = new
-            {
-                task = "InventoryRestockRecommendation",
-                format = "json",
-                outputSchema = new
+            var factorLines = limitedFactors.Count == 0
+                ? "none"
+                : string.Join("; ", limitedFactors.Select(f =>
                 {
-                    suggestedQuantity = "int",
-                    priorityLevel = "Low|Medium|High",
-                    reasoning = "string"
-                },
-                context = new
-                {
-                    product = new
-                    {
-                        id = product.ProductId,
-                        name = product.ProductName,
-                        stock = product.CurrentStock,
-                        safetyStock = product.SafetyStock,
-                        unitOfMeasure = product.UnitOfMeasure
-                    },
-                    externalFactors = limitedFactors.Select(f => new
-                    {
-                        f.FactorId,
-                        f.FactorType,
-                        f.Description,
-                        f.ImpactValue,
-                        f.ValueType,
-                        f.Date,
-                        f.IsActive
-                    }),
-                    meta = new
-                    {
-                        AverageHistoricalDemand = averageHistoricalDemand,
-                        MaxDemandObserved = maxDemandObserved,
-                        TrendSlopeDescription = trendSlopeDescription
-                    },
-                    forecasts = forecasts.Select(f => new
-                    {
-                        f.ForecastId,
-                        f.ProductId,
-                        f.ForecastDate,
-                        f.PredictedDemand,
-                        f.ConfidenceScore,
-                        f.ModelVersion
-                    })
-                },
-                prompt = userMessage,
-                instructions = new[]
-                {
-                    "Return only valid JSON.",
-                    "Use numeric suggestedQuantity.",
-                    "Keep reasoning concise and operational."
-                }
-            };
+                    var label = string.IsNullOrWhiteSpace(f.Description) ? f.FactorType : f.Description;
+                    return f.ImpactValue != 0 ? $"{label} ({(f.ImpactValue > 0 ? "+" : "")}{f.ImpactValue})" : label;
+                }));
 
-            return JsonSerializer.Serialize(payload, new JsonSerializerOptions
-            {
-                WriteIndented = true
-            });
+            var forecastLine = upcomingForecasts.Count > 0
+                ? string.Join(", ", upcomingForecasts)
+                : "no forecast data";
+
+            return
+                $"Product: {product.ProductName}\n" +
+                $"Current stock: {product.CurrentStock} {product.UnitOfMeasure} | Safety stock: {product.SafetyStock} | Gap: {(stockGap >= 0 ? "+" : "")}{stockGap}\n" +
+                $"Demand — avg: {avgDemand}, peak: {peakDemand}, trend: {trendDescription}\n" +
+                $"Upcoming forecast ({upcomingForecasts.Count} days): {forecastLine}\n" +
+                $"Active external factors: {factorLines}\n\n" +
+                "Recommend restock quantity and priority. State the specific risk or opportunity driving your decision, " +
+                "then give a precise action. Do not repeat the numbers above — explain what they mean.";
         }
 
         private static string BuildTrendSlopeDescription(List<AiForecast> forecasts)

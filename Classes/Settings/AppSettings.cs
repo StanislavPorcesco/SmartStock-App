@@ -13,5 +13,12 @@ namespace SmartStock.Classes.Settings
         public string ReportRecipientEmail { get; set; } = string.Empty;
         public string ReportScheduleTime { get; set; } = "08:00"; // HH:mm
         public DateTime? LastWeeklyReportSent { get; set; } = null;
+
+        // Logging settings
+        public bool LoggingEnabled { get; set; } = false;
+        public bool AiLoggingEnabled { get; set; } = false;
+        public string LogFilePath { get; set; } = string.Empty;
+        public string LogLevel { get; set; } = "Info";   // Info | Warning | Error
+        public int LogMaxSizeMb { get; set; } = 10;
     }
 }

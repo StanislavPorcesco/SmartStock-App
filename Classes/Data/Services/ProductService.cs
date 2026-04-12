@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using SmartStock.Classes.Data.DTOs;
 using SmartStock.Classes.Data.Interfaces;
 using SmartStock.Classes.Models;
+using SmartStock.Classes.Utils;
 
 namespace SmartStock.Classes.Data.Services
 {
@@ -210,6 +211,7 @@ namespace SmartStock.Classes.Data.Services
             {
                 _productRepository.Add(product);
                 await _productRepository.SaveAsync();
+                ActivityLogger.LogUserAction("ADD", "Product", product.ProductName, product.ProductId);
                 return true;
             }
             catch (Exception ex)
@@ -232,6 +234,7 @@ namespace SmartStock.Classes.Data.Services
             {
                 _productRepository.Update(product);
                 await _productRepository.SaveAsync();
+                ActivityLogger.LogUserAction("MODIFY", "Product", product.ProductName, product.ProductId);
                 return true;
             }
             catch (Exception ex)
@@ -256,6 +259,7 @@ namespace SmartStock.Classes.Data.Services
             {
                 _productRepository.Update(product);
                 await _productRepository.SaveAsync();
+                ActivityLogger.LogUserAction("ARCHIVE", "Product", product.ProductName, productId);
                 return true;
             }
             catch (Exception ex)
@@ -280,6 +284,7 @@ namespace SmartStock.Classes.Data.Services
             {
                 _productRepository.Update(product);
                 await _productRepository.SaveAsync();
+                ActivityLogger.LogUserAction("RESTORE", "Product", product.ProductName, productId);
                 return true;
             }
             catch (Exception ex)

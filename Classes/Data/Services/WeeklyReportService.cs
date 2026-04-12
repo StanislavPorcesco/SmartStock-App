@@ -277,10 +277,10 @@ namespace SmartStock.Classes.Data.Services
                 };
                 string productName = rec.Product?.ProductName ?? $"Product #{rec.ProductId}";
 
-                // Truncate reasoning to 200 chars for email readability
-                string reasoning = rec.Reasoning?.Length > 200
-                    ? rec.Reasoning[..200] + "..."
-                    : rec.Reasoning ?? string.Empty;
+                // Encode for HTML, then restore line-breaks as <br> for readability
+                string reasoning = System.Web.HttpUtility.HtmlEncode(rec.Reasoning ?? string.Empty)
+                                       .Replace("\r\n", "<br>")
+                                       .Replace("\n", "<br>");
 
                 sb.Append($@"
 <div class='rec-item {priorityCss}'>
@@ -289,8 +289,8 @@ namespace SmartStock.Classes.Data.Services
     <span class='badge {badgeCss}'>{rec.PriorityLevel}</span>
   </div>
   <div class='rec-qty'>Order quantity: <strong>{rec.SuggestedQuantity}</strong> units</div>
-  <div class='rec-reasoning'>{System.Web.HttpUtility.HtmlEncode(reasoning)}</div>
-  <div class='rec-date' style='color:#555;font-size:11px;margin-top:6px'>{rec.CreatedAt:dd MMM yyyy HH:mm}</div>
+  <div class='rec-reasoning'>{reasoning}</div>
+  <div class='rec-date'>{rec.CreatedAt:dd MMM yyyy HH:mm}</div>
 </div>");
             }
 

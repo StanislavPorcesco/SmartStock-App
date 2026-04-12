@@ -67,7 +67,8 @@ root/
 │   │       ├── 📄 SupplierService.cs
 │   │       ├── 📄 TextToSqlService.cs
 │   │       ├── 📄 TransactionService.cs
-│   │       └── 📄 UserService.cs
+│   │       ├── 📄 UserService.cs
+│   │       └── 📄 WeeklyReportService.cs
 │   │
 │   ├── 📂 Models/
 │   │   ├── 📄 AiForecast.cs
@@ -85,6 +86,7 @@ root/
 │   │
 │   ├── 📂 Settings/
 │   │   ├── 📄 AppSettings.cs
+│   │   ├── 📄 PathsManager.cs
 │   │   └── 📄 SettingsManager.cs
 │   │
 │   └── 📂 Utils/
@@ -92,6 +94,7 @@ root/
 │       ├── 📄 DataLayer.cs
 │       ├── 📄 DataSeeder.cs
 │       ├── 📄 EmailService.cs
+│       ├── 📄 ReportScheduler.cs
 │       ├── 📄 SecurityService.cs
 │       ├── 📄 SessionManager.cs
 │       ├── 📄 SmartStockContext.cs
@@ -178,8 +181,8 @@ root/
 - [ ] Suport multilingvistic (Română / Engleză) — proprietatea `Language` există în `AppSettings`, dar lipsește infrastructura de localizare și opțiunea UI
 - [X] Configurarea cheii API pentru agentul AI (DeepSeek) — expusă în `SettingsForm`
 - [X] Persistența setărilor în `appSettings.json` — `SettingsManager.Load/Save`
-- [ ] Configurarea dinamică a căii bazei de date SQLite — calea este hardcodată în `SmartStockContext.OnConfiguring`
-- [ ] Sistem de monitorizare (Logging) — nicio infrastructură de jurnalizare nu există
+- [X] Configurarea dinamică a căii bazei de date SQLite — `PathsManager` citește `Resources/paths.cfg`; `SmartStockContext.OnConfiguring` folosește `PathsManager.DatabasePath`; SettingsForm expune Browse buttons pentru ambele căi
+- [X] Sistem de monitorizare (Logging) — `ActivityLogger` static thread-safe; acțiuni utilizator (ADD/MODIFY/ARCHIVE/RESTORE/DELETE) în toate cele 8 servicii; activitate AI în `AnalyticsFacade` + `TextToSqlService`; UI în `SettingsForm` (enable, AI toggle, path + browse button)
 
 ### 3. Modulul de Gestiune a Stocurilor (CRUD și Căutare)
 - [X] Operații CRUD pentru toate entitățile (8 controale Add + 8 controale Modify)
@@ -302,3 +305,214 @@ DEEPSEEK_API_KEY=<key>
 4. Key is loaded into `Current.DeepSeekApiKey` in memory only — **not written back to `appSettings.json`**. Saving via the UI persists it explicitly.
 
 **`SettingsForm`** pre-fills `api_tb.Text = SettingsManager.Current.DeepSeekApiKey` in the constructor so the loaded key is visible for verification.
+
+---
+
+## `DeepSeekAiProvider` — Deferred Key Resolution
+
+### Problem (fixed)
+`DeepSeekAiProvider` originally threw in its constructor if the API key was empty, causing `AnalyzeForm.CreateDefaultFacade` to catch the exception and permanently install `FallbackAiReasoningProvider` for the lifetime of that form instance. Any user who opened `AnalyzeForm` before saving the key (or whose key came from `.env` but not from `appSettings.json` at that exact moment) would always see:
+
+> *"AI provider is not configured. Please add API key in settings and retry."*
+
+### Fix
+The constructor no longer throws. Key resolution is deferred to call time via `ResolveApiKey()`:
+
+```csharp
+private string ResolveApiKey()
+{
+    if (!string.IsNullOrWhiteSpace(_constructorApiKey)) return _constructorApiKey;
+    var settingsKey = SettingsManager.Current.DeepSeekApiKey;
+    if (!string.IsNullOrWhiteSpace(settingsKey)) return settingsKey;
+    return Environment.GetEnvironmentVariable("DEEPSEEK_API_KEY") ?? string.Empty;
+}
+```
+
+`BuildRequest` now receives `apiKey` as a parameter instead of reading `_apiKey` directly. `CreateDefaultFacade` in `AnalyzeForm` always creates `new DeepSeekAiProvider(new HttpClient())` — no try/catch, no fallback provider.
+
+**Rule:** Never bake infrastructure credentials into a constructor that runs at form-load time. Resolve them at the point of use so that late-bound configuration (e.g., saved after the form opened) is always picked up.
+
+---
+
+## Automated Weekly Report — Architecture
+
+### New files
+| File | Role |
+|---|---|
+| `Classes/Data/Services/WeeklyReportService.cs` | Queries DB and builds the full HTML email |
+| `Classes/Utils/ReportScheduler.cs` | Background `System.Threading.Timer`, 5-min poll |
+
+### `AppSettings` additions
+```csharp
+public bool     WeeklyReportsEnabled   { get; set; } = false;
+public string   ReportRecipientEmail   { get; set; } = string.Empty;
+public string   ReportScheduleTime     { get; set; } = "08:00"; // HH:mm
+public DateTime? LastWeeklyReportSent  { get; set; } = null;
+```
+
+### Scheduler firing conditions (all must be true)
+1. `WeeklyReportsEnabled == true`
+2. `ReportRecipientEmail` is non-empty
+3. At least 7 days since `LastWeeklyReportSent` (or never sent)
+4. Current clock is within ±5 minutes of `ReportScheduleTime`
+
+### Report HTML sections
+| Section | Data source | Notes |
+|---|---|---|
+| Sales Snapshot | `SaleDetails` + `Sale` | This-week vs last-week units & revenue; WoW % with ↑↓ arrows |
+| AI Alerts — Anomalies | `SaleDetails` last 30 days, Z-score client-side | Only points from last 24 h with `\|Z\| ≥ 2.0` |
+| AI Alerts — Critical Stock | `AiForecasts` next 3 days + `Products` | `CurrentStock − ForecastDemand < SafetyStock` |
+| Action Plan | `AiStockRecommendations` | Latest per product, fallback rows excluded, sorted High→Medium→Low, top 3 |
+| Chart | `Resources/last_chart.png` | PNG saved by `AnalyzeForm.SaveChartSnapshot()` ~1 s after analysis |
+
+### SQLite aggregate rule
+SQLite EF provider **cannot** translate `SumAsync` on `decimal`-typed columns. Always project to an anonymous type with `ToListAsync()` first, then aggregate via LINQ to Objects:
+```csharp
+// ✗ throws at runtime
+.SumAsync(sd => (decimal?)sd.UnitPrice)
+
+// ✓ correct
+var rows = await query.Select(sd => new { sd.Quantity, sd.UnitPrice }).ToListAsync();
+decimal total = rows.Sum(r => r.Quantity * r.UnitPrice);
+```
+Same applies to server-side `GroupBy` using `.Date` — always do it client-side after `ToListAsync`.
+
+### Fallback recommendation guard
+`BuildActionPlanBlockAsync` skips any `AiStockRecommendation` whose `Reasoning` starts with `"AI provider is not configured"`. This prevents stale fallback records (created before the key was set) from polluting the report.
+
+### Email accounts
+| Purpose | Address | Credential field |
+|---|---|---|
+| Account verification codes | `smartstock.auth@gmail.com` | `AuthPassword` |
+| Weekly/test reports | `smartstock.reports@gmail.com` | `ReportsPassword` |
+
+### `SettingsForm` — Automated Reporting panel (`section_b_pnl → groupBox1`)
+- `enable_reports_chk` — toggles `WeeklyReportsEnabled`
+- `time_picker` — `Format = Custom`, `CustomFormat = "HH:mm"`, `ShowUpDown = true` (time-only spinner)
+- `email_recipient_tb` — pre-filled with `ReportRecipientEmail`; falls back to `SessionManager.CurrentUser?.Email` when empty
+- `next_report_date_time_lbl` (formerly `label8`) — updated on load and on every Apply; shows `"Disabled"` or the computed next fire date
+- `sent_test_btn` — calls `ReportScheduler.SendReportAsync(recipient, isTest: true)` immediately, no cooldown
+
+### `AnalyzeForm` — chart snapshot
+After every successful analysis, a deferred call fires ~1 s later:
+```csharp
+_ = Task.Delay(1000).ContinueWith(_ => BeginInvoke(SaveChartSnapshot));
+```
+`SaveChartSnapshot` uses `DrawToBitmap` on `_analysisChart` (LiveCharts `CartesianChart`) and saves to `Resources/last_chart.png`. Sets `ReportScheduler.LastChartSnapshotPath`. Failure is silently swallowed — the snapshot is best-effort and the report sends regardless.
+
+---
+
+## Bootstrap Config — `PathsManager`
+
+### `Resources/paths.cfg` (fixed location, loaded before everything else)
+```
+SettingsFilePath=<absolute path to appSettings.json>
+DatabasePath=<absolute path to SmartStock.db>
+```
+
+### Load order in `Program.cs`
+1. `PathsManager.Load()` — reads `paths.cfg`, fills `PathsManager.SettingsFilePath` and `PathsManager.DatabasePath`, falls back to `<exe>/Resources/` defaults if file absent.
+2. `SettingsManager.Load()` — uses `PathsManager.SettingsFilePath` (computed property, not a readonly string).
+3. `db.Database.Migrate()` — `SmartStockContext.OnConfiguring` calls `PathsManager.DatabasePath`.
+4. `ReportScheduler.Start()`.
+
+**Why a separate file:** `appSettings.json` cannot store its own path. `paths.cfg` is the bootstrap anchor at a fixed known location, solving the circular dependency.
+
+### `SettingsForm` path browsing
+- `browse_settings_btn` and `browse_db_btn` open `OpenFileDialog` starting in the file's current directory.
+- On Apply, `PathsManager.Save(settingsPath, databasePath)` writes `paths.cfg`.
+- Default values on first start: `<exe>/Resources/appSettings.json` and `<exe>/Resources/SmartStock.db`.
+
+---
+
+## DeepSeek Prompt Engineering — `PromptBuilder` + System Message
+
+### Prompt format (plain text, not JSON)
+`PromptBuilder.BuildInventoryPrompt` sends a concise structured plain-text prompt instead of a verbose JSON blob. Internal DB IDs (`ForecastId`, `ProductId`, `FactorId`, `ModelVersion`) are excluded entirely.
+
+```
+Product: {name}
+Current stock: {stock} {unit} | Safety stock: {safetyStock} | Gap: {±gap}
+Demand — avg: {avg}, peak: {peak}, trend: {trendDescription}
+Upcoming forecast ({N} days): {date: demand, ...}
+Active external factors: {label (±impact), ...}
+
+Recommend restock quantity and priority. State the specific risk or opportunity driving your decision,
+then give a precise action. Do not repeat the numbers above — explain what they mean.
+```
+
+Key decisions:
+- **Gap is pre-computed** (`current − safety`) so DeepSeek reasons about shortfall magnitude, not raw numbers.
+- **Only 6 most recent factors** (down from 12) with impact values inline.
+- **Closing instruction** explicitly forbids restating input numbers; demands interpretation.
+- External factors capped at 6 (most recent by date) — older ones are typically superseded.
+
+### System message rules (enforced in `DeepSeekAiProvider.BuildRequest`)
+- 3–5 sentence cap on `reasoning`.
+- Lead with the key risk or opportunity.
+- Give a specific, actionable recommendation.
+- Never repeat input numbers verbatim — interpret them instead.
+- No preamble, no acknowledgements, no filler phrases like `"Based on the data provided"`.
+
+**Why:** The old system message + JSON blob produced verbose outputs that restated all input data before concluding. The new format forces a conclusion-first structure with a hard sentence cap.
+
+---
+
+## Console Window Suppression — `Program.cs`
+
+Two mechanisms applied together to prevent a console window from appearing when launched from Visual Studio:
+
+1. **`FreeConsole()` P/Invoke** — called as the very first statement in `Main`, before any framework initialization. Detaches the process from whatever console handle VS attached at launch time.
+2. **`Console.SetOut/SetError(TextWriter.Null)`** — redirects any residual `Console.Write*` calls to a null stream, preventing the runtime from lazily re-allocating a console handle later.
+3. **`Properties/launchSettings.json`** — sets `"console": "internalConsole"` so VS routes debug output to its Output pane rather than a separate window.
+
+`WinExe` in the `.csproj` sets the PE subsystem flag correctly for standalone `.exe` execution. The above three layers cover the VS debugger attachment scenario on top of that.
+
+---
+
+## Activity Logging — `ActivityLogger`
+
+### `Classes/Utils/ActivityLogger.cs`
+Static, thread-safe append logger. Uses a `private static readonly object _fileLock` and `lock` around every `File.AppendAllText` call. Failures silently swallowed — logging must never propagate to callers.
+
+### Log entry format
+```
+[yyyy-MM-dd HH:mm:ss] [USER:{username}] [ACTION] EntityType: "EntityName" (ID:{id})
+[yyyy-MM-dd HH:mm:ss] [AI] [OPERATION] details
+```
+
+### Two entry points
+| Method | Guard | Used in |
+|---|---|---|
+| `LogUserAction(action, entityType, entityName, id?)` | `LoggingEnabled` | All 8 CRUD services |
+| `LogAiAction(operation, details)` | `LoggingEnabled` AND `AiLoggingEnabled` | `AnalyticsFacade`, `TextToSqlService` |
+
+### Action vocabulary
+| Action | Trigger |
+|---|---|
+| `ADD` | Successful insert in any service |
+| `MODIFY` | Successful update |
+| `ARCHIVE` | `IsActive = false` (soft delete) |
+| `RESTORE` | `IsActive = true` (re-activation) |
+| `DELETE` | Hard delete (TransactionService reversal) |
+| `DEMAND_FORECAST` | AI — forecast analysis complete |
+| `CORRELATION` | AI — correlation analysis complete |
+| `STOCK_OPTIMIZATION` | AI — EOQ + recommendation persisted |
+| `ANOMALY_DETECTION` | AI — anomaly scan complete |
+| `TEXT_TO_SQL` | AI — NLQ → SQL generated |
+
+### Default path
+`<exe>/Resources/activity.log` — used when `AppSettings.LogFilePath` is empty.
+
+### `AppSettings` additions
+```csharp
+public bool   LoggingEnabled  { get; set; } = false;
+public bool   AiLoggingEnabled { get; set; } = false;
+public string LogFilePath      { get; set; } = string.Empty;
+```
+
+### `SettingsForm` — Logging panel (`section_b_pnl → groupBox2`)
+- `enable_logging_chk` — toggles `LoggingEnabled`
+- `ai_logs_ck` — toggles `AiLoggingEnabled`
+- `logs_tb` — pre-filled with default path when `LogFilePath` is empty
+- `browse_logs_btn` — `OpenFileDialog` for `.log` / `.txt` files; added to col 2, row 2 of `tableLayoutPanel2`

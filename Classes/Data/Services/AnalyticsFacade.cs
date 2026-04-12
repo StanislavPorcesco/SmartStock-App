@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using SmartStock.Classes.Data.DTOs;
 using SmartStock.Classes.Data.Interfaces;
 using SmartStock.Classes.Models;
+using SmartStock.Classes.Utils;
 using System.Text;
 
 namespace SmartStock.Classes.Data.Services
@@ -96,6 +97,8 @@ namespace SmartStock.Classes.Data.Services
                 var eoqReco   = await _aiReasoningProvider.GetRecommendationAsync(eoqPrompt);
 
                 await PersistStockRecommendationAsync(context.ProductId, eoq, eoqReco.Reasoning, product, cancellationToken);
+                ActivityLogger.LogAiAction("STOCK_OPTIMIZATION",
+                    $"Product: \"{product.ProductName}\" → EOQ: {eoq.EoqQuantity:F0} units, ROP: {eoq.ReorderPoint:F0}, Priority: {eoqReco.PriorityLevel}");
 
                 return new AnalyticsResult
                 {
@@ -196,6 +199,10 @@ namespace SmartStock.Classes.Data.Services
             await PersistEconometricModelAsync(econometricModel, cancellationToken);
             if (isDemandForecast)
                 await PersistForecastsAsync(context.ProductId, trendBands.TrendValues, historicalSales.Count, context.EndDate, forecastHorizonDays, econometricModel.RSquared, cancellationToken);
+
+            var analysisLabel = isDemandForecast ? "DEMAND_FORECAST" : "CORRELATION";
+            ActivityLogger.LogAiAction(analysisLabel,
+                $"Product: \"{product.ProductName}\" → R²: {econometricModel.RSquared:F3}, {(isDemandForecast ? $"Horizon: {forecastHorizonDays}d" : $"Factor: {primaryFactor}")}");
 
             return new AnalyticsResult
             {
@@ -725,6 +732,8 @@ namespace SmartStock.Classes.Data.Services
             var lowerBand  = Enumerable.Repeat(Math.Max(0m, mean - (decimal)threshold * stdDev), sales.Count).ToList();
             var meanLine   = Enumerable.Repeat(mean, sales.Count).ToList();
             var maxZScore  = anomalies.Count > 0 ? anomalies.Max(a => Math.Abs(a.ZScore)) : 0m;
+            ActivityLogger.LogAiAction("ANOMALY_DETECTION",
+                $"{anomalies.Count} anomalies detected, max Z-score: {maxZScore:F2}, threshold: {threshold}");
 
             return new AnalyticsResult
             {

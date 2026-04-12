@@ -215,7 +215,7 @@ namespace SmartStock.Classes.Data.Services
 
                 _userRepository.Add(newUser);
                 await _userRepository.SaveAsync();
-
+                ActivityLogger.LogUserAction("ADD", "User", newUser.Username, newUser.UserId);
                 return true;
             }
             catch (Exception ex)
@@ -246,6 +246,7 @@ namespace SmartStock.Classes.Data.Services
             {
                 _userRepository.Update(user);
                 await _userRepository.SaveAsync();
+                ActivityLogger.LogUserAction("MODIFY", "User", user.Username, user.UserId);
                 return true;
             }
             catch (Exception ex)
@@ -349,6 +350,7 @@ namespace SmartStock.Classes.Data.Services
             {
                 _userRepository.Update(user);
                 await _userRepository.SaveAsync();
+                ActivityLogger.LogUserAction("ARCHIVE", "User", user.Username, user.UserId);
                 return true;
             }
             catch (Exception ex)

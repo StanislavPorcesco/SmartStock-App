@@ -6,7 +6,7 @@
 
     public static class SettingsManager
     {
-        private static readonly string FilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/appSettings.json");
+        private static string FilePath => PathsManager.SettingsFilePath;
 
         public static AppSettings Current { get; private set; } = new AppSettings();
 

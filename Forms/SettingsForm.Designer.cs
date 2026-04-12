@@ -1,4 +1,4 @@
-﻿namespace SmartStock
+namespace SmartStock
 {
     partial class SettingsForm
     {
@@ -35,10 +35,16 @@
             panel3 = new Panel();
             groupBox2 = new GroupBox();
             tableLayoutPanel5 = new TableLayoutPanel();
-            label4 = new Label();
             enable_logging_chk = new CheckBox();
-            label5 = new Label();
+            ai_logs_lbl = new Label();
+            ai_logs_ck = new CheckBox();
             label6 = new Label();
+            label5 = new Label();
+            max_size_numeric = new NumericUpDown();
+            log_level_cb = new ComboBox();
+            open_log_btn = new Button();
+            label8 = new Label();
+            label4 = new Label();
             panel4 = new Panel();
             groupBox1 = new GroupBox();
             tableLayoutPanel4 = new TableLayoutPanel();
@@ -55,19 +61,22 @@
             theme_pnl = new Panel();
             ai_settings_gb = new GroupBox();
             tableLayoutPanel3 = new TableLayoutPanel();
+            label10 = new Label();
+            label9 = new Label();
             api_tb = new TextBox();
-            ai_logs_lbl = new Label();
             api_lbl = new Label();
-            ai_logs_ck = new CheckBox();
             path_pnl = new Panel();
             paths_gb = new GroupBox();
             tableLayoutPanel2 = new TableLayoutPanel();
             settings_lbl = new Label();
+            settings_tb = new TextBox();
+            browse_settings_btn = new Button();
             db_lbl = new Label();
             db_tb = new TextBox();
+            browse_db_btn = new Button();
             logs_lbl = new Label();
             logs_tb = new TextBox();
-            settings_tb = new TextBox();
+            browse_logs_btn = new Button();
             ai_pnl = new Panel();
             preferences_gb = new GroupBox();
             tableLayoutPanel1 = new TableLayoutPanel();
@@ -80,6 +89,7 @@
             panel3.SuspendLayout();
             groupBox2.SuspendLayout();
             tableLayoutPanel5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)max_size_numeric).BeginInit();
             panel4.SuspendLayout();
             groupBox1.SuspendLayout();
             tableLayoutPanel4.SuspendLayout();
@@ -139,7 +149,7 @@
             base_pnl.Margin = new Padding(30);
             base_pnl.Name = "base_pnl";
             base_pnl.Padding = new Padding(20);
-            base_pnl.Size = new Size(1271, 711);
+            base_pnl.Size = new Size(1271, 793);
             base_pnl.TabIndex = 2;
             base_pnl.Tag = "base";
             // 
@@ -150,7 +160,7 @@
             section_b_pnl.Dock = DockStyle.Fill;
             section_b_pnl.Location = new Point(636, 20);
             section_b_pnl.Name = "section_b_pnl";
-            section_b_pnl.Size = new Size(615, 601);
+            section_b_pnl.Size = new Size(615, 683);
             section_b_pnl.TabIndex = 11;
             // 
             // panel3
@@ -161,7 +171,7 @@
             panel3.Margin = new Padding(0);
             panel3.Name = "panel3";
             panel3.Padding = new Padding(10);
-            panel3.Size = new Size(615, 267);
+            panel3.Size = new Size(615, 321);
             panel3.TabIndex = 6;
             // 
             // groupBox2
@@ -174,7 +184,7 @@
             groupBox2.Margin = new Padding(0);
             groupBox2.Name = "groupBox2";
             groupBox2.Padding = new Padding(10, 20, 10, 20);
-            groupBox2.Size = new Size(595, 247);
+            groupBox2.Size = new Size(595, 301);
             groupBox2.TabIndex = 5;
             groupBox2.TabStop = false;
             groupBox2.Text = "Logging System";
@@ -184,33 +194,27 @@
             tableLayoutPanel5.ColumnCount = 2;
             tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel5.Controls.Add(label4, 0, 2);
             tableLayoutPanel5.Controls.Add(enable_logging_chk, 1, 0);
-            tableLayoutPanel5.Controls.Add(label5, 0, 1);
+            tableLayoutPanel5.Controls.Add(ai_logs_lbl, 0, 1);
+            tableLayoutPanel5.Controls.Add(ai_logs_ck, 1, 1);
             tableLayoutPanel5.Controls.Add(label6, 0, 0);
+            tableLayoutPanel5.Controls.Add(label5, 0, 2);
+            tableLayoutPanel5.Controls.Add(max_size_numeric, 1, 2);
+            tableLayoutPanel5.Controls.Add(log_level_cb, 1, 3);
+            tableLayoutPanel5.Controls.Add(open_log_btn, 1, 4);
+            tableLayoutPanel5.Controls.Add(label8, 0, 3);
+            tableLayoutPanel5.Controls.Add(label4, 0, 4);
             tableLayoutPanel5.Dock = DockStyle.Fill;
             tableLayoutPanel5.Location = new Point(10, 40);
             tableLayoutPanel5.Name = "tableLayoutPanel5";
-            tableLayoutPanel5.RowCount = 3;
+            tableLayoutPanel5.RowCount = 5;
             tableLayoutPanel5.RowStyles.Add(new RowStyle());
             tableLayoutPanel5.RowStyles.Add(new RowStyle());
             tableLayoutPanel5.RowStyles.Add(new RowStyle());
-            tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel5.Size = new Size(575, 187);
+            tableLayoutPanel5.RowStyles.Add(new RowStyle());
+            tableLayoutPanel5.RowStyles.Add(new RowStyle());
+            tableLayoutPanel5.Size = new Size(575, 241);
             tableLayoutPanel5.TabIndex = 2;
-            // 
-            // label4
-            // 
-            label4.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            label4.AutoSize = true;
-            label4.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label4.Location = new Point(10, 62);
-            label4.Margin = new Padding(10, 0, 0, 0);
-            label4.Name = "label4";
-            label4.Size = new Size(57, 125);
-            label4.TabIndex = 18;
-            label4.Text = "Label";
-            label4.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // enable_logging_chk
             // 
@@ -224,18 +228,30 @@
             enable_logging_chk.TabIndex = 16;
             enable_logging_chk.UseVisualStyleBackColor = true;
             // 
-            // label5
+            // ai_logs_lbl
             // 
-            label5.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            label5.AutoSize = true;
-            label5.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label5.Location = new Point(10, 37);
-            label5.Margin = new Padding(10, 0, 0, 0);
-            label5.Name = "label5";
-            label5.Size = new Size(57, 25);
-            label5.TabIndex = 3;
-            label5.Text = "Label";
-            label5.TextAlign = ContentAlignment.MiddleLeft;
+            ai_logs_lbl.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            ai_logs_lbl.AutoSize = true;
+            ai_logs_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            ai_logs_lbl.Location = new Point(10, 37);
+            ai_logs_lbl.Margin = new Padding(10, 0, 0, 0);
+            ai_logs_lbl.Name = "ai_logs_lbl";
+            ai_logs_lbl.Size = new Size(181, 37);
+            ai_logs_lbl.TabIndex = 3;
+            ai_logs_lbl.Text = "Detailed Logs for AI";
+            ai_logs_lbl.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // ai_logs_ck
+            // 
+            ai_logs_ck.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+            ai_logs_ck.AutoSize = true;
+            ai_logs_ck.ForeColor = Color.FromArgb(64, 64, 64);
+            ai_logs_ck.Location = new Point(547, 47);
+            ai_logs_ck.Margin = new Padding(10);
+            ai_logs_ck.Name = "ai_logs_ck";
+            ai_logs_ck.Size = new Size(18, 17);
+            ai_logs_ck.TabIndex = 15;
+            ai_logs_ck.UseVisualStyleBackColor = true;
             // 
             // label6
             // 
@@ -249,6 +265,83 @@
             label6.TabIndex = 2;
             label6.Text = "Enable Logging";
             label6.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // label5
+            // 
+            label5.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            label5.AutoSize = true;
+            label5.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            label5.Location = new Point(10, 74);
+            label5.Margin = new Padding(10, 0, 0, 0);
+            label5.Name = "label5";
+            label5.Size = new Size(170, 47);
+            label5.TabIndex = 26;
+            label5.Text = "Max File Size (MB)";
+            label5.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // max_size_numeric
+            // 
+            max_size_numeric.Dock = DockStyle.Fill;
+            max_size_numeric.Location = new Point(297, 84);
+            max_size_numeric.Margin = new Padding(10);
+            max_size_numeric.Maximum = new decimal(new int[] { 99999, 0, 0, 0 });
+            max_size_numeric.Name = "max_size_numeric";
+            max_size_numeric.Size = new Size(268, 27);
+            max_size_numeric.TabIndex = 28;
+            // 
+            // log_level_cb
+            // 
+            log_level_cb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            log_level_cb.BackColor = Color.FromArgb(54, 54, 54);
+            log_level_cb.FlatStyle = FlatStyle.Flat;
+            log_level_cb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            log_level_cb.ForeColor = Color.White;
+            log_level_cb.FormattingEnabled = true;
+            log_level_cb.Location = new Point(297, 131);
+            log_level_cb.Margin = new Padding(10);
+            log_level_cb.Name = "log_level_cb";
+            log_level_cb.Size = new Size(268, 33);
+            log_level_cb.TabIndex = 29;
+            // 
+            // open_log_btn
+            // 
+            open_log_btn.BackColor = Color.FromArgb(54, 54, 54);
+            open_log_btn.Dock = DockStyle.Fill;
+            open_log_btn.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            open_log_btn.ForeColor = Color.White;
+            open_log_btn.Location = new Point(297, 184);
+            open_log_btn.Margin = new Padding(10);
+            open_log_btn.Name = "open_log_btn";
+            open_log_btn.Size = new Size(268, 47);
+            open_log_btn.TabIndex = 25;
+            open_log_btn.Text = "Open File";
+            open_log_btn.UseVisualStyleBackColor = false;
+            // 
+            // label8
+            // 
+            label8.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            label8.AutoSize = true;
+            label8.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            label8.Location = new Point(10, 121);
+            label8.Margin = new Padding(10, 0, 0, 0);
+            label8.Name = "label8";
+            label8.Size = new Size(92, 53);
+            label8.TabIndex = 27;
+            label8.Text = "Log Level";
+            label8.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // label4
+            // 
+            label4.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            label4.AutoSize = true;
+            label4.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            label4.Location = new Point(10, 174);
+            label4.Margin = new Padding(10, 0, 0, 0);
+            label4.Name = "label4";
+            label4.Size = new Size(128, 67);
+            label4.TabIndex = 17;
+            label4.Text = "Open Log File";
+            label4.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // panel4
             // 
@@ -424,7 +517,7 @@
             section_a_pnl.Dock = DockStyle.Left;
             section_a_pnl.Location = new Point(20, 20);
             section_a_pnl.Name = "section_a_pnl";
-            section_a_pnl.Size = new Size(616, 601);
+            section_a_pnl.Size = new Size(616, 683);
             section_a_pnl.TabIndex = 10;
             // 
             // theme_pnl
@@ -435,7 +528,7 @@
             theme_pnl.Margin = new Padding(0);
             theme_pnl.Name = "theme_pnl";
             theme_pnl.Padding = new Padding(10);
-            theme_pnl.Size = new Size(616, 168);
+            theme_pnl.Size = new Size(616, 245);
             theme_pnl.TabIndex = 5;
             // 
             // ai_settings_gb
@@ -448,7 +541,7 @@
             ai_settings_gb.Margin = new Padding(0);
             ai_settings_gb.Name = "ai_settings_gb";
             ai_settings_gb.Padding = new Padding(10, 20, 10, 20);
-            ai_settings_gb.Size = new Size(596, 148);
+            ai_settings_gb.Size = new Size(596, 225);
             ai_settings_gb.TabIndex = 4;
             ai_settings_gb.TabStop = false;
             ai_settings_gb.Text = "AI Settings";
@@ -458,18 +551,45 @@
             tableLayoutPanel3.ColumnCount = 2;
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 49.74464F));
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50.2553635F));
+            tableLayoutPanel3.Controls.Add(label10, 1, 1);
+            tableLayoutPanel3.Controls.Add(label9, 0, 1);
             tableLayoutPanel3.Controls.Add(api_tb, 1, 0);
-            tableLayoutPanel3.Controls.Add(ai_logs_lbl, 0, 1);
             tableLayoutPanel3.Controls.Add(api_lbl, 0, 0);
-            tableLayoutPanel3.Controls.Add(ai_logs_ck, 1, 1);
             tableLayoutPanel3.Dock = DockStyle.Fill;
             tableLayoutPanel3.Location = new Point(10, 40);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
             tableLayoutPanel3.RowCount = 2;
-            tableLayoutPanel3.RowStyles.Add(new RowStyle());
-            tableLayoutPanel3.RowStyles.Add(new RowStyle());
-            tableLayoutPanel3.Size = new Size(576, 88);
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
+            tableLayoutPanel3.Size = new Size(576, 165);
             tableLayoutPanel3.TabIndex = 2;
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Dock = DockStyle.Right;
+            label10.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            label10.ForeColor = Color.FromArgb(192, 0, 0);
+            label10.Location = new Point(486, 60);
+            label10.Margin = new Padding(10);
+            label10.Name = "label10";
+            label10.Size = new Size(80, 95);
+            label10.TabIndex = 16;
+            label10.Text = "Inactive";
+            label10.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // label9
+            // 
+            label9.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            label9.AutoSize = true;
+            label9.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            label9.Location = new Point(10, 50);
+            label9.Margin = new Padding(10, 0, 0, 0);
+            label9.Name = "label9";
+            label9.Size = new Size(122, 115);
+            label9.TabIndex = 15;
+            label9.Text = "Agent Status";
+            label9.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // api_tb
             // 
@@ -483,19 +603,6 @@
             api_tb.Size = new Size(270, 31);
             api_tb.TabIndex = 14;
             // 
-            // ai_logs_lbl
-            // 
-            ai_logs_lbl.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            ai_logs_lbl.AutoSize = true;
-            ai_logs_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            ai_logs_lbl.Location = new Point(10, 51);
-            ai_logs_lbl.Margin = new Padding(10, 0, 0, 0);
-            ai_logs_lbl.Name = "ai_logs_lbl";
-            ai_logs_lbl.Size = new Size(177, 37);
-            ai_logs_lbl.TabIndex = 3;
-            ai_logs_lbl.Text = "Detailed logs for AI";
-            ai_logs_lbl.TextAlign = ContentAlignment.MiddleLeft;
-            // 
             // api_lbl
             // 
             api_lbl.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
@@ -504,22 +611,10 @@
             api_lbl.Location = new Point(10, 0);
             api_lbl.Margin = new Padding(10, 0, 0, 0);
             api_lbl.Name = "api_lbl";
-            api_lbl.Size = new Size(79, 51);
+            api_lbl.Size = new Size(79, 50);
             api_lbl.TabIndex = 2;
             api_lbl.Text = "API Key";
             api_lbl.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // ai_logs_ck
-            // 
-            ai_logs_ck.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
-            ai_logs_ck.AutoSize = true;
-            ai_logs_ck.ForeColor = Color.FromArgb(64, 64, 64);
-            ai_logs_ck.Location = new Point(548, 61);
-            ai_logs_ck.Margin = new Padding(10);
-            ai_logs_ck.Name = "ai_logs_ck";
-            ai_logs_ck.Size = new Size(18, 17);
-            ai_logs_ck.TabIndex = 15;
-            ai_logs_ck.UseVisualStyleBackColor = true;
             // 
             // path_pnl
             // 
@@ -549,15 +644,19 @@
             // 
             // tableLayoutPanel2
             // 
-            tableLayoutPanel2.ColumnCount = 2;
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 49.9250336F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50.0749626F));
+            tableLayoutPanel2.ColumnCount = 3;
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 38F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 48F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 90F));
             tableLayoutPanel2.Controls.Add(settings_lbl, 0, 0);
+            tableLayoutPanel2.Controls.Add(settings_tb, 1, 0);
+            tableLayoutPanel2.Controls.Add(browse_settings_btn, 2, 0);
             tableLayoutPanel2.Controls.Add(db_lbl, 0, 1);
             tableLayoutPanel2.Controls.Add(db_tb, 1, 1);
+            tableLayoutPanel2.Controls.Add(browse_db_btn, 2, 1);
             tableLayoutPanel2.Controls.Add(logs_lbl, 0, 2);
             tableLayoutPanel2.Controls.Add(logs_tb, 1, 2);
-            tableLayoutPanel2.Controls.Add(settings_tb, 1, 0);
+            tableLayoutPanel2.Controls.Add(browse_logs_btn, 2, 2);
             tableLayoutPanel2.Dock = DockStyle.Fill;
             tableLayoutPanel2.Location = new Point(10, 40);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -576,10 +675,36 @@
             settings_lbl.Location = new Point(10, 0);
             settings_lbl.Margin = new Padding(10, 0, 0, 0);
             settings_lbl.Name = "settings_lbl";
-            settings_lbl.Size = new Size(157, 51);
+            settings_lbl.Size = new Size(159, 51);
             settings_lbl.TabIndex = 7;
-            settings_lbl.Text = "Settings file path";
+            settings_lbl.Text = "Settings File Path";
             settings_lbl.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // settings_tb
+            // 
+            settings_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            settings_tb.BackColor = Color.FromArgb(54, 54, 54);
+            settings_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            settings_tb.ForeColor = Color.White;
+            settings_tb.Location = new Point(224, 10);
+            settings_tb.Margin = new Padding(10);
+            settings_tb.Name = "settings_tb";
+            settings_tb.Size = new Size(251, 31);
+            settings_tb.TabIndex = 11;
+            // 
+            // browse_settings_btn
+            // 
+            browse_settings_btn.BackColor = Color.FromArgb(54, 54, 54);
+            browse_settings_btn.Dock = DockStyle.Fill;
+            browse_settings_btn.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            browse_settings_btn.ForeColor = Color.White;
+            browse_settings_btn.Location = new Point(489, 10);
+            browse_settings_btn.Margin = new Padding(4, 10, 10, 10);
+            browse_settings_btn.Name = "browse_settings_btn";
+            browse_settings_btn.Size = new Size(77, 31);
+            browse_settings_btn.TabIndex = 23;
+            browse_settings_btn.Text = "Browse...";
+            browse_settings_btn.UseVisualStyleBackColor = false;
             // 
             // db_lbl
             // 
@@ -589,9 +714,9 @@
             db_lbl.Location = new Point(10, 51);
             db_lbl.Margin = new Padding(10, 0, 0, 0);
             db_lbl.Name = "db_lbl";
-            db_lbl.Size = new Size(141, 51);
+            db_lbl.Size = new Size(136, 51);
             db_lbl.TabIndex = 8;
-            db_lbl.Text = "Data Base path";
+            db_lbl.Text = "DataBase Path";
             db_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // db_tb
@@ -600,11 +725,25 @@
             db_tb.BackColor = Color.FromArgb(54, 54, 54);
             db_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             db_tb.ForeColor = Color.White;
-            db_tb.Location = new Point(297, 61);
+            db_tb.Location = new Point(224, 61);
             db_tb.Margin = new Padding(10);
             db_tb.Name = "db_tb";
-            db_tb.Size = new Size(269, 31);
+            db_tb.Size = new Size(251, 31);
             db_tb.TabIndex = 12;
+            // 
+            // browse_db_btn
+            // 
+            browse_db_btn.BackColor = Color.FromArgb(54, 54, 54);
+            browse_db_btn.Dock = DockStyle.Fill;
+            browse_db_btn.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            browse_db_btn.ForeColor = Color.White;
+            browse_db_btn.Location = new Point(489, 61);
+            browse_db_btn.Margin = new Padding(4, 10, 10, 10);
+            browse_db_btn.Name = "browse_db_btn";
+            browse_db_btn.Size = new Size(77, 31);
+            browse_db_btn.TabIndex = 24;
+            browse_db_btn.Text = "Browse...";
+            browse_db_btn.UseVisualStyleBackColor = false;
             // 
             // logs_lbl
             // 
@@ -614,9 +753,9 @@
             logs_lbl.Location = new Point(10, 102);
             logs_lbl.Margin = new Padding(10, 0, 0, 0);
             logs_lbl.Name = "logs_lbl";
-            logs_lbl.Size = new Size(150, 51);
+            logs_lbl.Size = new Size(114, 51);
             logs_lbl.TabIndex = 9;
-            logs_lbl.Text = "Logging file path";
+            logs_lbl.Text = "Log File Path";
             logs_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // logs_tb
@@ -625,23 +764,25 @@
             logs_tb.BackColor = Color.FromArgb(54, 54, 54);
             logs_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             logs_tb.ForeColor = Color.White;
-            logs_tb.Location = new Point(297, 112);
+            logs_tb.Location = new Point(224, 112);
             logs_tb.Margin = new Padding(10);
             logs_tb.Name = "logs_tb";
-            logs_tb.Size = new Size(269, 31);
+            logs_tb.Size = new Size(251, 31);
             logs_tb.TabIndex = 13;
             // 
-            // settings_tb
+            // browse_logs_btn
             // 
-            settings_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            settings_tb.BackColor = Color.FromArgb(54, 54, 54);
-            settings_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            settings_tb.ForeColor = Color.White;
-            settings_tb.Location = new Point(297, 10);
-            settings_tb.Margin = new Padding(10);
-            settings_tb.Name = "settings_tb";
-            settings_tb.Size = new Size(269, 31);
-            settings_tb.TabIndex = 11;
+            browse_logs_btn.BackColor = Color.FromArgb(54, 54, 54);
+            browse_logs_btn.Dock = DockStyle.Fill;
+            browse_logs_btn.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            browse_logs_btn.ForeColor = Color.White;
+            browse_logs_btn.Location = new Point(489, 112);
+            browse_logs_btn.Margin = new Padding(4, 10, 10, 10);
+            browse_logs_btn.Name = "browse_logs_btn";
+            browse_logs_btn.Size = new Size(77, 31);
+            browse_logs_btn.TabIndex = 25;
+            browse_logs_btn.Text = "Browse...";
+            browse_logs_btn.UseVisualStyleBackColor = false;
             // 
             // ai_pnl
             // 
@@ -730,7 +871,7 @@
             // 
             apply_pnl.Controls.Add(apply_btn);
             apply_pnl.Dock = DockStyle.Bottom;
-            apply_pnl.Location = new Point(20, 621);
+            apply_pnl.Location = new Point(20, 703);
             apply_pnl.Name = "apply_pnl";
             apply_pnl.Padding = new Padding(10, 0, 10, 0);
             apply_pnl.Size = new Size(1231, 70);
@@ -741,7 +882,7 @@
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(54, 54, 54);
-            ClientSize = new Size(1331, 771);
+            ClientSize = new Size(1331, 853);
             Controls.Add(base_pnl);
             Name = "SettingsForm";
             Padding = new Padding(30);
@@ -753,6 +894,7 @@
             groupBox2.ResumeLayout(false);
             tableLayoutPanel5.ResumeLayout(false);
             tableLayoutPanel5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)max_size_numeric).EndInit();
             panel4.ResumeLayout(false);
             groupBox1.ResumeLayout(false);
             tableLayoutPanel4.ResumeLayout(false);
@@ -817,11 +959,20 @@
         private Button sent_test_btn;
         private GroupBox groupBox2;
         private TableLayoutPanel tableLayoutPanel5;
-        private Label label4;
         private CheckBox enable_logging_chk;
-        private Label label5;
         private Label label6;
         private Label next_report_date_time_lbl;
         private Label label7;
+        private Button browse_settings_btn;
+        private Button browse_db_btn;
+        private Button browse_logs_btn;
+        private Label label5;
+        private Button open_log_btn;
+        private Label label4;
+        private Label label8;
+        private NumericUpDown max_size_numeric;
+        private ComboBox log_level_cb;
+        private Label label10;
+        private Label label9;
     }
 }

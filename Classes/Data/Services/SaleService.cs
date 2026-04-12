@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using SmartStock.Classes.Data.DTOs;
 using SmartStock.Classes.Data.Interfaces;
 using SmartStock.Classes.Models;
+using SmartStock.Classes.Utils;
 
 namespace SmartStock.Classes.Data.Services
 {
@@ -306,6 +307,7 @@ namespace SmartStock.Classes.Data.Services
                 // Adaugă vânzarea
                 _saleRepository.Add(sale);
                 await _saleRepository.SaveAsync();
+                ActivityLogger.LogUserAction("ADD", "Sale", $"Customer ID {sale.CustomerId}", sale.SaleId);
 
                 // Adaugă detaliile și scade stocul
                 foreach (var detail in details)
@@ -369,6 +371,7 @@ namespace SmartStock.Classes.Data.Services
             {
                 _saleRepository.Update(sale);
                 await _saleRepository.SaveAsync();
+                ActivityLogger.LogUserAction("MODIFY", "Sale", $"Payment status → {newStatus}", sale.SaleId);
                 return true;
             }
             catch (Exception ex)
@@ -393,6 +396,7 @@ namespace SmartStock.Classes.Data.Services
             {
                 _saleRepository.Update(sale);
                 await _saleRepository.SaveAsync();
+                ActivityLogger.LogUserAction("ARCHIVE", "Sale", $"Sale ID {saleId}", saleId);
                 return true;
             }
             catch (Exception ex)

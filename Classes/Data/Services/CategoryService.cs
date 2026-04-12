@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using SmartStock.Classes.Data.DTOs;
 using SmartStock.Classes.Data.Interfaces;
 using SmartStock.Classes.Models;
+using SmartStock.Classes.Utils;
 
 namespace SmartStock.Classes.Data.Services
 {
@@ -172,6 +173,7 @@ namespace SmartStock.Classes.Data.Services
             {
                 _categoryRepository.Add(category);
                 await _categoryRepository.SaveAsync();
+                ActivityLogger.LogUserAction("ADD", "Category", category.CategoryName, category.CategoryId);
                 return true;
             }
             catch (Exception ex)
@@ -198,6 +200,7 @@ namespace SmartStock.Classes.Data.Services
             {
                 _categoryRepository.Update(category);
                 await _categoryRepository.SaveAsync();
+                ActivityLogger.LogUserAction("MODIFY", "Category", category.CategoryName, category.CategoryId);
                 return true;
             }
             catch (Exception ex)
@@ -264,6 +267,7 @@ namespace SmartStock.Classes.Data.Services
                 category.IsActive = false;
                 _categoryRepository.Update(category);
                 await _categoryRepository.SaveAsync();
+                ActivityLogger.LogUserAction("ARCHIVE", "Category", category.CategoryName, category.CategoryId);
 
                 // Construiește mesaj de confirmare
                 string message = $"Category '{category.CategoryName}' has been deactivated successfully.";
@@ -299,6 +303,7 @@ namespace SmartStock.Classes.Data.Services
             {
                 _categoryRepository.Update(category);
                 await _categoryRepository.SaveAsync();
+                ActivityLogger.LogUserAction("RESTORE", "Category", category.CategoryName, category.CategoryId);
                 return true;
             }
             catch (Exception ex)

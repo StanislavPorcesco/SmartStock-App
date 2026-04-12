@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using SmartStock.Classes.Data.DTOs;
 using SmartStock.Classes.Data.Interfaces;
 using SmartStock.Classes.Models;
+using SmartStock.Classes.Utils;
 
 namespace SmartStock.Classes.Data.Services
 {
@@ -226,6 +227,7 @@ namespace SmartStock.Classes.Data.Services
                 // Add transaction
                 _transactionRepository.Add(transaction);
                 await _transactionRepository.SaveAsync();
+                ActivityLogger.LogUserAction("ADD", "Transaction", $"{transaction.Type} × {transaction.Quantity}", transaction.TransactionId);
 
                 // Update product stock
                 if (transaction.Type == "Stock In")
@@ -276,6 +278,7 @@ namespace SmartStock.Classes.Data.Services
                 // Delete transaction
                 _transactionRepository.Delete(transaction);
                 await _transactionRepository.SaveAsync();
+                ActivityLogger.LogUserAction("DELETE", "Transaction", $"{transaction.Type} × {transaction.Quantity}", transaction.TransactionId);
 
                 return true;
             }

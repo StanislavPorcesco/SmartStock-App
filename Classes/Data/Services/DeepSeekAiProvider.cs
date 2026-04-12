@@ -90,9 +90,12 @@ namespace SmartStock.Classes.Data.Services
         private static HttpRequestMessage BuildRequest(string prompt, string apiKey)
         {
             const string systemMessage =
-                "You are an inventory optimization assistant. " +
-                "Always respond with a valid JSON object using EXACTLY this schema — no extra fields, no wrapper keys, no markdown fences: " +
-                "{\"suggestedQuantity\": <int>, \"priorityLevel\": \"<Low|Medium|High>\", \"reasoning\": \"<your full analysis as plain text>\"}. " +
+                "You are a concise inventory optimization assistant. " +
+                "Respond ONLY with a valid JSON object — no markdown fences, no wrapper keys, no extra fields: " +
+                "{\"suggestedQuantity\": <int>, \"priorityLevel\": \"<Low|Medium|High>\", \"reasoning\": \"<string>\"}. " +
+                "Reasoning rules: 3–5 sentences maximum; lead with the key risk or opportunity; " +
+                "give a specific, actionable recommendation; never repeat input numbers verbatim — interpret them instead; " +
+                "no preamble, no acknowledgements, no filler phrases like 'Based on the data provided'. " +
                 "For analysis tasks where a restock quantity is not applicable, set suggestedQuantity to 0.";
 
             var body = new
@@ -156,7 +159,7 @@ namespace SmartStock.Classes.Data.Services
                     ProductId = 0,
                     SuggestedQuantity = Math.Max(0, quantity),
                     PriorityLevel = NormalizePriority(priority),
-                    Reasoning = TrimToLength(reasoning, 500),
+                    Reasoning = reasoning,
                     CreatedAt = DateTime.Now
                 };
             }
@@ -166,7 +169,7 @@ namespace SmartStock.Classes.Data.Services
                 ProductId = 0,
                 SuggestedQuantity = 0,
                 PriorityLevel = "Medium",
-                Reasoning = TrimToLength(aiContent, 500),
+                Reasoning = aiContent,
                 CreatedAt = DateTime.Now
             };
         }

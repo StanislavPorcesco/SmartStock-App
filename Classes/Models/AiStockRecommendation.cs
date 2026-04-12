@@ -20,7 +20,7 @@ namespace SmartStock.Classes.Models
         public string PriorityLevel { get; set; } // "Low", "Medium", "High"
 
         [Required]
-        [StringLength(500)]
+        [StringLength(4000)]
         public string Reasoning { get; set; } // Ex: "Stocul va scădea sub limita de siguranță în 3 zile conform analizei sezoniere."
 
         [Required]
