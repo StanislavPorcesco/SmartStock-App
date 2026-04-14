@@ -89,6 +89,7 @@ namespace SmartStock.Classes.Data.Services
 
         private static HttpRequestMessage BuildRequest(string prompt, string apiKey)
         {
+            var temperature = Math.Clamp(SettingsManager.Current.AiTemperature, 0.0, 2.0);
             const string systemMessage =
                 "You are a concise inventory optimization assistant. " +
                 "Respond ONLY with a valid JSON object — no markdown fences, no wrapper keys, no extra fields: " +
@@ -106,7 +107,7 @@ namespace SmartStock.Classes.Data.Services
                     new { role = "system", content = systemMessage },
                     new { role = "user", content = prompt }
                 },
-                temperature = 0.2
+                temperature
             };
 
             var request = new HttpRequestMessage(HttpMethod.Post, "chat/completions")

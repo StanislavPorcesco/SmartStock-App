@@ -182,7 +182,7 @@ root/
 - [X] Configurarea cheii API pentru agentul AI (DeepSeek) — expusă în `SettingsForm`
 - [X] Persistența setărilor în `appSettings.json` — `SettingsManager.Load/Save`
 - [X] Configurarea dinamică a căii bazei de date SQLite — `PathsManager` citește `Resources/paths.cfg`; `SmartStockContext.OnConfiguring` folosește `PathsManager.DatabasePath`; SettingsForm expune Browse buttons pentru ambele căi
-- [X] Sistem de monitorizare (Logging) — `ActivityLogger` static thread-safe; acțiuni utilizator (ADD/MODIFY/ARCHIVE/RESTORE/DELETE) în toate cele 8 servicii; activitate AI în `AnalyticsFacade` + `TextToSqlService`; UI în `SettingsForm` (enable, AI toggle, path + browse button)
+- [X] Sistem de monitorizare (Logging) — `ActivityLogger` static thread-safe; acțiuni utilizator (ADD/MODIFY/ARCHIVE/RESTORE/DELETE) în toate cele 8 servicii; activitate AI în `AnalyticsFacade` + `TextToSqlService`; evenimente sistem (EXTERNAL_FETCH — erori per-sursă + sumar) via `LogSystemAction`; UI în `SettingsForm` (enable, AI toggle, path + browse button)
 
 ### 3. Modulul de Gestiune a Stocurilor (CRUD și Căutare)
 - [X] Operații CRUD pentru toate entitățile (8 controale Add + 8 controale Modify)
@@ -334,6 +334,62 @@ private string ResolveApiKey()
 
 ---
 
+## External Factors Fetch — Architecture
+
+### New files
+| File | Role |
+|---|---|
+| `Classes/Data/Services/ExternalFactorsFetchService.cs` | Fetches from 4 APIs, deduplicates, batch-inserts `ExternalFactor` records |
+| `Classes/Utils/ExternalFactorsScheduler.cs` | Background `System.Threading.Timer`, 5-min poll, daily cooldown |
+
+### `AppSettings` additions
+```csharp
+public string   AlphaVantageApiKey          { get; set; } = string.Empty;
+public string   PredictHQApiKey             { get; set; } = string.Empty;
+public string   WorldBankCountryCode        { get; set; } = "RO";
+public double   WeatherLatitude             { get; set; } = 45.9432;
+public double   WeatherLongitude            { get; set; } = 24.9668;
+public string   WeatherRegion               { get; set; } = "Romania";
+public bool     ExternalFactorsFetchEnabled  { get; set; } = false;
+public string   ExternalFactorsFetchTime    { get; set; } = "08:00";
+public DateTime? LastExternalFactorsFetched { get; set; } = null;
+```
+
+### `.env` keys (loaded as fallback in `SettingsManager.Load`)
+- `ALPHAVANTAGE_API_KEY` → `AlphaVantageApiKey`
+- `PREDICTHQ_API_KEY`   → `PredictHQApiKey`
+
+### Scheduler firing conditions (all must be true)
+1. `ExternalFactorsFetchEnabled == true`
+2. At least 23 hours since `LastExternalFactorsFetched` (or never fetched)
+3. Current clock is within ±5 minutes of `ExternalFactorsFetchTime`
+
+### Data sources
+| Source | Auth | FactorType | ImpactValue | ValueType |
+|---|---|---|---|---|
+| Alpha Vantage | API key | `CommodityPrice` | `(latest−prev)/prev×100` | `Percentage` |
+| World Bank | None (free) | `EconomicIndex` | indicator value | `Percentage` |
+| PredictHQ | Bearer token | `Event` | `phq_rank / 100` | `Multiplier` |
+| Open-Meteo | None (free) | `Weather` | temp °C / precip mm | `Absolute` |
+
+### Deduplication
+Key = `"yyyy-MM-dd|FactorType|Description"`. Existing records for `Date >= minDate` loaded client-side into a `HashSet<string>`. `HashSet.Add()` returns false for duplicates → in-batch dedup too.
+
+### Alpha Vantage rate limit
+Free tier: 5 req/min → `Task.Delay(12_000)` between each of the 7 commodity calls.
+
+### `ExternalFactorService.ValidateFactor` — negative values allowed
+Removed the `if (factor.ImpactValue < 0) throw` guard. Negative values are legitimate:
+price drops (commodity %), recessions (GDP), below-zero temperatures (weather).
+
+### `SettingsForm` — External Factors fetch panel
+- `enable_daily_fetching` — toggles `ExternalFactorsFetchEnabled`
+- `fetching_time` — `Format = Custom`, `CustomFormat = "HH:mm"`, `ShowUpDown = true`
+- `next_fetch_lbl` — updated on load, on Apply, and after manual fetch
+- `manual_fetch_btn` — calls `ExternalFactorsScheduler.RunFetchAsync()` immediately; shows count + any per-source warnings
+
+---
+
 ## Automated Weekly Report — Architecture
 
 ### New files
@@ -479,13 +535,18 @@ Static, thread-safe append logger. Uses a `private static readonly object _fileL
 ```
 [yyyy-MM-dd HH:mm:ss] [USER:{username}] [ACTION] EntityType: "EntityName" (ID:{id})
 [yyyy-MM-dd HH:mm:ss] [AI] [OPERATION] details
+[yyyy-MM-dd HH:mm:ss] [SYSTEM] [OPERATION] details
+[yyyy-MM-dd HH:mm:ss] [ERROR] [OPERATION] details
 ```
 
-### Two entry points
+### Three entry points
 | Method | Guard | Used in |
 |---|---|---|
 | `LogUserAction(action, entityType, entityName, id?)` | `LoggingEnabled` | All 8 CRUD services |
 | `LogAiAction(operation, details)` | `LoggingEnabled` AND `AiLoggingEnabled` | `AnalyticsFacade`, `TextToSqlService` |
+| `LogSystemAction(operation, details, isError?)` | `LoggingEnabled` | `ExternalFactorsFetchService` (scheduler/background events) |
+
+`LogSystemAction` writes `[SYSTEM]` tag normally, or `[ERROR]` tag when `isError: true`. `[ERROR]` entries **always pass the level filter** — they are never silenced regardless of configured log level.
 
 ### Action vocabulary
 | Action | Trigger |
@@ -500,19 +561,120 @@ Static, thread-safe append logger. Uses a `private static readonly object _fileL
 | `STOCK_OPTIMIZATION` | AI — EOQ + recommendation persisted |
 | `ANOMALY_DETECTION` | AI — anomaly scan complete |
 | `TEXT_TO_SQL` | AI — NLQ → SQL generated |
+| `EXTERNAL_FETCH` | Scheduler/manual fetch — per-source errors + completion summary |
 
 ### Default path
 `<exe>/Resources/activity.log` — used when `AppSettings.LogFilePath` is empty.
 
 ### `AppSettings` additions
 ```csharp
-public bool   LoggingEnabled  { get; set; } = false;
+public bool   LoggingEnabled   { get; set; } = false;
 public bool   AiLoggingEnabled { get; set; } = false;
 public string LogFilePath      { get; set; } = string.Empty;
+public string LogLevel         { get; set; } = "Info";   // Info | Warning | Error
+public int    LogMaxSizeMb     { get; set; } = 10;
 ```
+
+### Log level semantics
+| Level | What is written |
+|---|---|
+| `Info` | Everything (ADD, MODIFY, ARCHIVE, RESTORE, DELETE, all AI, SYSTEM, ERROR) |
+| `Warning` | ARCHIVE, RESTORE, DELETE + AI + SYSTEM + ERROR (ADD/MODIFY noise suppressed) |
+| `Error` | ERROR only — `[ERROR]` tag always passes regardless of configured level |
+
+**Rule:** `[ERROR]`-tagged entries (e.g. per-source fetch failures) bypass the level filter entirely — they are written even when `LogLevel = "Error"`. This ensures critical failures are always captured.
+
+Implemented via `PassesLevelFilter(action)` in `ActivityLogger` — called before every `Write`.
+
+### File rotation
+`RotateIfNeeded(path)` runs inside `_fileLock` before each append. When `FileInfo.Length >= LogMaxSizeMb × 1 MB`, the current file is renamed to `activity_backup_yyyyMMdd_HHmmss.log` in the same directory and the next write starts a fresh file. No log lines are lost.
 
 ### `SettingsForm` — Logging panel (`section_b_pnl → groupBox2`)
 - `enable_logging_chk` — toggles `LoggingEnabled`
 - `ai_logs_ck` — toggles `AiLoggingEnabled`
 - `logs_tb` — pre-filled with default path when `LogFilePath` is empty
-- `browse_logs_btn` — `OpenFileDialog` for `.log` / `.txt` files; added to col 2, row 2 of `tableLayoutPanel2`
+- `browse_logs_btn` — `OpenFileDialog` for `.log` / `.txt` files; col 2, row 2 of `tableLayoutPanel2`
+- `log_level_cb` — ComboBox with `Info / Warning / Error`; Designer originally declared as `comboBox1` (renamed to `log_level_cb`)
+- `max_size_numeric` — `NumericUpDown` 1–999 MB; Designer originally declared as `min_numeric` (renamed)
+- `open_log_btn` — opens log file via `Process.Start(UseShellExecute = true)`; Designer originally declared as `button1` (renamed)
+
+### Designer naming fix
+The Designer's `InitializeComponent` used VS default names (`button1`, `min_numeric`, `comboBox1`) while field declarations at the bottom used the proper names (`open_log_btn`, `max_size_numeric`, `log_level_cb`). Fixed by aligning all `InitializeComponent` references to the declared field names via PowerShell replace.
+
+---
+
+## AI Settings Panel — `SettingsForm` (`ai_settings_gb`)
+
+### Multi-Provider Support
+
+`SettingsForm` holds a `Dictionary<string, string> _providerKeys` populated from `SettingsManager.Current` on open. Provider selection is stored in `SettingsManager.Current.SelectedAiProvider`.
+
+| Provider | Key field | `.env` variable |
+|---|---|---|
+| DeepSeek | `DeepSeekApiKey` | `DEEPSEEK_API_KEY` |
+| OpenAI | `OpenAIApiKey` | `OPENAI_API_KEY` |
+| Claude | `ClaudeApiKey` | `ANTHROPIC_API_KEY` or `CLAUDE_API_KEY` |
+
+Switching providers stashes the current key into `_providerKeys[prev]` and restores `_providerKeys[new]`. Key persists in memory until Apply or close — the textbox clears visually but the key is not lost.
+
+On Apply: all three keys and `SelectedAiProvider` are flushed to `SettingsManager.Current` and saved.
+
+### API Key Security
+
+- `api_tb.UseSystemPasswordChar = true` on every load and on every provider switch — key is always masked by default.
+- `view_api_btn` (`IconButton`, `Tag = "clean_icon"`) is **disabled + grayed** for non-Admin users. Check: `SessionManager.CurrentUser?.Role == "Admin"`.
+- Click toggles `UseSystemPasswordChar` and swaps icon `EyeSlash` ↔ `Eye`.
+
+### API Status Check (`CheckApiStatusAsync`)
+
+Fires on form open and on provider switch. Hits each provider's models endpoint (GET, no tokens consumed):
+- DeepSeek: `GET https://api.deepseek.com/models` — `Authorization: Bearer`
+- OpenAI: `GET https://api.openai.com/v1/models` — `Authorization: Bearer`
+- Claude: `GET https://api.anthropic.com/v1/models` — `x-api-key` + `anthropic-version: 2023-06-01`
+
+Updates `status_color_lbl` (colored dot: LimeGreen / Red / Gray) and `api_status_lbl` (text: Active / Inactive / No Key / Error / Checking...).
+
+### Temperature — `temperature_numeric`
+
+`AppSettings.AiTemperature` (double, default `0.2`). Range 0.0–2.0, step 0.1, 2 decimal places.
+
+`temperature_numeric.Tag = "range_lock"` — prevents `ThemeManager` from overwriting `Maximum` with `9999999999`.
+
+`DeepSeekAiProvider.BuildRequest` reads `Math.Clamp(SettingsManager.Current.AiTemperature, 0.0, 2.0)` — no longer hardcoded.
+
+---
+
+## ThemeManager — Control Tag Overrides
+
+Tag values checked in `ApplyStyleToControl` before applying defaults:
+
+| Tag | Control type | Effect |
+|---|---|---|
+| `"clean_icon"` | `Button` / `IconButton` | Transparent background, `BorderSize = 0`, `MouseOver/DownBackColor = Transparent`, `IconColor = theme.Text` |
+| `"range_lock"` | `NumericUpDown` | Skips `num.Maximum = 9999999999` — preserves designer-set range |
+| `"menu"` / `"title"` | `Button` | Transparent background with hover color |
+
+**Rule:** Any `IconButton` used as an icon-only control must have `Tag = "clean_icon"` in the Designer. Any `NumericUpDown` with a meaningful bounded range must have `Tag = "range_lock"` and configure `Minimum`/`Maximum`/`DecimalPlaces` in the form constructor.
+
+---
+
+## SettingsForm — Scrollable Layout
+
+### Structure
+
+```
+Form (Padding=30)
+├── apply_pnl   (Dock=Bottom) ← always visible, never scrolls
+└── base_pnl    (Dock=Fill, AutoScroll=true, Padding=10)
+    └── settings_table  (Dock=Top, fixed height) ← scrollable content
+```
+
+### Why `Dock=Top` on `settings_table`
+
+- `Dock=Fill` resizes the table to fit the parent — it never overflows, AutoScroll never activates.
+- `Anchor=Top|Left` with a hardcoded width leaves a gap when the window is wider than the hardcoded value.
+- `Dock=Top` stretches to fill the full width and keeps the natural/fixed height — the vertical overflow activates the scrollbar.
+
+### Why `apply_pnl` is at Form level
+
+`apply_pnl` inside `base_pnl` with `Dock=Bottom` scrolls away with the content. Moving it to a direct Form child (`Dock=Bottom`) pins it to the bottom of the window regardless of scroll position.

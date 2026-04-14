@@ -29,6 +29,20 @@ namespace SmartStock.Classes.Utils
             Write($"[USER:{user}] [{action}] {entityType}: \"{entityName}\"{idPart}");
         }
 
+        /// <summary>
+        /// Logs a background system event (scheduler, batch fetch, etc.).
+        /// Respects LoggingEnabled and level filter; does not require a logged-in user.
+        /// </summary>
+        public static void LogSystemAction(string operation, string details, bool isError = false)
+        {
+            if (!SettingsManager.Current.LoggingEnabled) return;
+
+            var action = isError ? "ERROR" : "SYSTEM";
+            if (!PassesLevelFilter(action)) return;
+
+            Write($"[{action}] [{operation}] {details}");
+        }
+
         /// <summary>Logs an AI operation. Only written when both LoggingEnabled and AiLoggingEnabled are true.</summary>
         public static void LogAiAction(string operation, string details)
         {
@@ -49,9 +63,12 @@ namespace SmartStock.Classes.Utils
         /// </summary>
         private static bool PassesLevelFilter(string action)
         {
+            // ERROR-level system events always pass regardless of the configured level.
+            if (action == "ERROR") return true;
+
             return SettingsManager.Current.LogLevel switch
             {
-                "Warning" => WarningActions.Contains(action) || action == "AI",
+                "Warning" => WarningActions.Contains(action) || action == "AI" || action == "SYSTEM",
                 "Error"   => false,
                 _         => true   // "Info" — everything
             };

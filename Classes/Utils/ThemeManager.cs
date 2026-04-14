@@ -82,23 +82,32 @@ namespace SmartStock.Classes.Utils
                         flp.BackColor = theme.LightColor;
                     break;
                 case Button btn:
-                    if(btn is IconButton icn)
+                    if (btn is IconButton icn)
                     {
                         icn.IconColor = theme.Text;
                     }
-                    btn.FlatAppearance.MouseOverBackColor = theme.HoverColor;
-                    btn.FlatAppearance.BorderSize = 0;
                     btn.FlatStyle = FlatStyle.Flat;
                     if ("menu".Equals(btn.Tag) || "title".Equals(btn.Tag))
                     {
                         btn.BackColor = Color.Transparent;
+                        btn.FlatAppearance.BorderSize = 0;
+                        btn.FlatAppearance.MouseOverBackColor = theme.HoverColor;
+                    }
+                    else if ("clean_icon".Equals(btn.Tag))
+                    {
+                        btn.BackColor = Color.Transparent;
+                        btn.FlatAppearance.BorderSize = 0;
+                        btn.FlatAppearance.MouseOverBackColor = Color.Transparent;
+                        btn.FlatAppearance.MouseDownBackColor = Color.Transparent;
+                        if (btn is IconButton cleanIcn)
+                            cleanIcn.IconColor = theme.Text;
                     }
                     else
                     {
                         btn.BackColor = theme.LightColor;
-                        btn.FlatStyle = FlatStyle.Flat;
                         btn.FlatAppearance.BorderSize = 1;
-                    }                  
+                        btn.FlatAppearance.MouseOverBackColor = theme.HoverColor;
+                    }
                     break;
 
                 case TextBox txt:
@@ -225,7 +234,8 @@ namespace SmartStock.Classes.Utils
                 case NumericUpDown num:
                     num.BackColor = theme.LightColor;
                     num.ForeColor = theme.Text;
-                    num.Maximum = 9999999999;
+                    if (!"range_lock".Equals(num.Tag))
+                        num.Maximum = 9999999999;
                     break;
                 case CheckedListBox ck:
                     ck.BackColor = theme.DarkColor;

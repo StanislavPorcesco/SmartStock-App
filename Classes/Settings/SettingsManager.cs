@@ -41,6 +41,46 @@
                     Console.WriteLine("DeepSeek API key loaded from .env file.");
                 }
             }
+
+            if (string.IsNullOrWhiteSpace(Current.OpenAIApiKey))
+            {
+                var envKey = ReadKeyFromDotEnv("OPENAI_API_KEY");
+                if (!string.IsNullOrWhiteSpace(envKey))
+                {
+                    Current.OpenAIApiKey = envKey;
+                    Console.WriteLine("OpenAI API key loaded from .env file.");
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(Current.ClaudeApiKey))
+            {
+                var envKey = ReadKeyFromDotEnv("ANTHROPIC_API_KEY") ?? ReadKeyFromDotEnv("CLAUDE_API_KEY");
+                if (!string.IsNullOrWhiteSpace(envKey))
+                {
+                    Current.ClaudeApiKey = envKey;
+                    Console.WriteLine("Claude API key loaded from .env file.");
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(Current.AlphaVantageApiKey))
+            {
+                var envKey = ReadKeyFromDotEnv("ALPHAVANTAGE_API_KEY");
+                if (!string.IsNullOrWhiteSpace(envKey))
+                {
+                    Current.AlphaVantageApiKey = envKey;
+                    Console.WriteLine("Alpha Vantage API key loaded from .env file.");
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(Current.PredictHQApiKey))
+            {
+                var envKey = ReadKeyFromDotEnv("PREDICTHQ_API_KEY");
+                if (!string.IsNullOrWhiteSpace(envKey))
+                {
+                    Current.PredictHQApiKey = envKey;
+                    Console.WriteLine("PredictHQ API key loaded from .env file.");
+                }
+            }
         }
 
         public static void Save()

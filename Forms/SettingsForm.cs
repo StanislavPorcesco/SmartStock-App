@@ -1,3 +1,5 @@
+using System.Net.Http;
+using System.Net.Http.Headers;
 using SmartStock.Classes.Settings;
 using SmartStock.Classes.Utils;
 
@@ -5,16 +7,54 @@ namespace SmartStock
 {
     public partial class SettingsForm : Form
     {
+        // Per-provider key storage (in-memory, not persisted until Apply)
+        private readonly Dictionary<string, string> _providerKeys = new();
+        private string _currentProvider = "DeepSeek";
+        private bool _apiKeyVisible = false;
+
         public SettingsForm()
         {
             InitializeComponent();
             DataLayer.populateOptions(themes_cb);
             DataLayer.setRightIndex(themes_cb);
-            api_tb.Text = SettingsManager.Current.DeepSeekApiKey;
+
+            // --- AI Provider setup ---
+            provider_cb.Items.AddRange(new object[] { "DeepSeek", "OpenAI", "Claude" });
+
+            _currentProvider = SettingsManager.Current.SelectedAiProvider is "DeepSeek" or "OpenAI" or "Claude"
+                ? SettingsManager.Current.SelectedAiProvider
+                : "DeepSeek";
+
+            _providerKeys["DeepSeek"] = SettingsManager.Current.DeepSeekApiKey ?? string.Empty;
+            _providerKeys["OpenAI"] = SettingsManager.Current.OpenAIApiKey ?? string.Empty;
+            _providerKeys["Claude"] = SettingsManager.Current.ClaudeApiKey ?? string.Empty;
+
+            provider_cb.SelectedItem = _currentProvider;
+
+            // Mask key by default; admin-only reveal button
+            api_tb.UseSystemPasswordChar = true;
+            api_tb.Text = _providerKeys.GetValueOrDefault(_currentProvider, string.Empty);
+
+            bool isAdmin = SessionManager.CurrentUser?.Role == "Admin";
+            view_api_btn.Enabled = isAdmin;
+            view_api_btn.IconColor = isAdmin ? Color.White : Color.Gray;
+
+            view_api_btn.Click += ToggleApiKeyVisibility;
+            provider_cb.SelectedIndexChanged += Provider_SelectedIndexChanged;
+
+            // Temperature
+            temperature_numeric.Minimum = (decimal)0.0;
+            temperature_numeric.Maximum = (decimal)2.0;
+            temperature_numeric.DecimalPlaces = 2;
+            temperature_numeric.Increment = (decimal)0.1;
+            temperature_numeric.Value = (decimal)Math.Clamp(SettingsManager.Current.AiTemperature, 0.0, 2.0);
+
+            // Fire API status check on open
+            _ = CheckApiStatusAsync();
 
             // File paths — default values on first start come from PathsManager
             settings_tb.Text = PathsManager.SettingsFilePath;
-            db_tb.Text       = PathsManager.DatabasePath;
+            db_tb.Text = PathsManager.DatabasePath;
 
             browse_settings_btn.Click += (_, __) =>
                 BrowseForFile(settings_tb, "JSON files|*.json|All files|*.*");
@@ -25,7 +65,7 @@ namespace SmartStock
 
             // Load logging settings into UI
             enable_logging_chk.Checked = SettingsManager.Current.LoggingEnabled;
-            ai_logs_ck.Checked         = SettingsManager.Current.AiLoggingEnabled;
+            ai_logs_ck.Checked = SettingsManager.Current.AiLoggingEnabled;
             logs_tb.Text = !string.IsNullOrWhiteSpace(SettingsManager.Current.LogFilePath)
                 ? SettingsManager.Current.LogFilePath
                 : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "activity.log");
@@ -37,7 +77,7 @@ namespace SmartStock
 
             max_size_numeric.Minimum = 1;
             max_size_numeric.Maximum = 999;
-            max_size_numeric.Value   = Math.Max(1, Math.Min(999, SettingsManager.Current.LogMaxSizeMb));
+            max_size_numeric.Value = Math.Max(1, Math.Min(999, SettingsManager.Current.LogMaxSizeMb));
 
             open_log_btn.Click += (_, __) => OpenLogFile();
 
@@ -48,15 +88,28 @@ namespace SmartStock
                 : SessionManager.CurrentUser?.Email ?? string.Empty;
 
             // Time-only picker: show HH:mm with spin buttons, no calendar dropdown
-            time_picker.Format       = DateTimePickerFormat.Custom;
+            time_picker.Format = DateTimePickerFormat.Custom;
             time_picker.CustomFormat = "HH:mm";
-            time_picker.ShowUpDown   = true;
+            time_picker.ShowUpDown = true;
             if (TimeSpan.TryParse(SettingsManager.Current.ReportScheduleTime, out var t))
                 time_picker.Value = DateTime.Today.Add(t);
 
             sent_test_btn.Click += sent_test_btn_Click;
 
             UpdateNextReportLabel();
+
+            // Load external factors fetch settings into UI
+            enable_daily_fetching.Checked = SettingsManager.Current.ExternalFactorsFetchEnabled;
+
+            fetching_time.Format = DateTimePickerFormat.Custom;
+            fetching_time.CustomFormat = "HH:mm";
+            fetching_time.ShowUpDown = true;
+            if (TimeSpan.TryParse(SettingsManager.Current.ExternalFactorsFetchTime, out var ft))
+                fetching_time.Value = DateTime.Today.Add(ft);
+
+            manual_fetch_btn.Click += manual_fetch_btn_Click;
+
+            UpdateNextFetchLabel();
 
             ThemeManager.Apply(this);
             ThemeManager.OnThemeChanged += HandleThemeUpdate;
@@ -77,7 +130,7 @@ namespace SmartStock
 
             System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
             {
-                FileName        = path,
+                FileName = path,
                 UseShellExecute = true   // opens with the default .log / .txt association (Notepad)
             });
         }
@@ -86,9 +139,9 @@ namespace SmartStock
         {
             using var dlg = new OpenFileDialog
             {
-                Filter   = filter,
+                Filter = filter,
                 FileName = target.Text,
-                Title    = "Select file location"
+                Title = "Select file location"
             };
             // Start in the file's current directory if it exists
             var dir = Path.GetDirectoryName(target.Text);
@@ -108,27 +161,38 @@ namespace SmartStock
         private void apply_btn_Click(object sender, EventArgs e)
         {
             string selectedTheme = themes_cb.SelectedItem?.ToString() ?? "Light";
-            string apiKey = api_tb.Text.Trim();
-            SettingsManager.Current.Theme          = selectedTheme;
-            SettingsManager.Current.DeepSeekApiKey = apiKey;
+            SettingsManager.Current.Theme = selectedTheme;
+
+            // Flush the currently visible key back into the per-provider memory, then persist all
+            _providerKeys[_currentProvider] = api_tb.Text.Trim();
+            SettingsManager.Current.DeepSeekApiKey = _providerKeys.GetValueOrDefault("DeepSeek", string.Empty);
+            SettingsManager.Current.OpenAIApiKey = _providerKeys.GetValueOrDefault("OpenAI", string.Empty);
+            SettingsManager.Current.ClaudeApiKey = _providerKeys.GetValueOrDefault("Claude", string.Empty);
+            SettingsManager.Current.SelectedAiProvider = _currentProvider;
+            SettingsManager.Current.AiTemperature     = (double)temperature_numeric.Value;
 
             // Persist file paths (written to paths.cfg, takes effect on next app start)
             PathsManager.Save(settings_tb.Text.Trim(), db_tb.Text.Trim());
 
             // Persist logging settings
-            SettingsManager.Current.LoggingEnabled   = enable_logging_chk.Checked;
+            SettingsManager.Current.LoggingEnabled = enable_logging_chk.Checked;
             SettingsManager.Current.AiLoggingEnabled = ai_logs_ck.Checked;
-            SettingsManager.Current.LogFilePath      = logs_tb.Text.Trim();
-            SettingsManager.Current.LogLevel         = log_level_cb.SelectedItem?.ToString() ?? "Info";
-            SettingsManager.Current.LogMaxSizeMb     = (int)max_size_numeric.Value;
+            SettingsManager.Current.LogFilePath = logs_tb.Text.Trim();
+            SettingsManager.Current.LogLevel = log_level_cb.SelectedItem?.ToString() ?? "Info";
+            SettingsManager.Current.LogMaxSizeMb = (int)max_size_numeric.Value;
 
             // Persist report settings
-            SettingsManager.Current.WeeklyReportsEnabled  = enable_reports_chk.Checked;
-            SettingsManager.Current.ReportRecipientEmail  = email_recipient_tb.Text.Trim();
-            SettingsManager.Current.ReportScheduleTime    = time_picker.Value.ToString("HH:mm");
+            SettingsManager.Current.WeeklyReportsEnabled = enable_reports_chk.Checked;
+            SettingsManager.Current.ReportRecipientEmail = email_recipient_tb.Text.Trim();
+            SettingsManager.Current.ReportScheduleTime = time_picker.Value.ToString("HH:mm");
+
+            // Persist external factors fetch settings
+            SettingsManager.Current.ExternalFactorsFetchEnabled = enable_daily_fetching.Checked;
+            SettingsManager.Current.ExternalFactorsFetchTime = fetching_time.Value.ToString("HH:mm");
 
             SettingsManager.Save();
             UpdateNextReportLabel();
+            UpdateNextFetchLabel();
 
             ThemeManager.SetTheme(selectedTheme);
             ThemeManager.Apply(this);
@@ -165,6 +229,60 @@ namespace SmartStock
             return candidate < DateTime.Now ? candidate.AddDays(1) : candidate;
         }
 
+        private void UpdateNextFetchLabel()
+        {
+            if (!SettingsManager.Current.ExternalFactorsFetchEnabled)
+            {
+                next_fetch_lbl.Text = "Disabled";
+                return;
+            }
+
+            next_fetch_lbl.Text = ComputeNextFetchDateTime().ToString("dd MMM yyyy  HH:mm");
+        }
+
+        private static DateTime ComputeNextFetchDateTime()
+        {
+            TimeSpan.TryParse(SettingsManager.Current.ExternalFactorsFetchTime, out var scheduledTime);
+
+            var lastFetched = SettingsManager.Current.LastExternalFactorsFetched;
+            if (lastFetched.HasValue)
+                return lastFetched.Value.Date.AddDays(1).Add(scheduledTime);
+
+            // Never fetched — use the next upcoming occurrence of the scheduled time
+            var candidate = DateTime.Today.Add(scheduledTime);
+            return candidate < DateTime.Now ? candidate.AddDays(1) : candidate;
+        }
+
+        private async void manual_fetch_btn_Click(object? sender, EventArgs e)
+        {
+            manual_fetch_btn.Enabled = false;
+            manual_fetch_btn.Text = "Fetching...";
+            try
+            {
+                var (added, errors) = await ExternalFactorsScheduler.RunFetchAsync();
+
+                var msg = $"Fetch complete. {added} new factor(s) added.";
+                if (errors.Count > 0)
+                    msg += $"\n\nWarnings:\n{string.Join("\n", errors)}";
+
+                MessageBox.Show(msg, "External Factors Fetch",
+                    MessageBoxButtons.OK,
+                    errors.Count > 0 ? MessageBoxIcon.Warning : MessageBoxIcon.Information);
+
+                UpdateNextFetchLabel();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Fetch failed:\n{ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                manual_fetch_btn.Enabled = true;
+                manual_fetch_btn.Text = "Fetch Now";
+            }
+        }
+
         private async void sent_test_btn_Click(object? sender, EventArgs e)
         {
             var recipient = email_recipient_tb.Text.Trim();
@@ -176,7 +294,7 @@ namespace SmartStock
             }
 
             sent_test_btn.Enabled = false;
-            sent_test_btn.Text    = "Sending...";
+            sent_test_btn.Text = "Sending...";
             try
             {
                 await ReportScheduler.SendReportAsync(recipient, isTest: true);
@@ -191,8 +309,113 @@ namespace SmartStock
             finally
             {
                 sent_test_btn.Enabled = true;
-                sent_test_btn.Text    = "Send Test Report";
+                sent_test_btn.Text = "Send Test Report";
             }
         }
+
+        // --- AI key visibility toggle (admin only) ---
+        private void ToggleApiKeyVisibility(object? sender, EventArgs e)
+        {
+            _apiKeyVisible = !_apiKeyVisible;
+            api_tb.UseSystemPasswordChar = !_apiKeyVisible;
+            view_api_btn.IconChar = _apiKeyVisible
+                ? FontAwesome.Sharp.IconChar.Eye
+                : FontAwesome.Sharp.IconChar.EyeSlash;
+        }
+
+        // --- Provider switching ---
+        private void Provider_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            var newProvider = provider_cb.SelectedItem?.ToString() ?? "DeepSeek";
+            if (newProvider == _currentProvider) return;
+
+            // Stash the key currently shown back to in-memory store
+            _providerKeys[_currentProvider] = api_tb.Text;
+
+            _currentProvider = newProvider;
+
+            // Restore key for the newly selected provider
+            api_tb.Text = _providerKeys.GetValueOrDefault(_currentProvider, string.Empty);
+
+            // Reset visibility — key should be masked again on provider change
+            _apiKeyVisible = false;
+            api_tb.UseSystemPasswordChar = true;
+            view_api_btn.IconChar = FontAwesome.Sharp.IconChar.EyeSlash;
+
+            _ = CheckApiStatusAsync();
+        }
+
+        // --- API status check ---
+        private async Task CheckApiStatusAsync()
+        {
+            SetApiStatus(null, "Checking...");
+
+            var key = api_tb.Text.Trim();
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                SetApiStatus(false, "No Key");
+                return;
+            }
+
+            try
+            {
+                bool active = await PingProviderAsync(_currentProvider, key);
+                SetApiStatus(active, active ? "Active" : "Inactive");
+            }
+            catch
+            {
+                SetApiStatus(false, "Error");
+            }
+        }
+
+        private void SetApiStatus(bool? active, string text)
+        {
+            if (InvokeRequired) { BeginInvoke(() => SetApiStatus(active, text)); return; }
+            api_status_lbl.Text = text;
+            status_color_lbl.ForeColor = active switch
+            {
+                true => Color.LimeGreen,
+                false => Color.Red,
+                null => Color.Gray
+            };
+        }
+
+        private static async Task<bool> PingProviderAsync(string provider, string apiKey)
+        {
+            using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(10) };
+
+            HttpRequestMessage request = provider switch
+            {
+                "OpenAI" => BuildRequest(HttpMethod.Get, "https://api.openai.com/v1/models",
+                                bearer: apiKey),
+                "Claude" => BuildRequest(HttpMethod.Get, "https://api.anthropic.com/v1/models",
+                                apiKeyHeader: ("x-api-key", apiKey),
+                                extraHeaders: new[] { ("anthropic-version", "2023-06-01") }),
+                _ => BuildRequest(HttpMethod.Get, "https://api.deepseek.com/models",
+                                bearer: apiKey),
+            };
+
+            var response = await client.SendAsync(request);
+            return response.IsSuccessStatusCode;
+        }
+
+        private static HttpRequestMessage BuildRequest(
+            HttpMethod method,
+            string url,
+            string? bearer = null,
+            (string name, string value)? apiKeyHeader = null,
+            (string name, string value)[]? extraHeaders = null)
+        {
+            var req = new HttpRequestMessage(method, url);
+            if (bearer is not null)
+                req.Headers.Authorization = new AuthenticationHeaderValue("Bearer", bearer);
+            if (apiKeyHeader.HasValue)
+                req.Headers.Add(apiKeyHeader.Value.name, apiKeyHeader.Value.value);
+            if (extraHeaders is not null)
+                foreach (var (name, value) in extraHeaders)
+                    req.Headers.Add(name, value);
+            return req;
+        }
+
     }
 }

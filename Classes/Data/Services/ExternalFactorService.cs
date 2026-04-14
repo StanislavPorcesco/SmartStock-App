@@ -401,8 +401,7 @@ namespace SmartStock.Classes.Data.Services
             if (string.IsNullOrWhiteSpace(factor.Region))
                 throw new ArgumentException("Region is required.");
 
-            if (factor.ImpactValue < 0)
-                throw new ArgumentException("Impact value cannot be negative.");
+            // ImpactValue may be negative (e.g. price drop, recession, sub-zero temperature)
 
             var validValueTypes = new[] { "Absolute", "Percentage", "Multiplier" };
             if (string.IsNullOrWhiteSpace(factor.ValueType) || !validValueTypes.Contains(factor.ValueType))
