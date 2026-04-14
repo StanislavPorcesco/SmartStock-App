@@ -29,10 +29,10 @@ namespace SmartStock.Forms.User_Control
 
         private void LoadUI()
         {
-            DataLayer.PopulateSelector(selector_cb);
+            //DataLayer.PopulateSelector(selector_cb);
             DataLayer.PopulateCategorySelector(category_selector_cb);
             DataLayer.PopulateSupplierSelector(supplier_cb);
-            selector_cb.SelectedIndexChanged += DataLayer.OpenAddInstanceForm(this, selector_cb);
+            //selector_cb.SelectedIndexChanged += DataLayer.OpenAddInstanceForm(this, selector_cb);
             ThemeManager.Apply(this);
             this.Refresh();
         }

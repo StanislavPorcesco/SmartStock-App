@@ -163,7 +163,7 @@
             panel1.Location = new Point(10, 40);
             panel1.Margin = new Padding(0);
             panel1.Name = "panel1";
-            panel1.Padding = new Padding(10, 0, 55, 0);
+            panel1.Padding = new Padding(10, 0, 45, 0);
             panel1.Size = new Size(448, 33);
             panel1.TabIndex = 0;
             // 
@@ -175,8 +175,8 @@
             selector_cb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             selector_cb.ForeColor = Color.White;
             selector_cb.FormattingEnabled = true;
-            selector_cb.Location = new Point(194, 0);
-            selector_cb.Margin = new Padding(0, 5, 0, 5);
+            selector_cb.Location = new Point(204, 0);
+            selector_cb.Margin = new Padding(10, 5, 0, 5);
             selector_cb.Name = "selector_cb";
             selector_cb.Size = new Size(199, 33);
             selector_cb.TabIndex = 14;

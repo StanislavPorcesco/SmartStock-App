@@ -73,7 +73,7 @@ namespace SmartStock.Forms.User_Control.SearchForms
             // Add tooltips for user guidance
             //ToolTipHelp.AddToolTip(this, "Filter categories by name, status, product count, or total inventory value.");
             ToolTipHelp.AddToolTip(status_lbl, "Filter categories by activity status.");
-            ToolTipHelp.AddToolTip(name_lbl, "Filter categories by their name (partial match).");
+            ToolTipHelp.AddToolTip(category_name_lbl, "Filter categories by their name (partial match).");
             ToolTipHelp.AddToolTip(range_lbl, "Filter categories by number of products.");
             ToolTipHelp.AddToolTip(total_lbl, "Filter categories by total inventory value of their products.");
 

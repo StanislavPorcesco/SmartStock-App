@@ -34,7 +34,7 @@
             dead_stock_max = new DateTimePicker();
             dead_stock_min = new DateTimePicker();
             product_name_tb = new TextBox();
-            name_lbl = new Label();
+            product_name_lbl = new Label();
             dead_lbl = new Label();
             safety_lbl = new Label();
             supplier_lbl = new Label();
@@ -51,7 +51,7 @@
             panel2 = new Panel();
             label4 = new Label();
             min_numeric = new NumericUpDown();
-            label3 = new Label();
+            total_sells_range = new Label();
             top_lbl = new Label();
             range_lbl = new Label();
             radio_pnl = new Panel();
@@ -89,7 +89,7 @@
             tableLayoutPanel1.Controls.Add(dead_stock_max, 1, 5);
             tableLayoutPanel1.Controls.Add(dead_stock_min, 1, 4);
             tableLayoutPanel1.Controls.Add(product_name_tb, 1, 0);
-            tableLayoutPanel1.Controls.Add(name_lbl, 0, 0);
+            tableLayoutPanel1.Controls.Add(product_name_lbl, 0, 0);
             tableLayoutPanel1.Controls.Add(dead_lbl, 0, 4);
             tableLayoutPanel1.Controls.Add(safety_lbl, 0, 3);
             tableLayoutPanel1.Controls.Add(supplier_lbl, 0, 2);
@@ -102,7 +102,7 @@
             tableLayoutPanel1.Controls.Add(top_sellers_ck, 1, 8);
             tableLayoutPanel1.Controls.Add(panel3, 1, 7);
             tableLayoutPanel1.Controls.Add(panel2, 1, 6);
-            tableLayoutPanel1.Controls.Add(label3, 0, 9);
+            tableLayoutPanel1.Controls.Add(total_sells_range, 0, 9);
             tableLayoutPanel1.Controls.Add(top_lbl, 0, 8);
             tableLayoutPanel1.Controls.Add(range_lbl, 0, 6);
             tableLayoutPanel1.Controls.Add(radio_pnl, 1, 11);
@@ -175,19 +175,19 @@
             product_name_tb.Size = new Size(540, 31);
             product_name_tb.TabIndex = 32;
             // 
-            // name_lbl
+            // product_name_lbl
             // 
-            name_lbl.AutoSize = true;
-            name_lbl.Dock = DockStyle.Left;
-            name_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            name_lbl.ForeColor = Color.White;
-            name_lbl.Location = new Point(10, 0);
-            name_lbl.Margin = new Padding(10, 0, 3, 0);
-            name_lbl.Name = "name_lbl";
-            name_lbl.Size = new Size(134, 46);
-            name_lbl.TabIndex = 31;
-            name_lbl.Text = "Product Name";
-            name_lbl.TextAlign = ContentAlignment.MiddleLeft;
+            product_name_lbl.AutoSize = true;
+            product_name_lbl.Dock = DockStyle.Left;
+            product_name_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            product_name_lbl.ForeColor = Color.White;
+            product_name_lbl.Location = new Point(10, 0);
+            product_name_lbl.Margin = new Padding(10, 0, 3, 0);
+            product_name_lbl.Name = "product_name_lbl";
+            product_name_lbl.Size = new Size(134, 46);
+            product_name_lbl.TabIndex = 31;
+            product_name_lbl.Text = "Product Name";
+            product_name_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // dead_lbl
             // 
@@ -393,20 +393,20 @@
             min_numeric.Size = new Size(128, 27);
             min_numeric.TabIndex = 0;
             // 
-            // label3
+            // total_sells_range
             // 
-            label3.AutoSize = true;
-            label3.Dock = DockStyle.Left;
-            label3.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label3.ForeColor = Color.White;
-            label3.Location = new Point(10, 448);
-            label3.Margin = new Padding(10, 0, 3, 0);
-            label3.Name = "label3";
-            tableLayoutPanel1.SetRowSpan(label3, 2);
-            label3.Size = new Size(162, 97);
-            label3.TabIndex = 30;
-            label3.Text = "Top Sellers Range";
-            label3.TextAlign = ContentAlignment.MiddleLeft;
+            total_sells_range.AutoSize = true;
+            total_sells_range.Dock = DockStyle.Left;
+            total_sells_range.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            total_sells_range.ForeColor = Color.White;
+            total_sells_range.Location = new Point(10, 448);
+            total_sells_range.Margin = new Padding(10, 0, 3, 0);
+            total_sells_range.Name = "total_sells_range";
+            tableLayoutPanel1.SetRowSpan(total_sells_range, 2);
+            total_sells_range.Size = new Size(145, 97);
+            total_sells_range.TabIndex = 30;
+            total_sells_range.Text = "Top Sells Range";
+            total_sells_range.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // top_lbl
             // 
@@ -546,8 +546,8 @@
         private CheckBox top_sellers_ck;
         private Label top_lbl;
         private TextBox product_name_tb;
-        private Label name_lbl;
-        private Label label3;
+        private Label product_name_lbl;
+        private Label total_sells_range;
         private DateTimePicker range_max;
         private DateTimePicker range_min;
         private DateTimePicker dead_stock_max;

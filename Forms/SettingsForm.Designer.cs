@@ -71,6 +71,7 @@ namespace SmartStock
             preferences_pnl = new Panel();
             preferences_gb = new GroupBox();
             tableLayoutPanel1 = new TableLayoutPanel();
+            currency_tb = new TextBox();
             label4 = new Label();
             languages_cb = new ComboBox();
             language_lbl = new Label();
@@ -100,7 +101,6 @@ namespace SmartStock
             logs_tb = new TextBox();
             browse_logs_btn = new Button();
             apply_pnl = new Panel();
-            currency_tb = new TextBox();
             base_pnl.SuspendLayout();
             settings_table.SuspendLayout();
             factors_pnl.SuspendLayout();
@@ -753,6 +753,19 @@ namespace SmartStock
             tableLayoutPanel1.Size = new Size(619, 146);
             tableLayoutPanel1.TabIndex = 2;
             // 
+            // currency_tb
+            // 
+            currency_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            currency_tb.BackColor = Color.FromArgb(54, 54, 54);
+            currency_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            currency_tb.ForeColor = Color.White;
+            currency_tb.Location = new Point(257, 102);
+            currency_tb.Margin = new Padding(10, 5, 10, 10);
+            currency_tb.MinimumSize = new Size(0, 31);
+            currency_tb.Name = "currency_tb";
+            currency_tb.Size = new Size(352, 31);
+            currency_tb.TabIndex = 20;
+            // 
             // label4
             // 
             label4.AutoSize = true;
@@ -1156,19 +1169,6 @@ namespace SmartStock
             apply_pnl.Padding = new Padding(20, 20, 41, 0);
             apply_pnl.Size = new Size(1337, 110);
             apply_pnl.TabIndex = 9;
-            // 
-            // currency_tb
-            // 
-            currency_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            currency_tb.BackColor = Color.FromArgb(54, 54, 54);
-            currency_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            currency_tb.ForeColor = Color.White;
-            currency_tb.Location = new Point(257, 102);
-            currency_tb.Margin = new Padding(10, 5, 10, 10);
-            currency_tb.MinimumSize = new Size(0, 31);
-            currency_tb.Name = "currency_tb";
-            currency_tb.Size = new Size(352, 31);
-            currency_tb.TabIndex = 20;
             // 
             // SettingsForm
             // 

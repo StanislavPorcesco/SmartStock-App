@@ -33,14 +33,14 @@
             status_lbl = new Label();
             dead_stock_end = new DateTimePicker();
             dead_stock_start = new DateTimePicker();
-            label6 = new Label();
+            no_sales_lbl = new Label();
             panel6 = new Panel();
             label3 = new Label();
             spent_max = new NumericUpDown();
             panel5 = new Panel();
             label2 = new Label();
             spent_min = new NumericUpDown();
-            label1 = new Label();
+            total_spent_lbl = new Label();
             registration_start = new DateTimePicker();
             name_or_phone_tb = new TextBox();
             search_lbl = new Label();
@@ -48,7 +48,7 @@
             city_lbl = new Label();
             city_cb = new ComboBox();
             registration_end = new DateTimePicker();
-            total_lbl = new Label();
+            sales_count_lbl = new Label();
             panel3 = new Panel();
             label5 = new Label();
             sale_count_max = new NumericUpDown();
@@ -92,10 +92,10 @@
             tableLayoutPanel1.Controls.Add(status_lbl, 0, 10);
             tableLayoutPanel1.Controls.Add(dead_stock_end, 1, 5);
             tableLayoutPanel1.Controls.Add(dead_stock_start, 1, 4);
-            tableLayoutPanel1.Controls.Add(label6, 0, 4);
+            tableLayoutPanel1.Controls.Add(no_sales_lbl, 0, 4);
             tableLayoutPanel1.Controls.Add(panel6, 1, 9);
             tableLayoutPanel1.Controls.Add(panel5, 1, 8);
-            tableLayoutPanel1.Controls.Add(label1, 0, 8);
+            tableLayoutPanel1.Controls.Add(total_spent_lbl, 0, 8);
             tableLayoutPanel1.Controls.Add(registration_start, 1, 2);
             tableLayoutPanel1.Controls.Add(name_or_phone_tb, 1, 0);
             tableLayoutPanel1.Controls.Add(search_lbl, 0, 0);
@@ -103,7 +103,7 @@
             tableLayoutPanel1.Controls.Add(city_lbl, 0, 1);
             tableLayoutPanel1.Controls.Add(city_cb, 1, 1);
             tableLayoutPanel1.Controls.Add(registration_end, 1, 3);
-            tableLayoutPanel1.Controls.Add(total_lbl, 0, 6);
+            tableLayoutPanel1.Controls.Add(sales_count_lbl, 0, 6);
             tableLayoutPanel1.Controls.Add(panel3, 1, 7);
             tableLayoutPanel1.Controls.Add(panel2, 1, 6);
             tableLayoutPanel1.Controls.Add(radio_pnl, 1, 10);
@@ -163,20 +163,20 @@
             dead_stock_start.Size = new Size(315, 31);
             dead_stock_start.TabIndex = 40;
             // 
-            // label6
+            // no_sales_lbl
             // 
-            label6.AutoSize = true;
-            label6.Dock = DockStyle.Left;
-            label6.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label6.ForeColor = Color.White;
-            label6.Location = new Point(10, 196);
-            label6.Margin = new Padding(10, 0, 3, 0);
-            label6.Name = "label6";
-            tableLayoutPanel1.SetRowSpan(label6, 2);
-            label6.Size = new Size(144, 92);
-            label6.TabIndex = 39;
-            label6.Text = "No Sales Range";
-            label6.TextAlign = ContentAlignment.MiddleLeft;
+            no_sales_lbl.AutoSize = true;
+            no_sales_lbl.Dock = DockStyle.Left;
+            no_sales_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            no_sales_lbl.ForeColor = Color.White;
+            no_sales_lbl.Location = new Point(10, 196);
+            no_sales_lbl.Margin = new Padding(10, 0, 3, 0);
+            no_sales_lbl.Name = "no_sales_lbl";
+            tableLayoutPanel1.SetRowSpan(no_sales_lbl, 2);
+            no_sales_lbl.Size = new Size(144, 92);
+            no_sales_lbl.TabIndex = 39;
+            no_sales_lbl.Text = "No Sales Range";
+            no_sales_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // panel6
             // 
@@ -245,20 +245,20 @@
             spent_min.Size = new Size(128, 27);
             spent_min.TabIndex = 0;
             // 
-            // label1
+            // total_spent_lbl
             // 
-            label1.AutoSize = true;
-            label1.Dock = DockStyle.Left;
-            label1.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label1.ForeColor = Color.White;
-            label1.Location = new Point(10, 372);
-            label1.Margin = new Padding(10, 0, 3, 0);
-            label1.Name = "label1";
-            tableLayoutPanel1.SetRowSpan(label1, 2);
-            label1.Size = new Size(108, 84);
-            label1.TabIndex = 35;
-            label1.Text = "Total Spent";
-            label1.TextAlign = ContentAlignment.MiddleLeft;
+            total_spent_lbl.AutoSize = true;
+            total_spent_lbl.Dock = DockStyle.Left;
+            total_spent_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            total_spent_lbl.ForeColor = Color.White;
+            total_spent_lbl.Location = new Point(10, 372);
+            total_spent_lbl.Margin = new Padding(10, 0, 3, 0);
+            total_spent_lbl.Name = "total_spent_lbl";
+            tableLayoutPanel1.SetRowSpan(total_spent_lbl, 2);
+            total_spent_lbl.Size = new Size(108, 84);
+            total_spent_lbl.TabIndex = 35;
+            total_spent_lbl.Text = "Total Spent";
+            total_spent_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // registration_start
             // 
@@ -353,20 +353,20 @@
             registration_end.Size = new Size(315, 31);
             registration_end.TabIndex = 32;
             // 
-            // total_lbl
+            // sales_count_lbl
             // 
-            total_lbl.AutoSize = true;
-            total_lbl.Dock = DockStyle.Left;
-            total_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            total_lbl.ForeColor = Color.White;
-            total_lbl.Location = new Point(10, 288);
-            total_lbl.Margin = new Padding(10, 0, 3, 0);
-            total_lbl.Name = "total_lbl";
-            tableLayoutPanel1.SetRowSpan(total_lbl, 2);
-            total_lbl.Size = new Size(111, 84);
-            total_lbl.TabIndex = 24;
-            total_lbl.Text = "Sales Count";
-            total_lbl.TextAlign = ContentAlignment.MiddleLeft;
+            sales_count_lbl.AutoSize = true;
+            sales_count_lbl.Dock = DockStyle.Left;
+            sales_count_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            sales_count_lbl.ForeColor = Color.White;
+            sales_count_lbl.Location = new Point(10, 288);
+            sales_count_lbl.Margin = new Padding(10, 0, 3, 0);
+            sales_count_lbl.Name = "sales_count_lbl";
+            tableLayoutPanel1.SetRowSpan(sales_count_lbl, 2);
+            sales_count_lbl.Size = new Size(111, 84);
+            sales_count_lbl.TabIndex = 24;
+            sales_count_lbl.Text = "Sales Count";
+            sales_count_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // panel3
             // 
@@ -533,7 +533,7 @@
 
         private Panel panel1;
         private TableLayoutPanel tableLayoutPanel1;
-        private Label total_lbl;
+        private Label sales_count_lbl;
         private Label date_lbl;
         private Label search_lbl;
         private Panel panel2;
@@ -547,7 +547,7 @@
         private DateTimePicker registration_start;
         private ComboBox city_cb;
         private DateTimePicker registration_end;
-        private Label label1;
+        private Label total_spent_lbl;
         private Panel panel6;
         private Label label3;
         private NumericUpDown spent_max;
@@ -556,7 +556,7 @@
         private NumericUpDown spent_min;
         private DateTimePicker dead_stock_end;
         private DateTimePicker dead_stock_start;
-        private Label label6;
+        private Label no_sales_lbl;
         private Panel radio_pnl;
         private TableLayoutPanel tableLayoutPanel2;
         private RadioButton inactive_rb;

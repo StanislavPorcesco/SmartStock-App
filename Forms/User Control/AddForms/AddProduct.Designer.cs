@@ -30,8 +30,6 @@ namespace SmartStock.Forms.User_Control
         private void InitializeComponent()
         {
             base_pnl = new Panel();
-            add_btn = new Button();
-            margin_pnl = new Panel();
             add_instance_pnl = new Panel();
             groupBox2 = new GroupBox();
             tableLayoutPanel2 = new TableLayoutPanel();
@@ -49,28 +47,17 @@ namespace SmartStock.Forms.User_Control
             current_stock_tb = new TextBox();
             label2 = new Label();
             unit_price_tb = new TextBox();
-            selector_pnl = new Panel();
-            groupBox1 = new GroupBox();
-            tableLayoutPanel1 = new TableLayoutPanel();
-            selector_cb = new ComboBox();
-            label1 = new Label();
             base_pnl.SuspendLayout();
             add_instance_pnl.SuspendLayout();
             groupBox2.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
-            selector_pnl.SuspendLayout();
-            groupBox1.SuspendLayout();
-            tableLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
             // base_pnl
             // 
             base_pnl.AutoScroll = true;
             base_pnl.BackColor = Color.FromArgb(64, 64, 64);
-            base_pnl.Controls.Add(add_btn);
-            base_pnl.Controls.Add(margin_pnl);
             base_pnl.Controls.Add(add_instance_pnl);
-            base_pnl.Controls.Add(selector_pnl);
             base_pnl.Dock = DockStyle.Fill;
             base_pnl.Location = new Point(0, 0);
             base_pnl.Margin = new Padding(30);
@@ -80,40 +67,12 @@ namespace SmartStock.Forms.User_Control
             base_pnl.TabIndex = 3;
             base_pnl.Tag = "base";
             // 
-            // add_btn
-            // 
-            add_btn.BackColor = Color.FromArgb(54, 54, 54);
-            add_btn.Dock = DockStyle.Bottom;
-            add_btn.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            add_btn.ForeColor = Color.White;
-            add_btn.Location = new Point(20, 627);
-            add_btn.Margin = new Padding(0);
-            add_btn.MaximumSize = new Size(0, 70);
-            add_btn.MinimumSize = new Size(0, 70);
-            add_btn.Name = "add_btn";
-            add_btn.Size = new Size(1259, 70);
-            add_btn.TabIndex = 8;
-            add_btn.Text = "Add Instance";
-            add_btn.UseVisualStyleBackColor = false;
-            add_btn.Click += add_btn_Click;
-            // 
-            // margin_pnl
-            // 
-            margin_pnl.BackColor = Color.Transparent;
-            margin_pnl.Dock = DockStyle.Top;
-            margin_pnl.Location = new Point(20, 520);
-            margin_pnl.MaximumSize = new Size(0, 20);
-            margin_pnl.MinimumSize = new Size(0, 20);
-            margin_pnl.Name = "margin_pnl";
-            margin_pnl.Size = new Size(1259, 20);
-            margin_pnl.TabIndex = 9;
-            // 
             // add_instance_pnl
             // 
             add_instance_pnl.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             add_instance_pnl.Controls.Add(groupBox2);
             add_instance_pnl.Dock = DockStyle.Top;
-            add_instance_pnl.Location = new Point(20, 150);
+            add_instance_pnl.Location = new Point(20, 20);
             add_instance_pnl.Name = "add_instance_pnl";
             add_instance_pnl.Padding = new Padding(10);
             add_instance_pnl.Size = new Size(1259, 370);
@@ -338,72 +297,6 @@ namespace SmartStock.Forms.User_Control
             unit_price_tb.Size = new Size(611, 31);
             unit_price_tb.TabIndex = 4;
             // 
-            // selector_pnl
-            // 
-            selector_pnl.Controls.Add(groupBox1);
-            selector_pnl.Dock = DockStyle.Top;
-            selector_pnl.Location = new Point(20, 20);
-            selector_pnl.Name = "selector_pnl";
-            selector_pnl.Padding = new Padding(10);
-            selector_pnl.Size = new Size(1259, 130);
-            selector_pnl.TabIndex = 3;
-            // 
-            // groupBox1
-            // 
-            groupBox1.Controls.Add(tableLayoutPanel1);
-            groupBox1.Dock = DockStyle.Fill;
-            groupBox1.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            groupBox1.ForeColor = Color.White;
-            groupBox1.Location = new Point(10, 10);
-            groupBox1.Margin = new Padding(0);
-            groupBox1.Name = "groupBox1";
-            groupBox1.Padding = new Padding(10, 20, 10, 20);
-            groupBox1.Size = new Size(1239, 110);
-            groupBox1.TabIndex = 1;
-            groupBox1.TabStop = false;
-            groupBox1.Text = "Instance selector";
-            // 
-            // tableLayoutPanel1
-            // 
-            tableLayoutPanel1.ColumnCount = 2;
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.Controls.Add(selector_cb, 1, 0);
-            tableLayoutPanel1.Controls.Add(label1, 0, 0);
-            tableLayoutPanel1.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Location = new Point(10, 40);
-            tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 1;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.Size = new Size(1219, 50);
-            tableLayoutPanel1.TabIndex = 0;
-            // 
-            // selector_cb
-            // 
-            selector_cb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            selector_cb.BackColor = Color.FromArgb(54, 54, 54);
-            selector_cb.FlatStyle = FlatStyle.Flat;
-            selector_cb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            selector_cb.ForeColor = Color.White;
-            selector_cb.FormattingEnabled = true;
-            selector_cb.Location = new Point(609, 8);
-            selector_cb.Margin = new Padding(0, 5, 0, 5);
-            selector_cb.Name = "selector_cb";
-            selector_cb.Size = new Size(610, 33);
-            selector_cb.TabIndex = 9;
-            // 
-            // label1
-            // 
-            label1.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.ForeColor = Color.White;
-            label1.Location = new Point(3, 9);
-            label1.Name = "label1";
-            label1.Size = new Size(603, 31);
-            label1.TabIndex = 0;
-            label1.Text = "Select the desired instance";
-            // 
             // AddProduct
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -416,18 +309,12 @@ namespace SmartStock.Forms.User_Control
             groupBox2.ResumeLayout(false);
             tableLayoutPanel2.ResumeLayout(false);
             tableLayoutPanel2.PerformLayout();
-            selector_pnl.ResumeLayout(false);
-            groupBox1.ResumeLayout(false);
-            tableLayoutPanel1.ResumeLayout(false);
-            tableLayoutPanel1.PerformLayout();
             ResumeLayout(false);
         }
 
         #endregion
 
         private Panel base_pnl;
-        private Button add_btn;
-        private Panel margin_pnl;
         private Panel add_instance_pnl;
         private GroupBox groupBox2;
         private TableLayoutPanel tableLayoutPanel2;
@@ -443,11 +330,6 @@ namespace SmartStock.Forms.User_Control
         private Label db_lbl;
         private TextBox product_name_tb;
         private Label logs_lbl;
-        private Panel selector_pnl;
-        private GroupBox groupBox1;
-        private TableLayoutPanel tableLayoutPanel1;
-        private ComboBox selector_cb;
-        private Label label1;
         private Label label6;
         private ComboBox supplier_cb;
     }

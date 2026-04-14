@@ -2,6 +2,7 @@
 using SmartStock.Classes.Data.Repositories;
 using SmartStock.Classes.Models;
 using SmartStock.Classes.Utils;
+using SmartStock.Classes.Data.Interfaces;
 
 namespace SmartStock.Forms.User_Control
 {
@@ -9,7 +10,7 @@ namespace SmartStock.Forms.User_Control
     /// Passive View: Doar colectează date din controale și afișează mesaje.
     /// Logica de business este delegată ProductService.
     /// </summary>
-    public partial class ModifyProduct : UserControl
+    public partial class ModifyProduct : UserControl, ISaveableControl
     {
         private ProductService _productService;
         private int _currentProductId;
@@ -18,22 +19,13 @@ namespace SmartStock.Forms.User_Control
         {
             InitializeComponent();
             InitializeService();
-            LoadUI();
+            DataLayer.PopulateCategorySelector(product_category_cb);
         }
 
         private void InitializeService()
         {
             var repository = new GenericRepository<Product>(new SmartStockContext());
             _productService = new ProductService(repository);
-        }
-
-        private void LoadUI()
-        {
-            DataLayer.PopulateSelector(selector_cb);
-            DataLayer.PopulateCategorySelector(product_category_cb);
-            selector_cb.SelectedIndexChanged += DataLayer.OpenModifyInstanceForm(this, selector_cb);
-            ThemeManager.Apply(this);
-            this.Refresh();
         }
 
         private void search_btn_Click(object sender, EventArgs e)
@@ -111,78 +103,10 @@ namespace SmartStock.Forms.User_Control
                                 MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
-
-        private void delete_btn_Click(object sender, EventArgs e)
-        {
-            if (!int.TryParse(product_id_tb.Text, out int productId))
-                return;
-
-            DialogResult confirm = MessageBox.Show(
-                "Are you sure you want to deactivate this product? Historical sales data will be preserved.",
-                "Confirm Deactivation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
-            if (confirm == DialogResult.Yes)
-            {
-                DeactivateProduct(productId);
-            }
-        }
-
-        /// <summary>
-        /// Deactivează produsul.
-        /// </summary>
-        private async void DeactivateProduct(int productId)
-        {
-            try
-            {
-                Cursor = Cursors.WaitCursor;
-
-                bool success = await _productService.DeactivateProductAsync(productId);
-
-                if (success)
-                {
-                    MessageBox.Show("Product has been deactivated successfully.", "Success",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    ClearControls();
-                }
-                else
-                {
-                    MessageBox.Show("Product not found.", "Error", 
-                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    ClearControls();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error during deactivation: {ex.Message}", "Database Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            finally
-            {
-                Cursor = Cursors.Default;
-            }
-        }
-
-        private void add_btn_Click(object sender, EventArgs e)
-        {
-            if (!int.TryParse(product_id_tb.Text, out int productId))
-            {
-                MessageBox.Show("Please search for a product first using a valid ID.", "Warning",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            if (!TryCollectProductData(productId, out var product))
-            {
-                return;
-            }
-
-            UpdateProduct(product);
-        }
-
         /// <summary>
         /// Colectează datele din controale și creează un obiect Product.
         /// </summary>
-        private bool TryCollectProductData(int productId, out Product product)
+        private bool TryCollectProductData(out Product product)
         {
             product = null;
 
@@ -199,7 +123,6 @@ namespace SmartStock.Forms.User_Control
 
             product = new Product
             {
-                ProductId = productId,
                 ProductName = product_name_tb.Text.Trim(),
                 UnitPrice = price,
                 CurrentStock = stock,
@@ -212,47 +135,68 @@ namespace SmartStock.Forms.User_Control
 
             return true;
         }
-
-        /// <summary>
-        /// Actualizează produsul în baza de date.
-        /// </summary>
-        private async void UpdateProduct(Product product)
+        public async Task<bool> PerformSave(bool isAddMode)
         {
+            if (string.IsNullOrWhiteSpace(product_name_tb.Text)) return false;
+            try
+            {
+                if (isAddMode)
+                {
+                    TryCollectProductData(out var newProduct);
+                    return await _productService.AddProductAsync(newProduct);
+                }
+                else
+                {
+                    TryCollectProductData(out var updatedProduct);
+                    return await _productService.UpdateProductAsync(updatedProduct);
+                }
+            }
+            catch { return false; }
+        }
+        void ISaveableControl.UpdateUIState(bool isAddMode)
+        {
+            var searchButton = this.Controls.Find("search_btn", true).FirstOrDefault();
+            var idTextBox = this.Controls.Find("product_id_tb", true).FirstOrDefault();
+            if (searchButton != null) searchButton.Enabled = !isAddMode;
+            if (idTextBox != null) idTextBox.Enabled = !isAddMode;
+            ClearControls();
+        }
+        async Task<bool> ISaveableControl.PerformArchive(int productId)
+        {
+            bool success = false;
             try
             {
                 Cursor = Cursors.WaitCursor;
 
-                bool success = await _productService.UpdateProductAsync(product);
+                success = await _productService.DeactivateProductAsync(productId);
 
                 if (success)
                 {
-                    MessageBox.Show("Product updated successfully.", "Success",
+                    MessageBox.Show("Product has been deactivated successfully.", "Success",
                                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                     ClearControls();
+                    return success;
                 }
                 else
                 {
-                    MessageBox.Show("Failed to update product.", "Error",
+                    MessageBox.Show("Product not found.", "Error",
                                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ClearControls();
+                    return success;
                 }
-            }
-            catch (ArgumentException ex)
-            {
-                MessageBox.Show($"Validation error: {ex.Message}", "Input Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error updating product: {ex.Message}", "Database Error",
+                MessageBox.Show($"Error during deactivation: {ex.Message}", "Database Error",
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
                 Cursor = Cursors.Default;
             }
+            return success;   
         }
-
-        private void ClearControls()
+        public void ClearControls()
         {
             product_id_tb.Clear();
             product_name_tb.Clear();
@@ -263,6 +207,15 @@ namespace SmartStock.Forms.User_Control
             safety_stock_tb.Clear();
             unit_measure_tb.Clear();
             ThemeManager.Apply(this);
+        }
+
+        int ISaveableControl.GetCurrentId()
+        {
+            if (int.TryParse(product_id_tb.Text, out int id))
+            {
+                return id;
+            }
+            return -1;
         }
     }
 }

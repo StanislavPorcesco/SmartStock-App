@@ -29,8 +29,11 @@ namespace SmartStock.Classes.Models
         [ForeignKey("ProductId")]
         public virtual Product Product { get; set; }
 
-        // Proprietate calculată pentru UI (Subtotal per linie)
+        // Proprietăți calculate pentru UI (nu se salvează în DB)
         [NotMapped]
         public decimal LineTotal => Quantity * UnitPrice;
+
+        [NotMapped]
+        public string ProductName { get; set; }
     }
 }

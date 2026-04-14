@@ -80,7 +80,17 @@ namespace SmartStock.Forms.User_Control.SearchForms
 
             tableLayoutPanel1.Padding = new Padding(0, 0, 25, 0);
             panel1.Padding = new Padding(0, 10, 0, 30);
-            ToolTipHelp.AddToolTip(this, "Filter external factors by type, region, date range, impact value, and status");
+
+            ToolTipHelp.AddToolTip(Search_description_lbl, "Search by factor description or region (partial match).");
+            ToolTipHelp.AddToolTip(factor_lbl,             "Filter by factor type — select one or more from the list.");
+            ToolTipHelp.AddToolTip(region_lbl,             "Filter factors affecting a specific geographic region.");
+            ToolTipHelp.AddToolTip(date_range_lbl,         "Filter factors that occurred within this date range.");
+            ToolTipHelp.AddToolTip(seasonality_lbl,        "Show factors recorded in specific calendar months.");
+            ToolTipHelp.AddToolTip(days_lbl,               "Show factors recorded on specific days of the week.");
+            ToolTipHelp.AddToolTip(value_range_lbl,        "Filter factors by impact value magnitude (min–max).");
+            ToolTipHelp.AddToolTip(value_type_lbl,         "Filter by value type: Absolute, Percentage, or Multiplier.");
+            ToolTipHelp.AddToolTip(direction_lbl,          "Filter by impact direction — Positive (growth) or Negative (decline).");
+            ToolTipHelp.AddToolTip(status_lbl,             "Filter external factors by active/inactive status.");
 
             this.Refresh();
         }

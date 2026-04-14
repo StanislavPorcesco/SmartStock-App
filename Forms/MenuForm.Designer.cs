@@ -200,7 +200,7 @@
             add_btn.Size = new Size(320, 100);
             add_btn.TabIndex = 1;
             add_btn.Tag = "menu";
-            add_btn.Text = "Add Instance";
+            add_btn.Text = "Add / Modify";
             add_btn.TextAlign = ContentAlignment.MiddleLeft;
             add_btn.TextImageRelation = TextImageRelation.ImageBeforeText;
             add_btn.UseVisualStyleBackColor = false;

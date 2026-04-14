@@ -81,7 +81,13 @@ namespace SmartStock.Forms.User_Control.SearchForms
             tableLayoutPanel1.Padding = new Padding(0, 0, 45, 0);
             panel1.Padding = new Padding(0, 10, 0, 30);
 
-            ToolTipHelp.AddToolTip(this, "Filter customers by name, email, phone, city, registration date, and spending.");
+            ToolTipHelp.AddToolTip(search_lbl,       "Search by customer full name, phone number, or email (partial match).");
+            ToolTipHelp.AddToolTip(status_lbl,       "Filter customers by account status (All, Active, Inactive).");
+            ToolTipHelp.AddToolTip(city_lbl,         "Filter customers by the city they are located in.");
+            ToolTipHelp.AddToolTip(date_lbl,         "Filter customers by their registration date range.");
+            ToolTipHelp.AddToolTip(no_sales_lbl,     "Show customers with no purchases in the specified date range.");
+            ToolTipHelp.AddToolTip(sales_count_lbl,  "Filter customers by number of sales (purchases) made.");
+            ToolTipHelp.AddToolTip(total_spent_lbl,  "Filter customers by total amount spent across all paid sales.");
 
             this.Refresh();
         }

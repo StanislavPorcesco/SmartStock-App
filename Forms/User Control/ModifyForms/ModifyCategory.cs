@@ -2,6 +2,7 @@ using SmartStock.Classes.Data.Services;
 using SmartStock.Classes.Data.Repositories;
 using SmartStock.Classes.Models;
 using SmartStock.Classes.Utils;
+using SmartStock.Classes.Data.Interfaces;
 
 namespace SmartStock.Forms.AddForms
 {
@@ -9,7 +10,7 @@ namespace SmartStock.Forms.AddForms
     /// Passive View: Doar colectează date din controale și afișează mesaje.
     /// Logica de business este delegată CategoryService.
     /// </summary>
-    public partial class ModifyCategory : UserControl
+    public partial class ModifyCategory : UserControl, ISaveableControl
     {
         private CategoryService _categoryService;
         private int _currentCategoryId;
@@ -18,7 +19,6 @@ namespace SmartStock.Forms.AddForms
         {
             InitializeComponent();
             InitializeService();
-            LoadUI();
         }
 
         private void InitializeService()
@@ -26,15 +26,6 @@ namespace SmartStock.Forms.AddForms
             var repository = new GenericRepository<Category>(new SmartStockContext());
             _categoryService = new CategoryService(repository);
         }
-
-        private void LoadUI()
-        {
-            DataLayer.PopulateSelector(selector_cb);
-            selector_cb.SelectedIndexChanged += DataLayer.OpenModifyInstanceForm(this, selector_cb);
-            ThemeManager.Apply(this);
-            this.Refresh();
-        }
-
         private void search_btn_Click(object sender, EventArgs e)
         {
             if (!int.TryParse(category_id_tb.Text, out int catId))
@@ -101,82 +92,10 @@ namespace SmartStock.Forms.AddForms
                                 MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
-
-        private void delete_btn_Click(object sender, EventArgs e)
-        {
-            if (!int.TryParse(category_id_tb.Text, out int catId))
-                return;
-
-            DialogResult confirm = MessageBox.Show(
-                "Are you sure you want to deactivate this category? Historical data will be preserved.",
-                "Confirm Deactivation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-            if (confirm == DialogResult.Yes)
-            {
-                DeactivateCategory(catId);
-            }
-        }
-
-        /// <summary>
-        /// Deactivează categoria cu verificare cascadă.
-        /// 
-        /// SOLID Principle - Cascading Availability:
-        /// Serviciul returnează un sumar cu produsele care vor deveni indisponibile.
-        /// Aceasta permite UI-ului să afișeze un avertisment informativ.
-        /// </summary>
-        private async void DeactivateCategory(int categoryId)
-        {
-            try
-            {
-                Cursor = Cursors.WaitCursor;
-
-                // Serviciul returnează (Success, Message) cu sumar cascadă
-                var (success, message) = await _categoryService.DeactivateCategoryAsync(categoryId);
-
-                if (success)
-                {
-                    // Afișează avertismentul informativ cu sumar
-                    MessageBox.Show(message, "Category Deactivated", 
-                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    ClearControls();
-                }
-                else
-                {
-                    MessageBox.Show(message, "Error", 
-                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    ClearControls();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error during deactivation: {ex.Message}", "Database Error", 
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            finally
-            {
-                Cursor = Cursors.Default;
-            }
-        }
-
-        private void add_btn_Click(object sender, EventArgs e)
-        {
-            if (!int.TryParse(category_id_tb.Text, out int catId))
-            {
-                MessageBox.Show("Please search for a category first using a valid ID.", "Warning", 
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            if (!TryCollectCategoryData(catId, out var category))
-                return;
-
-            UpdateCategory(category);
-        }
-
         /// <summary>
         /// Colectează datele din controale.
         /// </summary>
-        private bool TryCollectCategoryData(int categoryId, out Category category)
+        private bool TryCollectCategoryData(out Category category)
         {
             category = null;
 
@@ -191,7 +110,6 @@ namespace SmartStock.Forms.AddForms
 
             category = new Category
             {
-                CategoryId = categoryId,
                 CategoryName = categoryName,
                 IsActive = true
             };
@@ -202,48 +120,82 @@ namespace SmartStock.Forms.AddForms
         /// <summary>
         /// Actualizează categoria în baza de date.
         /// </summary>
-        private async void UpdateCategory(Category category)
+        public async Task<bool> PerformSave(bool isAddMode)
         {
+            if (string.IsNullOrWhiteSpace(category_name_tb.Text)) return false;
+            try
+            {
+                if (isAddMode)
+                {
+                    TryCollectCategoryData(out var newCategory);
+                    return await _categoryService.AddCategoryAsync(newCategory);
+                }
+                else
+                {
+                    TryCollectCategoryData(out var updatedCategory);
+                    return await _categoryService.UpdateCategoryAsync(updatedCategory);
+                }
+            }
+            catch 
+            { 
+
+                return false; 
+            }
+        }
+
+        public async Task<bool> PerformArchive(int id)
+        {
+            bool success = false;
+            string message = string.Empty;
             try
             {
                 Cursor = Cursors.WaitCursor;
 
-                bool success = await _categoryService.UpdateCategoryAsync(category);
+                (success, message) = await _categoryService.DeactivateCategoryAsync(id);
 
                 if (success)
                 {
-                    MessageBox.Show("Category updated successfully.", "Success",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(message, "Category Deactivated", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     ClearControls();
+                    return success;
                 }
                 else
                 {
-                    MessageBox.Show("Failed to update category.", "Error",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ClearControls();
+                    return success;
                 }
-            }
-            catch (InvalidOperationException ex)
-            {
-                MessageBox.Show($"Validation error: {ex.Message}", "Input Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-            catch (ArgumentException ex)
-            {
-                MessageBox.Show($"Validation error: {ex.Message}", "Input Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error updating category: {ex.Message}", "Database Error",
+                MessageBox.Show($"Error during deactivation: {ex.Message}", "Database Error",
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
                 Cursor = Cursors.Default;
             }
+            return success;
+        }
+        public void UpdateUIState(bool isAddMode)
+        {
+            var searchButton = this.Controls.Find("search_btn", true).FirstOrDefault();
+            var idTextBox = this.Controls.Find("category_id_tb", true).FirstOrDefault();
+            if (searchButton != null) searchButton.Enabled = !isAddMode;
+            if (idTextBox != null) idTextBox.Enabled = !isAddMode;
+            ClearControls();
         }
 
-        private void ClearControls()
+        public int GetCurrentId()
+        {
+            if (int.TryParse(category_id_tb.Text, out int id))
+            {
+                return id;
+            }
+            return -1;
+        }
+
+        public void ClearControls()
         {
             category_id_tb.Clear();
             category_name_tb.Clear();

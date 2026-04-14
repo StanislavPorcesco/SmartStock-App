@@ -117,7 +117,7 @@ namespace SmartStock.Forms
             ActivateButton(sender);
             BaseAddInstance form = new BaseAddInstance();
             OpenChildForm(form);
-            DataLayer.OpenUserControl(form, new AddProduct());
+            //DataLayer.OpenUserControl(form, new AddProduct());
         }
 
         private void settings_btn_Click(object sender, EventArgs e)

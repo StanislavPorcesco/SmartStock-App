@@ -1,39 +1,34 @@
-﻿using SmartStock.Classes.Data.Services;
+using SmartStock.Classes.Data.Services;
 using SmartStock.Classes.Data.Repositories;
 using SmartStock.Classes.Models;
 using SmartStock.Classes.Utils;
+using SmartStock.Classes.Data.Interfaces;
 
 namespace SmartStock.Forms.User_Control
 {
     /// <summary>
     /// Passive View: Doar colectează date din controale și afișează mesaje.
     /// Logica de business și actualizări este delegată UserService.
+    /// Add mode: creates a new user account (password_tb used as plain-text password).
+    /// Modify mode: updates profile fields (username, full name, email, role, active state).
     /// </summary>
-    public partial class ModifyUser : UserControl
+    public partial class ModifyUser : UserControl, ISaveableControl
     {
         private UserService _userService;
         private int _currentUserId;
+        private User _loadedUser;
 
         public ModifyUser()
         {
             InitializeComponent();
             InitializeService();
-            LoadUI();
+            DataLayer.PopulateRoleSelector(role_cb);
         }
 
         private void InitializeService()
         {
             var repository = new GenericRepository<User>(new SmartStockContext());
             _userService = new UserService(repository);
-        }
-
-        private void LoadUI()
-        {
-            DataLayer.PopulateSelector(selector_cb);
-            DataLayer.PopulateRoleSelector(role_selector_cb);
-            selector_cb.SelectedIndexChanged += DataLayer.OpenModifyInstanceForm(this, selector_cb);
-            ThemeManager.Apply(this);
-            this.Refresh();
         }
 
         private void search_btn_Click(object sender, EventArgs e)
@@ -48,9 +43,6 @@ namespace SmartStock.Forms.User_Control
             SearchAndLoadUser(userId);
         }
 
-        /// <summary>
-        /// Caută și încarcă utilizatorul.
-        /// </summary>
         private async void SearchAndLoadUser(int userId)
         {
             try
@@ -62,21 +54,23 @@ namespace SmartStock.Forms.User_Control
                 if (user != null)
                 {
                     _currentUserId = user.UserId;
+                    _loadedUser    = user;
                     DisplayUserData(user);
                 }
                 else
                 {
                     user_id_tb.BackColor = Color.DarkRed;
                     user_id_tb.ForeColor = Color.White;
-                    MessageBox.Show("User not found.", "Search Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    ClearUserFields();
+                    MessageBox.Show("User not found.", "Search Error",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ClearControls();
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error during search: {ex.Message}", "Database Error",
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
-                ClearUserFields();
+                ClearControls();
             }
             finally
             {
@@ -84,58 +78,31 @@ namespace SmartStock.Forms.User_Control
             }
         }
 
-        /// <summary>
-        /// Afișează datele utilizatorului în controale.
-        /// </summary>
         private void DisplayUserData(User user)
         {
-            username_tb.Text = user.Username;
-            fullname_tb.Text = user.FullName;
-            email_tb.Text = user.Email;
-            role_selector_cb.SelectedItem = user.Role;
-            is_active_ck.Checked = user.IsActive;
-            failed_count_tb.Text = user.AccessFailedCount.ToString();
-            password_tb.Clear(); // Don't display password hash
+            username_tb.Text              = user.Username;
+            fullname_tb.Text              = user.FullName;
+            email_tb.Text                 = user.Email;
+            role_cb.SelectedItem = user.Role;
+            is_active_ck.Checked          = user.IsActive;
+            failed_count_tb.Text          = user.AccessFailedCount.ToString();
+            password_tb.Clear(); // Never display the password hash
 
-            if (user.IsActive)
-            {
-                user_id_tb.BackColor = Color.DarkGreen;
-                user_id_tb.ForeColor = Color.White;
-            }
-            else
-            {
-                user_id_tb.BackColor = Color.DarkOrange;
-                user_id_tb.ForeColor = Color.White;
+            user_id_tb.BackColor = user.IsActive ? Color.DarkGreen : Color.DarkOrange;
+            user_id_tb.ForeColor = Color.White;
+
+            if (!user.IsActive)
                 MessageBox.Show("This user is currently inactive.", "Information",
                                 MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
         }
 
-        private void add_btn_Click(object sender, EventArgs e)
-        {
-            if (!int.TryParse(user_id_tb.Text, out int userId))
-            {
-                MessageBox.Show("Please search for a user first using a valid ID.", "Search Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            if (!TryCollectUserData(userId, out var user))
-                return;
-
-            UpdateUser(user);
-        }
-
-        /// <summary>
-        /// Colectează datele din controale.
-        /// </summary>
-        private bool TryCollectUserData(int userId, out User user)
+        private bool TryCollectUserData(out User user)
         {
             user = null;
 
             string username = username_tb.Text.Trim();
             string fullName = fullname_tb.Text.Trim();
-            string email = email_tb.Text.Trim();
+            string email    = email_tb.Text.Trim();
 
             if (string.IsNullOrWhiteSpace(username) || username.Length < 3)
             {
@@ -151,7 +118,7 @@ namespace SmartStock.Forms.User_Control
                 return false;
             }
 
-            if (role_selector_cb.SelectedIndex == -1)
+            if (role_cb.SelectedIndex == -1)
             {
                 MessageBox.Show("Please select a role.", "Input Error",
                                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -167,69 +134,111 @@ namespace SmartStock.Forms.User_Control
 
             user = new User
             {
-                UserId = userId,
                 Username = username,
                 FullName = fullName,
-                Email = email,
-                Role = role_selector_cb.SelectedItem.ToString(),
+                Email    = email,
+                Role     = role_cb.SelectedItem.ToString(),
                 IsActive = is_active_ck.Checked
             };
 
             return true;
         }
 
-        /// <summary>
-        /// Actualizează utilizatorul prin serviciu.
-        /// </summary>
-        private async void UpdateUser(User user)
+        // ── ISaveableControl ──────────────────────────────────────────────────
+
+        public async Task<bool> PerformSave(bool isAddMode)
         {
+            if (!TryCollectUserData(out var user)) return false;
+
+            try
+            {
+                if (isAddMode)
+                {
+                    string password = password_tb.Text;
+                    if (string.IsNullOrWhiteSpace(password) || password.Length < 6)
+                    {
+                        MessageBox.Show("Password must be at least 6 characters.", "Input Error",
+                                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return false;
+                    }
+
+                    return await _userService.CreateUserAsync(user, password);
+                }
+                else
+                {
+                    // Mutate the tracked entity — avoids EF duplicate-key tracking conflict
+                    _loadedUser.Username = user.Username;
+                    _loadedUser.FullName = user.FullName;
+                    _loadedUser.Email    = user.Email;
+                    _loadedUser.Role     = user.Role;
+                    _loadedUser.IsActive = user.IsActive;
+                    return await _userService.UpdateUserAsync(_loadedUser);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Database Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
+
+        public async Task<bool> PerformArchive(int userId)
+        {
+            bool success = false;
             try
             {
                 Cursor = Cursors.WaitCursor;
 
-                bool success = await _userService.UpdateUserAsync(user);
+                success = await _userService.DeactivateUserAsync(userId);
 
                 if (success)
                 {
-                    MessageBox.Show($"User {user.Username} has been updated successfully.", "Success",
+                    MessageBox.Show("User has been deactivated successfully.", "Success",
                                     MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    ClearUserFields();
+                    ClearControls();
                 }
                 else
                 {
-                    MessageBox.Show("Failed to update user.", "Error",
+                    MessageBox.Show("User not found.", "Error",
                                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ClearControls();
                 }
-            }
-            catch (InvalidOperationException ex)
-            {
-                MessageBox.Show($"Validation error: {ex.Message}", "Input Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-            catch (ArgumentException ex)
-            {
-                MessageBox.Show($"Validation error: {ex.Message}", "Input Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error updating user: {ex.Message}", "Database Error",
+                MessageBox.Show($"Error during deactivation: {ex.Message}", "Database Error",
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
                 Cursor = Cursors.Default;
             }
+            return success;
         }
 
-        private void ClearUserFields()
+        public void UpdateUIState(bool isAddMode)
+        {
+            var searchButton = this.Controls.Find("search_btn", true).FirstOrDefault();
+            var idTextBox    = this.Controls.Find("user_id_tb", true).FirstOrDefault();
+            if (searchButton != null) searchButton.Enabled = !isAddMode;
+            if (idTextBox    != null) idTextBox.Enabled    = !isAddMode;
+            ClearControls();
+        }
+
+        public int GetCurrentId()
+        {
+            return int.TryParse(user_id_tb.Text, out int id) ? id : -1;
+        }
+
+        public void ClearControls()
         {
             user_id_tb.Clear();
             username_tb.Clear();
             fullname_tb.Clear();
             email_tb.Clear();
             password_tb.Clear();
-            role_selector_cb.SelectedIndex = -1;
+            role_cb.SelectedIndex = -1;
             is_active_ck.Checked = false;
             failed_count_tb.Clear();
             ThemeManager.Apply(this);

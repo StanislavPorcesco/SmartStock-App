@@ -89,7 +89,18 @@ namespace SmartStock.Forms.User_Control.SearchForms
 
             tableLayoutPanel1.Padding = new Padding(0,0,25,0);
             panel1.Padding = new Padding(0, 10, 0, 30);
-            ToolTipHelp.AddToolTip(this, "Filter sales by date range, customer, payment method, or payment status");
+
+            ToolTipHelp.AddToolTip(activity_status_lbl,   "Filter sales by active/inactive status.");
+            ToolTipHelp.AddToolTip(search_by_name_lbl,    "Search by customer name or user/operator name (partial match).");
+            ToolTipHelp.AddToolTip(customer_id_lbl,       "Show sales belonging to a specific customer ID.");
+            ToolTipHelp.AddToolTip(user_id_lbl,           "Show sales processed by a specific user ID.");
+            ToolTipHelp.AddToolTip(payment_method_lbl,    "Filter sales by payment method (Cash, Card, Transfer).");
+            ToolTipHelp.AddToolTip(payment_status_lbl,    "Filter sales by payment status (Paid, Pending, Cancelled).");
+            ToolTipHelp.AddToolTip(sale_date_range_lbl,   "Filter sales within a specific date range.");
+            ToolTipHelp.AddToolTip(total_amount_lbl,      "Filter sales by total transaction amount range (min–max).");
+            ToolTipHelp.AddToolTip(product_id_lbl,        "Show only sales that contain this product ID.");
+            ToolTipHelp.AddToolTip(category_id_lbl,       "Show only sales containing a product from this category ID.");
+            ToolTipHelp.AddToolTip(itemss_count_lbl,      "Filter sales by number of line items in the order.");
             
             this.Refresh();
         }

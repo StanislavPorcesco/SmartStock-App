@@ -58,6 +58,7 @@ root/
 │   │       ├── 📄 EconometricService.cs
 │   │       ├── 📄 ExternalDataProvider.cs
 │   │       ├── 📄 ExternalFactorService.cs
+│       ├── 📄 ExternalFactorsFetchService.cs
 │   │       ├── 📄 FallbackAiReasoningProvider.cs
 │   │       ├── 📄 ForecastService.cs
 │   │       ├── 📄 ProductService.cs
@@ -93,7 +94,9 @@ root/
 │       ├── 📄 ComboBoxHelper.cs
 │       ├── 📄 DataLayer.cs
 │       ├── 📄 DataSeeder.cs
+│       ├── 📄 ActivityLogger.cs
 │       ├── 📄 EmailService.cs
+│       ├── 📄 ExternalFactorsScheduler.cs
 │       ├── 📄 ReportScheduler.cs
 │       ├── 📄 SecurityService.cs
 │       ├── 📄 SessionManager.cs
@@ -471,6 +474,9 @@ DatabasePath=<absolute path to SmartStock.db>
 2. `SettingsManager.Load()` — uses `PathsManager.SettingsFilePath` (computed property, not a readonly string).
 3. `db.Database.Migrate()` — `SmartStockContext.OnConfiguring` calls `PathsManager.DatabasePath`.
 4. `ReportScheduler.Start()`.
+5. `ExternalFactorsScheduler.Start()` — first check deferred 2 minutes to allow full app load.
+
+Both schedulers are stopped in `Application.ApplicationExit`.
 
 **Why a separate file:** `appSettings.json` cannot store its own path. `paths.cfg` is the bootstrap anchor at a fixed known location, solving the circular dependency.
 

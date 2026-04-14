@@ -32,22 +32,22 @@
             tableLayoutPanel1 = new TableLayoutPanel();
             days_clb = new CheckedListBox();
             months_clb = new CheckedListBox();
-            label12 = new Label();
+            status_lbl = new Label();
             radio_pnl = new Panel();
             tableLayoutPanel2 = new TableLayoutPanel();
             inactive_rb = new RadioButton();
             active_rb = new RadioButton();
             all_rb = new RadioButton();
-            label11 = new Label();
-            label10 = new Label();
-            label9 = new Label();
-            label7 = new Label();
-            label6 = new Label();
-            label4 = new Label();
-            label3 = new Label();
-            label2 = new Label();
+            direction_lbl = new Label();
+            value_type_lbl = new Label();
+            value_range_lbl = new Label();
+            days_lbl = new Label();
+            seasonality_lbl = new Label();
+            date_range_lbl = new Label();
+            region_lbl = new Label();
+            factor_lbl = new Label();
             search_text_tb = new TextBox();
-            label1 = new Label();
+            Search_description_lbl = new Label();
             factor_types_clb = new CheckedListBox();
             region_cb = new ComboBox();
             date_from_dtp = new DateTimePicker();
@@ -88,18 +88,18 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.Controls.Add(days_clb, 1, 6);
             tableLayoutPanel1.Controls.Add(months_clb, 1, 5);
-            tableLayoutPanel1.Controls.Add(label12, 0, 11);
+            tableLayoutPanel1.Controls.Add(status_lbl, 0, 11);
             tableLayoutPanel1.Controls.Add(radio_pnl, 1, 11);
-            tableLayoutPanel1.Controls.Add(label11, 0, 10);
-            tableLayoutPanel1.Controls.Add(label10, 0, 9);
-            tableLayoutPanel1.Controls.Add(label9, 0, 7);
-            tableLayoutPanel1.Controls.Add(label7, 0, 6);
-            tableLayoutPanel1.Controls.Add(label6, 0, 5);
-            tableLayoutPanel1.Controls.Add(label4, 0, 3);
-            tableLayoutPanel1.Controls.Add(label3, 0, 2);
-            tableLayoutPanel1.Controls.Add(label2, 0, 1);
+            tableLayoutPanel1.Controls.Add(direction_lbl, 0, 10);
+            tableLayoutPanel1.Controls.Add(value_type_lbl, 0, 9);
+            tableLayoutPanel1.Controls.Add(value_range_lbl, 0, 7);
+            tableLayoutPanel1.Controls.Add(days_lbl, 0, 6);
+            tableLayoutPanel1.Controls.Add(seasonality_lbl, 0, 5);
+            tableLayoutPanel1.Controls.Add(date_range_lbl, 0, 3);
+            tableLayoutPanel1.Controls.Add(region_lbl, 0, 2);
+            tableLayoutPanel1.Controls.Add(factor_lbl, 0, 1);
             tableLayoutPanel1.Controls.Add(search_text_tb, 1, 0);
-            tableLayoutPanel1.Controls.Add(label1, 0, 0);
+            tableLayoutPanel1.Controls.Add(Search_description_lbl, 0, 0);
             tableLayoutPanel1.Controls.Add(factor_types_clb, 1, 1);
             tableLayoutPanel1.Controls.Add(region_cb, 1, 2);
             tableLayoutPanel1.Controls.Add(date_from_dtp, 1, 3);
@@ -159,20 +159,20 @@
             months_clb.TabIndex = 61;
             months_clb.UseCompatibleTextRendering = true;
             // 
-            // label12
+            // status_lbl
             // 
-            label12.AutoSize = true;
-            label12.Dock = DockStyle.Left;
-            label12.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label12.ForeColor = Color.White;
-            label12.Location = new Point(10, 746);
-            label12.Margin = new Padding(10, 0, 3, 0);
-            label12.MaximumSize = new Size(0, 100);
-            label12.Name = "label12";
-            label12.Size = new Size(136, 100);
-            label12.TabIndex = 60;
-            label12.Text = "Activity Status";
-            label12.TextAlign = ContentAlignment.MiddleLeft;
+            status_lbl.AutoSize = true;
+            status_lbl.Dock = DockStyle.Left;
+            status_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            status_lbl.ForeColor = Color.White;
+            status_lbl.Location = new Point(10, 746);
+            status_lbl.Margin = new Padding(10, 0, 3, 0);
+            status_lbl.MaximumSize = new Size(0, 100);
+            status_lbl.Name = "status_lbl";
+            status_lbl.Size = new Size(136, 100);
+            status_lbl.TabIndex = 60;
+            status_lbl.Text = "Activity Status";
+            status_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // radio_pnl
             // 
@@ -240,119 +240,119 @@
             all_rb.Text = "All";
             all_rb.UseVisualStyleBackColor = true;
             // 
-            // label11
+            // direction_lbl
             // 
-            label11.AutoSize = true;
-            label11.Dock = DockStyle.Left;
-            label11.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label11.ForeColor = Color.White;
-            label11.Location = new Point(10, 698);
-            label11.Margin = new Padding(10, 0, 3, 0);
-            label11.Name = "label11";
-            label11.Size = new Size(154, 48);
-            label11.TabIndex = 57;
-            label11.Text = "Impact Direction";
-            label11.TextAlign = ContentAlignment.MiddleLeft;
+            direction_lbl.AutoSize = true;
+            direction_lbl.Dock = DockStyle.Left;
+            direction_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            direction_lbl.ForeColor = Color.White;
+            direction_lbl.Location = new Point(10, 698);
+            direction_lbl.Margin = new Padding(10, 0, 3, 0);
+            direction_lbl.Name = "direction_lbl";
+            direction_lbl.Size = new Size(154, 48);
+            direction_lbl.TabIndex = 57;
+            direction_lbl.Text = "Impact Direction";
+            direction_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // label10
+            // value_type_lbl
             // 
-            label10.AutoSize = true;
-            label10.Dock = DockStyle.Left;
-            label10.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label10.ForeColor = Color.White;
-            label10.Location = new Point(10, 650);
-            label10.Margin = new Padding(10, 0, 3, 0);
-            label10.Name = "label10";
-            label10.Size = new Size(105, 48);
-            label10.TabIndex = 55;
-            label10.Text = "Value Type";
-            label10.TextAlign = ContentAlignment.MiddleLeft;
+            value_type_lbl.AutoSize = true;
+            value_type_lbl.Dock = DockStyle.Left;
+            value_type_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            value_type_lbl.ForeColor = Color.White;
+            value_type_lbl.Location = new Point(10, 650);
+            value_type_lbl.Margin = new Padding(10, 0, 3, 0);
+            value_type_lbl.Name = "value_type_lbl";
+            value_type_lbl.Size = new Size(105, 48);
+            value_type_lbl.TabIndex = 55;
+            value_type_lbl.Text = "Value Type";
+            value_type_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // label9
+            // value_range_lbl
             // 
-            label9.AutoSize = true;
-            label9.Dock = DockStyle.Left;
-            label9.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label9.ForeColor = Color.White;
-            label9.Location = new Point(10, 566);
-            label9.Margin = new Padding(10, 0, 3, 0);
-            label9.Name = "label9";
-            tableLayoutPanel1.SetRowSpan(label9, 2);
-            label9.Size = new Size(182, 84);
-            label9.TabIndex = 53;
-            label9.Text = "Impact Value Range";
-            label9.TextAlign = ContentAlignment.MiddleLeft;
+            value_range_lbl.AutoSize = true;
+            value_range_lbl.Dock = DockStyle.Left;
+            value_range_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            value_range_lbl.ForeColor = Color.White;
+            value_range_lbl.Location = new Point(10, 566);
+            value_range_lbl.Margin = new Padding(10, 0, 3, 0);
+            value_range_lbl.Name = "value_range_lbl";
+            tableLayoutPanel1.SetRowSpan(value_range_lbl, 2);
+            value_range_lbl.Size = new Size(182, 84);
+            value_range_lbl.TabIndex = 53;
+            value_range_lbl.Text = "Impact Value Range";
+            value_range_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // label7
+            // days_lbl
             // 
-            label7.AutoSize = true;
-            label7.Dock = DockStyle.Left;
-            label7.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label7.ForeColor = Color.White;
-            label7.Location = new Point(10, 446);
-            label7.Margin = new Padding(10, 0, 3, 0);
-            label7.Name = "label7";
-            label7.Size = new Size(162, 120);
-            label7.TabIndex = 50;
-            label7.Text = "Days of the Week";
-            label7.TextAlign = ContentAlignment.MiddleLeft;
+            days_lbl.AutoSize = true;
+            days_lbl.Dock = DockStyle.Left;
+            days_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            days_lbl.ForeColor = Color.White;
+            days_lbl.Location = new Point(10, 446);
+            days_lbl.Margin = new Padding(10, 0, 3, 0);
+            days_lbl.Name = "days_lbl";
+            days_lbl.Size = new Size(162, 120);
+            days_lbl.TabIndex = 50;
+            days_lbl.Text = "Days of the Week";
+            days_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // label6
+            // seasonality_lbl
             // 
-            label6.AutoSize = true;
-            label6.Dock = DockStyle.Left;
-            label6.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label6.ForeColor = Color.White;
-            label6.Location = new Point(10, 316);
-            label6.Margin = new Padding(10, 0, 3, 0);
-            label6.Name = "label6";
-            label6.Size = new Size(264, 130);
-            label6.TabIndex = 47;
-            label6.Text = "Seasonality (Specific Months)";
-            label6.TextAlign = ContentAlignment.MiddleLeft;
+            seasonality_lbl.AutoSize = true;
+            seasonality_lbl.Dock = DockStyle.Left;
+            seasonality_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            seasonality_lbl.ForeColor = Color.White;
+            seasonality_lbl.Location = new Point(10, 316);
+            seasonality_lbl.Margin = new Padding(10, 0, 3, 0);
+            seasonality_lbl.Name = "seasonality_lbl";
+            seasonality_lbl.Size = new Size(264, 130);
+            seasonality_lbl.TabIndex = 47;
+            seasonality_lbl.Text = "Seasonality (Specific Months)";
+            seasonality_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // label4
+            // date_range_lbl
             // 
-            label4.AutoSize = true;
-            label4.Dock = DockStyle.Left;
-            label4.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label4.ForeColor = Color.White;
-            label4.Location = new Point(10, 224);
-            label4.Margin = new Padding(10, 0, 3, 0);
-            label4.Name = "label4";
-            tableLayoutPanel1.SetRowSpan(label4, 2);
-            label4.Size = new Size(111, 92);
-            label4.TabIndex = 45;
-            label4.Text = "Date Range";
-            label4.TextAlign = ContentAlignment.MiddleLeft;
+            date_range_lbl.AutoSize = true;
+            date_range_lbl.Dock = DockStyle.Left;
+            date_range_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            date_range_lbl.ForeColor = Color.White;
+            date_range_lbl.Location = new Point(10, 224);
+            date_range_lbl.Margin = new Padding(10, 0, 3, 0);
+            date_range_lbl.Name = "date_range_lbl";
+            tableLayoutPanel1.SetRowSpan(date_range_lbl, 2);
+            date_range_lbl.Size = new Size(111, 92);
+            date_range_lbl.TabIndex = 45;
+            date_range_lbl.Text = "Date Range";
+            date_range_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // label3
+            // region_lbl
             // 
-            label3.AutoSize = true;
-            label3.Dock = DockStyle.Left;
-            label3.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label3.ForeColor = Color.White;
-            label3.Location = new Point(10, 176);
-            label3.Margin = new Padding(10, 0, 3, 0);
-            label3.Name = "label3";
-            label3.Size = new Size(72, 48);
-            label3.TabIndex = 37;
-            label3.Text = "Region";
-            label3.TextAlign = ContentAlignment.MiddleLeft;
+            region_lbl.AutoSize = true;
+            region_lbl.Dock = DockStyle.Left;
+            region_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            region_lbl.ForeColor = Color.White;
+            region_lbl.Location = new Point(10, 176);
+            region_lbl.Margin = new Padding(10, 0, 3, 0);
+            region_lbl.Name = "region_lbl";
+            region_lbl.Size = new Size(72, 48);
+            region_lbl.TabIndex = 37;
+            region_lbl.Text = "Region";
+            region_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // label2
+            // factor_lbl
             // 
-            label2.AutoSize = true;
-            label2.Dock = DockStyle.Left;
-            label2.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label2.ForeColor = Color.White;
-            label2.Location = new Point(10, 46);
-            label2.Margin = new Padding(10, 0, 3, 0);
-            label2.Name = "label2";
-            label2.Size = new Size(118, 130);
-            label2.TabIndex = 35;
-            label2.Text = "Factor Types";
-            label2.TextAlign = ContentAlignment.MiddleLeft;
+            factor_lbl.AutoSize = true;
+            factor_lbl.Dock = DockStyle.Left;
+            factor_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            factor_lbl.ForeColor = Color.White;
+            factor_lbl.Location = new Point(10, 46);
+            factor_lbl.Margin = new Padding(10, 0, 3, 0);
+            factor_lbl.Name = "factor_lbl";
+            factor_lbl.Size = new Size(118, 130);
+            factor_lbl.TabIndex = 35;
+            factor_lbl.Text = "Factor Types";
+            factor_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // search_text_tb
             // 
@@ -367,19 +367,19 @@
             search_text_tb.Size = new Size(323, 31);
             search_text_tb.TabIndex = 33;
             // 
-            // label1
+            // Search_description_lbl
             // 
-            label1.AutoSize = true;
-            label1.Dock = DockStyle.Left;
-            label1.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label1.ForeColor = Color.White;
-            label1.Location = new Point(10, 0);
-            label1.Margin = new Padding(10, 0, 3, 0);
-            label1.Name = "label1";
-            label1.Size = new Size(265, 46);
-            label1.TabIndex = 29;
-            label1.Text = "Search by Description/Region";
-            label1.TextAlign = ContentAlignment.MiddleLeft;
+            Search_description_lbl.AutoSize = true;
+            Search_description_lbl.Dock = DockStyle.Left;
+            Search_description_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            Search_description_lbl.ForeColor = Color.White;
+            Search_description_lbl.Location = new Point(10, 0);
+            Search_description_lbl.Margin = new Padding(10, 0, 3, 0);
+            Search_description_lbl.Name = "Search_description_lbl";
+            Search_description_lbl.Size = new Size(265, 46);
+            Search_description_lbl.TabIndex = 29;
+            Search_description_lbl.Text = "Search by Description/Region";
+            Search_description_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // factor_types_clb
             // 
@@ -562,26 +562,26 @@
 
         private Panel panel1;
         private TableLayoutPanel tableLayoutPanel1;
-        private Label label1;
-        private Label label2;
+        private Label Search_description_lbl;
+        private Label factor_lbl;
         private TextBox search_text_tb;
         private CheckedListBox factor_types_clb;
-        private Label label3;
+        private Label region_lbl;
         private ComboBox region_cb;
         private DateTimePicker date_from_dtp;
         private DateTimePicker date_to_dtp;
-        private Label label6;
-        private Label label4;
-        private Label label7;
+        private Label seasonality_lbl;
+        private Label date_range_lbl;
+        private Label days_lbl;
         private Panel panel2;
         private Label label5;
         private NumericUpDown impact_min_nud;
-        private Label label9;
+        private Label value_range_lbl;
         private Panel panel3;
         private Label label8;
         private NumericUpDown impact_max_nud;
-        private Label label11;
-        private Label label10;
+        private Label direction_lbl;
+        private Label value_type_lbl;
         private ComboBox value_type_cb;
         private ComboBox direction_cb;
         private Panel radio_pnl;
@@ -589,7 +589,7 @@
         private RadioButton inactive_rb;
         private RadioButton active_rb;
         private RadioButton all_rb;
-        private Label label12;
+        private Label status_lbl;
         private CheckedListBox days_clb;
         private CheckedListBox months_clb;
     }

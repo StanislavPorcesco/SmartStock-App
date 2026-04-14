@@ -2,6 +2,7 @@ using SmartStock.Classes.Data.Services;
 using SmartStock.Classes.Data.Repositories;
 using SmartStock.Classes.Models;
 using SmartStock.Classes.Utils;
+using SmartStock.Classes.Data.Interfaces;
 using System.ComponentModel;
 
 namespace SmartStock.Forms.User_Control
@@ -9,18 +10,22 @@ namespace SmartStock.Forms.User_Control
     /// <summary>
     /// Passive View: Doar colectează date din controale și afișează mesaje.
     /// Logica de business este delegată SaleService.
+    /// Add mode: creates a new sale with line items entered in the grid.
+    /// Modify mode: updates the payment status of an existing sale.
     /// </summary>
-    public partial class ModifySale : UserControl
+    public partial class ModifySale : UserControl, ISaveableControl
     {
         private SaleService _saleService;
+        private ProductService _productService;
         private int _currentSaleId;
-        private BindingList<SaleDetails> saleItemsList = new BindingList<SaleDetails>();
+        private BindingList<SaleDetails> _saleItemsList = new BindingList<SaleDetails>();
 
         public ModifySale()
         {
             InitializeComponent();
             InitializeService();
-            LoadUI();
+            DataLayer.PopulatePaymentMethodSelector(payment_method_cb);
+            DataLayer.PopulatePaymentStatusSelector(payment_status_cb);
         }
 
         private void InitializeService()
@@ -28,34 +33,22 @@ namespace SmartStock.Forms.User_Control
             var repository = new GenericRepository<Sale>(new SmartStockContext());
             var saleDetailsRepo = new GenericRepository<SaleDetails>(new SmartStockContext());
             var productRepo = new GenericRepository<Product>(new SmartStockContext());
-
             _saleService = new SaleService(repository, saleDetailsRepo, productRepo);
-        }
-
-        private void LoadUI()
-        {
-            DataLayer.PopulateSelector(selector_cb);
-            selector_cb.SelectedIndexChanged += DataLayer.OpenModifyInstanceForm(this, selector_cb);
-            DataLayer.PopulatePaymentMethodSelector(payment_method_cb);
-            DataLayer.PopulatePaymentStatusSelector(payment_status_cb);
-            ThemeManager.Apply(this);
-            this.Refresh();
+            _productService = new ProductService(new GenericRepository<Product>(new SmartStockContext()));
         }
 
         private void search_btn_Click(object sender, EventArgs e)
         {
             if (!int.TryParse(sale_id_tb.Text, out int saleId))
             {
-                MessageBox.Show("Please enter a valid Sale ID.", "Search Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please enter a valid Sale ID.", "Search Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             SearchAndLoadSale(saleId);
         }
 
-        /// <summary>
-        /// Caută și încarcă vânzarea.
-        /// </summary>
         private async void SearchAndLoadSale(int saleId)
         {
             try
@@ -73,14 +66,16 @@ namespace SmartStock.Forms.User_Control
                 {
                     sale_id_tb.BackColor = Color.DarkRed;
                     sale_id_tb.ForeColor = Color.White;
-                    MessageBox.Show("Sale not found.", "Search Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    ClearSaleFields();
+                    MessageBox.Show("Sale not found.", "Search Error",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ClearControls();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error during search: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                ClearSaleFields();
+                MessageBox.Show($"Error during search: {ex.Message}", "Database Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ClearControls();
             }
             finally
             {
@@ -88,9 +83,6 @@ namespace SmartStock.Forms.User_Control
             }
         }
 
-        /// <summary>
-        /// Afișează datele vânzării în controale.
-        /// </summary>
         private void DisplaySaleData(Sale sale)
         {
             customer_id_tb.Text = sale.CustomerId.ToString();
@@ -99,134 +91,292 @@ namespace SmartStock.Forms.User_Control
             payment_method_cb.SelectedItem = sale.PaymentMethod;
             payment_status_cb.SelectedItem = sale.PaymentStatus;
 
-            saleItemsList = new BindingList<SaleDetails>(sale.SaleDetails.ToList());
-            sales_dgv.DataSource = saleItemsList;
+            // Populate ProductName for display
+            foreach (var d in sale.SaleDetails)
+                d.ProductName = d.Product?.ProductName ?? $"Product #{d.ProductId}";
+
+            _saleItemsList = new BindingList<SaleDetails>(sale.SaleDetails.ToList());
+            BindCartGrid();
+
+            sale_id_tb.BackColor = sale.IsActive ? Color.DarkGreen : Color.DarkOrange;
+            sale_id_tb.ForeColor = Color.White;
+
+            UpdateCartTotal();
+
+            if (!sale.IsActive)
+                MessageBox.Show("This sale is currently inactive (Soft Deleted).", "Information",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        // ── Cart ─────────────────────────────────────────────────────────────
+
+        private async void add_to_cart_btn_Click(object sender, EventArgs e)
+        {
+            if (!int.TryParse(product_id_tb.Text.Trim(), out int productId) || productId <= 0)
+            {
+                MessageBox.Show("Please enter a valid Product ID.", "Input Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (!int.TryParse(qty_tb.Text.Trim(), out int qty) || qty <= 0)
+            {
+                MessageBox.Show("Please enter a valid quantity (> 0).", "Input Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            try
+            {
+                Cursor = Cursors.WaitCursor;
+
+                var product = await _productService.GetProductWithDetailsAsync(productId);
+
+                if (product == null)
+                {
+                    MessageBox.Show($"Product ID {productId} not found.", "Not Found",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (!product.IsActive)
+                {
+                    MessageBox.Show($"'{product.ProductName}' is inactive and cannot be sold.", "Inactive Product",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Merge with existing cart line for the same product
+                var existing = _saleItemsList.FirstOrDefault(d => d.ProductId == productId);
+                int totalQty = (existing?.Quantity ?? 0) + qty;
+
+                if (product.CurrentStock < totalQty)
+                {
+                    MessageBox.Show(
+                        $"Insufficient stock for '{product.ProductName}'.\n" +
+                        $"Available: {product.CurrentStock}, Requested: {totalQty}",
+                        "Stock Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (existing != null)
+                    existing.Quantity = totalQty;
+                else
+                    _saleItemsList.Add(new SaleDetails
+                    {
+                        ProductId   = product.ProductId,
+                        ProductName = product.ProductName,
+                        Quantity    = qty,
+                        UnitPrice   = product.UnitPrice
+                    });
+
+                // Always rebind: DataSource may be null after ClearControls,
+                // and BindingList doesn't raise ListChanged for property mutations.
+                BindCartGrid();
+                product_id_tb.Clear();
+                qty_tb.Clear();
+                UpdateCartTotal();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error looking up product: {ex.Message}", "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
+        }
+
+        private void remove_from_cart_btn_Click(object sender, EventArgs e)
+        {
+            if (!int.TryParse(product_id_tb.Text.Trim(), out int productId) || productId <= 0)
+            {
+                MessageBox.Show("Please enter a valid Product ID to remove.", "Input Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var toRemove = _saleItemsList.Where(d => d.ProductId == productId).ToList();
+
+            if (toRemove.Count == 0)
+            {
+                MessageBox.Show($"Product ID {productId} is not in the cart.", "Not Found",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            foreach (var item in toRemove)
+                _saleItemsList.Remove(item);
+
+            BindCartGrid();
+            product_id_tb.Clear();
+            qty_tb.Clear();
+            UpdateCartTotal();
+        }
+
+        private void BindCartGrid()
+        {
+            sales_dgv.DataSource = null;
+            sales_dgv.DataSource = _saleItemsList;
             sales_dgv.AllowUserToAddRows = false;
             sales_dgv.ReadOnly = true;
 
-            if (sales_dgv.Columns["Sale"] != null) sales_dgv.Columns["Sale"].Visible = false;
-            if (sales_dgv.Columns["Product"] != null) sales_dgv.Columns["Product"].Visible = false;
+            // Hide navigation / DB-internal columns
+            foreach (var col in new[] { "DetailId", "SaleId", "Sale", "Product" })
+                if (sales_dgv.Columns[col] != null)
+                    sales_dgv.Columns[col].Visible = false;
 
-            if (sale.IsActive)
-            {
-                sale_id_tb.BackColor = Color.DarkGreen;
-                sale_id_tb.ForeColor = Color.White;
-            }
-            else
-            {
-                sale_id_tb.BackColor = Color.DarkOrange;
-                sale_id_tb.ForeColor = Color.White;
-                MessageBox.Show("This sale is currently inactive (Soft Deleted).", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
+            // Column order and headers
+            if (sales_dgv.Columns["ProductId"]   != null) { sales_dgv.Columns["ProductId"].DisplayIndex   = 0; sales_dgv.Columns["ProductId"].HeaderText   = "Product ID"; }
+            if (sales_dgv.Columns["ProductName"] != null) { sales_dgv.Columns["ProductName"].DisplayIndex = 1; sales_dgv.Columns["ProductName"].HeaderText = "Product Name"; }
+            if (sales_dgv.Columns["Quantity"]    != null) { sales_dgv.Columns["Quantity"].DisplayIndex    = 2; sales_dgv.Columns["Quantity"].HeaderText    = "Qty"; }
+            if (sales_dgv.Columns["UnitPrice"]   != null) { sales_dgv.Columns["UnitPrice"].DisplayIndex   = 3; sales_dgv.Columns["UnitPrice"].HeaderText   = "Unit Price"; }
+            if (sales_dgv.Columns["LineTotal"]   != null) { sales_dgv.Columns["LineTotal"].DisplayIndex   = 4; sales_dgv.Columns["LineTotal"].HeaderText   = "Line Total"; }
         }
 
-        private void delete_btn_Click(object sender, EventArgs e)
+        private void UpdateCartTotal()
         {
-            if (!int.TryParse(sale_id_tb.Text, out int saleId))
-                return;
-
-            if (MessageBox.Show("Deactivate this sale? Historical data will be preserved.",
-                "Confirm Deactivation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
-            {
-                DeactivateSale(saleId);
-            }
+            decimal total = _saleItemsList.Sum(d => d.LineTotal);
+            total_amount_tb.Text = total.ToString("F2");
         }
 
-        /// <summary>
-        /// Deactivează vânzarea.
-        /// </summary>
-        private async void DeactivateSale(int saleId)
+        // ── ISaveableControl ──────────────────────────────────────────────────
+
+        public async Task<bool> PerformSave(bool isAddMode)
         {
             try
             {
-                Cursor = Cursors.WaitCursor;
-
-                bool success = await _saleService.DeactivateSaleAsync(saleId);
-
-                if (success)
+                if (isAddMode)
                 {
-                    MessageBox.Show("Sale has been deactivated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    ClearSaleFields();
+                    if (!int.TryParse(customer_id_tb.Text, out int custId) || custId <= 0)
+                    {
+                        MessageBox.Show("Please enter a valid Customer ID.", "Input Error",
+                                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return false;
+                    }
+
+                    if (payment_method_cb.SelectedIndex == -1 || payment_status_cb.SelectedIndex == -1)
+                    {
+                        MessageBox.Show("Please select Payment Method and Status.", "Input Error",
+                                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return false;
+                    }
+
+                    if (_saleItemsList.Count == 0)
+                    {
+                        MessageBox.Show("Please add at least one item to the sale.", "Input Error",
+                                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return false;
+                    }
+
+                    var sale = new Sale
+                    {
+                        CustomerId    = custId,
+                        SaleDate      = date_picker.Value,
+                        PaymentMethod = payment_method_cb.SelectedItem.ToString(),
+                        PaymentStatus = payment_status_cb.SelectedItem.ToString(),
+                        TotalAmount   = (decimal)_saleItemsList.Sum(d => d.LineTotal),
+                        IsActive      = true
+                    };
+
+                    int userId = SessionManager.CurrentUser?.UserId ?? 0;
+                    return await _saleService.AddSaleWithDetailsAsync(sale, _saleItemsList.ToList(), userId);
                 }
                 else
                 {
-                    MessageBox.Show("Sale not found.", "Search Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    ClearSaleFields();
+                    if (payment_status_cb.SelectedIndex == -1)
+                    {
+                        MessageBox.Show("Please select a Payment Status.", "Input Error",
+                                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return false;
+                    }
+
+                    return await _saleService.UpdatePaymentStatusAsync(
+                        _currentSaleId,
+                        payment_status_cb.SelectedItem.ToString());
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error during deactivation: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error: {ex.Message}", "Database Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
+
+        public async Task<bool> PerformArchive(int saleId)
+        {
+            bool success = false;
+            try
+            {
+                Cursor = Cursors.WaitCursor;
+
+                success = await _saleService.DeactivateSaleAsync(saleId);
+
+                if (success)
+                {
+                    MessageBox.Show("Sale has been deactivated successfully.", "Success",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ClearControls();
+                }
+                else
+                {
+                    MessageBox.Show("Sale not found.", "Error",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ClearControls();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error during deactivation: {ex.Message}", "Database Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
                 Cursor = Cursors.Default;
             }
+            return success;
         }
 
-        private void apply_btn_Click(object sender, EventArgs e)
+        public void UpdateUIState(bool isAddMode)
         {
-            if (!int.TryParse(sale_id_tb.Text, out int saleId))
-            {
-                MessageBox.Show("Please search for a sale first using a valid ID.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            var searchButton  = this.Controls.Find("search_btn",           true).FirstOrDefault();
+            var idTextBox     = this.Controls.Find("sale_id_tb",           true).FirstOrDefault();
+            var addBtn        = this.Controls.Find("add_to_cart_btn",      true).FirstOrDefault();
+            var removeBtn     = this.Controls.Find("remove_from_cart_btn", true).FirstOrDefault();
+            var productIdTb   = this.Controls.Find("product_id_tb",        true).FirstOrDefault();
+            var qtyTb         = this.Controls.Find("qty_tb",               true).FirstOrDefault();
 
-            if (string.IsNullOrWhiteSpace(payment_status_cb.Text))
-            {
-                MessageBox.Show("Please select a Payment Status.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            if (searchButton != null) searchButton.Enabled = !isAddMode;
+            if (idTextBox    != null) idTextBox.Enabled    = !isAddMode;
 
-            UpdateSaleStatus(saleId, payment_status_cb.SelectedItem.ToString());
+            // user_id_tb is always read-only — filled from session on save
+            user_id_tb.Enabled = false;
+
+            if (addBtn      != null) addBtn.Enabled      = isAddMode;
+            if (removeBtn   != null) removeBtn.Enabled   = isAddMode;
+            if (productIdTb != null) productIdTb.Enabled = isAddMode;
+            if (qtyTb       != null) qtyTb.Enabled       = isAddMode;
+
+            ClearControls();
         }
 
-        /// <summary>
-        /// Actualizează status de plată al vânzării.
-        /// </summary>
-        private async void UpdateSaleStatus(int saleId, string newStatus)
+        public int GetCurrentId()
         {
-            try
-            {
-                Cursor = Cursors.WaitCursor;
-
-                bool success = await _saleService.UpdatePaymentStatusAsync(saleId, newStatus);
-
-                if (success)
-                {
-                    MessageBox.Show("Sale status updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    ClearSaleFields();
-                }
-                else
-                {
-                    MessageBox.Show("Failed to update sale status.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            catch (InvalidOperationException ex)
-            {
-                MessageBox.Show($"Validation error: {ex.Message}", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-            catch (ArgumentException ex)
-            {
-                MessageBox.Show($"Validation error: {ex.Message}", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error updating sale: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            finally
-            {
-                Cursor = Cursors.Default;
-            }
+            return int.TryParse(sale_id_tb.Text, out int id) ? id : -1;
         }
 
-        private void ClearSaleFields()
+        public void ClearControls()
         {
             sale_id_tb.Clear();
             customer_id_tb.Clear();
             user_id_tb.Clear();
+            product_id_tb.Clear();
+            qty_tb.Clear();
+            total_amount_tb.Clear();
+            _saleItemsList.Clear();
             sales_dgv.DataSource = null;
-            saleItemsList.Clear();
             ThemeManager.Apply(this);
         }
     }

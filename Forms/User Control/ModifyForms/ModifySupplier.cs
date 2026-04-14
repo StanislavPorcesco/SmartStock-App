@@ -1,7 +1,8 @@
-﻿using SmartStock.Classes.Data.Services;
+using SmartStock.Classes.Data.Services;
 using SmartStock.Classes.Data.Repositories;
 using SmartStock.Classes.Models;
 using SmartStock.Classes.Utils;
+using SmartStock.Classes.Data.Interfaces;
 
 namespace SmartStock.Forms.User_Control
 {
@@ -9,16 +10,16 @@ namespace SmartStock.Forms.User_Control
     /// Passive View: Doar colectează date din controale și afișează mesaje.
     /// Logica de business este delegată SupplierService.
     /// </summary>
-    public partial class ModifySupplier : UserControl
+    public partial class ModifySupplier : UserControl, ISaveableControl
     {
         private SupplierService _supplierService;
         private int _currentSupplierId;
+        private Supplier _loadedSupplier;
 
         public ModifySupplier()
         {
             InitializeComponent();
             InitializeService();
-            LoadUI();
         }
 
         private void InitializeService()
@@ -27,28 +28,18 @@ namespace SmartStock.Forms.User_Control
             _supplierService = new SupplierService(repository);
         }
 
-        private void LoadUI()
-        {
-            DataLayer.PopulateSelector(selector_cb);
-            selector_cb.SelectedIndexChanged += DataLayer.OpenModifyInstanceForm(this, selector_cb);
-            ThemeManager.Apply(this);
-            this.Refresh();
-        }
-
         private void search_btn_Click(object sender, EventArgs e)
         {
             if (!int.TryParse(supplier_id_tb.Text, out int suppId))
             {
-                MessageBox.Show("Please enter a valid Supplier ID.", "Search Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please enter a valid Supplier ID.", "Search Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             SearchAndLoadSupplier(suppId);
         }
 
-        /// <summary>
-        /// Caută și încarcă furnizorul.
-        /// </summary>
         private async void SearchAndLoadSupplier(int supplierId)
         {
             try
@@ -60,20 +51,23 @@ namespace SmartStock.Forms.User_Control
                 if (supplier != null)
                 {
                     _currentSupplierId = supplier.SupplierId;
+                    _loadedSupplier    = supplier;
                     DisplaySupplierData(supplier);
                 }
                 else
                 {
                     supplier_id_tb.BackColor = Color.DarkRed;
                     supplier_id_tb.ForeColor = Color.White;
-                    MessageBox.Show("Supplier ID not found!", "Search Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    ClearSupplierFields();
+                    MessageBox.Show("Supplier ID not found!", "Search Error",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ClearControls();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error during search: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                ClearSupplierFields();
+                MessageBox.Show($"Error during search: {ex.Message}", "Database Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ClearControls();
             }
             finally
             {
@@ -81,16 +75,13 @@ namespace SmartStock.Forms.User_Control
             }
         }
 
-        /// <summary>
-        /// Afișează datele furnizorului în controale.
-        /// </summary>
         private void DisplaySupplierData(Supplier supplier)
         {
-            supplier_name_tb.Text = supplier.SupplierName;
-            contact_person_tb.Text = supplier.ContactPerson;
-            email_tb.Text = supplier.Email;
-            phone_tb.Text = supplier.Phone;
-            address_tb.Text = supplier.Address;
+            supplier_name_tb.Text   = supplier.SupplierName;
+            contact_person_tb.Text  = supplier.ContactPerson;
+            email_tb.Text           = supplier.Email;
+            phone_tb.Text           = supplier.Phone;
+            address_tb.Text         = supplier.Address;
 
             if (supplier.IsActive)
             {
@@ -101,84 +92,16 @@ namespace SmartStock.Forms.User_Control
             {
                 supplier_id_tb.BackColor = Color.DarkOrange;
                 supplier_id_tb.ForeColor = Color.White;
-                MessageBox.Show("This supplier is currently inactive (Soft Deleted).", "Information", 
+                MessageBox.Show("This supplier is currently inactive (Soft Deleted).", "Information",
                                 MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
-        private void delete_btn_Click(object sender, EventArgs e)
-        {
-            if (!int.TryParse(supplier_id_tb.Text, out int suppId))
-                return;
-
-            DialogResult confirm = MessageBox.Show(
-                "Are you sure you want to deactivate this supplier? Historical sales data will be preserved.",
-                "Confirm Deactivation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
-            if (confirm == DialogResult.Yes)
-            {
-                DeactivateSupplier(suppId);
-            }
-        }
-
-        /// <summary>
-        /// Deactivează furnizorul.
-        /// </summary>
-        private async void DeactivateSupplier(int supplierId)
-        {
-            try
-            {
-                Cursor = Cursors.WaitCursor;
-
-                bool success = await _supplierService.DeactivateSupplierAsync(supplierId);
-
-                if (success)
-                {
-                    MessageBox.Show("Supplier deactivated successfully.", "Success", 
-                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    ClearSupplierFields();
-                }
-                else
-                {
-                    MessageBox.Show("Supplier not found", "Search Error", 
-                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    ClearSupplierFields();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error during deactivation: {ex.Message}", "Database Error", 
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            finally
-            {
-                Cursor = Cursors.Default;
-            }
-        }
-
-        private void add_btn_Click(object sender, EventArgs e)
-        {
-            if (!int.TryParse(supplier_id_tb.Text, out int suppId))
-            {
-                MessageBox.Show("Please search for a supplier first using a valid ID.", "Warning", 
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            if (!TryCollectSupplierData(suppId, out var supplier))
-                return;
-
-            UpdateSupplier(supplier);
-        }
-
-        /// <summary>
-        /// Colectează datele din controale.
-        /// </summary>
-        private bool TryCollectSupplierData(int supplierId, out Supplier supplier)
+        private bool TryCollectSupplierData(out Supplier supplier)
         {
             supplier = null;
 
-            string sName = supplier_name_tb.Text.Trim();
+            string sName  = supplier_name_tb.Text.Trim();
             string sEmail = email_tb.Text.Trim();
 
             if (string.IsNullOrWhiteSpace(sName))
@@ -188,7 +111,6 @@ namespace SmartStock.Forms.User_Control
                 return false;
             }
 
-            // Validare email
             if (!string.IsNullOrWhiteSpace(sEmail) && (!sEmail.Contains("@") || !sEmail.Contains(".")))
             {
                 MessageBox.Show("Please enter a valid email address.", "Validation Error",
@@ -198,63 +120,97 @@ namespace SmartStock.Forms.User_Control
 
             supplier = new Supplier
             {
-                SupplierId = supplierId,
-                SupplierName = sName,
-                ContactPerson = contact_person_tb.Text.Trim(),
-                Email = sEmail,
-                Phone = phone_tb.Text.Trim(),
-                Address = address_tb.Text.Trim(),
-                IsActive = true
+                SupplierName   = sName,
+                ContactPerson  = contact_person_tb.Text.Trim(),
+                Email          = sEmail,
+                Phone          = phone_tb.Text.Trim(),
+                Address        = address_tb.Text.Trim(),
+                IsActive       = true
             };
 
             return true;
         }
 
-        /// <summary>
-        /// Actualizează furnizorul în baza de date.
-        /// </summary>
-        private async void UpdateSupplier(Supplier supplier)
+        // ── ISaveableControl ──────────────────────────────────────────────────
+
+        public async Task<bool> PerformSave(bool isAddMode)
         {
+            if (!TryCollectSupplierData(out var supplier)) return false;
+
+            try
+            {
+                if (isAddMode)
+                {
+                    return await _supplierService.AddSupplierAsync(supplier);
+                }
+                else
+                {
+                    // Mutate the tracked entity — avoids EF duplicate-key tracking conflict
+                    _loadedSupplier.SupplierName  = supplier.SupplierName;
+                    _loadedSupplier.ContactPerson = supplier.ContactPerson;
+                    _loadedSupplier.Email         = supplier.Email;
+                    _loadedSupplier.Phone         = supplier.Phone;
+                    _loadedSupplier.Address       = supplier.Address;
+                    return await _supplierService.UpdateSupplierAsync(_loadedSupplier);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Database Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
+
+        public async Task<bool> PerformArchive(int supplierId)
+        {
+            bool success = false;
             try
             {
                 Cursor = Cursors.WaitCursor;
 
-                bool success = await _supplierService.UpdateSupplierAsync(supplier);
+                success = await _supplierService.DeactivateSupplierAsync(supplierId);
 
                 if (success)
                 {
-                    MessageBox.Show("Supplier updated successfully.", "Success",
+                    MessageBox.Show("Supplier deactivated successfully.", "Success",
                                     MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    ClearSupplierFields();
+                    ClearControls();
                 }
                 else
                 {
-                    MessageBox.Show("Failed to update supplier.", "Error",
+                    MessageBox.Show("Supplier not found.", "Error",
                                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ClearControls();
                 }
-            }
-            catch (InvalidOperationException ex)
-            {
-                MessageBox.Show($"Validation error: {ex.Message}", "Input Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-            catch (ArgumentException ex)
-            {
-                MessageBox.Show($"Validation error: {ex.Message}", "Input Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error updating supplier: {ex.Message}", "Database Error",
+                MessageBox.Show($"Error during deactivation: {ex.Message}", "Database Error",
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
                 Cursor = Cursors.Default;
             }
+            return success;
         }
 
-        private void ClearSupplierFields()
+        public void UpdateUIState(bool isAddMode)
+        {
+            var searchButton = this.Controls.Find("search_btn", true).FirstOrDefault();
+            var idTextBox    = this.Controls.Find("supplier_id_tb", true).FirstOrDefault();
+            if (searchButton != null) searchButton.Enabled = !isAddMode;
+            if (idTextBox    != null) idTextBox.Enabled    = !isAddMode;
+            ClearControls();
+        }
+
+        public int GetCurrentId()
+        {
+            return int.TryParse(supplier_id_tb.Text, out int id) ? id : -1;
+        }
+
+        public void ClearControls()
         {
             supplier_id_tb.Clear();
             supplier_name_tb.Clear();

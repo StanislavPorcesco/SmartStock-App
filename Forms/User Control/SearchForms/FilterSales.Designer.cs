@@ -30,7 +30,7 @@
         {
             panel1 = new Panel();
             tableLayoutPanel1 = new TableLayoutPanel();
-            label9 = new Label();
+            activity_status_lbl = new Label();
             panel5 = new Panel();
             label7 = new Label();
             items_count_min = new NumericUpDown();
@@ -41,20 +41,20 @@
             user_id_tb = new TextBox();
             customer_id_tb = new TextBox();
             name_or_supplier_tb = new TextBox();
-            label1 = new Label();
-            total_range_lbl = new Label();
-            payment_lbl = new Label();
-            customer_lbl = new Label();
-            supplier_lbl = new Label();
-            range_lbl = new Label();
-            inclusion_lbl = new Label();
+            search_by_name_lbl = new Label();
+            sale_date_range_lbl = new Label();
+            payment_method_lbl = new Label();
+            payment_status_lbl = new Label();
+            user_id_lbl = new Label();
+            customer_id_lbl = new Label();
+            total_amount_lbl = new Label();
             sale_date_end = new DateTimePicker();
             panel2 = new Panel();
             label5 = new Label();
             total_amount_min = new NumericUpDown();
-            label4 = new Label();
-            label3 = new Label();
-            label2 = new Label();
+            itemss_count_lbl = new Label();
+            category_id_lbl = new Label();
+            product_id_lbl = new Label();
             panel3 = new Panel();
             label6 = new Label();
             total_amount_max = new NumericUpDown();
@@ -98,7 +98,7 @@
             tableLayoutPanel1.ColumnCount = 2;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.Controls.Add(label9, 0, 13);
+            tableLayoutPanel1.Controls.Add(activity_status_lbl, 0, 13);
             tableLayoutPanel1.Controls.Add(panel5, 1, 11);
             tableLayoutPanel1.Controls.Add(contains_cat_tb, 1, 10);
             tableLayoutPanel1.Controls.Add(sale_date_start, 1, 5);
@@ -107,18 +107,18 @@
             tableLayoutPanel1.Controls.Add(user_id_tb, 1, 2);
             tableLayoutPanel1.Controls.Add(customer_id_tb, 1, 1);
             tableLayoutPanel1.Controls.Add(name_or_supplier_tb, 1, 0);
-            tableLayoutPanel1.Controls.Add(label1, 0, 0);
-            tableLayoutPanel1.Controls.Add(total_range_lbl, 0, 5);
-            tableLayoutPanel1.Controls.Add(payment_lbl, 0, 4);
-            tableLayoutPanel1.Controls.Add(customer_lbl, 0, 3);
-            tableLayoutPanel1.Controls.Add(supplier_lbl, 0, 2);
-            tableLayoutPanel1.Controls.Add(range_lbl, 0, 1);
-            tableLayoutPanel1.Controls.Add(inclusion_lbl, 0, 7);
+            tableLayoutPanel1.Controls.Add(search_by_name_lbl, 0, 0);
+            tableLayoutPanel1.Controls.Add(sale_date_range_lbl, 0, 5);
+            tableLayoutPanel1.Controls.Add(payment_method_lbl, 0, 4);
+            tableLayoutPanel1.Controls.Add(payment_status_lbl, 0, 3);
+            tableLayoutPanel1.Controls.Add(user_id_lbl, 0, 2);
+            tableLayoutPanel1.Controls.Add(customer_id_lbl, 0, 1);
+            tableLayoutPanel1.Controls.Add(total_amount_lbl, 0, 7);
             tableLayoutPanel1.Controls.Add(sale_date_end, 1, 6);
             tableLayoutPanel1.Controls.Add(panel2, 1, 7);
-            tableLayoutPanel1.Controls.Add(label4, 0, 11);
-            tableLayoutPanel1.Controls.Add(label3, 0, 10);
-            tableLayoutPanel1.Controls.Add(label2, 0, 9);
+            tableLayoutPanel1.Controls.Add(itemss_count_lbl, 0, 11);
+            tableLayoutPanel1.Controls.Add(category_id_lbl, 0, 10);
+            tableLayoutPanel1.Controls.Add(product_id_lbl, 0, 9);
             tableLayoutPanel1.Controls.Add(panel3, 1, 8);
             tableLayoutPanel1.Controls.Add(contains_prod_tb, 1, 9);
             tableLayoutPanel1.Controls.Add(panel6, 1, 12);
@@ -145,19 +145,19 @@
             tableLayoutPanel1.Size = new Size(587, 713);
             tableLayoutPanel1.TabIndex = 0;
             // 
-            // label9
+            // activity_status_lbl
             // 
-            label9.AutoSize = true;
-            label9.Dock = DockStyle.Left;
-            label9.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label9.ForeColor = Color.White;
-            label9.Location = new Point(10, 585);
-            label9.Margin = new Padding(10, 0, 3, 0);
-            label9.Name = "label9";
-            label9.Size = new Size(136, 105);
-            label9.TabIndex = 50;
-            label9.Text = "Activity Status";
-            label9.TextAlign = ContentAlignment.MiddleLeft;
+            activity_status_lbl.AutoSize = true;
+            activity_status_lbl.Dock = DockStyle.Left;
+            activity_status_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            activity_status_lbl.ForeColor = Color.White;
+            activity_status_lbl.Location = new Point(10, 585);
+            activity_status_lbl.Margin = new Padding(10, 0, 3, 0);
+            activity_status_lbl.Name = "activity_status_lbl";
+            activity_status_lbl.Size = new Size(136, 105);
+            activity_status_lbl.TabIndex = 50;
+            activity_status_lbl.Text = "Activity Status";
+            activity_status_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // panel5
             // 
@@ -281,105 +281,105 @@
             name_or_supplier_tb.Size = new Size(284, 31);
             name_or_supplier_tb.TabIndex = 32;
             // 
-            // label1
+            // search_by_name_lbl
             // 
-            label1.AutoSize = true;
-            label1.Dock = DockStyle.Left;
-            label1.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label1.ForeColor = Color.White;
-            label1.Location = new Point(10, 0);
-            label1.Margin = new Padding(10, 0, 3, 0);
-            label1.Name = "label1";
-            label1.Size = new Size(227, 50);
-            label1.TabIndex = 28;
-            label1.Text = "Search by Client Name /  Supplier";
-            label1.TextAlign = ContentAlignment.MiddleLeft;
+            search_by_name_lbl.AutoSize = true;
+            search_by_name_lbl.Dock = DockStyle.Left;
+            search_by_name_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            search_by_name_lbl.ForeColor = Color.White;
+            search_by_name_lbl.Location = new Point(10, 0);
+            search_by_name_lbl.Margin = new Padding(10, 0, 3, 0);
+            search_by_name_lbl.Name = "search_by_name_lbl";
+            search_by_name_lbl.Size = new Size(227, 50);
+            search_by_name_lbl.TabIndex = 28;
+            search_by_name_lbl.Text = "Search by Client Name /  Supplier";
+            search_by_name_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // total_range_lbl
+            // sale_date_range_lbl
             // 
-            total_range_lbl.AutoSize = true;
-            total_range_lbl.Dock = DockStyle.Left;
-            total_range_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            total_range_lbl.ForeColor = Color.White;
-            total_range_lbl.Location = new Point(10, 233);
-            total_range_lbl.Margin = new Padding(10, 0, 3, 0);
-            total_range_lbl.Name = "total_range_lbl";
-            tableLayoutPanel1.SetRowSpan(total_range_lbl, 2);
-            total_range_lbl.Size = new Size(151, 92);
-            total_range_lbl.TabIndex = 24;
-            total_range_lbl.Text = "Sale Date Range";
-            total_range_lbl.TextAlign = ContentAlignment.MiddleLeft;
+            sale_date_range_lbl.AutoSize = true;
+            sale_date_range_lbl.Dock = DockStyle.Left;
+            sale_date_range_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            sale_date_range_lbl.ForeColor = Color.White;
+            sale_date_range_lbl.Location = new Point(10, 233);
+            sale_date_range_lbl.Margin = new Padding(10, 0, 3, 0);
+            sale_date_range_lbl.Name = "sale_date_range_lbl";
+            tableLayoutPanel1.SetRowSpan(sale_date_range_lbl, 2);
+            sale_date_range_lbl.Size = new Size(151, 92);
+            sale_date_range_lbl.TabIndex = 24;
+            sale_date_range_lbl.Text = "Sale Date Range";
+            sale_date_range_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // payment_lbl
+            // payment_method_lbl
             // 
-            payment_lbl.AutoSize = true;
-            payment_lbl.Dock = DockStyle.Left;
-            payment_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            payment_lbl.ForeColor = Color.White;
-            payment_lbl.Location = new Point(10, 185);
-            payment_lbl.Margin = new Padding(10, 0, 3, 0);
-            payment_lbl.Name = "payment_lbl";
-            payment_lbl.Size = new Size(159, 48);
-            payment_lbl.TabIndex = 20;
-            payment_lbl.Text = "Payment Method";
-            payment_lbl.TextAlign = ContentAlignment.MiddleLeft;
+            payment_method_lbl.AutoSize = true;
+            payment_method_lbl.Dock = DockStyle.Left;
+            payment_method_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            payment_method_lbl.ForeColor = Color.White;
+            payment_method_lbl.Location = new Point(10, 185);
+            payment_method_lbl.Margin = new Padding(10, 0, 3, 0);
+            payment_method_lbl.Name = "payment_method_lbl";
+            payment_method_lbl.Size = new Size(159, 48);
+            payment_method_lbl.TabIndex = 20;
+            payment_method_lbl.Text = "Payment Method";
+            payment_method_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // customer_lbl
+            // payment_status_lbl
             // 
-            customer_lbl.AutoSize = true;
-            customer_lbl.Dock = DockStyle.Left;
-            customer_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            customer_lbl.ForeColor = Color.White;
-            customer_lbl.Location = new Point(10, 137);
-            customer_lbl.Margin = new Padding(10, 0, 3, 0);
-            customer_lbl.Name = "customer_lbl";
-            customer_lbl.Size = new Size(145, 48);
-            customer_lbl.TabIndex = 18;
-            customer_lbl.Text = "Payment Status";
-            customer_lbl.TextAlign = ContentAlignment.MiddleLeft;
+            payment_status_lbl.AutoSize = true;
+            payment_status_lbl.Dock = DockStyle.Left;
+            payment_status_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            payment_status_lbl.ForeColor = Color.White;
+            payment_status_lbl.Location = new Point(10, 137);
+            payment_status_lbl.Margin = new Padding(10, 0, 3, 0);
+            payment_status_lbl.Name = "payment_status_lbl";
+            payment_status_lbl.Size = new Size(145, 48);
+            payment_status_lbl.TabIndex = 18;
+            payment_status_lbl.Text = "Payment Status";
+            payment_status_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // supplier_lbl
+            // user_id_lbl
             // 
-            supplier_lbl.AutoSize = true;
-            supplier_lbl.Dock = DockStyle.Left;
-            supplier_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            supplier_lbl.ForeColor = Color.White;
-            supplier_lbl.Location = new Point(10, 91);
-            supplier_lbl.Margin = new Padding(10, 0, 3, 0);
-            supplier_lbl.Name = "supplier_lbl";
-            supplier_lbl.Size = new Size(74, 46);
-            supplier_lbl.TabIndex = 16;
-            supplier_lbl.Text = "User ID";
-            supplier_lbl.TextAlign = ContentAlignment.MiddleLeft;
+            user_id_lbl.AutoSize = true;
+            user_id_lbl.Dock = DockStyle.Left;
+            user_id_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            user_id_lbl.ForeColor = Color.White;
+            user_id_lbl.Location = new Point(10, 91);
+            user_id_lbl.Margin = new Padding(10, 0, 3, 0);
+            user_id_lbl.Name = "user_id_lbl";
+            user_id_lbl.Size = new Size(74, 46);
+            user_id_lbl.TabIndex = 16;
+            user_id_lbl.Text = "User ID";
+            user_id_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // range_lbl
+            // customer_id_lbl
             // 
-            range_lbl.AutoSize = true;
-            range_lbl.Dock = DockStyle.Left;
-            range_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            range_lbl.ForeColor = Color.White;
-            range_lbl.Location = new Point(10, 50);
-            range_lbl.Margin = new Padding(10, 0, 3, 0);
-            range_lbl.Name = "range_lbl";
-            range_lbl.Size = new Size(117, 41);
-            range_lbl.TabIndex = 8;
-            range_lbl.Text = "Customer ID";
-            range_lbl.TextAlign = ContentAlignment.MiddleLeft;
+            customer_id_lbl.AutoSize = true;
+            customer_id_lbl.Dock = DockStyle.Left;
+            customer_id_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            customer_id_lbl.ForeColor = Color.White;
+            customer_id_lbl.Location = new Point(10, 50);
+            customer_id_lbl.Margin = new Padding(10, 0, 3, 0);
+            customer_id_lbl.Name = "customer_id_lbl";
+            customer_id_lbl.Size = new Size(117, 41);
+            customer_id_lbl.TabIndex = 8;
+            customer_id_lbl.Text = "Customer ID";
+            customer_id_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // inclusion_lbl
+            // total_amount_lbl
             // 
-            inclusion_lbl.AutoSize = true;
-            inclusion_lbl.Dock = DockStyle.Left;
-            inclusion_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            inclusion_lbl.ForeColor = Color.White;
-            inclusion_lbl.Location = new Point(10, 325);
-            inclusion_lbl.Margin = new Padding(10, 0, 3, 0);
-            inclusion_lbl.Name = "inclusion_lbl";
-            tableLayoutPanel1.SetRowSpan(inclusion_lbl, 2);
-            inclusion_lbl.Size = new Size(128, 84);
-            inclusion_lbl.TabIndex = 25;
-            inclusion_lbl.Text = "Total Amount";
-            inclusion_lbl.TextAlign = ContentAlignment.MiddleLeft;
+            total_amount_lbl.AutoSize = true;
+            total_amount_lbl.Dock = DockStyle.Left;
+            total_amount_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            total_amount_lbl.ForeColor = Color.White;
+            total_amount_lbl.Location = new Point(10, 325);
+            total_amount_lbl.Margin = new Padding(10, 0, 3, 0);
+            total_amount_lbl.Name = "total_amount_lbl";
+            tableLayoutPanel1.SetRowSpan(total_amount_lbl, 2);
+            total_amount_lbl.Size = new Size(128, 84);
+            total_amount_lbl.TabIndex = 25;
+            total_amount_lbl.Text = "Total Amount";
+            total_amount_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // sale_date_end
             // 
@@ -427,48 +427,48 @@
             total_amount_min.Size = new Size(128, 27);
             total_amount_min.TabIndex = 0;
             // 
-            // label4
+            // itemss_count_lbl
             // 
-            label4.AutoSize = true;
-            label4.Dock = DockStyle.Left;
-            label4.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label4.ForeColor = Color.White;
-            label4.Location = new Point(10, 501);
-            label4.Margin = new Padding(10, 0, 3, 0);
-            label4.Name = "label4";
-            tableLayoutPanel1.SetRowSpan(label4, 2);
-            label4.Size = new Size(115, 84);
-            label4.TabIndex = 31;
-            label4.Text = "Items Count";
-            label4.TextAlign = ContentAlignment.MiddleLeft;
+            itemss_count_lbl.AutoSize = true;
+            itemss_count_lbl.Dock = DockStyle.Left;
+            itemss_count_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            itemss_count_lbl.ForeColor = Color.White;
+            itemss_count_lbl.Location = new Point(10, 501);
+            itemss_count_lbl.Margin = new Padding(10, 0, 3, 0);
+            itemss_count_lbl.Name = "itemss_count_lbl";
+            tableLayoutPanel1.SetRowSpan(itemss_count_lbl, 2);
+            itemss_count_lbl.Size = new Size(115, 84);
+            itemss_count_lbl.TabIndex = 31;
+            itemss_count_lbl.Text = "Items Count";
+            itemss_count_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // label3
+            // category_id_lbl
             // 
-            label3.AutoSize = true;
-            label3.Dock = DockStyle.Left;
-            label3.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label3.ForeColor = Color.White;
-            label3.Location = new Point(10, 455);
-            label3.Margin = new Padding(10, 0, 3, 0);
-            label3.Name = "label3";
-            label3.Size = new Size(193, 46);
-            label3.TabIndex = 30;
-            label3.Text = "Contains Category ID";
-            label3.TextAlign = ContentAlignment.MiddleLeft;
+            category_id_lbl.AutoSize = true;
+            category_id_lbl.Dock = DockStyle.Left;
+            category_id_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            category_id_lbl.ForeColor = Color.White;
+            category_id_lbl.Location = new Point(10, 455);
+            category_id_lbl.Margin = new Padding(10, 0, 3, 0);
+            category_id_lbl.Name = "category_id_lbl";
+            category_id_lbl.Size = new Size(193, 46);
+            category_id_lbl.TabIndex = 30;
+            category_id_lbl.Text = "Contains Category ID";
+            category_id_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // label2
+            // product_id_lbl
             // 
-            label2.AutoSize = true;
-            label2.Dock = DockStyle.Left;
-            label2.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label2.ForeColor = Color.White;
-            label2.Location = new Point(10, 409);
-            label2.Margin = new Padding(10, 0, 3, 0);
-            label2.Name = "label2";
-            label2.Size = new Size(182, 46);
-            label2.TabIndex = 29;
-            label2.Text = "Contains Product ID";
-            label2.TextAlign = ContentAlignment.MiddleLeft;
+            product_id_lbl.AutoSize = true;
+            product_id_lbl.Dock = DockStyle.Left;
+            product_id_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            product_id_lbl.ForeColor = Color.White;
+            product_id_lbl.Location = new Point(10, 409);
+            product_id_lbl.Margin = new Padding(10, 0, 3, 0);
+            product_id_lbl.Name = "product_id_lbl";
+            product_id_lbl.Size = new Size(182, 46);
+            product_id_lbl.TabIndex = 29;
+            product_id_lbl.Text = "Contains Product ID";
+            product_id_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // panel3
             // 
@@ -647,16 +647,16 @@
 
         private Panel panel1;
         private TableLayoutPanel tableLayoutPanel1;
-        private Label total_range_lbl;
-        private Label payment_lbl;
-        private Label customer_lbl;
-        private Label supplier_lbl;
-        private Label range_lbl;
-        private Label inclusion_lbl;
-        private Label label1;
-        private Label label2;
-        private Label label3;
-        private Label label4;
+        private Label sale_date_range_lbl;
+        private Label payment_method_lbl;
+        private Label payment_status_lbl;
+        private Label user_id_lbl;
+        private Label customer_id_lbl;
+        private Label total_amount_lbl;
+        private Label search_by_name_lbl;
+        private Label product_id_lbl;
+        private Label category_id_lbl;
+        private Label itemss_count_lbl;
         private TextBox user_id_tb;
         private TextBox customer_id_tb;
         private TextBox name_or_supplier_tb;
@@ -678,7 +678,7 @@
         private Panel panel6;
         private Label label8;
         private NumericUpDown items_count_max;
-        private Label label9;
+        private Label activity_status_lbl;
         private Panel radio_pnl;
         private TableLayoutPanel tableLayoutPanel2;
         private RadioButton inactive_rb;

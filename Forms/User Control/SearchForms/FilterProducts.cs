@@ -88,13 +88,15 @@ namespace SmartStock.Forms.User_Control.SearchForms
             dead_stock_max.ValueChanged += (s, e) => OnFilterChanged();
 
             // Add tooltips for user guidance
-            ToolTipHelp.AddToolTip(name_lbl, "Filter products by product name (partial match).");
-            ToolTipHelp.AddToolTip(category_lbl, "Filter products by category. Inactive categories will hide their products (Cascading Availability).");
-            ToolTipHelp.AddToolTip(supplier_lbl, "Filter products by supplier name (partial match).");
-            ToolTipHelp.AddToolTip(safety_lbl, "Show only products below their safety stock threshold.");
-            ToolTipHelp.AddToolTip(dead_lbl, "Filter products with no sales between the specified dates.");
-            ToolTipHelp.AddToolTip(range_lbl, "Price range filter - enter minimum and maximum unit price.");
-            ToolTipHelp.AddToolTip(top_lbl, "Show top-selling products within the date range (active only).");
+            ToolTipHelp.AddToolTip(product_name_lbl,  "Filter products by product name (partial match).");
+            ToolTipHelp.AddToolTip(category_lbl,      "Filter products by category. Inactive categories will hide their products (Cascading Availability).");
+            ToolTipHelp.AddToolTip(supplier_lbl,      "Filter products by supplier name (partial match).");
+            ToolTipHelp.AddToolTip(status_lbl,        "Filter products by activity status (All, Active, Inactive).");
+            ToolTipHelp.AddToolTip(safety_lbl,        "Show only products below their safety stock threshold.");
+            ToolTipHelp.AddToolTip(dead_lbl,          "Filter products with no sales between the specified dates.");
+            ToolTipHelp.AddToolTip(range_lbl,         "Price range filter - enter minimum and maximum unit price.");
+            ToolTipHelp.AddToolTip(top_lbl,           "Show top-selling products within the date range (active only).");
+            ToolTipHelp.AddToolTip(total_sells_range, "Date range used to calculate top-selling products.");
 
             tableLayoutPanel1.Padding = new Padding(0, 0, 25, 0);
             panel1.Padding = new Padding(0, 10, 0, 30);

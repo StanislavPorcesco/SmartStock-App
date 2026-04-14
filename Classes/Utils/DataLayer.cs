@@ -42,7 +42,7 @@ namespace SmartStock.Classes.Utils
             if (selector != null)
             {
                 selector.Items.Clear();
-                selector.Items.AddRange(new string[] { "Admin", "Agent" });
+                selector.Items.AddRange(new string[] { "Admin", "Manager", "Operator" });
                 selector.Text = "Select a role";
             }
         }

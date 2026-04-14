@@ -30,8 +30,8 @@
         {
             panel1 = new Panel();
             tableLayoutPanel1 = new TableLayoutPanel();
-            label6 = new Label();
-            name_lbl = new Label();
+            total_range_lbl = new Label();
+            category_name_lbl = new Label();
             category_name_tb = new TextBox();
             range_lbl = new Label();
             panel2 = new Panel();
@@ -83,8 +83,8 @@
             tableLayoutPanel1.ColumnCount = 2;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.Controls.Add(label6, 0, 5);
-            tableLayoutPanel1.Controls.Add(name_lbl, 0, 0);
+            tableLayoutPanel1.Controls.Add(total_range_lbl, 0, 5);
+            tableLayoutPanel1.Controls.Add(category_name_lbl, 0, 0);
             tableLayoutPanel1.Controls.Add(category_name_tb, 1, 0);
             tableLayoutPanel1.Controls.Add(range_lbl, 0, 2);
             tableLayoutPanel1.Controls.Add(panel2, 1, 2);
@@ -111,34 +111,34 @@
             tableLayoutPanel1.Size = new Size(569, 572);
             tableLayoutPanel1.TabIndex = 0;
             // 
-            // label6
+            // total_range_lbl
             // 
-            label6.AutoSize = true;
-            label6.Dock = DockStyle.Left;
-            label6.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label6.ForeColor = Color.White;
-            label6.Location = new Point(10, 172);
-            label6.Margin = new Padding(10, 0, 3, 0);
-            label6.Name = "label6";
-            tableLayoutPanel1.SetRowSpan(label6, 2);
-            label6.Size = new Size(202, 79);
-            label6.TabIndex = 38;
-            label6.Text = "Total Inventory Range";
-            label6.TextAlign = ContentAlignment.MiddleLeft;
+            total_range_lbl.AutoSize = true;
+            total_range_lbl.Dock = DockStyle.Left;
+            total_range_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            total_range_lbl.ForeColor = Color.White;
+            total_range_lbl.Location = new Point(10, 172);
+            total_range_lbl.Margin = new Padding(10, 0, 3, 0);
+            total_range_lbl.Name = "total_range_lbl";
+            tableLayoutPanel1.SetRowSpan(total_range_lbl, 2);
+            total_range_lbl.Size = new Size(202, 79);
+            total_range_lbl.TabIndex = 38;
+            total_range_lbl.Text = "Total Inventory Range";
+            total_range_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // name_lbl
+            // category_name_lbl
             // 
-            name_lbl.AutoSize = true;
-            name_lbl.Dock = DockStyle.Left;
-            name_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            name_lbl.ForeColor = Color.White;
-            name_lbl.Location = new Point(10, 0);
-            name_lbl.Margin = new Padding(10, 0, 3, 0);
-            name_lbl.Name = "name_lbl";
-            name_lbl.Size = new Size(145, 51);
-            name_lbl.TabIndex = 8;
-            name_lbl.Text = "Category Name";
-            name_lbl.TextAlign = ContentAlignment.MiddleLeft;
+            category_name_lbl.AutoSize = true;
+            category_name_lbl.Dock = DockStyle.Left;
+            category_name_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            category_name_lbl.ForeColor = Color.White;
+            category_name_lbl.Location = new Point(10, 0);
+            category_name_lbl.Margin = new Padding(10, 0, 3, 0);
+            category_name_lbl.Name = "category_name_lbl";
+            category_name_lbl.Size = new Size(145, 51);
+            category_name_lbl.TabIndex = 8;
+            category_name_lbl.Text = "Category Name";
+            category_name_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // category_name_tb
             // 
@@ -445,7 +445,7 @@
         private Panel panel1;
         private TableLayoutPanel tableLayoutPanel1;
         private Label range_lbl;
-        private Label name_lbl;
+        private Label category_name_lbl;
         private Panel panel2;
         private Label label4;
         private NumericUpDown min_numeric;
@@ -455,7 +455,7 @@
         private Label label5;
         private NumericUpDown max_numeric;
         private TextBox category_name_tb;
-        private Label label6;
+        private Label total_range_lbl;
         private Panel panel5;
         private Label label2;
         private NumericUpDown value_min;

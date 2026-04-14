@@ -3,8 +3,16 @@
   "WorkspaceRootPath": "D:\\Files\\Degree\\App\\SmartStock\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\forms\\settingsform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:forms\\settingsform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\forms\\searchform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:forms\\searchform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\forms\\user control\\searchforms\\filterproducts.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:forms\\user control\\searchforms\\filterproducts.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\forms\\user control\\searchforms\\filtercategories.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:forms\\user control\\searchforms\\filtercategories.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     }
   ],
   "DocumentGroupContainers": [
@@ -24,18 +32,46 @@
         },
         {
           "DockedHeight": 40,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "SettingsForm.cs [Design]",
-              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\SettingsForm.cs",
-              "RelativeDocumentMoniker": "Forms\\SettingsForm.cs",
-              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\SettingsForm.cs [Design]",
-              "RelativeToolTip": "Forms\\SettingsForm.cs [Design]",
+              "Title": "SearchForm.cs [Design]",
+              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\SearchForm.cs",
+              "RelativeDocumentMoniker": "Forms\\SearchForm.cs",
+              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\SearchForm.cs [Design]",
+              "RelativeToolTip": "Forms\\SearchForm.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-14T15:52:47.378Z",
+              "WhenOpened": "2026-04-14T21:48:49.579Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "FilterProducts.cs [Design]",
+              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\User Control\\SearchForms\\FilterProducts.cs",
+              "RelativeDocumentMoniker": "Forms\\User Control\\SearchForms\\FilterProducts.cs",
+              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\User Control\\SearchForms\\FilterProducts.cs [Design]",
+              "RelativeToolTip": "Forms\\User Control\\SearchForms\\FilterProducts.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-14T21:43:57.783Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "FilterCategories.cs [Design]",
+              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\User Control\\SearchForms\\FilterCategories.cs",
+              "RelativeDocumentMoniker": "Forms\\User Control\\SearchForms\\FilterCategories.cs",
+              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\User Control\\SearchForms\\FilterCategories.cs [Design]",
+              "RelativeToolTip": "Forms\\User Control\\SearchForms\\FilterCategories.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-14T21:38:39.838Z",
               "EditorCaption": " [Design]"
             }
           ]
