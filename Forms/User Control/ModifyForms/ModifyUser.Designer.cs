@@ -1,14 +1,15 @@
-﻿using SmartStock.Classes.Utils;
+using FontAwesome.Sharp;
+
 namespace SmartStock.Forms.User_Control
 {
     partial class ModifyUser
     {
-        /// <summary> 
+        /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -23,382 +24,342 @@ namespace SmartStock.Forms.User_Control
 
         #region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
             base_pnl = new Panel();
-            add_instance_pnl = new Panel();
-            groupBox2 = new GroupBox();
-            tableLayoutPanel2 = new TableLayoutPanel();
-            is_active_ck = new CheckBox();
+            fields_table = new TableLayoutPanel();
             label5 = new Label();
+            search_row = new Panel();
+            user_id_tb = new TextBox();
+            search_btn = new IconButton();
             db_lbl = new Label();
-            password_tb = new TextBox();
-            fullname_tb = new TextBox();
             username_tb = new TextBox();
             label2 = new Label();
-            label7 = new Label();
-            label8 = new Label();
-            failed_count_tb = new TextBox();
+            fullname_tb = new TextBox();
             logs_lbl = new Label();
-            label3 = new Label();
+            password_tb = new TextBox();
             label4 = new Label();
             email_tb = new TextBox();
+            label3 = new Label();
             role_cb = new ComboBox();
-            tableLayoutPanel3 = new TableLayoutPanel();
-            search_btn = new Button();
-            user_id_tb = new TextBox();
+            label7 = new Label();
+            is_active_ck = new CheckBox();
+            label8 = new Label();
+            failed_count_tb = new TextBox();
             base_pnl.SuspendLayout();
-            add_instance_pnl.SuspendLayout();
-            groupBox2.SuspendLayout();
-            tableLayoutPanel2.SuspendLayout();
-            tableLayoutPanel3.SuspendLayout();
+            fields_table.SuspendLayout();
+            search_row.SuspendLayout();
             SuspendLayout();
-            // 
+            //
             // base_pnl
-            // 
-            base_pnl.AutoScroll = true;
-            base_pnl.BackColor = Color.FromArgb(64, 64, 64);
-            base_pnl.Controls.Add(add_instance_pnl);
+            //
+            base_pnl.Controls.Add(fields_table);
             base_pnl.Dock = DockStyle.Fill;
             base_pnl.Location = new Point(0, 0);
-            base_pnl.Margin = new Padding(30);
             base_pnl.Name = "base_pnl";
-            base_pnl.Size = new Size(1299, 717);
-            base_pnl.TabIndex = 3;
+            base_pnl.Padding = new Padding(28, 24, 28, 24);
+            base_pnl.Size = new Size(907, 572);
+            base_pnl.TabIndex = 0;
             base_pnl.Tag = "base";
-            // 
-            // add_instance_pnl
-            // 
-            add_instance_pnl.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            add_instance_pnl.Controls.Add(groupBox2);
-            add_instance_pnl.Dock = DockStyle.Top;
-            add_instance_pnl.Location = new Point(0, 0);
-            add_instance_pnl.Name = "add_instance_pnl";
-            add_instance_pnl.Padding = new Padding(10);
-            add_instance_pnl.Size = new Size(1299, 409);
-            add_instance_pnl.TabIndex = 4;
-            // 
-            // groupBox2
-            // 
-            groupBox2.Controls.Add(tableLayoutPanel2);
-            groupBox2.Dock = DockStyle.Fill;
-            groupBox2.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            groupBox2.ForeColor = Color.White;
-            groupBox2.Location = new Point(10, 10);
-            groupBox2.Name = "groupBox2";
-            groupBox2.Padding = new Padding(10, 20, 10, 20);
-            groupBox2.Size = new Size(1279, 389);
-            groupBox2.TabIndex = 2;
-            groupBox2.TabStop = false;
-            groupBox2.Text = "Current Instance: Product";
-            // 
-            // tableLayoutPanel2
-            // 
-            tableLayoutPanel2.ColumnCount = 2;
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 49.92503F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50.0749664F));
-            tableLayoutPanel2.Controls.Add(is_active_ck, 1, 6);
-            tableLayoutPanel2.Controls.Add(label5, 0, 0);
-            tableLayoutPanel2.Controls.Add(db_lbl, 0, 1);
-            tableLayoutPanel2.Controls.Add(password_tb, 1, 3);
-            tableLayoutPanel2.Controls.Add(fullname_tb, 1, 2);
-            tableLayoutPanel2.Controls.Add(username_tb, 1, 1);
-            tableLayoutPanel2.Controls.Add(label2, 0, 2);
-            tableLayoutPanel2.Controls.Add(label7, 0, 6);
-            tableLayoutPanel2.Controls.Add(label8, 0, 7);
-            tableLayoutPanel2.Controls.Add(failed_count_tb, 1, 7);
-            tableLayoutPanel2.Controls.Add(logs_lbl, 0, 3);
-            tableLayoutPanel2.Controls.Add(label3, 0, 5);
-            tableLayoutPanel2.Controls.Add(label4, 0, 4);
-            tableLayoutPanel2.Controls.Add(email_tb, 1, 4);
-            tableLayoutPanel2.Controls.Add(role_cb, 1, 5);
-            tableLayoutPanel2.Controls.Add(tableLayoutPanel3, 1, 0);
-            tableLayoutPanel2.Dock = DockStyle.Fill;
-            tableLayoutPanel2.Location = new Point(10, 40);
-            tableLayoutPanel2.Name = "tableLayoutPanel2";
-            tableLayoutPanel2.RowCount = 8;
-            tableLayoutPanel2.RowStyles.Add(new RowStyle());
-            tableLayoutPanel2.RowStyles.Add(new RowStyle());
-            tableLayoutPanel2.RowStyles.Add(new RowStyle());
-            tableLayoutPanel2.RowStyles.Add(new RowStyle());
-            tableLayoutPanel2.RowStyles.Add(new RowStyle());
-            tableLayoutPanel2.RowStyles.Add(new RowStyle());
-            tableLayoutPanel2.RowStyles.Add(new RowStyle());
-            tableLayoutPanel2.RowStyles.Add(new RowStyle());
-            tableLayoutPanel2.Size = new Size(1259, 329);
-            tableLayoutPanel2.TabIndex = 3;
-            // 
-            // is_active_ck
-            // 
-            is_active_ck.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            is_active_ck.AutoSize = true;
-            is_active_ck.CheckAlign = ContentAlignment.MiddleRight;
-            is_active_ck.ImageAlign = ContentAlignment.MiddleRight;
-            is_active_ck.Location = new Point(628, 262);
-            is_active_ck.Margin = new Padding(0, 10, 10, 10);
-            is_active_ck.Name = "is_active_ck";
-            is_active_ck.Size = new Size(621, 17);
-            is_active_ck.TabIndex = 31;
-            is_active_ck.TextAlign = ContentAlignment.MiddleRight;
-            is_active_ck.UseVisualStyleBackColor = true;
-            // 
+            //
+            // fields_table
+            //
+            fields_table.ColumnCount = 2;
+            fields_table.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 160F));
+            fields_table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            fields_table.Controls.Add(label5, 0, 0);
+            fields_table.Controls.Add(search_row, 1, 0);
+            fields_table.Controls.Add(db_lbl, 0, 1);
+            fields_table.Controls.Add(username_tb, 1, 1);
+            fields_table.Controls.Add(label2, 0, 2);
+            fields_table.Controls.Add(fullname_tb, 1, 2);
+            fields_table.Controls.Add(logs_lbl, 0, 3);
+            fields_table.Controls.Add(password_tb, 1, 3);
+            fields_table.Controls.Add(label4, 0, 4);
+            fields_table.Controls.Add(email_tb, 1, 4);
+            fields_table.Controls.Add(label3, 0, 5);
+            fields_table.Controls.Add(role_cb, 1, 5);
+            fields_table.Controls.Add(label7, 0, 6);
+            fields_table.Controls.Add(is_active_ck, 1, 6);
+            fields_table.Controls.Add(label8, 0, 7);
+            fields_table.Controls.Add(failed_count_tb, 1, 7);
+            fields_table.Dock = DockStyle.Top;
+            fields_table.Location = new Point(28, 24);
+            fields_table.Name = "fields_table";
+            fields_table.RowCount = 8;
+            fields_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 52F));
+            fields_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 52F));
+            fields_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 52F));
+            fields_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 52F));
+            fields_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 52F));
+            fields_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 52F));
+            fields_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 52F));
+            fields_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 52F));
+            fields_table.Size = new Size(851, 416);
+            fields_table.TabIndex = 0;
+            //
             // label5
-            // 
-            label5.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            label5.AutoSize = true;
-            label5.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label5.Location = new Point(3, 0);
+            //
+            label5.Dock = DockStyle.Fill;
+            label5.Font = new Font("Segoe UI", 10F);
+            label5.Location = new Point(0, 0);
+            label5.Margin = new Padding(0);
             label5.Name = "label5";
-            label5.Size = new Size(74, 45);
-            label5.TabIndex = 25;
+            label5.Size = new Size(160, 52);
+            label5.TabIndex = 0;
+            label5.Tag = "muted";
             label5.Text = "User ID";
             label5.TextAlign = ContentAlignment.MiddleLeft;
-            // 
+            //
+            // search_row
+            //
+            search_row.Controls.Add(user_id_tb);
+            search_row.Controls.Add(search_btn);
+            search_row.Dock = DockStyle.Fill;
+            search_row.Location = new Point(163, 3);
+            search_row.Name = "search_row";
+            search_row.Size = new Size(685, 46);
+            search_row.TabIndex = 1;
+            //
+            // user_id_tb
+            //
+            user_id_tb.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            user_id_tb.Font = new Font("Segoe UI", 11F);
+            user_id_tb.Location = new Point(0, 8);
+            user_id_tb.Margin = new Padding(0);
+            user_id_tb.Name = "user_id_tb";
+            user_id_tb.Size = new Size(533, 32);
+            user_id_tb.TabIndex = 0;
+            user_id_tb.Tag = "flat";
+            //
+            // search_btn
+            //
+            search_btn.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            search_btn.FlatAppearance.BorderSize = 1;
+            search_btn.FlatStyle = FlatStyle.Flat;
+            search_btn.Font = new Font("Segoe UI Semibold", 9.5F, FontStyle.Bold);
+            search_btn.IconChar = IconChar.MagnifyingGlass;
+            search_btn.IconSize = 18;
+            search_btn.Location = new Point(545, 4);
+            search_btn.Name = "search_btn";
+            search_btn.Size = new Size(140, 38);
+            search_btn.TabIndex = 1;
+            search_btn.Tag = "outlined";
+            search_btn.Text = "  Search";
+            search_btn.TextImageRelation = TextImageRelation.ImageBeforeText;
+            search_btn.UseVisualStyleBackColor = true;
+            search_btn.Click += search_btn_Click;
+            //
             // db_lbl
-            // 
-            db_lbl.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            db_lbl.AutoSize = true;
-            db_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            db_lbl.Location = new Point(3, 45);
+            //
+            db_lbl.Dock = DockStyle.Fill;
+            db_lbl.Font = new Font("Segoe UI", 10F);
+            db_lbl.Location = new Point(0, 52);
+            db_lbl.Margin = new Padding(0);
             db_lbl.Name = "db_lbl";
-            db_lbl.Size = new Size(97, 41);
-            db_lbl.TabIndex = 8;
+            db_lbl.Size = new Size(160, 52);
+            db_lbl.TabIndex = 2;
+            db_lbl.Tag = "muted";
             db_lbl.Text = "Username";
             db_lbl.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // password_tb
-            // 
-            password_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            password_tb.BackColor = Color.FromArgb(54, 54, 54);
-            password_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            password_tb.ForeColor = Color.White;
-            password_tb.Location = new Point(628, 132);
-            password_tb.Margin = new Padding(0, 5, 0, 5);
-            password_tb.Name = "password_tb";
-            password_tb.Size = new Size(631, 31);
-            password_tb.TabIndex = 15;
-            // 
-            // fullname_tb
-            // 
-            fullname_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            fullname_tb.BackColor = Color.FromArgb(54, 54, 54);
-            fullname_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            fullname_tb.ForeColor = Color.White;
-            fullname_tb.Location = new Point(628, 91);
-            fullname_tb.Margin = new Padding(0, 5, 0, 5);
-            fullname_tb.Name = "fullname_tb";
-            fullname_tb.Size = new Size(631, 31);
-            fullname_tb.TabIndex = 24;
-            // 
+            //
             // username_tb
-            // 
+            //
             username_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            username_tb.BackColor = Color.FromArgb(54, 54, 54);
-            username_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            username_tb.ForeColor = Color.White;
-            username_tb.Location = new Point(628, 50);
-            username_tb.Margin = new Padding(0, 5, 0, 5);
+            username_tb.Font = new Font("Segoe UI", 11F);
+            username_tb.Location = new Point(163, 62);
+            username_tb.Margin = new Padding(3, 5, 3, 5);
             username_tb.Name = "username_tb";
-            username_tb.Size = new Size(631, 31);
-            username_tb.TabIndex = 12;
-            // 
+            username_tb.Size = new Size(685, 32);
+            username_tb.TabIndex = 3;
+            username_tb.Tag = "flat";
+            //
             // label2
-            // 
-            label2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
-            label2.Location = new Point(3, 86);
+            //
+            label2.Dock = DockStyle.Fill;
+            label2.Font = new Font("Segoe UI", 10F);
+            label2.Location = new Point(0, 104);
+            label2.Margin = new Padding(0);
             label2.Name = "label2";
-            label2.Size = new Size(91, 41);
-            label2.TabIndex = 14;
+            label2.Size = new Size(160, 52);
+            label2.TabIndex = 4;
+            label2.Tag = "muted";
             label2.Text = "Full Name";
             label2.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // label7
-            // 
-            label7.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            label7.AutoSize = true;
-            label7.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label7.Location = new Point(3, 252);
-            label7.Name = "label7";
-            label7.Size = new Size(85, 37);
-            label7.TabIndex = 28;
-            label7.Text = "Is Active";
-            label7.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // label8
-            // 
-            label8.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            label8.AutoSize = true;
-            label8.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label8.Location = new Point(3, 289);
-            label8.Name = "label8";
-            label8.Size = new Size(117, 41);
-            label8.TabIndex = 29;
-            label8.Text = "Failed Count";
-            label8.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // failed_count_tb
-            // 
-            failed_count_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            failed_count_tb.BackColor = Color.FromArgb(54, 54, 54);
-            failed_count_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            failed_count_tb.ForeColor = Color.White;
-            failed_count_tb.Location = new Point(628, 294);
-            failed_count_tb.Margin = new Padding(0, 5, 0, 5);
-            failed_count_tb.Name = "failed_count_tb";
-            failed_count_tb.Size = new Size(631, 31);
-            failed_count_tb.TabIndex = 30;
-            // 
+            //
+            // fullname_tb
+            //
+            fullname_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            fullname_tb.Font = new Font("Segoe UI", 11F);
+            fullname_tb.Location = new Point(163, 114);
+            fullname_tb.Margin = new Padding(3, 5, 3, 5);
+            fullname_tb.Name = "fullname_tb";
+            fullname_tb.Size = new Size(685, 32);
+            fullname_tb.TabIndex = 5;
+            fullname_tb.Tag = "flat";
+            //
             // logs_lbl
-            // 
-            logs_lbl.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            logs_lbl.AutoSize = true;
-            logs_lbl.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
-            logs_lbl.Location = new Point(3, 127);
+            //
+            logs_lbl.Dock = DockStyle.Fill;
+            logs_lbl.Font = new Font("Segoe UI", 10F);
+            logs_lbl.Location = new Point(0, 156);
+            logs_lbl.Margin = new Padding(0);
             logs_lbl.Name = "logs_lbl";
-            logs_lbl.Size = new Size(126, 41);
-            logs_lbl.TabIndex = 9;
+            logs_lbl.Size = new Size(160, 52);
+            logs_lbl.TabIndex = 6;
+            logs_lbl.Tag = "muted";
             logs_lbl.Text = "New Password";
             logs_lbl.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // label3
-            // 
-            label3.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            label3.AutoSize = true;
-            label3.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
-            label3.Location = new Point(3, 209);
-            label3.Name = "label3";
-            label3.Size = new Size(45, 43);
-            label3.TabIndex = 16;
-            label3.Text = "Role";
-            label3.TextAlign = ContentAlignment.MiddleLeft;
-            // 
+            //
+            // password_tb
+            //
+            password_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            password_tb.Font = new Font("Segoe UI", 11F);
+            password_tb.Location = new Point(163, 166);
+            password_tb.Margin = new Padding(3, 5, 3, 5);
+            password_tb.Name = "password_tb";
+            password_tb.Size = new Size(685, 32);
+            password_tb.TabIndex = 7;
+            password_tb.Tag = "flat";
+            //
             // label4
-            // 
-            label4.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            label4.AutoSize = true;
-            label4.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
-            label4.Location = new Point(3, 168);
+            //
+            label4.Dock = DockStyle.Fill;
+            label4.Font = new Font("Segoe UI", 10F);
+            label4.Location = new Point(0, 208);
+            label4.Margin = new Padding(0);
             label4.Name = "label4";
-            label4.Size = new Size(54, 41);
-            label4.TabIndex = 18;
+            label4.Size = new Size(160, 52);
+            label4.TabIndex = 8;
+            label4.Tag = "muted";
             label4.Text = "Email";
             label4.TextAlign = ContentAlignment.MiddleLeft;
-            // 
+            //
             // email_tb
-            // 
+            //
             email_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            email_tb.BackColor = Color.FromArgb(54, 54, 54);
-            email_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            email_tb.ForeColor = Color.White;
-            email_tb.Location = new Point(628, 173);
-            email_tb.Margin = new Padding(0, 5, 0, 5);
+            email_tb.Font = new Font("Segoe UI", 11F);
+            email_tb.Location = new Point(163, 218);
+            email_tb.Margin = new Padding(3, 5, 3, 5);
             email_tb.Name = "email_tb";
-            email_tb.Size = new Size(631, 31);
-            email_tb.TabIndex = 19;
-            // 
+            email_tb.Size = new Size(685, 32);
+            email_tb.TabIndex = 9;
+            email_tb.Tag = "flat";
+            //
+            // label3
+            //
+            label3.Dock = DockStyle.Fill;
+            label3.Font = new Font("Segoe UI", 10F);
+            label3.Location = new Point(0, 260);
+            label3.Margin = new Padding(0);
+            label3.Name = "label3";
+            label3.Size = new Size(160, 52);
+            label3.TabIndex = 10;
+            label3.Tag = "muted";
+            label3.Text = "Role";
+            label3.TextAlign = ContentAlignment.MiddleLeft;
+            //
             // role_cb
-            // 
+            //
             role_cb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            role_cb.BackColor = Color.FromArgb(54, 54, 54);
+            role_cb.DropDownStyle = ComboBoxStyle.DropDownList;
             role_cb.FlatStyle = FlatStyle.Flat;
-            role_cb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            role_cb.ForeColor = Color.White;
+            role_cb.Font = new Font("Segoe UI", 11F);
             role_cb.FormattingEnabled = true;
-            role_cb.Location = new Point(628, 214);
-            role_cb.Margin = new Padding(0, 5, 0, 5);
+            role_cb.Location = new Point(163, 270);
+            role_cb.Margin = new Padding(3, 5, 3, 5);
             role_cb.Name = "role_cb";
-            role_cb.Size = new Size(631, 33);
-            role_cb.TabIndex = 23;
-            // 
-            // tableLayoutPanel3
-            // 
-            tableLayoutPanel3.ColumnCount = 2;
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel3.Controls.Add(search_btn, 1, 0);
-            tableLayoutPanel3.Controls.Add(user_id_tb, 0, 0);
-            tableLayoutPanel3.Dock = DockStyle.Top;
-            tableLayoutPanel3.Location = new Point(631, 3);
-            tableLayoutPanel3.Name = "tableLayoutPanel3";
-            tableLayoutPanel3.RowCount = 1;
-            tableLayoutPanel3.RowStyles.Add(new RowStyle());
-            tableLayoutPanel3.Size = new Size(625, 39);
-            tableLayoutPanel3.TabIndex = 32;
-            // 
-            // search_btn
-            // 
-            search_btn.BackColor = Color.FromArgb(54, 54, 54);
-            search_btn.Dock = DockStyle.Fill;
-            search_btn.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            search_btn.ForeColor = Color.White;
-            search_btn.Location = new Point(322, 4);
-            search_btn.Margin = new Padding(10, 4, 0, 0);
-            search_btn.MaximumSize = new Size(0, 34);
-            search_btn.Name = "search_btn";
-            search_btn.Size = new Size(303, 34);
-            search_btn.TabIndex = 27;
-            search_btn.Text = "Search";
-            search_btn.UseVisualStyleBackColor = false;
-            search_btn.Click += search_btn_Click;
-            // 
-            // user_id_tb
-            // 
-            user_id_tb.BackColor = Color.FromArgb(54, 54, 54);
-            user_id_tb.Dock = DockStyle.Fill;
-            user_id_tb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            user_id_tb.ForeColor = Color.White;
-            user_id_tb.Location = new Point(0, 5);
-            user_id_tb.Margin = new Padding(0, 5, 10, 5);
-            user_id_tb.Name = "user_id_tb";
-            user_id_tb.Size = new Size(302, 31);
-            user_id_tb.TabIndex = 26;
-            // 
+            role_cb.Size = new Size(685, 33);
+            role_cb.TabIndex = 11;
+            //
+            // label7
+            //
+            label7.Dock = DockStyle.Fill;
+            label7.Font = new Font("Segoe UI", 10F);
+            label7.Location = new Point(0, 312);
+            label7.Margin = new Padding(0);
+            label7.Name = "label7";
+            label7.Size = new Size(160, 52);
+            label7.TabIndex = 12;
+            label7.Tag = "muted";
+            label7.Text = "Is Active";
+            label7.TextAlign = ContentAlignment.MiddleLeft;
+            //
+            // is_active_ck
+            //
+            is_active_ck.Anchor = AnchorStyles.Left;
+            is_active_ck.AutoSize = true;
+            is_active_ck.Location = new Point(163, 329);
+            is_active_ck.Margin = new Padding(3, 5, 3, 5);
+            is_active_ck.Name = "is_active_ck";
+            is_active_ck.Size = new Size(18, 17);
+            is_active_ck.TabIndex = 13;
+            is_active_ck.UseVisualStyleBackColor = true;
+            //
+            // label8
+            //
+            label8.Dock = DockStyle.Fill;
+            label8.Font = new Font("Segoe UI", 10F);
+            label8.Location = new Point(0, 364);
+            label8.Margin = new Padding(0);
+            label8.Name = "label8";
+            label8.Size = new Size(160, 52);
+            label8.TabIndex = 14;
+            label8.Tag = "muted";
+            label8.Text = "Failed Count";
+            label8.TextAlign = ContentAlignment.MiddleLeft;
+            //
+            // failed_count_tb
+            //
+            failed_count_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            failed_count_tb.Font = new Font("Segoe UI", 11F);
+            failed_count_tb.Location = new Point(163, 374);
+            failed_count_tb.Margin = new Padding(3, 5, 3, 5);
+            failed_count_tb.Name = "failed_count_tb";
+            failed_count_tb.Size = new Size(685, 32);
+            failed_count_tb.TabIndex = 15;
+            failed_count_tb.Tag = "flat";
+            //
             // ModifyUser
-            // 
+            //
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(base_pnl);
             Name = "ModifyUser";
-            Size = new Size(1299, 717);
+            Size = new Size(907, 572);
             base_pnl.ResumeLayout(false);
-            add_instance_pnl.ResumeLayout(false);
-            groupBox2.ResumeLayout(false);
-            tableLayoutPanel2.ResumeLayout(false);
-            tableLayoutPanel2.PerformLayout();
-            tableLayoutPanel3.ResumeLayout(false);
-            tableLayoutPanel3.PerformLayout();
+            fields_table.ResumeLayout(false);
+            fields_table.PerformLayout();
+            search_row.ResumeLayout(false);
+            search_row.PerformLayout();
             ResumeLayout(false);
         }
 
         #endregion
 
         private Panel base_pnl;
-        private Panel add_instance_pnl;
-        private GroupBox groupBox2;
-        private TableLayoutPanel tableLayoutPanel2;
-        private Label label3;
-        private TextBox password_tb;
-        private Label label2;
+        private TableLayoutPanel fields_table;
+        private Label label5;
+        private Panel search_row;
+        private TextBox user_id_tb;
+        private IconButton search_btn;
         private Label db_lbl;
         private TextBox username_tb;
-        private Label logs_lbl;
-        private ComboBox role_cb;
+        private Label label2;
         private TextBox fullname_tb;
-        private TextBox email_tb;
+        private Label logs_lbl;
+        private TextBox password_tb;
         private Label label4;
-        private Label label5;
-        private TextBox user_id_tb;
+        private TextBox email_tb;
+        private Label label3;
+        private ComboBox role_cb;
         private Label label7;
+        private CheckBox is_active_ck;
         private Label label8;
         private TextBox failed_count_tb;
-        private CheckBox is_active_ck;
-        private Button search_btn;
-        private TableLayoutPanel tableLayoutPanel3;
     }
 }

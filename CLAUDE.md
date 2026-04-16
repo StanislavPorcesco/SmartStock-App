@@ -10,7 +10,7 @@
 - **UI Tags** (all semantic, via `ThemeManager`):
   - Buttons: `"cta"` (primary) | `"ghost"` (secondary) | `"outlined"` (tertiary) | `"clean_icon"` (icon-only)
   - Panels: `"base"` (default bg) | `"hero"` (surface bg) | `"card"` (elevated) | `"divider"` (border)
-  - Labels: `"muted"` (secondary text) | `"accent"` (highlight)
+  - Labels: `"muted"` (secondary text) | `"accent"` (highlight) | no tag → TextPrimary (default)
   - TextBox: `"flat"` (no border) | `"otp"` (OTP digits: SurfaceHover BG + Accent text + border)
   - Icons: `"accent-icon"` (amber) | `"muted-icon"` (secondary)
   - **Never hardcode BackColor/ForeColor in Designer** — use Tags only.
@@ -19,11 +19,19 @@
 - **BindingList mutation:** After *any* cart/list edit, call `BindCartGrid()` or rebind (DataSource=null forces refresh).
 - **NumericUpDown range:** Use `Tag = "range_lock"` to prevent ThemeManager from overwriting `Maximum`.
 
+### Designer Safety
+- **All properties INLINE in InitializeComponent** — VS Designer regeneration wipes helper methods. Never use post-init styling helpers.
+- **Merged-cell pattern:** When two controls share a row cell, wrap in a container Panel (Tag="card") with Dock=Fill label + Dock=Right cta pill button (e.g., `report_row_pnl` in SettingsForm).
+
 ### Architecture
 - **Forms:** Data display + event capture only. No business logic.
 - **Services/Facade:** All processing, validation, AI, analytics, logging.
 - **MenuForm layout:** TableLayoutPanel root (sidebar 320px + content fill) → brand header + nav buttons + user card footer.
-- **SettingsForm scroll:** `Dock=Top` on content (not Fill), `apply_pnl` at Form level for fixed footer.
+- **BaseAddInstance shell:** TableLayoutPanel root (3 rows: 196px selector card / fill content card / 84px footer). Selector card: hero header (PenRuler icon) + 2-col combo grid (entity type + action). Content card: dynamic icon + title (updated via `UpdateContentHeader`). Footer: archive (outlined) + save (cta, mode-aware text/icon).
+- **SettingsForm layout:** 2×3 card grid (Preferences, Reporting, Paths, Logging, AI, Factors) inside scrollable base_pnl (Dock=Fill, AutoScroll). Hero header (Gears icon + title). Sticky `apply_pnl` (Dock=Bottom, 88px) with full-width cta button.
+- **Card shell pattern:** outer Panel (Tag="base") → body Panel (Tag="card", padding 22) → 56px header (IconPictureBox Tag="accent-icon" + title Label 11pt Semibold) → divider Panel (Tag="divider", 1px) → body TableLayoutPanel.
+- **ModifyForm field grid pattern:** base_pnl (Tag="base", Dock=Fill, padding 28/24) → fields_table (160px label col + fill input col, 52px rows). Row 0: search_row Panel (Dock=Fill TextBox Tag="flat" + Dock=Right IconButton Tag="outlined" MagnifyingGlass). All labels Tag="muted", all TextBoxes Tag="flat". Button type: `FontAwesome.Sharp.IconButton`.
+- **ModifySale 2-column layout:** root_table (48%/52%, Dock=Top) → left_pnl (sale_fields + cart_section with accent title + divider + cart_fields + cart_buttons: cta CartPlus + outlined TrashCan) → right_pnl (Tag="card", DataGridView Dock=Fill). base_pnl has AutoScroll=true for full-form scrolling.
 - **Filter controls:** Attach tooltips to specific labels via `ToolTipHelp.AddToolTip(label, text)` — never form-level.
 
 ---
@@ -107,6 +115,19 @@ Forms/
 | EXTERNAL_FETCH | ExternalFactorsFetchService |
 
 Log levels: **Info** (all) | **Warning** (noise suppressed) | **Error** (always writes, bypasses level filter).
+
+---
+
+---
+
+## ✅ Session Progress: ModifyForm UI Redesign
+
+**Completed:** 2026-04-16
+- **ModifySupplier.Designer.cs** — Converted to Tag-based field grid (6 rows: Supplier ID+search, Name, Contact Person, Email, Phone, Address)
+- **ModifyTransaction.Designer.cs** — Converted to Tag-based field grid (7 rows: Transaction ID+search, Product ID, Entity ID, User ID, Quantity, Type ComboBox, Date DateTimePicker)
+- **ModifyUser.Designer.cs** — Converted to Tag-based field grid (8 rows: User ID+search, Username, Full Name, Password, Email, Role ComboBox, Is Active CheckBox, Failed Count)
+
+All three use the standardized pattern: base_pnl (Tag="base") → fields_table (160px label + fill input, 52px rows) → Row 0 search_row (TextBox Tag="flat" + IconButton Tag="outlined"). Button changed from `Button` to `FontAwesome.Sharp.IconButton` (MagnifyingGlass icon).
 
 ---
 

@@ -274,6 +274,7 @@ namespace SmartStock.Forms.User_Control
             form_host.Padding = new Padding(56, 40, 56, 40);
             form_host.Size = new Size(477, 578);
             form_host.TabIndex = 1;
+            form_host.TabStop = false;
             form_host.Tag = "base";
             // 
             // form_table
@@ -308,6 +309,7 @@ namespace SmartStock.Forms.User_Control
             form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 52F));
             form_table.Size = new Size(365, 498);
             form_table.TabIndex = 0;
+            form_table.TabStop = false;
             // 
             // welcome_lbl
             // 
@@ -355,7 +357,8 @@ namespace SmartStock.Forms.User_Control
             username_host.Margin = new Padding(0);
             username_host.Name = "username_host";
             username_host.Size = new Size(365, 48);
-            username_host.TabIndex = 3;
+            username_host.TabIndex = 0;
+            username_host.TabStop = false;
             username_host.Tag = "input";
             // 
             // username_inner
@@ -374,6 +377,7 @@ namespace SmartStock.Forms.User_Control
             username_inner.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             username_inner.Size = new Size(365, 48);
             username_inner.TabIndex = 0;
+            username_inner.TabStop = false;
             // 
             // user_icn
             // 
@@ -401,7 +405,7 @@ namespace SmartStock.Forms.User_Control
             username_tb.Margin = new Padding(0);
             username_tb.Name = "username_tb";
             username_tb.Size = new Size(307, 25);
-            username_tb.TabIndex = 1;
+            username_tb.TabIndex = 0;
             username_tb.Tag = "flat";
             // 
             // password_lbl
@@ -425,7 +429,8 @@ namespace SmartStock.Forms.User_Control
             password_host.Margin = new Padding(0);
             password_host.Name = "password_host";
             password_host.Size = new Size(365, 48);
-            password_host.TabIndex = 5;
+            password_host.TabIndex = 1;
+            password_host.TabStop = false;
             password_host.Tag = "input";
             // 
             // password_inner
@@ -444,6 +449,7 @@ namespace SmartStock.Forms.User_Control
             password_inner.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             password_inner.Size = new Size(365, 48);
             password_inner.TabIndex = 0;
+            password_inner.TabStop = false;
             // 
             // lock_icn
             // 
@@ -471,7 +477,7 @@ namespace SmartStock.Forms.User_Control
             password_tb.Margin = new Padding(0);
             password_tb.Name = "password_tb";
             password_tb.Size = new Size(307, 25);
-            password_tb.TabIndex = 2;
+            password_tb.TabIndex = 0;
             password_tb.Tag = "flat";
             password_tb.UseSystemPasswordChar = true;
             // 
@@ -485,7 +491,7 @@ namespace SmartStock.Forms.User_Control
             login_btn.Margin = new Padding(0);
             login_btn.Name = "login_btn";
             login_btn.Size = new Size(365, 52);
-            login_btn.TabIndex = 3;
+            login_btn.TabIndex = 2;
             login_btn.Tag = "cta";
             login_btn.Text = "Sign in";
             login_btn.UseVisualStyleBackColor = false;
@@ -507,7 +513,8 @@ namespace SmartStock.Forms.User_Control
             footer_pnl.RowStyles.Add(new RowStyle(SizeType.Absolute, 1F));
             footer_pnl.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             footer_pnl.Size = new Size(365, 52);
-            footer_pnl.TabIndex = 6;
+            footer_pnl.TabIndex = 3;
+            footer_pnl.TabStop = false;
             // 
             // divider_pnl
             // 
@@ -530,7 +537,7 @@ namespace SmartStock.Forms.User_Control
             settings_btn.Margin = new Padding(0);
             settings_btn.Name = "settings_btn";
             settings_btn.Size = new Size(182, 51);
-            settings_btn.TabIndex = 4;
+            settings_btn.TabIndex = 0;
             settings_btn.Tag = "ghost";
             settings_btn.Text = "Settings";
             settings_btn.UseVisualStyleBackColor = true;
@@ -546,7 +553,7 @@ namespace SmartStock.Forms.User_Control
             account_btn.Margin = new Padding(0);
             account_btn.Name = "account_btn";
             account_btn.Size = new Size(183, 51);
-            account_btn.TabIndex = 5;
+            account_btn.TabIndex = 1;
             account_btn.Tag = "ghost";
             account_btn.Text = "Create account";
             account_btn.UseVisualStyleBackColor = true;

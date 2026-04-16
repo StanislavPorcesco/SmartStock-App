@@ -3,24 +3,24 @@
   "WorkspaceRootPath": "D:\\Files\\Degree\\App\\SmartStock\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\forms\\menuform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:forms\\menuform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\forms\\analyzeform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:forms\\analyzeform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\forms\\menuform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:forms\\menuform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\forms\\user control\\analysisforms\\correlationanalysis.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:forms\\user control\\analysisforms\\correlationanalysis.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\forms\\user control\\analysisforms\\stockoptimization.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:forms\\user control\\analysisforms\\stockoptimization.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\forms\\user control\\analysisforms\\stockoptimization.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:forms\\user control\\analysisforms\\stockoptimization.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\classes\\utils\\thememanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:classes\\utils\\thememanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\forms\\user control\\loginforms\\addaccount.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:forms\\user control\\loginforms\\addaccount.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|d:\\files\\degree\\app\\smartstock\\forms\\user control\\loginforms\\addaccount.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F9F495E7-3A5E-0EE0-8E49-6108D92F4834}|SmartStock.csproj|solutionrelative:forms\\user control\\loginforms\\addaccount.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -48,52 +48,51 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "AddAccount.cs [Design]",
-              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\User Control\\LoginForms\\AddAccount.cs",
-              "RelativeDocumentMoniker": "Forms\\User Control\\LoginForms\\AddAccount.cs",
-              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\User Control\\LoginForms\\AddAccount.cs [Design]",
-              "RelativeToolTip": "Forms\\User Control\\LoginForms\\AddAccount.cs [Design]",
+              "DocumentIndex": 1,
+              "Title": "CorrelationAnalysis.cs [Design]",
+              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\User Control\\AnalysisForms\\CorrelationAnalysis.cs",
+              "RelativeDocumentMoniker": "Forms\\User Control\\AnalysisForms\\CorrelationAnalysis.cs",
+              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\User Control\\AnalysisForms\\CorrelationAnalysis.cs [Design]*",
+              "RelativeToolTip": "Forms\\User Control\\AnalysisForms\\CorrelationAnalysis.cs [Design]*",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-16T01:53:07.281Z",
+              "WhenOpened": "2026-04-16T23:00:08.628Z",
               "EditorCaption": " [Design]"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ThemeManager.cs",
-              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Utils\\ThemeManager.cs",
-              "RelativeDocumentMoniker": "Classes\\Utils\\ThemeManager.cs",
-              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Utils\\ThemeManager.cs",
-              "RelativeToolTip": "Classes\\Utils\\ThemeManager.cs",
-              "ViewState": "AgIAABMBAAAAAAAAAAAAACcBAABKAAAAAAAAAA==",
+              "DocumentIndex": 3,
+              "Title": "StockOptimization.Designer.cs",
+              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\User Control\\AnalysisForms\\StockOptimization.Designer.cs",
+              "RelativeDocumentMoniker": "Forms\\User Control\\AnalysisForms\\StockOptimization.Designer.cs",
+              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\User Control\\AnalysisForms\\StockOptimization.Designer.cs*",
+              "RelativeToolTip": "Forms\\User Control\\AnalysisForms\\StockOptimization.Designer.cs*",
+              "ViewState": "AgIAAPwAAAAAAAAAAAAAAAABAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-16T01:48:16.353Z",
+              "WhenOpened": "2026-04-16T22:58:05.946Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "MenuForm.cs",
-              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\MenuForm.cs",
-              "RelativeDocumentMoniker": "Forms\\MenuForm.cs",
-              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\MenuForm.cs",
-              "RelativeToolTip": "Forms\\MenuForm.cs",
-              "ViewState": "AgIAAIoAAAAAAAAAAAAQwJgAAAAJAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "StockOptimization.cs [Design]",
+              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\User Control\\AnalysisForms\\StockOptimization.cs",
+              "RelativeDocumentMoniker": "Forms\\User Control\\AnalysisForms\\StockOptimization.cs",
+              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\User Control\\AnalysisForms\\StockOptimization.cs [Design]*",
+              "RelativeToolTip": "Forms\\User Control\\AnalysisForms\\StockOptimization.cs [Design]*",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-16T01:21:08.813Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-16T22:57:38.95Z",
+              "EditorCaption": " [Design]"
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "MenuForm.cs [Design]",
-              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\MenuForm.cs",
-              "RelativeDocumentMoniker": "Forms\\MenuForm.cs",
-              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\MenuForm.cs [Design]",
-              "RelativeToolTip": "Forms\\MenuForm.cs [Design]",
+              "Title": "AnalyzeForm.cs [Design]",
+              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\AnalyzeForm.cs",
+              "RelativeDocumentMoniker": "Forms\\AnalyzeForm.cs",
+              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\AnalyzeForm.cs [Design]",
+              "RelativeToolTip": "Forms\\AnalyzeForm.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-16T01:06:05.015Z",
+              "WhenOpened": "2026-04-16T22:55:51.829Z",
               "EditorCaption": " [Design]"
             },
             {
@@ -103,14 +102,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "AddAccount.cs",
-              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\User Control\\LoginForms\\AddAccount.cs",
-              "RelativeDocumentMoniker": "Forms\\User Control\\LoginForms\\AddAccount.cs",
-              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Forms\\User Control\\LoginForms\\AddAccount.cs",
-              "RelativeToolTip": "Forms\\User Control\\LoginForms\\AddAccount.cs",
-              "ViewState": "AgIAAAoAAAAAAAAAAAAQwBwAAAAsAAAAAAAAAA==",
+              "Title": "ThemeManager.cs",
+              "DocumentMoniker": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Utils\\ThemeManager.cs",
+              "RelativeDocumentMoniker": "Classes\\Utils\\ThemeManager.cs",
+              "ToolTip": "D:\\Files\\Degree\\App\\SmartStock\\Classes\\Utils\\ThemeManager.cs",
+              "RelativeToolTip": "Classes\\Utils\\ThemeManager.cs",
+              "ViewState": "AgIAABUBAAAAAAAAAAAAACkBAABKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-15T13:08:20.616Z",
+              "WhenOpened": "2026-04-16T01:48:16.353Z",
               "EditorCaption": ""
             }
           ]

@@ -25,7 +25,6 @@ namespace SmartStock.Forms.User_Control.AnalysisForms
             //
             // base_pnl
             //
-            base_pnl.BackColor = Color.FromArgb(64, 64, 64);
             base_pnl.Controls.Add(tableLayoutPanel1);
             base_pnl.Dock = DockStyle.Fill;
             base_pnl.Location = new Point(0, 0);
@@ -54,28 +53,27 @@ namespace SmartStock.Forms.User_Control.AnalysisForms
             //
             label1.AutoSize = true;
             label1.Dock = DockStyle.Fill;
-            label1.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label1.ForeColor = Color.White;
+            label1.Font = new Font("Segoe UI", 10F);
             label1.Location = new Point(3, 0);
             label1.Name = "label1";
             label1.Size = new Size(435, 42);
             label1.TabIndex = 0;
+            label1.Tag = "muted";
             label1.Text = "Describe your query in natural language:";
             label1.TextAlign = ContentAlignment.MiddleLeft;
             //
             // query_tb
             //
             query_tb.AcceptsReturn = true;
-            query_tb.BackColor = Color.FromArgb(54, 54, 54);
             query_tb.Dock = DockStyle.Fill;
-            query_tb.Font = new Font("Segoe UI", 10.8F);
-            query_tb.ForeColor = Color.White;
+            query_tb.Font = new Font("Segoe UI", 11F);
             query_tb.Location = new Point(3, 45);
             query_tb.Multiline = true;
             query_tb.Name = "query_tb";
             query_tb.ScrollBars = ScrollBars.Vertical;
             query_tb.Size = new Size(435, 265);
             query_tb.TabIndex = 1;
+            query_tb.Tag = "flat";
             //
             // LanguageQuery
             //

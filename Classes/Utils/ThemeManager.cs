@@ -189,6 +189,8 @@ namespace SmartStock.Classes.Utils
                         lbl.ForeColor = theme.TextSecondary;
                     else if ("accent".Equals(lbl.Tag))
                         lbl.ForeColor = theme.Accent;
+                    else
+                        lbl.ForeColor = theme.Text;
                     break;
 
                 case DataGridView dgv:
