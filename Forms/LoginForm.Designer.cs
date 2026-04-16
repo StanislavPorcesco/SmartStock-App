@@ -35,11 +35,9 @@
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(54, 54, 54);
-            ClientSize = new Size(632, 483);
+            ClientSize = new Size(1007, 670);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
-            MaximumSize = new Size(650, 530);
             MinimizeBox = false;
-            MinimumSize = new Size(650, 530);
             Name = "LoginForm";
             Padding = new Padding(30);
             StartPosition = FormStartPosition.CenterScreen;

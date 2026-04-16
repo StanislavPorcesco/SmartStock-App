@@ -151,7 +151,6 @@ D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.AddForm
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.User_Control.Login.resources
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.User_Control.MailConfirmation.resources
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.AddForms.Settings.resources
-D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.BaseModifyInstance.resources
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.AddForms.ModifyCategory.resources
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.User_Control.ModifyCustomer.resources
 D:\Files\Degree\App\SmartStock\obj\Debug\net8.0-windows\SmartStock.Forms.User_Control.ModifyExternalFactor.resources

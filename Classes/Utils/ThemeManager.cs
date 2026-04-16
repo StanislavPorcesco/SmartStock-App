@@ -16,25 +16,44 @@ namespace SmartStock.Classes.Utils
         // Eveniment la care se vor abona toate Form-urile pentru update live
         public static event Action OnThemeChanged;
 
-        public static string CurrentThemeName { get; private set; } = "Light";
+        public static string CurrentThemeName { get; private set; } = "Dark";
 
-        // Definiția paletelor de culori
+        // "Midnight Cobalt" — Analogous blue/indigo base + amber accent (Concept 1).
+        // "Light" — kept as a compatible warm-neutral fallback for the theme toggle.
         public static readonly Dictionary<string, ThemePalette> Themes = new Dictionary<string, ThemePalette>
         {
-            { "Dark", new ThemePalette { 
-                DarkColor = Color.FromArgb(54,54,54),
-                LightColor = Color.FromArgb(64,64,64),
-                HoverColor = Color.FromArgb(74,74,74),
-                Accent = Color.White,
-                Text = Color.WhiteSmoke
-            }},
-            { "Light", new ThemePalette {
-                DarkColor = Color.FromArgb(240, 240, 240),
-                LightColor = Color.White,
-                HoverColor = Color.FromArgb(220, 220, 220),
-                Accent = Color.FromArgb(40,40,40),
-                Text = Color.FromArgb(40,40,40)
-             }}
+            { "Dark", new ThemePalette
+                {
+                    Background    = Color.FromArgb(14, 20, 32),     // #0E1420 — app bg (60%)
+                    Surface       = Color.FromArgb(22, 29, 46),     // #161D2E — cards/sidebars (30%)
+                    SurfaceHover  = Color.FromArgb(30, 39, 64),     // #1E2740 — hover/active
+                    Accent        = Color.FromArgb(245, 181, 71),   // #F5B547 — amber CTA (10%)
+                    AccentHover   = Color.FromArgb(255, 200, 102),  // #FFC866
+                    OnAccent      = Color.FromArgb(14, 20, 32),     // dark text on amber
+                    TextPrimary   = Color.FromArgb(230, 235, 245),  // #E6EBF5
+                    TextSecondary = Color.FromArgb(148, 160, 184),  // #94A0B8
+                    Border        = Color.FromArgb(37, 46, 71),     // #252E47
+                    Success       = Color.FromArgb(74, 222, 128),   // #4ADE80
+                    Warning       = Color.FromArgb(251, 191, 36),   // #FBBF24
+                    Danger        = Color.FromArgb(248, 113, 113)   // #F87171
+                }
+            },
+            { "Light", new ThemePalette
+                {
+                    Background    = Color.FromArgb(250, 250, 247),
+                    Surface       = Color.FromArgb(240, 239, 233),
+                    SurfaceHover  = Color.FromArgb(230, 228, 219),
+                    Accent        = Color.FromArgb(13, 125, 107),
+                    AccentHover   = Color.FromArgb(15, 160, 136),
+                    OnAccent      = Color.FromArgb(250, 250, 247),
+                    TextPrimary   = Color.FromArgb(26, 29, 26),
+                    TextSecondary = Color.FromArgb(92, 97, 94),
+                    Border        = Color.FromArgb(212, 209, 197),
+                    Success       = Color.FromArgb(46, 139, 87),
+                    Warning       = Color.FromArgb(184, 119, 10),
+                    Danger        = Color.FromArgb(180, 58, 58)
+                }
+            }
         };
 
         public static void SetTheme(string themeName)
@@ -54,7 +73,8 @@ namespace SmartStock.Classes.Utils
             // Dacă controlul este o Formă, îi schimbăm fundalul principal
             if (parent is Form frm)
             {
-                frm.BackColor = theme.LightColor;
+                frm.BackColor = theme.Background;
+                frm.ForeColor = theme.TextPrimary;
             }
 
             foreach (Control c in parent.Controls)
@@ -87,7 +107,33 @@ namespace SmartStock.Classes.Utils
                         icn.IconColor = theme.Text;
                     }
                     btn.FlatStyle = FlatStyle.Flat;
-                    if ("menu".Equals(btn.Tag) || "title".Equals(btn.Tag))
+                    if ("cta".Equals(btn.Tag))
+                    {
+                        btn.BackColor = theme.Accent;
+                        btn.ForeColor = theme.OnAccent;
+                        btn.FlatAppearance.BorderSize = 0;
+                        btn.FlatAppearance.MouseOverBackColor = theme.AccentHover;
+                        btn.FlatAppearance.MouseDownBackColor = theme.Accent;
+                        if (btn is IconButton ctaIcn) ctaIcn.IconColor = theme.OnAccent;
+                    }
+                    else if ("ghost".Equals(btn.Tag))
+                    {
+                        btn.BackColor = Color.Transparent;
+                        btn.ForeColor = theme.TextSecondary;
+                        btn.FlatAppearance.BorderSize = 0;
+                        btn.FlatAppearance.MouseOverBackColor = theme.SurfaceHover;
+                        btn.FlatAppearance.MouseDownBackColor = theme.SurfaceHover;
+                        if (btn is IconButton ghostIcn) ghostIcn.IconColor = theme.TextSecondary;
+                    }
+                    else if ("outlined".Equals(btn.Tag))
+                    {
+                        btn.BackColor = Color.Transparent;
+                        btn.ForeColor = theme.TextPrimary;
+                        btn.FlatAppearance.BorderSize = 1;
+                        btn.FlatAppearance.BorderColor = theme.Border;
+                        btn.FlatAppearance.MouseOverBackColor = theme.SurfaceHover;
+                    }
+                    else if ("menu".Equals(btn.Tag) || "title".Equals(btn.Tag))
                     {
                         btn.BackColor = Color.Transparent;
                         btn.FlatAppearance.BorderSize = 0;
@@ -106,20 +152,43 @@ namespace SmartStock.Classes.Utils
                     {
                         btn.BackColor = theme.LightColor;
                         btn.FlatAppearance.BorderSize = 1;
+                        btn.FlatAppearance.BorderColor = theme.Border;
                         btn.FlatAppearance.MouseOverBackColor = theme.HoverColor;
                     }
                     break;
 
                 case TextBox txt:
                     txt.BackColor = theme.LightColor;
-                    txt.BorderStyle = BorderStyle.Fixed3D;
+                    txt.ForeColor = theme.TextPrimary;
+                    if ("flat".Equals(txt.Tag))
+                    {
+                        txt.BorderStyle = BorderStyle.None;
+                    }
+                    else if ("otp".Equals(txt.Tag))
+                    {
+                        // OTP digit boxes: SurfaceHover bg + amber digit text + single border
+                        txt.BackColor   = theme.SurfaceHover;
+                        txt.ForeColor   = theme.Accent;
+                        txt.BorderStyle = BorderStyle.FixedSingle;
+                    }
+                    else
+                    {
+                        txt.BorderStyle = BorderStyle.Fixed3D;
+                    }
                     break;
 
                 case Label lbl:
-                    if (lbl.Tag != null && lbl.Tag.ToString() == "workplace")
+                    if ("workplace".Equals(lbl.Tag))
                         lbl.BackColor = theme.LightColor;
+                    else if ("hero".Equals(lbl.Tag))
+                        lbl.BackColor = theme.Surface;
                     else
                         lbl.BackColor = Color.Transparent;
+
+                    if ("muted".Equals(lbl.Tag) || "hero-muted".Equals(lbl.Tag))
+                        lbl.ForeColor = theme.TextSecondary;
+                    else if ("accent".Equals(lbl.Tag))
+                        lbl.ForeColor = theme.Accent;
                     break;
 
                 case DataGridView dgv:
@@ -191,18 +260,27 @@ namespace SmartStock.Classes.Utils
                     combo.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
                     break;
                 case Panel pnl:
-                    if(pnl.Tag != null && pnl.Tag.ToString() == "menu")
+                    var ptag = pnl.Tag?.ToString();
+                    switch (ptag)
                     {
-                        pnl.BackColor = theme.DarkColor;
+                        case "hero":
+                        case "workplace":
+                        case "input":
+                        case "card":
+                            pnl.BackColor = theme.Surface;
+                            break;
+                        case "accent":
+                            pnl.BackColor = theme.Accent;
+                            break;
+                        case "divider":
+                            pnl.BackColor = theme.Border;
+                            break;
+                        case "menu":
+                        case "base":
+                        default:
+                            pnl.BackColor = theme.Background;
+                            break;
                     }
-                    else if(pnl.Tag != null && pnl.Tag.ToString() == "base")
-                        pnl.BackColor = theme.DarkColor;
-                    else if (pnl.Tag != null && pnl.Tag.ToString() == "accent")
-                        pnl.BackColor = theme.Accent;
-                    else if (pnl.Tag != null && pnl.Tag.ToString() == "workplace")
-                        pnl.BackColor = theme.LightColor;
-                    else
-                        pnl.BackColor = theme.DarkColor;
                     break;
                 case GroupBox grp:
                     grp.BackColor = theme.DarkColor;
@@ -213,10 +291,15 @@ namespace SmartStock.Classes.Utils
                 case IconPictureBox pic:
                     pic.BackColor = Color.Transparent;
                     pic.IconColor = theme.Text;
-                    if (pic.Tag != null && pic.Tag.ToString() == "menu")
-                        pic.BackColor = theme.DarkColor;
-                    if (pic.Tag != null && pic.Tag.ToString() == "workplace")
-                        pic.BackColor = theme.LightColor;
+                    var picTag = pic.Tag?.ToString();
+                    if (picTag == "menu") pic.BackColor = theme.Background;
+                    else if (picTag == "workplace" || picTag == "input") {
+                        pic.BackColor = theme.Surface;
+                        pic.IconSize = 30;
+                    } 
+                    else if (picTag == "hero") pic.BackColor = theme.Surface;
+                    if (picTag == "accent-icon") pic.IconColor = theme.Accent;
+                    else if (picTag == "muted-icon" || picTag == "input") pic.IconColor = theme.TextSecondary;
                     break;
                 case DateTimePicker date:
                     date.Format = DateTimePickerFormat.Custom;
@@ -253,23 +336,45 @@ namespace SmartStock.Classes.Utils
                     chart.ForeColor = theme.Text;
                     break;
                 default:
-                    c.BackColor = Color.Black;
+                    // Unknown controls inherit parent bg — never hard-force black.
                     break;
             }
         }
 
         public class ThemePalette
         {
-            public Color LightColor { get; set; }
-            public Color DarkColor { get; set; }
-            public Color HoverColor { get; set; }
-            public Color Accent { get; set; }
-            public Color Text { get; set; }
+            // Creative palette (60-30-10, WCAG-compliant)
+            public Color Background    { get; set; }   // 60% — app bg
+            public Color Surface       { get; set; }   // 30% — sidebars/cards/inputs
+            public Color SurfaceHover  { get; set; }
+            public Color Accent        { get; set; }   // 10% — CTA
+            public Color AccentHover   { get; set; }
+            public Color OnAccent      { get; set; }   // text/icon color on Accent bg
+            public Color TextPrimary   { get; set; }
+            public Color TextSecondary { get; set; }
+            public Color Border        { get; set; }
+            public Color Success       { get; set; }
+            public Color Warning       { get; set; }
+            public Color Danger        { get; set; }
+
+            // Legacy aliases — keep existing call sites working without changes.
+            public Color LightColor => Surface;
+            public Color DarkColor  => Background;
+            public Color HoverColor => SurfaceHover;
+            public Color Text       => TextPrimary;
         }
+
         public static ThemePalette GetCurrentPalette()
         {
             return Themes[CurrentThemeName];
         }
+
+        /// <summary>
+        /// Applies the currently selected creative palette recursively.
+        /// Alias of <see cref="Apply(Control)"/> — use this at call sites that
+        /// want the intent ("apply our design system") to be explicit.
+        /// </summary>
+        public static void ApplyCreativePalette(Control parent) => Apply(parent);
 
         public static void ApplyThemeToParentForm()
         {

@@ -1,4 +1,6 @@
-﻿namespace SmartStock
+using FontAwesome.Sharp;
+
+namespace SmartStock
 {
     partial class BaseAddInstance
     {
@@ -10,7 +12,6 @@
         /// <summary>
         ///  Clean up any resources being used.
         /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -22,196 +23,354 @@
 
         #region Windows Form Designer generated code
 
-        /// <summary>
-        ///  Required method for Designer support - do not modify
-        ///  the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
-            base_pnl = new Panel();
-            usercontrol_pnl = new Panel();
-            selector_pnl = new Panel();
-            groupBox1 = new GroupBox();
-            tableLayoutPanel1 = new TableLayoutPanel();
-            action_cb = new ComboBox();
-            label2 = new Label();
+            root_shell = new TableLayoutPanel();
+            selector_card = new Panel();
+            selector_inner = new TableLayoutPanel();
+            selector_header_pnl = new Panel();
+            selector_subtitle_lbl = new Label();
+            selector_title_lbl = new Label();
+            selector_icon = new IconPictureBox();
+            selector_divider = new Panel();
+            selector_fields_pnl = new TableLayoutPanel();
+            instance_lbl = new Label();
+            action_lbl = new Label();
             selector_cb = new ComboBox();
-            label1 = new Label();
-            panel1 = new Panel();
-            archive_btn = new Button();
-            save_btn = new Button();
-            base_pnl.SuspendLayout();
-            selector_pnl.SuspendLayout();
-            groupBox1.SuspendLayout();
-            tableLayoutPanel1.SuspendLayout();
-            panel1.SuspendLayout();
+            action_cb = new ComboBox();
+            content_card = new Panel();
+            usercontrol_pnl = new Panel();
+            content_divider = new Panel();
+            content_header_pnl = new Panel();
+            content_title_lbl = new Label();
+            content_icon = new IconPictureBox();
+            footer_pnl = new TableLayoutPanel();
+            archive_btn = new IconButton();
+            save_btn = new IconButton();
+            root_shell.SuspendLayout();
+            selector_card.SuspendLayout();
+            selector_inner.SuspendLayout();
+            selector_header_pnl.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)selector_icon).BeginInit();
+            selector_fields_pnl.SuspendLayout();
+            content_card.SuspendLayout();
+            content_header_pnl.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)content_icon).BeginInit();
+            footer_pnl.SuspendLayout();
             SuspendLayout();
             // 
-            // base_pnl
+            // root_shell
             // 
-            base_pnl.AutoScroll = true;
-            base_pnl.BackColor = Color.FromArgb(64, 64, 64);
-            base_pnl.Controls.Add(usercontrol_pnl);
-            base_pnl.Controls.Add(selector_pnl);
-            base_pnl.Controls.Add(panel1);
-            base_pnl.Dock = DockStyle.Fill;
-            base_pnl.Location = new Point(30, 30);
-            base_pnl.Margin = new Padding(30);
-            base_pnl.Name = "base_pnl";
-            base_pnl.Padding = new Padding(20);
-            base_pnl.Size = new Size(1271, 702);
-            base_pnl.TabIndex = 3;
-            base_pnl.Tag = "base";
+            root_shell.ColumnCount = 1;
+            root_shell.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            root_shell.Controls.Add(selector_card, 0, 0);
+            root_shell.Controls.Add(content_card, 0, 1);
+            root_shell.Controls.Add(footer_pnl, 0, 2);
+            root_shell.Dock = DockStyle.Fill;
+            root_shell.Location = new Point(28, 28);
+            root_shell.Name = "root_shell";
+            root_shell.RowCount = 3;
+            root_shell.RowStyles.Add(new RowStyle(SizeType.Absolute, 196F));
+            root_shell.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            root_shell.RowStyles.Add(new RowStyle(SizeType.Absolute, 84F));
+            root_shell.Size = new Size(1275, 706);
+            root_shell.TabIndex = 0;
+            root_shell.Tag = "base";
+            // 
+            // selector_card
+            // 
+            selector_card.Controls.Add(selector_inner);
+            selector_card.Dock = DockStyle.Fill;
+            selector_card.Location = new Point(0, 0);
+            selector_card.Margin = new Padding(0, 0, 0, 16);
+            selector_card.Name = "selector_card";
+            selector_card.Padding = new Padding(24, 20, 24, 22);
+            selector_card.Size = new Size(1275, 180);
+            selector_card.TabIndex = 0;
+            selector_card.Tag = "card";
+            // 
+            // selector_inner
+            // 
+            selector_inner.ColumnCount = 1;
+            selector_inner.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            selector_inner.Controls.Add(selector_header_pnl, 0, 0);
+            selector_inner.Controls.Add(selector_divider, 0, 1);
+            selector_inner.Controls.Add(selector_fields_pnl, 0, 2);
+            selector_inner.Dock = DockStyle.Fill;
+            selector_inner.Location = new Point(24, 20);
+            selector_inner.Name = "selector_inner";
+            selector_inner.RowCount = 3;
+            selector_inner.RowStyles.Add(new RowStyle(SizeType.Absolute, 67F));
+            selector_inner.RowStyles.Add(new RowStyle(SizeType.Absolute, 1F));
+            selector_inner.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            selector_inner.Size = new Size(1227, 138);
+            selector_inner.TabIndex = 0;
+            // 
+            // selector_header_pnl
+            // 
+            selector_header_pnl.Controls.Add(selector_subtitle_lbl);
+            selector_header_pnl.Controls.Add(selector_title_lbl);
+            selector_header_pnl.Controls.Add(selector_icon);
+            selector_header_pnl.Dock = DockStyle.Fill;
+            selector_header_pnl.Location = new Point(0, 0);
+            selector_header_pnl.Margin = new Padding(0, 0, 0, 10);
+            selector_header_pnl.Name = "selector_header_pnl";
+            selector_header_pnl.Size = new Size(1227, 57);
+            selector_header_pnl.TabIndex = 0;
+            selector_header_pnl.Tag = "card";
+            // 
+            // selector_subtitle_lbl
+            // 
+            selector_subtitle_lbl.AutoSize = true;
+            selector_subtitle_lbl.Font = new Font("Segoe UI", 9.5F);
+            selector_subtitle_lbl.Location = new Point(48, 33);
+            selector_subtitle_lbl.Name = "selector_subtitle_lbl";
+            selector_subtitle_lbl.Size = new Size(435, 21);
+            selector_subtitle_lbl.TabIndex = 2;
+            selector_subtitle_lbl.Tag = "muted";
+            selector_subtitle_lbl.Text = "Choose an entity type and whether to add or modify a record.";
+            // 
+            // selector_title_lbl
+            // 
+            selector_title_lbl.AutoSize = true;
+            selector_title_lbl.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold);
+            selector_title_lbl.Location = new Point(46, -5);
+            selector_title_lbl.Name = "selector_title_lbl";
+            selector_title_lbl.Size = new Size(226, 37);
+            selector_title_lbl.TabIndex = 1;
+            selector_title_lbl.Text = "Manage Instance";
+            // 
+            // selector_icon
+            // 
+            selector_icon.BackColor = SystemColors.Control;
+            selector_icon.ForeColor = Color.FromArgb(245, 181, 71);
+            selector_icon.IconChar = IconChar.PencilRuler;
+            selector_icon.IconColor = Color.FromArgb(245, 181, 71);
+            selector_icon.IconFont = IconFont.Auto;
+            selector_icon.IconSize = 40;
+            selector_icon.Location = new Point(0, 0);
+            selector_icon.Name = "selector_icon";
+            selector_icon.Size = new Size(34, 34);
+            selector_icon.SizeMode = PictureBoxSizeMode.CenterImage;
+            selector_icon.TabIndex = 0;
+            selector_icon.TabStop = false;
+            selector_icon.Tag = "accent-icon";
+            // 
+            // selector_divider
+            // 
+            selector_divider.Dock = DockStyle.Fill;
+            selector_divider.Location = new Point(0, 67);
+            selector_divider.Margin = new Padding(0, 0, 0, 12);
+            selector_divider.Name = "selector_divider";
+            selector_divider.Size = new Size(1227, 1);
+            selector_divider.TabIndex = 1;
+            selector_divider.Tag = "divider";
+            // 
+            // selector_fields_pnl
+            // 
+            selector_fields_pnl.ColumnCount = 2;
+            selector_fields_pnl.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            selector_fields_pnl.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            selector_fields_pnl.Controls.Add(instance_lbl, 0, 0);
+            selector_fields_pnl.Controls.Add(action_lbl, 1, 0);
+            selector_fields_pnl.Controls.Add(selector_cb, 0, 1);
+            selector_fields_pnl.Controls.Add(action_cb, 1, 1);
+            selector_fields_pnl.Dock = DockStyle.Fill;
+            selector_fields_pnl.Location = new Point(3, 71);
+            selector_fields_pnl.Name = "selector_fields_pnl";
+            selector_fields_pnl.RowCount = 2;
+            selector_fields_pnl.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+            selector_fields_pnl.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            selector_fields_pnl.Size = new Size(1221, 64);
+            selector_fields_pnl.TabIndex = 2;
+            selector_fields_pnl.Tag = "card";
+            // 
+            // instance_lbl
+            // 
+            instance_lbl.AutoSize = true;
+            instance_lbl.Dock = DockStyle.Bottom;
+            instance_lbl.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            instance_lbl.Location = new Point(3, 4);
+            instance_lbl.Margin = new Padding(3, 0, 3, 6);
+            instance_lbl.Name = "instance_lbl";
+            instance_lbl.Size = new Size(604, 20);
+            instance_lbl.TabIndex = 0;
+            instance_lbl.Tag = "muted";
+            instance_lbl.Text = "ENTITY TYPE";
+            // 
+            // action_lbl
+            // 
+            action_lbl.AutoSize = true;
+            action_lbl.Dock = DockStyle.Bottom;
+            action_lbl.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            action_lbl.Location = new Point(624, 4);
+            action_lbl.Margin = new Padding(14, 0, 3, 6);
+            action_lbl.Name = "action_lbl";
+            action_lbl.Size = new Size(594, 20);
+            action_lbl.TabIndex = 1;
+            action_lbl.Tag = "muted";
+            action_lbl.Text = "ACTION";
+            // 
+            // selector_cb
+            // 
+            selector_cb.Dock = DockStyle.Top;
+            selector_cb.DropDownStyle = ComboBoxStyle.DropDownList;
+            selector_cb.FlatStyle = FlatStyle.Flat;
+            selector_cb.Font = new Font("Segoe UI", 11F);
+            selector_cb.FormattingEnabled = true;
+            selector_cb.Location = new Point(0, 30);
+            selector_cb.Margin = new Padding(0, 0, 10, 0);
+            selector_cb.Name = "selector_cb";
+            selector_cb.Size = new Size(600, 33);
+            selector_cb.TabIndex = 2;
+            selector_cb.SelectedIndexChanged += selector_cb_SelectedIndexChanged;
+            // 
+            // action_cb
+            // 
+            action_cb.Dock = DockStyle.Top;
+            action_cb.DropDownStyle = ComboBoxStyle.DropDownList;
+            action_cb.FlatStyle = FlatStyle.Flat;
+            action_cb.Font = new Font("Segoe UI", 11F);
+            action_cb.FormattingEnabled = true;
+            action_cb.Location = new Point(620, 30);
+            action_cb.Margin = new Padding(10, 0, 0, 0);
+            action_cb.Name = "action_cb";
+            action_cb.Size = new Size(601, 33);
+            action_cb.TabIndex = 3;
+            action_cb.SelectedIndexChanged += action_cb_SelectedIndexChanged;
+            // 
+            // content_card
+            // 
+            content_card.Controls.Add(usercontrol_pnl);
+            content_card.Controls.Add(content_divider);
+            content_card.Controls.Add(content_header_pnl);
+            content_card.Dock = DockStyle.Fill;
+            content_card.Location = new Point(0, 196);
+            content_card.Margin = new Padding(0, 0, 0, 16);
+            content_card.Name = "content_card";
+            content_card.Size = new Size(1275, 410);
+            content_card.TabIndex = 1;
+            content_card.Tag = "card";
             // 
             // usercontrol_pnl
             // 
             usercontrol_pnl.Dock = DockStyle.Fill;
-            usercontrol_pnl.Location = new Point(20, 182);
+            usercontrol_pnl.Location = new Point(0, 57);
             usercontrol_pnl.Name = "usercontrol_pnl";
-            usercontrol_pnl.Size = new Size(1231, 340);
-            usercontrol_pnl.TabIndex = 5;
+            usercontrol_pnl.Padding = new Padding(4);
+            usercontrol_pnl.Size = new Size(1275, 353);
+            usercontrol_pnl.TabIndex = 2;
+            usercontrol_pnl.Tag = "card";
             // 
-            // selector_pnl
+            // content_divider
             // 
-            selector_pnl.Controls.Add(groupBox1);
-            selector_pnl.Dock = DockStyle.Top;
-            selector_pnl.Location = new Point(20, 20);
-            selector_pnl.Name = "selector_pnl";
-            selector_pnl.Padding = new Padding(10, 11, 10, 11);
-            selector_pnl.Size = new Size(1231, 162);
-            selector_pnl.TabIndex = 4;
+            content_divider.Dock = DockStyle.Top;
+            content_divider.Location = new Point(0, 56);
+            content_divider.Name = "content_divider";
+            content_divider.Size = new Size(1275, 1);
+            content_divider.TabIndex = 3;
+            content_divider.Tag = "divider";
             // 
-            // groupBox1
+            // content_header_pnl
             // 
-            groupBox1.Controls.Add(tableLayoutPanel1);
-            groupBox1.Dock = DockStyle.Fill;
-            groupBox1.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            groupBox1.ForeColor = Color.White;
-            groupBox1.Location = new Point(10, 11);
-            groupBox1.Margin = new Padding(0);
-            groupBox1.Name = "groupBox1";
-            groupBox1.Padding = new Padding(10);
-            groupBox1.Size = new Size(1211, 140);
-            groupBox1.TabIndex = 1;
-            groupBox1.TabStop = false;
-            groupBox1.Text = "Instance selector";
+            content_header_pnl.Controls.Add(content_title_lbl);
+            content_header_pnl.Controls.Add(content_icon);
+            content_header_pnl.Dock = DockStyle.Top;
+            content_header_pnl.Location = new Point(0, 0);
+            content_header_pnl.Name = "content_header_pnl";
+            content_header_pnl.Padding = new Padding(24, 0, 24, 0);
+            content_header_pnl.Size = new Size(1275, 56);
+            content_header_pnl.TabIndex = 4;
+            content_header_pnl.Tag = "card";
             // 
-            // tableLayoutPanel1
+            // content_title_lbl
             // 
-            tableLayoutPanel1.ColumnCount = 2;
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.Controls.Add(action_cb, 1, 1);
-            tableLayoutPanel1.Controls.Add(label2, 0, 1);
-            tableLayoutPanel1.Controls.Add(selector_cb, 1, 0);
-            tableLayoutPanel1.Controls.Add(label1, 0, 0);
-            tableLayoutPanel1.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Location = new Point(10, 30);
-            tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 2;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.Size = new Size(1191, 100);
-            tableLayoutPanel1.TabIndex = 0;
+            content_title_lbl.AutoSize = true;
+            content_title_lbl.Font = new Font("Segoe UI Semibold", 11.5F, FontStyle.Bold);
+            content_title_lbl.Location = new Point(56, 18);
+            content_title_lbl.Name = "content_title_lbl";
+            content_title_lbl.Size = new Size(162, 28);
+            content_title_lbl.TabIndex = 1;
+            content_title_lbl.Text = "Current Instance";
             // 
-            // action_cb
+            // content_icon
             // 
-            action_cb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            action_cb.BackColor = Color.FromArgb(54, 54, 54);
-            action_cb.FlatStyle = FlatStyle.Flat;
-            action_cb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            action_cb.ForeColor = Color.White;
-            action_cb.FormattingEnabled = true;
-            action_cb.Location = new Point(605, 63);
-            action_cb.Margin = new Padding(10);
-            action_cb.Name = "action_cb";
-            action_cb.Size = new Size(576, 33);
-            action_cb.TabIndex = 5;
-            action_cb.SelectedIndexChanged += action_cb_SelectedIndexChanged;
+            content_icon.BackColor = SystemColors.Control;
+            content_icon.ForeColor = SystemColors.ControlText;
+            content_icon.IconChar = IconChar.TableList;
+            content_icon.IconColor = SystemColors.ControlText;
+            content_icon.IconFont = IconFont.Auto;
+            content_icon.IconSize = 22;
+            content_icon.Location = new Point(24, 25);
+            content_icon.Name = "content_icon";
+            content_icon.Size = new Size(22, 22);
+            content_icon.SizeMode = PictureBoxSizeMode.CenterImage;
+            content_icon.TabIndex = 0;
+            content_icon.TabStop = false;
+            content_icon.Tag = "accent-icon";
             // 
-            // label2
+            // footer_pnl
             // 
-            label2.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.ForeColor = Color.White;
-            label2.Location = new Point(3, 64);
-            label2.Name = "label2";
-            label2.Size = new Size(589, 31);
-            label2.TabIndex = 4;
-            label2.Text = "Action";
-            // 
-            // selector_cb
-            // 
-            selector_cb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            selector_cb.BackColor = Color.FromArgb(54, 54, 54);
-            selector_cb.FlatStyle = FlatStyle.Flat;
-            selector_cb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            selector_cb.ForeColor = Color.White;
-            selector_cb.FormattingEnabled = true;
-            selector_cb.Location = new Point(605, 10);
-            selector_cb.Margin = new Padding(10);
-            selector_cb.Name = "selector_cb";
-            selector_cb.Size = new Size(576, 33);
-            selector_cb.TabIndex = 3;
-            selector_cb.SelectedIndexChanged += selector_cb_SelectedIndexChanged;
-            // 
-            // label1
-            // 
-            label1.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.ForeColor = Color.White;
-            label1.Location = new Point(3, 11);
-            label1.Name = "label1";
-            label1.Size = new Size(589, 31);
-            label1.TabIndex = 0;
-            label1.Text = "Select the desired instance";
-            // 
-            // panel1
-            // 
-            panel1.Controls.Add(archive_btn);
-            panel1.Controls.Add(save_btn);
-            panel1.Dock = DockStyle.Bottom;
-            panel1.Location = new Point(20, 522);
-            panel1.MaximumSize = new Size(0, 160);
-            panel1.MinimumSize = new Size(0, 150);
-            panel1.Name = "panel1";
-            panel1.Padding = new Padding(15, 10, 0, 0);
-            panel1.Size = new Size(1231, 160);
-            panel1.TabIndex = 6;
+            footer_pnl.ColumnCount = 2;
+            footer_pnl.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 36F));
+            footer_pnl.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 64F));
+            footer_pnl.Controls.Add(archive_btn, 0, 0);
+            footer_pnl.Controls.Add(save_btn, 1, 0);
+            footer_pnl.Dock = DockStyle.Fill;
+            footer_pnl.Location = new Point(0, 622);
+            footer_pnl.Margin = new Padding(0);
+            footer_pnl.Name = "footer_pnl";
+            footer_pnl.Padding = new Padding(0, 16, 0, 0);
+            footer_pnl.RowCount = 1;
+            footer_pnl.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            footer_pnl.Size = new Size(1275, 84);
+            footer_pnl.TabIndex = 2;
+            footer_pnl.Tag = "base";
             // 
             // archive_btn
             // 
-            archive_btn.BackColor = Color.FromArgb(54, 54, 54);
-            archive_btn.Dock = DockStyle.Top;
-            archive_btn.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            archive_btn.ForeColor = Color.White;
-            archive_btn.Location = new Point(15, 10);
-            archive_btn.Margin = new Padding(0);
-            archive_btn.MaximumSize = new Size(0, 70);
-            archive_btn.MinimumSize = new Size(0, 70);
+            archive_btn.Cursor = Cursors.Hand;
+            archive_btn.Dock = DockStyle.Fill;
+            archive_btn.FlatStyle = FlatStyle.Flat;
+            archive_btn.Font = new Font("Segoe UI Semibold", 10.5F, FontStyle.Bold);
+            archive_btn.IconChar = IconChar.BoxArchive;
+            archive_btn.IconColor = Color.Black;
+            archive_btn.IconFont = IconFont.Auto;
+            archive_btn.IconSize = 30;
+            archive_btn.ImageAlign = ContentAlignment.MiddleLeft;
+            archive_btn.Location = new Point(0, 16);
+            archive_btn.Margin = new Padding(0, 0, 12, 0);
             archive_btn.Name = "archive_btn";
-            archive_btn.Size = new Size(1216, 70);
-            archive_btn.TabIndex = 10;
-            archive_btn.Text = "Delete instance";
+            archive_btn.Padding = new Padding(24, 0, 24, 0);
+            archive_btn.Size = new Size(447, 68);
+            archive_btn.TabIndex = 0;
+            archive_btn.Tag = "outlined";
+            archive_btn.Text = "  Archive Instance";
+            archive_btn.TextImageRelation = TextImageRelation.ImageBeforeText;
             archive_btn.UseVisualStyleBackColor = false;
             archive_btn.Click += archive_btn_Click;
             // 
             // save_btn
             // 
-            save_btn.BackColor = Color.FromArgb(54, 54, 54);
-            save_btn.Dock = DockStyle.Bottom;
-            save_btn.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            save_btn.ForeColor = Color.White;
-            save_btn.Location = new Point(15, 90);
-            save_btn.Margin = new Padding(0);
-            save_btn.MaximumSize = new Size(0, 70);
-            save_btn.MinimumSize = new Size(0, 70);
+            save_btn.Cursor = Cursors.Hand;
+            save_btn.Dock = DockStyle.Fill;
+            save_btn.FlatAppearance.BorderSize = 0;
+            save_btn.FlatStyle = FlatStyle.Flat;
+            save_btn.Font = new Font("Segoe UI Semibold", 11F, FontStyle.Bold);
+            save_btn.IconChar = IconChar.Save;
+            save_btn.IconColor = Color.Black;
+            save_btn.IconFont = IconFont.Auto;
+            save_btn.IconSize = 30;
+            save_btn.ImageAlign = ContentAlignment.MiddleLeft;
+            save_btn.Location = new Point(471, 16);
+            save_btn.Margin = new Padding(12, 0, 0, 0);
             save_btn.Name = "save_btn";
-            save_btn.Size = new Size(1216, 70);
-            save_btn.TabIndex = 9;
-            save_btn.Text = "Save";
+            save_btn.Padding = new Padding(24, 0, 24, 0);
+            save_btn.Size = new Size(804, 68);
+            save_btn.TabIndex = 1;
+            save_btn.Tag = "cta";
+            save_btn.Text = "  Save Changes";
+            save_btn.TextImageRelation = TextImageRelation.ImageBeforeText;
             save_btn.UseVisualStyleBackColor = false;
             save_btn.Click += save_btn_Click;
             // 
@@ -219,35 +378,55 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.FromArgb(54, 54, 54);
             ClientSize = new Size(1331, 762);
-            Controls.Add(base_pnl);
+            Controls.Add(root_shell);
+            FormBorderStyle = FormBorderStyle.None;
             Name = "BaseAddInstance";
-            Padding = new Padding(30);
+            Padding = new Padding(28);
             Tag = "workplace";
-            Text = "Form1";
-            base_pnl.ResumeLayout(false);
-            selector_pnl.ResumeLayout(false);
-            groupBox1.ResumeLayout(false);
-            tableLayoutPanel1.ResumeLayout(false);
-            tableLayoutPanel1.PerformLayout();
-            panel1.ResumeLayout(false);
+            Text = "BaseAddInstance";
+            root_shell.ResumeLayout(false);
+            selector_card.ResumeLayout(false);
+            selector_inner.ResumeLayout(false);
+            selector_header_pnl.ResumeLayout(false);
+            selector_header_pnl.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)selector_icon).EndInit();
+            selector_fields_pnl.ResumeLayout(false);
+            selector_fields_pnl.PerformLayout();
+            content_card.ResumeLayout(false);
+            content_header_pnl.ResumeLayout(false);
+            content_header_pnl.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)content_icon).EndInit();
+            footer_pnl.ResumeLayout(false);
             ResumeLayout(false);
         }
 
         #endregion
 
-        private Panel base_pnl;
-        private Panel selector_pnl;
-        private GroupBox groupBox1;
-        private TableLayoutPanel tableLayoutPanel1;
+        private TableLayoutPanel root_shell;
+
+        private Panel selector_card;
+        private TableLayoutPanel selector_inner;
+        private Panel selector_header_pnl;
+        private IconPictureBox selector_icon;
+        private Label selector_title_lbl;
+        private Label selector_subtitle_lbl;
+        private Panel selector_divider;
+        private TableLayoutPanel selector_fields_pnl;
+        private Label instance_lbl;
+        private Label action_lbl;
         private ComboBox selector_cb;
-        private Label label1;
         private ComboBox action_cb;
-        private Label label2;
+
+        private Panel content_card;
+        private Panel content_header_pnl;
+        private IconPictureBox content_icon;
+        private Label content_title_lbl;
+        private Panel content_divider;
         private Panel usercontrol_pnl;
-        private Panel panel1;
-        private Button archive_btn;
-        private Button save_btn;
+
+        private TableLayoutPanel footer_pnl;
+        private IconButton archive_btn;
+        private IconButton save_btn;
     }
 }

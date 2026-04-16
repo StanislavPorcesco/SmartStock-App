@@ -22,10 +22,30 @@ namespace SmartStock.Forms
             ThemeManager.OnThemeChanged += HandleThemeUpdate;
 
             leftBorderBtn = new Panel();
-            leftBorderBtn.Size = new Size(7, 75);
-            menu_pnl.Controls.Add(leftBorderBtn);
-            add_btn_Click(this.add_btn, EventArgs.Empty);
+            leftBorderBtn.Size = new Size(7, 52);
+            menu_buttons_pnl.Controls.Add(leftBorderBtn);
+            leftBorderBtn.Visible = false;
 
+            PopulateUserCard();
+
+            add_btn_Click(this.add_btn, EventArgs.Empty);
+        }
+
+        private void PopulateUserCard()
+        {
+            var user = SessionManager.CurrentUser;
+            if (user != null)
+            {
+                user_name_lbl.Text = string.IsNullOrWhiteSpace(user.FullName) ? user.Username : user.FullName;
+                user_role_lbl.Text = (user.Role ?? "USER").ToUpperInvariant();
+                status_lbl.Text    = $"Signed in as {user.Username}";
+            }
+            else
+            {
+                user_name_lbl.Text = "Guest";
+                user_role_lbl.Text = "OFFLINE";
+                status_lbl.Text    = "Ready";
+            }
         }
 
         //Metode 
@@ -58,23 +78,23 @@ namespace SmartStock.Forms
             {
                 currentBtn = (IconButton)senderBtn;
                 currentBtn.TextAlign = ContentAlignment.MiddleLeft;
-                currentBtn.BackColor = ThemeManager.GetCurrentPalette().LightColor;
+                var p = ThemeManager.GetCurrentPalette();
+                currentBtn.BackColor = p.Surface;
+                currentBtn.ForeColor = p.TextPrimary;
+                currentBtn.IconColor = p.Accent;
 
-                //Left border button
-                leftBorderBtn.BackColor = ThemeManager.GetCurrentPalette().Text;
-                int buttonPositionInMenu = currentBtn.Location.Y + menu_buttons_pnl.Location.Y;
-                leftBorderBtn.Location = new Point(0, buttonPositionInMenu);
-                leftBorderBtn.Height = currentBtn.Height;
-                leftBorderBtn.Visible = true;
+                // Left border: amber accent strip marks the active section
+                leftBorderBtn.BackColor = p.Accent;
+                leftBorderBtn.Location = new Point(0, currentBtn.Location.Y);
+                leftBorderBtn.Height   = currentBtn.Height;
+                leftBorderBtn.Visible  = true;
                 leftBorderBtn.BringToFront();
 
-                //iconCurentChildForm
-                iconCurentChildForm.IconChar = currentBtn.IconChar;
-                iconCurentChildForm.IconColor = currentBtn.IconColor;
+                iconCurentChildForm.IconChar  = currentBtn.IconChar;
+                iconCurentChildForm.IconColor = p.Accent;
 
-                //lableCurrentChildForm
-                labelCurentChildForm.Text = currentBtn.Text;
-                labelCurentChildForm.ForeColor = currentBtn.ForeColor;
+                labelCurentChildForm.Text      = currentBtn.Text.Trim();
+                labelCurentChildForm.ForeColor = p.TextPrimary;
             }
         }
 
@@ -82,13 +102,13 @@ namespace SmartStock.Forms
         {
             if (currentBtn != null)
             {
-                currentBtn.TextAlign = ContentAlignment.MiddleCenter;
-                currentBtn.BackColor = ThemeManager.GetCurrentPalette().DarkColor;
-                currentBtn.TextImageRelation = TextImageRelation.ImageBeforeText;
-                currentBtn.ImageAlign = ContentAlignment.MiddleLeft;
-                leftBorderBtn.Location = new Point(-10, currentBtn.Location.Y);
+                var p = ThemeManager.GetCurrentPalette();
+                currentBtn.TextAlign  = ContentAlignment.MiddleLeft;
+                currentBtn.BackColor  = Color.Transparent;
+                currentBtn.ForeColor  = p.TextSecondary;
+                currentBtn.IconColor  = p.TextSecondary;
+                leftBorderBtn.Visible = false;
             }
-
         }
 
         private void OpenChildForm(Form childForm)
@@ -130,14 +150,6 @@ namespace SmartStock.Forms
         {
             ActivateButton(sender);
             OpenChildForm(new SearchForm());
-        }
-
-        private void modify_btn_Click(object sender, EventArgs e)
-        {
-            ActivateButton(sender);
-            BaseModifyInstance form = new BaseModifyInstance();
-            OpenChildForm(form);
-            DataLayer.OpenUserControl(form, new ModifyProduct());
         }
 
         private void analyze_btn_Click(object sender, EventArgs e)

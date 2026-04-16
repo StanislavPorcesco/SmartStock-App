@@ -21,6 +21,8 @@ namespace SmartStock.Forms.User_Control
             password = _password;
             fullname = _fullname;
             email = _email;
+            ThemeManager.Apply(this);
+            ThemeManager.OnThemeChanged += () => ThemeManager.Apply(this);
         }
         private void confirm_btn_Click(object sender, EventArgs e)
         {

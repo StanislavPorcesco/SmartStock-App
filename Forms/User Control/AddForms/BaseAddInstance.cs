@@ -1,3 +1,4 @@
+using FontAwesome.Sharp;
 using SmartStock.Classes.Data.Interfaces;
 using SmartStock.Classes.Utils;
 using SmartStock.Forms.AddForms;
@@ -12,6 +13,7 @@ namespace SmartStock
         public BaseAddInstance()
         {
             InitializeComponent();
+            ThemeManager.Apply(this);
             ThemeManager.OnThemeChanged += HandleThemeUpdate;
             DataLayer.PopulateSelector(selector_cb);
             action_cb.Items.AddRange(new object[] { "Add Instance", "Modify Instance" });
@@ -71,6 +73,7 @@ namespace SmartStock
                     usercontrol_pnl.Controls.Add(controlToOpen);
 
                     ThemeManager.Apply(controlToOpen);
+                    UpdateContentHeader(selectedOption);
                     SyncActionState();
                 }
             }
@@ -160,8 +163,27 @@ namespace SmartStock
                 bool isAddMode = action_cb.SelectedItem?.ToString() == "Add Instance";
                 control.UpdateUIState(isAddMode);
                 archive_btn.Enabled = !isAddMode;
+                save_btn.Text = isAddMode ? "  Add to Inventory" : "  Save Changes";
+                save_btn.IconChar = isAddMode ? IconChar.Plus : IconChar.FloppyDisk;
                 ThemeManager.Apply(controlToOpen);
             }
+        }
+
+        private void UpdateContentHeader(string selectedOption)
+        {
+            content_title_lbl.Text = $"Current Instance — {selectedOption}";
+            content_icon.IconChar = selectedOption switch
+            {
+                "Product"        => IconChar.Box,
+                "Category"       => IconChar.Tags,
+                "Supplier"       => IconChar.Truck,
+                "Transaction"    => IconChar.ArrowRightArrowLeft,
+                "Customer"       => IconChar.UserTie,
+                "Sale"           => IconChar.CashRegister,
+                "ExternalFactor" => IconChar.CloudBolt,
+                "User"           => IconChar.UserGear,
+                _                => IconChar.TableList
+            };
         }
     }
 }

@@ -28,9 +28,6 @@
     <Compile Update="Forms\User Control\AddForms\AddUser.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="Forms\User Control\ModifyForms\BaseModifyInstance.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Update="Forms\LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
