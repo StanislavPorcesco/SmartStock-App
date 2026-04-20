@@ -231,6 +231,12 @@ namespace SmartStock.Forms.User_Control
             return int.TryParse(user_id_tb.Text, out int id) ? id : -1;
         }
 
+        public void LoadById(int id)
+        {
+            user_id_tb.Text = id.ToString();
+            SearchAndLoadUser(id);
+        }
+
         public void ClearControls()
         {
             user_id_tb.Clear();

@@ -194,7 +194,7 @@ namespace SmartStock.Forms
             // restart_lbl
             // 
             restart_lbl.Dock = DockStyle.Top;
-            restart_lbl.Font = new Font("Segoe UI", 20.25F, FontStyle.Bold);
+            restart_lbl.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
             restart_lbl.Location = new Point(0, 10);
             restart_lbl.Margin = new Padding(0);
             restart_lbl.Name = "restart_lbl";

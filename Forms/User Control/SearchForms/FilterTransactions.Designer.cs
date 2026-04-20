@@ -1,13 +1,13 @@
-﻿namespace SmartStock.Forms.User_Control.SearchForms
+namespace SmartStock.Forms.User_Control.SearchForms
 {
     partial class FilterTransactions
     {
-        /// <summary> 
+        /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -22,8 +22,8 @@
 
         #region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -61,6 +61,7 @@
             panel1.Padding = new Padding(0, 10, 0, 0);
             panel1.Size = new Size(719, 667);
             panel1.TabIndex = 0;
+            panel1.Tag = "card";
             // 
             // tableLayoutPanel1
             // 
@@ -94,15 +95,15 @@
             // date_lbl
             // 
             date_lbl.AutoSize = true;
-            date_lbl.Dock = DockStyle.Left;
-            date_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            date_lbl.ForeColor = Color.White;
+            date_lbl.Dock = DockStyle.Fill;
+            date_lbl.Font = new Font("Segoe UI", 10F);
             date_lbl.Location = new Point(10, 0);
             date_lbl.Margin = new Padding(10, 0, 3, 0);
             date_lbl.Name = "date_lbl";
             tableLayoutPanel1.SetRowSpan(date_lbl, 2);
-            date_lbl.Size = new Size(111, 92);
+            date_lbl.Size = new Size(346, 104);
             date_lbl.TabIndex = 8;
+            date_lbl.Tag = "muted";
             date_lbl.Text = "Date Range";
             date_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
@@ -110,67 +111,63 @@
             // 
             date_start.Dock = DockStyle.Fill;
             date_start.DropDownAlign = LeftRightAlignment.Right;
-            date_start.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            date_start.Font = new Font("Segoe UI", 11F);
             date_start.Format = DateTimePickerFormat.Custom;
-            date_start.Location = new Point(359, 10);
-            date_start.Margin = new Padding(0, 10, 10, 5);
+            date_start.Location = new Point(365, 10);
+            date_start.Margin = new Padding(6, 10, 0, 10);
             date_start.Name = "date_start";
-            date_start.Size = new Size(350, 31);
+            date_start.Size = new Size(354, 32);
             date_start.TabIndex = 28;
             // 
             // user_cb
             // 
-            user_cb.BackColor = Color.FromArgb(54, 54, 54);
             user_cb.Dock = DockStyle.Fill;
             user_cb.FlatStyle = FlatStyle.Flat;
-            user_cb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            user_cb.ForeColor = Color.White;
+            user_cb.Font = new Font("Segoe UI", 11F);
             user_cb.FormattingEnabled = true;
-            user_cb.Location = new Point(359, 155);
-            user_cb.Margin = new Padding(0, 10, 10, 10);
+            user_cb.Location = new Point(365, 167);
+            user_cb.Margin = new Padding(6, 10, 0, 10);
             user_cb.Name = "user_cb";
-            user_cb.Size = new Size(350, 33);
+            user_cb.Size = new Size(354, 33);
             user_cb.TabIndex = 30;
             // 
             // type_cb
             // 
-            type_cb.BackColor = Color.FromArgb(54, 54, 54);
             type_cb.Dock = DockStyle.Fill;
             type_cb.FlatStyle = FlatStyle.Flat;
-            type_cb.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            type_cb.ForeColor = Color.White;
+            type_cb.Font = new Font("Segoe UI", 11F);
             type_cb.FormattingEnabled = true;
-            type_cb.Location = new Point(359, 102);
-            type_cb.Margin = new Padding(0, 10, 10, 10);
+            type_cb.Location = new Point(365, 114);
+            type_cb.Margin = new Padding(6, 10, 0, 10);
             type_cb.Name = "type_cb";
-            type_cb.Size = new Size(350, 33);
+            type_cb.Size = new Size(354, 33);
             type_cb.TabIndex = 29;
             // 
             // user_lbl
             // 
             user_lbl.AutoSize = true;
-            user_lbl.Dock = DockStyle.Left;
-            user_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            user_lbl.ForeColor = Color.White;
-            user_lbl.Location = new Point(10, 145);
+            user_lbl.Dock = DockStyle.Fill;
+            user_lbl.Font = new Font("Segoe UI", 10F);
+            user_lbl.Location = new Point(10, 157);
             user_lbl.Margin = new Padding(10, 0, 3, 0);
             user_lbl.Name = "user_lbl";
-            user_lbl.Size = new Size(151, 53);
+            user_lbl.Size = new Size(346, 53);
             user_lbl.TabIndex = 18;
+            user_lbl.Tag = "muted";
             user_lbl.Text = "User / Employee";
             user_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // type_lbl
             // 
             type_lbl.AutoSize = true;
-            type_lbl.Dock = DockStyle.Left;
-            type_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            type_lbl.ForeColor = Color.White;
-            type_lbl.Location = new Point(10, 92);
+            type_lbl.Dock = DockStyle.Fill;
+            type_lbl.Font = new Font("Segoe UI", 10F);
+            type_lbl.Location = new Point(10, 104);
             type_lbl.Margin = new Padding(10, 0, 3, 0);
             type_lbl.Name = "type_lbl";
-            type_lbl.Size = new Size(157, 53);
+            type_lbl.Size = new Size(346, 53);
             type_lbl.TabIndex = 16;
+            type_lbl.Tag = "muted";
             type_lbl.Text = "Transaction Type";
             type_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
@@ -178,26 +175,26 @@
             // 
             date_end.Dock = DockStyle.Fill;
             date_end.DropDownAlign = LeftRightAlignment.Right;
-            date_end.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            date_end.Font = new Font("Segoe UI", 11F);
             date_end.Format = DateTimePickerFormat.Custom;
-            date_end.Location = new Point(359, 51);
-            date_end.Margin = new Padding(0, 5, 10, 10);
+            date_end.Location = new Point(365, 62);
+            date_end.Margin = new Padding(6, 10, 0, 10);
             date_end.Name = "date_end";
-            date_end.Size = new Size(350, 31);
+            date_end.Size = new Size(354, 32);
             date_end.TabIndex = 31;
             // 
             // range_lbl
             // 
             range_lbl.AutoSize = true;
-            range_lbl.Dock = DockStyle.Left;
-            range_lbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            range_lbl.ForeColor = Color.White;
-            range_lbl.Location = new Point(10, 198);
+            range_lbl.Dock = DockStyle.Fill;
+            range_lbl.Font = new Font("Segoe UI", 10F);
+            range_lbl.Location = new Point(10, 210);
             range_lbl.Margin = new Padding(10, 0, 3, 0);
             range_lbl.Name = "range_lbl";
             tableLayoutPanel1.SetRowSpan(range_lbl, 2);
-            range_lbl.Size = new Size(146, 84);
+            range_lbl.Size = new Size(346, 100);
             range_lbl.TabIndex = 24;
+            range_lbl.Tag = "muted";
             range_lbl.Text = "Quantity Range";
             range_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
@@ -206,73 +203,80 @@
             panel2.Controls.Add(label4);
             panel2.Controls.Add(min_numeric);
             panel2.Dock = DockStyle.Fill;
-            panel2.Location = new Point(359, 208);
-            panel2.Margin = new Padding(0, 10, 10, 5);
-            panel2.MaximumSize = new Size(0, 27);
+            panel2.Location = new Point(365, 220);
+            panel2.Margin = new Padding(6, 10, 0, 10);
+            panel2.MaximumSize = new Size(0, 30);
             panel2.Name = "panel2";
-            panel2.Size = new Size(350, 27);
+            panel2.Size = new Size(354, 30);
             panel2.TabIndex = 22;
+            panel2.Tag = "card";
             // 
             // label4
             // 
             label4.AutoSize = true;
             label4.Dock = DockStyle.Left;
-            label4.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label4.ForeColor = Color.White;
+            label4.Font = new Font("Segoe UI", 10F);
             label4.Location = new Point(0, 0);
             label4.Name = "label4";
-            label4.Size = new Size(45, 25);
+            label4.Size = new Size(39, 23);
             label4.TabIndex = 21;
+            label4.Tag = "muted";
             label4.Text = "Min";
             label4.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // min_numeric
             // 
             min_numeric.Dock = DockStyle.Right;
-            min_numeric.Location = new Point(222, 0);
+            min_numeric.Font = new Font("Segoe UI", 11F);
+            min_numeric.Location = new Point(226, 0);
             min_numeric.Margin = new Padding(0, 10, 0, 0);
+            min_numeric.Maximum = new decimal(new int[] { 999999, 0, 0, 0 });
             min_numeric.Name = "min_numeric";
-            min_numeric.Size = new Size(128, 27);
+            min_numeric.Size = new Size(128, 32);
             min_numeric.TabIndex = 0;
+            min_numeric.Tag = "range_lock";
             // 
             // panel3
             // 
             panel3.Controls.Add(label5);
             panel3.Controls.Add(max_numeric);
             panel3.Dock = DockStyle.Fill;
-            panel3.Location = new Point(359, 245);
-            panel3.Margin = new Padding(0, 5, 10, 10);
-            panel3.MaximumSize = new Size(0, 27);
+            panel3.Location = new Point(365, 270);
+            panel3.Margin = new Padding(6, 10, 0, 10);
+            panel3.MaximumSize = new Size(0, 30);
             panel3.Name = "panel3";
-            panel3.Size = new Size(350, 27);
+            panel3.Size = new Size(354, 30);
             panel3.TabIndex = 23;
+            panel3.Tag = "card";
             // 
             // label5
             // 
             label5.AutoSize = true;
             label5.Dock = DockStyle.Left;
-            label5.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label5.ForeColor = Color.White;
+            label5.Font = new Font("Segoe UI", 10F);
             label5.Location = new Point(0, 0);
             label5.Name = "label5";
-            label5.Size = new Size(49, 25);
+            label5.Size = new Size(42, 23);
             label5.TabIndex = 22;
+            label5.Tag = "muted";
             label5.Text = "Max";
             label5.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // max_numeric
             // 
             max_numeric.Dock = DockStyle.Right;
-            max_numeric.Location = new Point(222, 0);
+            max_numeric.Font = new Font("Segoe UI", 11F);
+            max_numeric.Location = new Point(226, 0);
+            max_numeric.Maximum = new decimal(new int[] { 999999, 0, 0, 0 });
             max_numeric.Name = "max_numeric";
-            max_numeric.Size = new Size(128, 27);
+            max_numeric.Size = new Size(128, 32);
             max_numeric.TabIndex = 0;
+            max_numeric.Tag = "range_lock";
             // 
             // FilterTransactions
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.FromArgb(64, 64, 64);
             Controls.Add(panel1);
             Name = "FilterTransactions";
             Size = new Size(719, 667);

@@ -13,5 +13,6 @@ namespace SmartStock.Classes.Data.Interfaces
         void UpdateUIState(bool isAddMode);
         int GetCurrentId();
         void ClearControls();
+        void LoadById(int id);
     }
 }

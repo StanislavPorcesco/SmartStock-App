@@ -54,9 +54,9 @@ namespace SmartStock.Forms.User_Control
             fields_table.SuspendLayout();
             search_row.SuspendLayout();
             SuspendLayout();
-            //
+            // 
             // base_pnl
-            //
+            // 
             base_pnl.Controls.Add(fields_table);
             base_pnl.Dock = DockStyle.Fill;
             base_pnl.Location = new Point(0, 0);
@@ -64,10 +64,10 @@ namespace SmartStock.Forms.User_Control
             base_pnl.Padding = new Padding(28, 24, 28, 24);
             base_pnl.Size = new Size(907, 572);
             base_pnl.TabIndex = 0;
-            base_pnl.Tag = "base";
-            //
+            base_pnl.Tag = "card";
+            // 
             // fields_table
-            //
+            // 
             fields_table.ColumnCount = 2;
             fields_table.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 160F));
             fields_table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
@@ -101,9 +101,9 @@ namespace SmartStock.Forms.User_Control
             fields_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 52F));
             fields_table.Size = new Size(851, 416);
             fields_table.TabIndex = 0;
-            //
+            // 
             // label5
-            //
+            // 
             label5.Dock = DockStyle.Fill;
             label5.Font = new Font("Segoe UI", 10F);
             label5.Location = new Point(0, 0);
@@ -114,9 +114,9 @@ namespace SmartStock.Forms.User_Control
             label5.Tag = "muted";
             label5.Text = "User ID";
             label5.TextAlign = ContentAlignment.MiddleLeft;
-            //
+            // 
             // search_row
-            //
+            // 
             search_row.Controls.Add(user_id_tb);
             search_row.Controls.Add(search_btn);
             search_row.Dock = DockStyle.Fill;
@@ -124,9 +124,10 @@ namespace SmartStock.Forms.User_Control
             search_row.Name = "search_row";
             search_row.Size = new Size(685, 46);
             search_row.TabIndex = 1;
-            //
+            search_row.Tag = "card";
+            // 
             // user_id_tb
-            //
+            // 
             user_id_tb.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             user_id_tb.Font = new Font("Segoe UI", 11F);
             user_id_tb.Location = new Point(0, 8);
@@ -134,15 +135,16 @@ namespace SmartStock.Forms.User_Control
             user_id_tb.Name = "user_id_tb";
             user_id_tb.Size = new Size(533, 32);
             user_id_tb.TabIndex = 0;
-            user_id_tb.Tag = "flat";
-            //
+            user_id_tb.Tag = "";
+            // 
             // search_btn
-            //
+            // 
             search_btn.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            search_btn.FlatAppearance.BorderSize = 1;
             search_btn.FlatStyle = FlatStyle.Flat;
             search_btn.Font = new Font("Segoe UI Semibold", 9.5F, FontStyle.Bold);
-            search_btn.IconChar = IconChar.MagnifyingGlass;
+            search_btn.IconChar = IconChar.Search;
+            search_btn.IconColor = Color.Black;
+            search_btn.IconFont = IconFont.Auto;
             search_btn.IconSize = 18;
             search_btn.Location = new Point(545, 4);
             search_btn.Name = "search_btn";
@@ -153,9 +155,9 @@ namespace SmartStock.Forms.User_Control
             search_btn.TextImageRelation = TextImageRelation.ImageBeforeText;
             search_btn.UseVisualStyleBackColor = true;
             search_btn.Click += search_btn_Click;
-            //
+            // 
             // db_lbl
-            //
+            // 
             db_lbl.Dock = DockStyle.Fill;
             db_lbl.Font = new Font("Segoe UI", 10F);
             db_lbl.Location = new Point(0, 52);
@@ -166,9 +168,9 @@ namespace SmartStock.Forms.User_Control
             db_lbl.Tag = "muted";
             db_lbl.Text = "Username";
             db_lbl.TextAlign = ContentAlignment.MiddleLeft;
-            //
+            // 
             // username_tb
-            //
+            // 
             username_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             username_tb.Font = new Font("Segoe UI", 11F);
             username_tb.Location = new Point(163, 62);
@@ -176,10 +178,10 @@ namespace SmartStock.Forms.User_Control
             username_tb.Name = "username_tb";
             username_tb.Size = new Size(685, 32);
             username_tb.TabIndex = 3;
-            username_tb.Tag = "flat";
-            //
+            username_tb.Tag = "";
+            // 
             // label2
-            //
+            // 
             label2.Dock = DockStyle.Fill;
             label2.Font = new Font("Segoe UI", 10F);
             label2.Location = new Point(0, 104);
@@ -190,9 +192,9 @@ namespace SmartStock.Forms.User_Control
             label2.Tag = "muted";
             label2.Text = "Full Name";
             label2.TextAlign = ContentAlignment.MiddleLeft;
-            //
+            // 
             // fullname_tb
-            //
+            // 
             fullname_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             fullname_tb.Font = new Font("Segoe UI", 11F);
             fullname_tb.Location = new Point(163, 114);
@@ -200,10 +202,10 @@ namespace SmartStock.Forms.User_Control
             fullname_tb.Name = "fullname_tb";
             fullname_tb.Size = new Size(685, 32);
             fullname_tb.TabIndex = 5;
-            fullname_tb.Tag = "flat";
-            //
+            fullname_tb.Tag = "";
+            // 
             // logs_lbl
-            //
+            // 
             logs_lbl.Dock = DockStyle.Fill;
             logs_lbl.Font = new Font("Segoe UI", 10F);
             logs_lbl.Location = new Point(0, 156);
@@ -214,9 +216,9 @@ namespace SmartStock.Forms.User_Control
             logs_lbl.Tag = "muted";
             logs_lbl.Text = "New Password";
             logs_lbl.TextAlign = ContentAlignment.MiddleLeft;
-            //
+            // 
             // password_tb
-            //
+            // 
             password_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             password_tb.Font = new Font("Segoe UI", 11F);
             password_tb.Location = new Point(163, 166);
@@ -224,10 +226,10 @@ namespace SmartStock.Forms.User_Control
             password_tb.Name = "password_tb";
             password_tb.Size = new Size(685, 32);
             password_tb.TabIndex = 7;
-            password_tb.Tag = "flat";
-            //
+            password_tb.Tag = "";
+            // 
             // label4
-            //
+            // 
             label4.Dock = DockStyle.Fill;
             label4.Font = new Font("Segoe UI", 10F);
             label4.Location = new Point(0, 208);
@@ -238,9 +240,9 @@ namespace SmartStock.Forms.User_Control
             label4.Tag = "muted";
             label4.Text = "Email";
             label4.TextAlign = ContentAlignment.MiddleLeft;
-            //
+            // 
             // email_tb
-            //
+            // 
             email_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             email_tb.Font = new Font("Segoe UI", 11F);
             email_tb.Location = new Point(163, 218);
@@ -248,10 +250,10 @@ namespace SmartStock.Forms.User_Control
             email_tb.Name = "email_tb";
             email_tb.Size = new Size(685, 32);
             email_tb.TabIndex = 9;
-            email_tb.Tag = "flat";
-            //
+            email_tb.Tag = "";
+            // 
             // label3
-            //
+            // 
             label3.Dock = DockStyle.Fill;
             label3.Font = new Font("Segoe UI", 10F);
             label3.Location = new Point(0, 260);
@@ -262,22 +264,22 @@ namespace SmartStock.Forms.User_Control
             label3.Tag = "muted";
             label3.Text = "Role";
             label3.TextAlign = ContentAlignment.MiddleLeft;
-            //
+            // 
             // role_cb
-            //
+            // 
             role_cb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             role_cb.DropDownStyle = ComboBoxStyle.DropDownList;
             role_cb.FlatStyle = FlatStyle.Flat;
             role_cb.Font = new Font("Segoe UI", 11F);
             role_cb.FormattingEnabled = true;
-            role_cb.Location = new Point(163, 270);
+            role_cb.Location = new Point(163, 269);
             role_cb.Margin = new Padding(3, 5, 3, 5);
             role_cb.Name = "role_cb";
             role_cb.Size = new Size(685, 33);
             role_cb.TabIndex = 11;
-            //
+            // 
             // label7
-            //
+            // 
             label7.Dock = DockStyle.Fill;
             label7.Font = new Font("Segoe UI", 10F);
             label7.Location = new Point(0, 312);
@@ -288,20 +290,22 @@ namespace SmartStock.Forms.User_Control
             label7.Tag = "muted";
             label7.Text = "Is Active";
             label7.TextAlign = ContentAlignment.MiddleLeft;
-            //
+            // 
             // is_active_ck
-            //
-            is_active_ck.Anchor = AnchorStyles.Left;
+            // 
             is_active_ck.AutoSize = true;
-            is_active_ck.Location = new Point(163, 329);
+            is_active_ck.CheckAlign = ContentAlignment.MiddleRight;
+            is_active_ck.Dock = DockStyle.Fill;
+            is_active_ck.Location = new Point(163, 317);
             is_active_ck.Margin = new Padding(3, 5, 3, 5);
             is_active_ck.Name = "is_active_ck";
-            is_active_ck.Size = new Size(18, 17);
+            is_active_ck.Size = new Size(685, 42);
             is_active_ck.TabIndex = 13;
+            is_active_ck.Text = "On / Off";
             is_active_ck.UseVisualStyleBackColor = true;
-            //
+            // 
             // label8
-            //
+            // 
             label8.Dock = DockStyle.Fill;
             label8.Font = new Font("Segoe UI", 10F);
             label8.Location = new Point(0, 364);
@@ -312,9 +316,9 @@ namespace SmartStock.Forms.User_Control
             label8.Tag = "muted";
             label8.Text = "Failed Count";
             label8.TextAlign = ContentAlignment.MiddleLeft;
-            //
+            // 
             // failed_count_tb
-            //
+            // 
             failed_count_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             failed_count_tb.Font = new Font("Segoe UI", 11F);
             failed_count_tb.Location = new Point(163, 374);
@@ -322,10 +326,10 @@ namespace SmartStock.Forms.User_Control
             failed_count_tb.Name = "failed_count_tb";
             failed_count_tb.Size = new Size(685, 32);
             failed_count_tb.TabIndex = 15;
-            failed_count_tb.Tag = "flat";
-            //
+            failed_count_tb.Tag = "";
+            // 
             // ModifyUser
-            //
+            // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(base_pnl);

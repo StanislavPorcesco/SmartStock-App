@@ -7,6 +7,7 @@ namespace SmartStock.Classes.Utils
     using System;
     using System.Collections.Generic;
     using System.Drawing;
+    using System.Drawing.Drawing2D;
     using System.Reflection;
     using System.Windows.Documents;
     using System.Windows.Forms;
@@ -197,7 +198,7 @@ namespace SmartStock.Classes.Utils
                     Font gridFont = new Font("Segoe UI", 10, FontStyle.Regular);
                     Font headerFont = new Font("Segoe UI", 10, FontStyle.Bold);
                     // 1. Fundalul general al controlului (zona fără celule)
-                    dgv.BackgroundColor = theme.DarkColor;
+                    dgv.BackgroundColor = theme.Surface;
                     dgv.GridColor = theme.DarkColor; // Culoarea liniilor de demarcație
 
                     // 2. Dezactivăm stilul Windows pentru a permite culori custom pe Headere
@@ -217,9 +218,9 @@ namespace SmartStock.Classes.Utils
                     dgv.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
 
                     // 4. Stilul Headerelor de Coloane
-                    dgv.ColumnHeadersDefaultCellStyle.BackColor = theme.DarkColor;
+                    dgv.ColumnHeadersDefaultCellStyle.BackColor = theme.Surface;
                     dgv.ColumnHeadersDefaultCellStyle.ForeColor = theme.Text;
-                    dgv.ColumnHeadersDefaultCellStyle.SelectionBackColor = theme.DarkColor; // Evită schimbarea culorii la click
+                    dgv.ColumnHeadersDefaultCellStyle.SelectionBackColor = theme.Surface; // Evită schimbarea culorii la click
                     dgv.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
                     dgv.ColumnHeadersDefaultCellStyle.Font = headerFont;
 
@@ -252,6 +253,7 @@ namespace SmartStock.Classes.Utils
                     break;
                 case ComboBox combo:
                     combo.FlatStyle = FlatStyle.Flat; 
+                 
                     combo.BackColor = theme.LightColor;
                     combo.ForeColor = theme.Text;
                     combo.DisableMouseWheelScroll();
@@ -271,6 +273,10 @@ namespace SmartStock.Classes.Utils
                         case "card":
                             pnl.BackColor = theme.Surface;
                             break;
+                        case "main_card":
+                            pnl.BackColor = theme.Surface;
+                            RoundBorders(pnl);
+                            break;
                         case "accent":
                             pnl.BackColor = theme.Accent;
                             break;
@@ -288,7 +294,8 @@ namespace SmartStock.Classes.Utils
                     grp.BackColor = theme.DarkColor;
                     break;
                  case CheckBox chk:
-                    chk.BackColor = theme.DarkColor;
+                    chk.BackColor = theme.LightColor;
+                    chk.ForeColor = theme.TextSecondary;
                     break;
                 case IconPictureBox pic:
                     pic.BackColor = Color.Transparent;
@@ -313,8 +320,8 @@ namespace SmartStock.Classes.Utils
                     date.ForeColor = theme.Text;
                     break;
                 case RadioButton radio:
-                    radio.BackColor = theme.DarkColor;
-                    radio.ForeColor = theme.Text;
+                    radio.BackColor = theme.LightColor;
+                    radio.ForeColor = theme.TextSecondary;
                     break;
                 case NumericUpDown num:
                     num.BackColor = theme.LightColor;
@@ -323,7 +330,7 @@ namespace SmartStock.Classes.Utils
                         num.Maximum = 9999999999;
                     break;
                 case CheckedListBox ck:
-                    ck.BackColor = theme.DarkColor;
+                    ck.BackColor = theme.LightColor;
                     ck.ForeColor = theme.Text;
                     break;
                 case TrackBar tr:
@@ -450,6 +457,38 @@ namespace SmartStock.Classes.Utils
             {
                 AdjustGridAutoSize(dgv);
             }
+        }
+
+        private static void RoundBorders(Control c)
+        {
+            if (c is Panel)
+            {
+                ApplyRoundRegion(c);
+                c.Resize -= RoundedPanel_Resize;
+                c.Resize += RoundedPanel_Resize;
+            }
+        }
+
+        private static void RoundedPanel_Resize(object sender, EventArgs e)
+        {
+            if (sender is Control c)
+                ApplyRoundRegion(c);
+        }
+
+        private static void ApplyRoundRegion(Control c)
+        {
+            int radius = 20;
+            GraphicsPath path = new GraphicsPath();
+            // Use Width-1 / Height-1 to stay within GDI+ visible bounds
+            Rectangle rect = new Rectangle(0, 0, c.Width - 1, c.Height - 1);
+
+            path.AddArc(rect.X, rect.Y, radius, radius, 180, 90);                          // Top-left
+            path.AddArc(rect.Right - radius, rect.Y, radius, radius, 270, 90);             // Top-right
+            path.AddArc(rect.Right - radius, rect.Bottom - radius, radius, radius, 0, 90); // Bottom-right
+            path.AddArc(rect.X, rect.Bottom - radius, radius, radius, 90, 90);             // Bottom-left
+            path.CloseFigure();
+
+            c.Region = new Region(path);
         }
     }
 }

@@ -52,6 +52,7 @@ namespace SmartStock.Classes.Data.Services
                 .GetAll()
                 .Where(s => s.SaleId == saleId)
                 .Include(s => s.SaleDetails)
+                    .ThenInclude(d => d.Product)
                 .Include(s => s.Customer)
                 .Include(s => s.User)
                 .AsNoTracking()

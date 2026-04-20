@@ -199,7 +199,7 @@ namespace SmartStock
             settings_table.Controls.Add(ai_pnl, 0, 2);
             settings_table.Controls.Add(factors_pnl, 1, 2);
             settings_table.Dock = DockStyle.Top;
-            settings_table.Location = new Point(0, 96);
+            settings_table.Location = new Point(0, 90);
             settings_table.Margin = new Padding(0);
             settings_table.Name = "settings_table";
             settings_table.RowCount = 3;
@@ -231,7 +231,7 @@ namespace SmartStock
             preferences_body.Padding = new Padding(22, 0, 22, 18);
             preferences_body.Size = new Size(650, 284);
             preferences_body.TabIndex = 0;
-            preferences_body.Tag = "card";
+            preferences_body.Tag = "main_card";
             // 
             // tableLayoutPanel1
             // 
@@ -323,6 +323,7 @@ namespace SmartStock
             // currency_tb
             // 
             currency_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            currency_tb.BackColor = SystemColors.Window;
             currency_tb.Font = new Font("Segoe UI", 10.5F);
             currency_tb.Location = new Point(248, 161);
             currency_tb.Margin = new Padding(6, 10, 0, 10);
@@ -398,7 +399,7 @@ namespace SmartStock
             reporting_body.Padding = new Padding(22, 0, 22, 18);
             reporting_body.Size = new Size(650, 284);
             reporting_body.TabIndex = 0;
-            reporting_body.Tag = "card";
+            reporting_body.Tag = "main_card";
             // 
             // tableLayoutPanel4
             // 
@@ -624,7 +625,7 @@ namespace SmartStock
             paths_body.Padding = new Padding(22, 0, 22, 18);
             paths_body.Size = new Size(650, 344);
             paths_body.TabIndex = 0;
-            paths_body.Tag = "card";
+            paths_body.Tag = "main_card";
             // 
             // tableLayoutPanel2
             // 
@@ -840,7 +841,7 @@ namespace SmartStock
             logging_body.Padding = new Padding(22, 0, 22, 18);
             logging_body.Size = new Size(650, 344);
             logging_body.TabIndex = 0;
-            logging_body.Tag = "card";
+            logging_body.Tag = "main_card";
             // 
             // tableLayoutPanel5
             // 
@@ -1059,7 +1060,7 @@ namespace SmartStock
             ai_body.Padding = new Padding(22, 0, 22, 18);
             ai_body.Size = new Size(650, 420);
             ai_body.TabIndex = 0;
-            ai_body.Tag = "card";
+            ai_body.Tag = "main_card";
             // 
             // tableLayoutPanel3
             // 
@@ -1305,7 +1306,7 @@ namespace SmartStock
             factors_body.Padding = new Padding(22, 0, 22, 18);
             factors_body.Size = new Size(650, 420);
             factors_body.TabIndex = 0;
-            factors_body.Tag = "card";
+            factors_body.Tag = "main_card";
             // 
             // tableLayoutPanel7
             // 
@@ -1483,7 +1484,7 @@ namespace SmartStock
             hero_pnl.Location = new Point(0, 0);
             hero_pnl.Name = "hero_pnl";
             hero_pnl.Padding = new Padding(4, 8, 0, 0);
-            hero_pnl.Size = new Size(1320, 96);
+            hero_pnl.Size = new Size(1320, 90);
             hero_pnl.TabIndex = 2;
             hero_pnl.Tag = "base";
             // 

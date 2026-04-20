@@ -201,5 +201,11 @@ namespace SmartStock.Forms.AddForms
             category_name_tb.Clear();
             ThemeManager.Apply(this);
         }
+
+        public void LoadById(int id)
+        {
+            category_id_tb.Text = id.ToString();
+            SearchAndLoadCategory(id);
+        }
     }
 }

@@ -6,6 +6,7 @@ using SmartStock.Classes.Models;
 using SmartStock.Classes.Utils;
 using SmartStock.Forms;
 using SmartStock.Forms.User_Control.SearchForms;
+using System.Drawing.Drawing2D;
 
 
 namespace SmartStock
@@ -572,6 +573,22 @@ namespace SmartStock
                     filterControl.ResetFilters();
                 }
             }
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+            int radius = 20; // Set your desired corner radius
+            GraphicsPath path = new GraphicsPath();
+            Rectangle rect = new Rectangle(0, 0, panel5.Width, panel5.Height);
+
+            // Create a rounded rectangle path
+            path.AddArc(rect.X, rect.Y, radius, radius, 180, 90); // Top-left
+            path.AddArc(rect.Right - radius, rect.Y, radius, radius, 270, 90); // Top-right
+            path.AddArc(rect.Right - radius, rect.Bottom - radius, radius, radius, 0, 90); // Bottom-right
+            path.AddArc(rect.X, rect.Bottom - radius, radius, radius, 90, 90); // Bottom-left
+            path.CloseFigure();
+
+            panel5.Region = new Region(path);
         }
     }
 }

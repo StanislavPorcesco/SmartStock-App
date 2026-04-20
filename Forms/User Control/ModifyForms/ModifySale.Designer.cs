@@ -31,7 +31,6 @@ namespace SmartStock.Forms.User_Control
         private void InitializeComponent()
         {
             base_pnl = new Panel();
-            root_table = new TableLayoutPanel();
             left_pnl = new Panel();
             cart_section = new Panel();
             cart_fields = new TableLayoutPanel();
@@ -61,57 +60,38 @@ namespace SmartStock.Forms.User_Control
             date_picker = new DateTimePicker();
             label2 = new Label();
             total_amount_tb = new TextBox();
-            right_pnl = new Panel();
-            sales_dgv = new DataGridView();
             base_pnl.SuspendLayout();
-            root_table.SuspendLayout();
             left_pnl.SuspendLayout();
             cart_section.SuspendLayout();
             cart_fields.SuspendLayout();
             cart_buttons.SuspendLayout();
             sale_fields.SuspendLayout();
             search_row.SuspendLayout();
-            right_pnl.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)sales_dgv).BeginInit();
             SuspendLayout();
             // 
             // base_pnl
             // 
             base_pnl.AutoScroll = true;
-            base_pnl.Controls.Add(root_table);
+            base_pnl.Controls.Add(left_pnl);
             base_pnl.Dock = DockStyle.Fill;
             base_pnl.Location = new Point(0, 0);
             base_pnl.Name = "base_pnl";
             base_pnl.Padding = new Padding(20, 16, 20, 16);
             base_pnl.Size = new Size(1420, 717);
             base_pnl.TabIndex = 0;
-            base_pnl.Tag = "base";
-            // 
-            // root_table
-            // 
-            root_table.ColumnCount = 2;
-            root_table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 48F));
-            root_table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 52F));
-            root_table.Controls.Add(left_pnl, 0, 0);
-            root_table.Controls.Add(right_pnl, 1, 0);
-            root_table.Dock = DockStyle.Top;
-            root_table.Location = new Point(20, 16);
-            root_table.Name = "root_table";
-            root_table.RowCount = 1;
-            root_table.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            root_table.Size = new Size(1380, 557);
-            root_table.TabIndex = 0;
-            // 
+            base_pnl.Tag = "card";
+            //
             // left_pnl
-            // 
+            //
             left_pnl.Controls.Add(cart_section);
             left_pnl.Controls.Add(sale_fields);
-            left_pnl.Dock = DockStyle.Fill;
+            left_pnl.Dock = DockStyle.Top;
             left_pnl.Location = new Point(0, 0);
-            left_pnl.Margin = new Padding(0, 0, 8, 0);
+            left_pnl.Margin = new Padding(0);
             left_pnl.Name = "left_pnl";
-            left_pnl.Size = new Size(654, 557);
+            left_pnl.Size = new Size(654, 549);
             left_pnl.TabIndex = 0;
+            left_pnl.Tag = "card";
             // 
             // cart_section
             // 
@@ -125,6 +105,7 @@ namespace SmartStock.Forms.User_Control
             cart_section.Padding = new Padding(0, 8, 0, 0);
             cart_section.Size = new Size(654, 199);
             cart_section.TabIndex = 1;
+            cart_section.Tag = "card";
             // 
             // cart_fields
             // 
@@ -166,7 +147,7 @@ namespace SmartStock.Forms.User_Control
             product_id_tb.Name = "product_id_tb";
             product_id_tb.Size = new Size(493, 32);
             product_id_tb.TabIndex = 1;
-            product_id_tb.Tag = "flat";
+            product_id_tb.Tag = "";
             // 
             // label8
             // 
@@ -190,7 +171,7 @@ namespace SmartStock.Forms.User_Control
             qty_tb.Name = "qty_tb";
             qty_tb.Size = new Size(493, 32);
             qty_tb.TabIndex = 3;
-            qty_tb.Tag = "flat";
+            qty_tb.Tag = "";
             // 
             // cart_buttons
             // 
@@ -265,7 +246,7 @@ namespace SmartStock.Forms.User_Control
             cart_title_lbl.Name = "cart_title_lbl";
             cart_title_lbl.Size = new Size(654, 32);
             cart_title_lbl.TabIndex = 0;
-            cart_title_lbl.Tag = "accent";
+            cart_title_lbl.Tag = "";
             cart_title_lbl.Text = "Product Cart";
             cart_title_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
@@ -301,6 +282,7 @@ namespace SmartStock.Forms.User_Control
             sale_fields.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
             sale_fields.Size = new Size(654, 350);
             sale_fields.TabIndex = 0;
+            sale_fields.Tag = "card";
             // 
             // label5
             // 
@@ -324,6 +306,7 @@ namespace SmartStock.Forms.User_Control
             search_row.Name = "search_row";
             search_row.Size = new Size(493, 44);
             search_row.TabIndex = 1;
+            search_row.Tag = "card";
             // 
             // sale_id_tb
             // 
@@ -334,7 +317,7 @@ namespace SmartStock.Forms.User_Control
             sale_id_tb.Name = "sale_id_tb";
             sale_id_tb.Size = new Size(341, 32);
             sale_id_tb.TabIndex = 0;
-            sale_id_tb.Tag = "flat";
+            sale_id_tb.Tag = "";
             // 
             // search_btn
             // 
@@ -378,7 +361,7 @@ namespace SmartStock.Forms.User_Control
             user_id_tb.Name = "user_id_tb";
             user_id_tb.Size = new Size(493, 32);
             user_id_tb.TabIndex = 3;
-            user_id_tb.Tag = "flat";
+            user_id_tb.Tag = "";
             // 
             // db_lbl
             // 
@@ -402,7 +385,7 @@ namespace SmartStock.Forms.User_Control
             customer_id_tb.Name = "customer_id_tb";
             customer_id_tb.Size = new Size(493, 32);
             customer_id_tb.TabIndex = 5;
-            customer_id_tb.Tag = "flat";
+            customer_id_tb.Tag = "";
             // 
             // logs_lbl
             // 
@@ -503,34 +486,8 @@ namespace SmartStock.Forms.User_Control
             total_amount_tb.Name = "total_amount_tb";
             total_amount_tb.Size = new Size(493, 32);
             total_amount_tb.TabIndex = 13;
-            total_amount_tb.Tag = "flat";
-            // 
-            // right_pnl
-            // 
-            right_pnl.Controls.Add(sales_dgv);
-            right_pnl.Dock = DockStyle.Fill;
-            right_pnl.Location = new Point(670, 0);
-            right_pnl.Margin = new Padding(8, 0, 0, 0);
-            right_pnl.Name = "right_pnl";
-            right_pnl.Padding = new Padding(5, 5, 5, 0);
-            right_pnl.Size = new Size(710, 557);
-            right_pnl.TabIndex = 1;
-            right_pnl.Tag = "card";
-            // 
-            // sales_dgv
-            // 
-            sales_dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            sales_dgv.BorderStyle = BorderStyle.None;
-            sales_dgv.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            sales_dgv.Dock = DockStyle.Fill;
-            sales_dgv.Location = new Point(5, 5);
-            sales_dgv.Margin = new Padding(0);
-            sales_dgv.Name = "sales_dgv";
-            sales_dgv.ReadOnly = true;
-            sales_dgv.RowHeadersWidth = 51;
-            sales_dgv.Size = new Size(700, 552);
-            sales_dgv.TabIndex = 0;
-            // 
+            total_amount_tb.Tag = "";
+            //
             // ModifySale
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -539,7 +496,6 @@ namespace SmartStock.Forms.User_Control
             Name = "ModifySale";
             Size = new Size(1420, 717);
             base_pnl.ResumeLayout(false);
-            root_table.ResumeLayout(false);
             left_pnl.ResumeLayout(false);
             cart_section.ResumeLayout(false);
             cart_fields.ResumeLayout(false);
@@ -549,15 +505,12 @@ namespace SmartStock.Forms.User_Control
             sale_fields.PerformLayout();
             search_row.ResumeLayout(false);
             search_row.PerformLayout();
-            right_pnl.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)sales_dgv).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
 
         private Panel base_pnl;
-        private TableLayoutPanel root_table;
         private Panel left_pnl;
         private TableLayoutPanel sale_fields;
         private Label label5;
@@ -587,7 +540,5 @@ namespace SmartStock.Forms.User_Control
         private TableLayoutPanel cart_buttons;
         private IconButton add_to_cart_btn;
         private IconButton remove_from_cart_btn;
-        private Panel right_pnl;
-        private DataGridView sales_dgv;
     }
 }

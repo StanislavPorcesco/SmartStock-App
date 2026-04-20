@@ -20,6 +20,8 @@ namespace SmartStock.Forms.User_Control
         private int _currentSaleId;
         private BindingList<SaleDetails> _saleItemsList = new BindingList<SaleDetails>();
 
+        public DataGridView CartGrid { get; set; }
+
         public ModifySale()
         {
             InitializeComponent();
@@ -217,22 +219,22 @@ namespace SmartStock.Forms.User_Control
 
         private void BindCartGrid()
         {
-            sales_dgv.DataSource = null;
-            sales_dgv.DataSource = _saleItemsList;
-            sales_dgv.AllowUserToAddRows = false;
-            sales_dgv.ReadOnly = true;
+            if (CartGrid == null) return;
 
-            // Hide navigation / DB-internal columns
+            CartGrid.DataSource = null;
+            CartGrid.DataSource = _saleItemsList;
+            CartGrid.AllowUserToAddRows = false;
+            CartGrid.ReadOnly = true;
+
             foreach (var col in new[] { "DetailId", "SaleId", "Sale", "Product" })
-                if (sales_dgv.Columns[col] != null)
-                    sales_dgv.Columns[col].Visible = false;
+                if (CartGrid.Columns[col] != null)
+                    CartGrid.Columns[col].Visible = false;
 
-            // Column order and headers
-            if (sales_dgv.Columns["ProductId"]   != null) { sales_dgv.Columns["ProductId"].DisplayIndex   = 0; sales_dgv.Columns["ProductId"].HeaderText   = "Product ID"; }
-            if (sales_dgv.Columns["ProductName"] != null) { sales_dgv.Columns["ProductName"].DisplayIndex = 1; sales_dgv.Columns["ProductName"].HeaderText = "Product Name"; }
-            if (sales_dgv.Columns["Quantity"]    != null) { sales_dgv.Columns["Quantity"].DisplayIndex    = 2; sales_dgv.Columns["Quantity"].HeaderText    = "Qty"; }
-            if (sales_dgv.Columns["UnitPrice"]   != null) { sales_dgv.Columns["UnitPrice"].DisplayIndex   = 3; sales_dgv.Columns["UnitPrice"].HeaderText   = "Unit Price"; }
-            if (sales_dgv.Columns["LineTotal"]   != null) { sales_dgv.Columns["LineTotal"].DisplayIndex   = 4; sales_dgv.Columns["LineTotal"].HeaderText   = "Line Total"; }
+            if (CartGrid.Columns["ProductId"]   != null) { CartGrid.Columns["ProductId"].DisplayIndex   = 0; CartGrid.Columns["ProductId"].HeaderText   = "Product ID"; }
+            if (CartGrid.Columns["ProductName"] != null) { CartGrid.Columns["ProductName"].DisplayIndex = 1; CartGrid.Columns["ProductName"].HeaderText = "Product Name"; }
+            if (CartGrid.Columns["Quantity"]    != null) { CartGrid.Columns["Quantity"].DisplayIndex    = 2; CartGrid.Columns["Quantity"].HeaderText    = "Qty"; }
+            if (CartGrid.Columns["UnitPrice"]   != null) { CartGrid.Columns["UnitPrice"].DisplayIndex   = 3; CartGrid.Columns["UnitPrice"].HeaderText   = "Unit Price"; }
+            if (CartGrid.Columns["LineTotal"]   != null) { CartGrid.Columns["LineTotal"].DisplayIndex   = 4; CartGrid.Columns["LineTotal"].HeaderText   = "Line Total"; }
         }
 
         private void UpdateCartTotal()
@@ -367,6 +369,12 @@ namespace SmartStock.Forms.User_Control
             return int.TryParse(sale_id_tb.Text, out int id) ? id : -1;
         }
 
+        public void LoadById(int id)
+        {
+            sale_id_tb.Text = id.ToString();
+            SearchAndLoadSale(id);
+        }
+
         public void ClearControls()
         {
             sale_id_tb.Clear();
@@ -376,7 +384,7 @@ namespace SmartStock.Forms.User_Control
             qty_tb.Clear();
             total_amount_tb.Clear();
             _saleItemsList.Clear();
-            sales_dgv.DataSource = null;
+            if (CartGrid != null) CartGrid.DataSource = null;
             ThemeManager.Apply(this);
         }
     }

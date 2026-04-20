@@ -217,5 +217,11 @@ namespace SmartStock.Forms.User_Control
             }
             return -1;
         }
+
+        public void LoadById(int id)
+        {
+            product_id_tb.Text = id.ToString();
+            SearchAndLoadProduct(id);
+        }
     }
 }

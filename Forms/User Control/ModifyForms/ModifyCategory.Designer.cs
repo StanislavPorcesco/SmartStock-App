@@ -42,9 +42,9 @@ namespace SmartStock.Forms.AddForms
             fields_table.SuspendLayout();
             search_row.SuspendLayout();
             SuspendLayout();
-            //
+            // 
             // base_pnl
-            //
+            // 
             base_pnl.Controls.Add(fields_table);
             base_pnl.Dock = DockStyle.Fill;
             base_pnl.Location = new Point(0, 0);
@@ -52,10 +52,10 @@ namespace SmartStock.Forms.AddForms
             base_pnl.Padding = new Padding(28, 24, 28, 24);
             base_pnl.Size = new Size(907, 572);
             base_pnl.TabIndex = 0;
-            base_pnl.Tag = "base";
-            //
+            base_pnl.Tag = "card";
+            // 
             // fields_table
-            //
+            // 
             fields_table.ColumnCount = 2;
             fields_table.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 160F));
             fields_table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
@@ -71,9 +71,9 @@ namespace SmartStock.Forms.AddForms
             fields_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 52F));
             fields_table.Size = new Size(851, 104);
             fields_table.TabIndex = 0;
-            //
+            // 
             // settings_lbl
-            //
+            // 
             settings_lbl.Dock = DockStyle.Fill;
             settings_lbl.Font = new Font("Segoe UI", 10F);
             settings_lbl.Location = new Point(0, 0);
@@ -84,9 +84,9 @@ namespace SmartStock.Forms.AddForms
             settings_lbl.Tag = "muted";
             settings_lbl.Text = "Category ID";
             settings_lbl.TextAlign = ContentAlignment.MiddleLeft;
-            //
+            // 
             // search_row
-            //
+            // 
             search_row.Controls.Add(category_id_tb);
             search_row.Controls.Add(search_btn);
             search_row.Dock = DockStyle.Fill;
@@ -94,9 +94,10 @@ namespace SmartStock.Forms.AddForms
             search_row.Name = "search_row";
             search_row.Size = new Size(685, 46);
             search_row.TabIndex = 1;
-            //
+            search_row.Tag = "card";
+            // 
             // category_id_tb
-            //
+            // 
             category_id_tb.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             category_id_tb.Font = new Font("Segoe UI", 11F);
             category_id_tb.Location = new Point(0, 8);
@@ -104,15 +105,16 @@ namespace SmartStock.Forms.AddForms
             category_id_tb.Name = "category_id_tb";
             category_id_tb.Size = new Size(533, 32);
             category_id_tb.TabIndex = 0;
-            category_id_tb.Tag = "flat";
-            //
+            category_id_tb.Tag = "";
+            // 
             // search_btn
-            //
+            // 
             search_btn.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            search_btn.FlatAppearance.BorderSize = 1;
             search_btn.FlatStyle = FlatStyle.Flat;
             search_btn.Font = new Font("Segoe UI Semibold", 9.5F, FontStyle.Bold);
-            search_btn.IconChar = IconChar.MagnifyingGlass;
+            search_btn.IconChar = IconChar.Search;
+            search_btn.IconColor = Color.Black;
+            search_btn.IconFont = IconFont.Auto;
             search_btn.IconSize = 18;
             search_btn.Location = new Point(545, 4);
             search_btn.Name = "search_btn";
@@ -123,9 +125,9 @@ namespace SmartStock.Forms.AddForms
             search_btn.TextImageRelation = TextImageRelation.ImageBeforeText;
             search_btn.UseVisualStyleBackColor = true;
             search_btn.Click += search_btn_Click;
-            //
+            // 
             // db_lbl
-            //
+            // 
             db_lbl.Dock = DockStyle.Fill;
             db_lbl.Font = new Font("Segoe UI", 10F);
             db_lbl.Location = new Point(0, 52);
@@ -136,9 +138,9 @@ namespace SmartStock.Forms.AddForms
             db_lbl.Tag = "muted";
             db_lbl.Text = "Category Name";
             db_lbl.TextAlign = ContentAlignment.MiddleLeft;
-            //
+            // 
             // category_name_tb
-            //
+            // 
             category_name_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             category_name_tb.Font = new Font("Segoe UI", 11F);
             category_name_tb.Location = new Point(163, 62);
@@ -146,10 +148,10 @@ namespace SmartStock.Forms.AddForms
             category_name_tb.Name = "category_name_tb";
             category_name_tb.Size = new Size(685, 32);
             category_name_tb.TabIndex = 3;
-            category_name_tb.Tag = "flat";
-            //
+            category_name_tb.Tag = "";
+            // 
             // ModifyCategory
-            //
+            // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(base_pnl);
