@@ -41,7 +41,7 @@ namespace SmartStock.Forms.User_Control.AnalysisForms
             panel1.Padding = new Padding(0, 10, 0, 0);
             panel1.Size = new Size(641, 688);
             panel1.TabIndex = 1;
-            panel1.Tag = "base";
+            panel1.Tag = "card";
             // 
             // tableLayoutPanel1
             // 
@@ -103,6 +103,7 @@ namespace SmartStock.Forms.User_Control.AnalysisForms
             panel2.Name = "panel2";
             panel2.Size = new Size(311, 30);
             panel2.TabIndex = 25;
+            panel2.Tag = "card";
             // 
             // label4
             // 
@@ -165,6 +166,7 @@ namespace SmartStock.Forms.User_Control.AnalysisForms
             confidence_tb.Name = "confidence_tb";
             confidence_tb.Size = new Size(311, 56);
             confidence_tb.TabIndex = 29;
+            confidence_tb.Tag = "";
             // 
             // DemandForecast
             // 

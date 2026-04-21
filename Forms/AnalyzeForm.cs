@@ -155,16 +155,9 @@ namespace SmartStock.Forms
             label1.Visible = !isNlq;
             target_subject_cb.Visible = !isNlq;
             label2.Visible = !isNlq;
+            end_date_lbl.Visible = !isNlq;
             start_date_dtp.Visible = !isNlq;
             end_date_dtp.Visible = !isNlq;
-
-            // Reparent the shared status/progress panel into whichever GroupBox is active
-            var targetBox = isNlq ? (Control)query_results_gb : groupBox1;
-            if (panel3.Parent != targetBox)
-            {
-                panel3.Parent?.Controls.Remove(panel3);
-                targetBox.Controls.Add(panel3);
-            }
 
             _currentParameterView = selectedIndex switch
             {
@@ -702,10 +695,10 @@ namespace SmartStock.Forms
 
             _anomalyLookup = result.Anomalies.ToDictionary(a => a.DataIndex);
 
-            var salesValues  = result.HistoricalSales.Select(x => (double)x).ToArray();
-            var meanValues   = result.TrendValues.Select(x => (double)x).ToArray();
-            var upperValues  = result.UpperBond.Select(x => (double)x).ToArray();
-            var lowerValues  = result.LowerBond.Select(x => (double)x).ToArray();
+            var salesValues = result.HistoricalSales.Select(x => (double)x).ToArray();
+            var meanValues = result.TrendValues.Select(x => (double)x).ToArray();
+            var upperValues = result.UpperBond.Select(x => (double)x).ToArray();
+            var lowerValues = result.LowerBond.Select(x => (double)x).ToArray();
 
             var anomalyPoints = result.Anomalies
                 .Select(a => new ObservablePoint(a.DataIndex, (double)a.ActualValue))
@@ -777,15 +770,15 @@ namespace SmartStock.Forms
             label4.Text = "Max Z-Score";
             label6.Text = "Anomaly Rate";
 
-            var totalPoints  = result.HistoricalSales.Count;
-            var anomalyRate  = totalPoints > 0
+            var totalPoints = result.HistoricalSales.Count;
+            var anomalyRate = totalPoints > 0
                 ? (decimal)result.Anomalies.Count / totalPoints * 100m
                 : 0m;
             var maxZ = result.MaxSeverityZScore;
 
             reliability_lbl.Text = result.Anomalies.Count.ToString();
-            trend_lbl.Text       = maxZ > 0 ? $"{maxZ:F1}" : "0.0";
-            confidence_lbl.Text  = $"{anomalyRate:F1}%";
+            trend_lbl.Text = maxZ > 0 ? $"{maxZ:F1}" : "0.0";
+            confidence_lbl.Text = $"{anomalyRate:F1}%";
 
             reliability_lbl.ForeColor = result.Anomalies.Count == 0 ? Color.LimeGreen
                 : result.Anomalies.Count <= 2 ? Color.Orange : Color.Red;
@@ -877,13 +870,13 @@ namespace SmartStock.Forms
             label4.Text = "EOQ Qty (Q*)";
             label6.Text = "Reorder Point";
 
-            reliability_lbl.Text  = $"{eoq.ServiceLevel:P0}";
-            trend_lbl.Text        = $"{eoq.EoqQuantity:F0}";
-            confidence_lbl.Text   = $"{eoq.ReorderPoint:F0}";
+            reliability_lbl.Text = $"{eoq.ServiceLevel:P0}";
+            trend_lbl.Text = $"{eoq.EoqQuantity:F0}";
+            confidence_lbl.Text = $"{eoq.ReorderPoint:F0}";
 
             reliability_lbl.ForeColor = Color.LimeGreen;
-            trend_lbl.ForeColor       = Color.LimeGreen;
-            confidence_lbl.ForeColor  = Color.LimeGreen;
+            trend_lbl.ForeColor = Color.LimeGreen;
+            confidence_lbl.ForeColor = Color.LimeGreen;
         }
     }
 }

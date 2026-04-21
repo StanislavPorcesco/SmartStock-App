@@ -89,12 +89,6 @@ namespace SmartStock.Forms
                 leftBorderBtn.Height   = currentBtn.Height;
                 leftBorderBtn.Visible  = true;
                 leftBorderBtn.BringToFront();
-
-                iconCurentChildForm.IconChar  = currentBtn.IconChar;
-                iconCurentChildForm.IconColor = p.Accent;
-
-                labelCurentChildForm.Text      = currentBtn.Text.Trim();
-                labelCurentChildForm.ForeColor = p.TextPrimary;
             }
         }
 
@@ -103,9 +97,9 @@ namespace SmartStock.Forms
             if (currentBtn != null)
             {
                 var p = ThemeManager.GetCurrentPalette();
+                currentBtn.ForeColor = p.TextSecondary;
+                currentBtn.BackColor = Color.Transparent;
                 currentBtn.TextAlign  = ContentAlignment.MiddleLeft;
-                currentBtn.BackColor  = Color.Transparent;
-                currentBtn.ForeColor  = p.TextSecondary;
                 currentBtn.IconColor  = p.TextSecondary;
                 leftBorderBtn.Visible = false;
             }

@@ -179,7 +179,7 @@ namespace SmartStock
             filters_card.Location = new Point(0, 0);
             filters_card.Margin = new Padding(0, 0, 10, 0);
             filters_card.Name = "filters_card";
-            filters_card.Padding = new Padding(24, 10, 24, 10);
+            filters_card.Padding = new Padding(24, 10, 24, 20);
             filters_card.Size = new Size(377, 665);
             filters_card.TabIndex = 4;
             filters_card.Tag = "main_card";
@@ -198,17 +198,17 @@ namespace SmartStock
             reset_pnl.Controls.Add(reset_btn);
             reset_pnl.Dock = DockStyle.Bottom;
             reset_pnl.Location = new Point(24, 565);
-            reset_pnl.MaximumSize = new Size(0, 90);
-            reset_pnl.MinimumSize = new Size(0, 90);
+            reset_pnl.MaximumSize = new Size(0, 80);
+            reset_pnl.MinimumSize = new Size(0, 80);
             reset_pnl.Name = "reset_pnl";
             reset_pnl.Padding = new Padding(0, 10, 0, 0);
-            reset_pnl.Size = new Size(329, 90);
+            reset_pnl.Size = new Size(329, 80);
             reset_pnl.TabIndex = 2;
             reset_pnl.Tag = "card";
             // 
             // reset_btn
             // 
-            reset_btn.Dock = DockStyle.Top;
+            reset_btn.Dock = DockStyle.Fill;
             reset_btn.FlatStyle = FlatStyle.Flat;
             reset_btn.Font = new Font("Segoe UI Semibold", 11F, FontStyle.Bold);
             reset_btn.IconChar = IconChar.RotateBack;

@@ -13,3 +13,10 @@ obj/
 # OS
 Thumbs.db
 .DS_Store
+
+# Obsidian
+*.md
+.graphify_python
+.graphifyignore
+Classes/graphify-out/
+graphify-out/

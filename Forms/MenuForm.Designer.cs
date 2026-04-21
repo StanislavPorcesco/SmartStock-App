@@ -50,12 +50,14 @@ namespace SmartStock.Forms
             desktop_pnl = new Panel();
             bottom_pnl = new Panel();
             bottom_grid = new TableLayoutPanel();
+            panel1 = new Panel();
             status_lbl = new Label();
             version_lbl = new Label();
             titlebar_pnl = new Panel();
-            titlebar_grid = new TableLayoutPanel();
-            iconCurentChildForm = new FontAwesome.Sharp.IconPictureBox();
-            labelCurentChildForm = new Label();
+            tableLayoutPanel1 = new TableLayoutPanel();
+            minimize_btn = new FontAwesome.Sharp.IconButton();
+            maximize_btn = new FontAwesome.Sharp.IconButton();
+            close_btn = new FontAwesome.Sharp.IconButton();
             titlebar_divider = new Panel();
             logo_pnl = new Panel();
             accent_pnl = new Panel();
@@ -78,8 +80,7 @@ namespace SmartStock.Forms
             bottom_pnl.SuspendLayout();
             bottom_grid.SuspendLayout();
             titlebar_pnl.SuspendLayout();
-            titlebar_grid.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)iconCurentChildForm).BeginInit();
+            tableLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
             // root_shell
@@ -466,10 +467,10 @@ namespace SmartStock.Forms
             // desktop_pnl
             // 
             desktop_pnl.Dock = DockStyle.Fill;
-            desktop_pnl.Location = new Point(0, 64);
+            desktop_pnl.Location = new Point(0, 43);
             desktop_pnl.Margin = new Padding(0);
             desktop_pnl.Name = "desktop_pnl";
-            desktop_pnl.Size = new Size(1582, 959);
+            desktop_pnl.Size = new Size(1582, 969);
             desktop_pnl.TabIndex = 1;
             desktop_pnl.Tag = "workplace";
             // 
@@ -477,10 +478,10 @@ namespace SmartStock.Forms
             // 
             bottom_pnl.Controls.Add(bottom_grid);
             bottom_pnl.Dock = DockStyle.Bottom;
-            bottom_pnl.Location = new Point(0, 1023);
+            bottom_pnl.Location = new Point(0, 1012);
             bottom_pnl.Margin = new Padding(0);
             bottom_pnl.Name = "bottom_pnl";
-            bottom_pnl.Size = new Size(1582, 32);
+            bottom_pnl.Size = new Size(1582, 43);
             bottom_pnl.TabIndex = 2;
             bottom_pnl.Tag = "base";
             // 
@@ -489,26 +490,38 @@ namespace SmartStock.Forms
             bottom_grid.ColumnCount = 2;
             bottom_grid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             bottom_grid.ColumnStyles.Add(new ColumnStyle());
-            bottom_grid.Controls.Add(status_lbl, 0, 0);
-            bottom_grid.Controls.Add(version_lbl, 1, 0);
+            bottom_grid.Controls.Add(panel1, 0, 0);
+            bottom_grid.Controls.Add(status_lbl, 0, 1);
+            bottom_grid.Controls.Add(version_lbl, 1, 1);
             bottom_grid.Dock = DockStyle.Fill;
             bottom_grid.Location = new Point(0, 0);
             bottom_grid.Margin = new Padding(0);
             bottom_grid.Name = "bottom_grid";
             bottom_grid.Padding = new Padding(24, 0, 24, 0);
-            bottom_grid.RowCount = 1;
+            bottom_grid.RowCount = 2;
             bottom_grid.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            bottom_grid.Size = new Size(1582, 32);
+            bottom_grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 34F));
+            bottom_grid.Size = new Size(1582, 43);
             bottom_grid.TabIndex = 0;
+            // 
+            // panel1
+            // 
+            bottom_grid.SetColumnSpan(panel1, 2);
+            panel1.Dock = DockStyle.Top;
+            panel1.Location = new Point(27, 3);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(1528, 1);
+            panel1.TabIndex = 2;
+            panel1.Tag = "divider";
             // 
             // status_lbl
             // 
             status_lbl.Dock = DockStyle.Fill;
             status_lbl.Font = new Font("Segoe UI", 8.25F);
-            status_lbl.Location = new Point(24, 0);
+            status_lbl.Location = new Point(24, 9);
             status_lbl.Margin = new Padding(0);
             status_lbl.Name = "status_lbl";
-            status_lbl.Size = new Size(1426, 32);
+            status_lbl.Size = new Size(1426, 34);
             status_lbl.TabIndex = 0;
             status_lbl.Tag = "muted";
             status_lbl.Text = "Ready";
@@ -519,10 +532,10 @@ namespace SmartStock.Forms
             version_lbl.AutoSize = true;
             version_lbl.Dock = DockStyle.Fill;
             version_lbl.Font = new Font("Segoe UI", 8.25F);
-            version_lbl.Location = new Point(1450, 0);
+            version_lbl.Location = new Point(1450, 9);
             version_lbl.Margin = new Padding(0);
             version_lbl.Name = "version_lbl";
-            version_lbl.Size = new Size(108, 32);
+            version_lbl.Size = new Size(108, 34);
             version_lbl.TabIndex = 1;
             version_lbl.Tag = "muted";
             version_lbl.Text = "SmartStock v1.0";
@@ -530,67 +543,86 @@ namespace SmartStock.Forms
             // 
             // titlebar_pnl
             // 
-            titlebar_pnl.Controls.Add(titlebar_grid);
+            titlebar_pnl.Controls.Add(tableLayoutPanel1);
             titlebar_pnl.Controls.Add(titlebar_divider);
             titlebar_pnl.Dock = DockStyle.Top;
             titlebar_pnl.Location = new Point(0, 0);
             titlebar_pnl.Margin = new Padding(0);
             titlebar_pnl.Name = "titlebar_pnl";
-            titlebar_pnl.Size = new Size(1582, 64);
+            titlebar_pnl.Size = new Size(1582, 43);
             titlebar_pnl.TabIndex = 0;
             titlebar_pnl.Tag = "base";
             // 
-            // titlebar_grid
+            // tableLayoutPanel1
             // 
-            titlebar_grid.ColumnCount = 2;
-            titlebar_grid.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 56F));
-            titlebar_grid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            titlebar_grid.Controls.Add(iconCurentChildForm, 0, 0);
-            titlebar_grid.Controls.Add(labelCurentChildForm, 1, 0);
-            titlebar_grid.Dock = DockStyle.Fill;
-            titlebar_grid.Location = new Point(0, 0);
-            titlebar_grid.Margin = new Padding(0);
-            titlebar_grid.Name = "titlebar_grid";
-            titlebar_grid.Padding = new Padding(24, 0, 24, 0);
-            titlebar_grid.RowCount = 1;
-            titlebar_grid.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            titlebar_grid.Size = new Size(1582, 63);
-            titlebar_grid.TabIndex = 1;
+            tableLayoutPanel1.ColumnCount = 3;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+            tableLayoutPanel1.Controls.Add(minimize_btn, 0, 0);
+            tableLayoutPanel1.Controls.Add(maximize_btn, 1, 0);
+            tableLayoutPanel1.Controls.Add(close_btn, 2, 0);
+            tableLayoutPanel1.Dock = DockStyle.Right;
+            tableLayoutPanel1.Location = new Point(1396, 0);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 1;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel1.Size = new Size(186, 42);
+            tableLayoutPanel1.TabIndex = 1;
             // 
-            // iconCurentChildForm
+            // minimize_btn
             // 
-            iconCurentChildForm.Anchor = AnchorStyles.Left;
-            iconCurentChildForm.BackColor = Color.Transparent;
-            iconCurentChildForm.ForeColor = SystemColors.ControlText;
-            iconCurentChildForm.IconChar = FontAwesome.Sharp.IconChar.HomeLgAlt;
-            iconCurentChildForm.IconColor = SystemColors.ControlText;
-            iconCurentChildForm.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            iconCurentChildForm.IconSize = 44;
-            iconCurentChildForm.Location = new Point(24, 9);
-            iconCurentChildForm.Margin = new Padding(0, 0, 12, 0);
-            iconCurentChildForm.Name = "iconCurentChildForm";
-            iconCurentChildForm.Size = new Size(44, 44);
-            iconCurentChildForm.SizeMode = PictureBoxSizeMode.CenterImage;
-            iconCurentChildForm.TabIndex = 0;
-            iconCurentChildForm.TabStop = false;
-            iconCurentChildForm.Tag = "accent-icon";
+            minimize_btn.BackColor = Color.Transparent;
+            minimize_btn.Dock = DockStyle.Fill;
+            minimize_btn.FlatAppearance.BorderSize = 0;
+            minimize_btn.FlatStyle = FlatStyle.Flat;
+            minimize_btn.IconChar = FontAwesome.Sharp.IconChar.WindowMinimize;
+            minimize_btn.IconColor = Color.Black;
+            minimize_btn.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            minimize_btn.IconSize = 30;
+            minimize_btn.Location = new Point(3, 3);
+            minimize_btn.Name = "minimize_btn";
+            minimize_btn.Size = new Size(56, 36);
+            minimize_btn.TabIndex = 0;
+            minimize_btn.Tag = "titlebar_buttons";
+            minimize_btn.UseVisualStyleBackColor = false;
             // 
-            // labelCurentChildForm
+            // maximize_btn
             // 
-            labelCurentChildForm.Dock = DockStyle.Fill;
-            labelCurentChildForm.Font = new Font("Segoe UI Semibold", 16F);
-            labelCurentChildForm.Location = new Point(80, 0);
-            labelCurentChildForm.Margin = new Padding(0);
-            labelCurentChildForm.Name = "labelCurentChildForm";
-            labelCurentChildForm.Size = new Size(1478, 63);
-            labelCurentChildForm.TabIndex = 1;
-            labelCurentChildForm.Text = "Acasă";
-            labelCurentChildForm.TextAlign = ContentAlignment.MiddleLeft;
+            maximize_btn.Dock = DockStyle.Fill;
+            maximize_btn.FlatAppearance.BorderSize = 0;
+            maximize_btn.FlatStyle = FlatStyle.Flat;
+            maximize_btn.IconChar = FontAwesome.Sharp.IconChar.WindowMaximize;
+            maximize_btn.IconColor = Color.Black;
+            maximize_btn.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            maximize_btn.IconSize = 30;
+            maximize_btn.Location = new Point(65, 3);
+            maximize_btn.Name = "maximize_btn";
+            maximize_btn.Size = new Size(56, 36);
+            maximize_btn.TabIndex = 1;
+            maximize_btn.Tag = "titlebar_buttons";
+            maximize_btn.UseVisualStyleBackColor = true;
+            // 
+            // close_btn
+            // 
+            close_btn.Dock = DockStyle.Fill;
+            close_btn.FlatAppearance.BorderSize = 0;
+            close_btn.FlatStyle = FlatStyle.Flat;
+            close_btn.IconChar = FontAwesome.Sharp.IconChar.Multiply;
+            close_btn.IconColor = Color.Black;
+            close_btn.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            close_btn.IconSize = 30;
+            close_btn.Location = new Point(127, 3);
+            close_btn.Name = "close_btn";
+            close_btn.Size = new Size(56, 36);
+            close_btn.TabIndex = 2;
+            close_btn.Tag = "titlebar_buttons";
+            close_btn.UseVisualStyleBackColor = true;
             // 
             // titlebar_divider
             // 
             titlebar_divider.Dock = DockStyle.Bottom;
-            titlebar_divider.Location = new Point(0, 63);
+            titlebar_divider.Location = new Point(0, 42);
             titlebar_divider.Name = "titlebar_divider";
             titlebar_divider.Size = new Size(1582, 1);
             titlebar_divider.TabIndex = 0;
@@ -654,8 +686,7 @@ namespace SmartStock.Forms
             bottom_grid.ResumeLayout(false);
             bottom_grid.PerformLayout();
             titlebar_pnl.ResumeLayout(false);
-            titlebar_grid.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)iconCurentChildForm).EndInit();
+            tableLayoutPanel1.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -693,9 +724,6 @@ namespace SmartStock.Forms
         private Panel right_host;
         private Panel titlebar_pnl;
         private Panel titlebar_divider;
-        private TableLayoutPanel titlebar_grid;
-        private FontAwesome.Sharp.IconPictureBox iconCurentChildForm;
-        private Label labelCurentChildForm;
         private Panel desktop_pnl;
         private Panel bottom_pnl;
         private TableLayoutPanel bottom_grid;
@@ -707,5 +735,10 @@ namespace SmartStock.Forms
         private Panel accent_pnl;
         private Panel workplace_pnl;
         private TableLayoutPanel workplace_layout;
+        private TableLayoutPanel tableLayoutPanel1;
+        private FontAwesome.Sharp.IconButton minimize_btn;
+        private FontAwesome.Sharp.IconButton maximize_btn;
+        private FontAwesome.Sharp.IconButton close_btn;
+        private Panel panel1;
     }
 }

@@ -50,7 +50,7 @@ namespace SmartStock.Forms.User_Control.AnalysisForms
             panel1.Padding = new Padding(0, 10, 0, 0);
             panel1.Size = new Size(729, 477);
             panel1.TabIndex = 3;
-            panel1.Tag = "base";
+            panel1.Tag = "card";
             // 
             // tableLayoutPanel1
             // 
@@ -103,6 +103,7 @@ namespace SmartStock.Forms.User_Control.AnalysisForms
             panel3.Name = "panel3";
             panel3.Size = new Size(350, 30);
             panel3.TabIndex = 33;
+            panel3.Tag = "card";
             // 
             // label3
             // 
@@ -153,6 +154,7 @@ namespace SmartStock.Forms.User_Control.AnalysisForms
             panel2.Name = "panel2";
             panel2.Size = new Size(350, 30);
             panel2.TabIndex = 31;
+            panel2.Tag = "card";
             // 
             // label4
             // 
@@ -204,6 +206,7 @@ namespace SmartStock.Forms.User_Control.AnalysisForms
             panel4.Name = "panel4";
             panel4.Size = new Size(350, 30);
             panel4.TabIndex = 40;
+            panel4.Tag = "card";
             // 
             // label_ordering_unit
             // 

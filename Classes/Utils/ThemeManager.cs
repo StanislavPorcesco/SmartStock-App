@@ -8,6 +8,7 @@ namespace SmartStock.Classes.Utils
     using System.Collections.Generic;
     using System.Drawing;
     using System.Drawing.Drawing2D;
+    using System.Net.NetworkInformation;
     using System.Reflection;
     using System.Windows.Documents;
     using System.Windows.Forms;
@@ -132,13 +133,23 @@ namespace SmartStock.Classes.Utils
                         btn.ForeColor = theme.TextPrimary;
                         btn.FlatAppearance.BorderSize = 1;
                         btn.FlatAppearance.BorderColor = theme.Border;
-                        btn.FlatAppearance.MouseOverBackColor = theme.SurfaceHover;
+                        btn.FlatAppearance.MouseOverBackColor = theme.Surface;
+                        btn.FlatAppearance.MouseDownBackColor = theme.SurfaceHover;
+                    }
+                    else if ("titlebar_buttons".Equals(btn.Tag))
+                    {
+                        btn.FlatAppearance.BorderSize = 0;
+                        btn.BackColor = Color.Transparent;
+                        btn.FlatAppearance.MouseOverBackColor = theme.Surface;
+                        btn.FlatAppearance.MouseDownBackColor = theme.SurfaceHover;
                     }
                     else if ("menu".Equals(btn.Tag) || "title".Equals(btn.Tag))
                     {
                         btn.BackColor = Color.Transparent;
                         btn.FlatAppearance.BorderSize = 0;
-                        btn.FlatAppearance.MouseOverBackColor = theme.HoverColor;
+                        //btn.FlatAppearance.MouseOverBackColor = theme.HoverColor;
+                        btn.FlatAppearance.MouseOverBackColor = theme.Surface;
+                        btn.FlatAppearance.MouseDownBackColor = theme.SurfaceHover;
                     }
                     else if ("clean_icon".Equals(btn.Tag))
                     {
@@ -268,6 +279,8 @@ namespace SmartStock.Classes.Utils
                     switch (ptag)
                     {
                         case "hero":
+                            pnl.BackColor = theme.Surface;
+                            break;
                         case "workplace":
                         case "input":
                         case "card":
@@ -334,11 +347,19 @@ namespace SmartStock.Classes.Utils
                     ck.ForeColor = theme.Text;
                     break;
                 case TrackBar tr:
-                    tr.BackColor = theme.DarkColor;
+                    tr.BackColor = theme.Surface;
                     break;
                 case RichTextBox rtb:
-                    rtb.BackColor = theme.LightColor;
-                    rtb.ForeColor = theme.Text;
+                    if ("insights".Equals(rtb.Tag))
+                    {
+                        rtb.BackColor = theme.Surface;
+                        rtb.ForeColor = theme.TextSecondary;
+                    }
+                    else
+                    {
+                        rtb.BackColor = theme.LightColor;
+                        rtb.ForeColor = theme.Text;
+                    }
                     break;
                 case LiveChartsCore.SkiaSharpView.WinForms.CartesianChart chart:
                     chart.BackColor = theme.LightColor;

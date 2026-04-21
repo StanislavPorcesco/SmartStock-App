@@ -4,7 +4,7 @@
 
 ---
 
-## 🎯 Critical Rules
+## Critical Rules
 
 ### Code Style
 - **UI Tags** (all semantic, via `ThemeManager`):
@@ -14,127 +14,142 @@
   - TextBox: `"flat"` (no border) | `"otp"` (OTP digits: SurfaceHover BG + Accent text + border)
   - Icons: `"accent-icon"` (amber) | `"muted-icon"` (secondary)
   - **Never hardcode BackColor/ForeColor in Designer** — use Tags only.
-
 - **Repository pattern:** Shared `DbContext` across multiple repos → always call `ClearChanges()` on persist failure.
 - **BindingList mutation:** After *any* cart/list edit, call `BindCartGrid()` or rebind (DataSource=null forces refresh).
 - **NumericUpDown range:** Use `Tag = "range_lock"` to prevent ThemeManager from overwriting `Maximum`.
 
 ### Designer Safety
 - **All properties INLINE in InitializeComponent** — VS Designer regeneration wipes helper methods. Never use post-init styling helpers.
-- **Merged-cell pattern:** When two controls share a row cell, wrap in a container Panel (Tag="card") with Dock=Fill label + Dock=Right cta pill button (e.g., `report_row_pnl` in SettingsForm).
+- **Merged-cell pattern:** Two controls sharing a row cell → wrap in container Panel (Tag="card"), Dock=Fill label + Dock=Right cta button.
 
 ### Architecture
 - **Forms:** Data display + event capture only. No business logic.
 - **Services/Facade:** All processing, validation, AI, analytics, logging.
-- **MenuForm layout:** TableLayoutPanel root (sidebar 320px + content fill) → brand header + nav buttons + user card footer.
-- **BaseAddInstance shell:** TableLayoutPanel root (3 rows: 196px selector card / fill content card / 84px footer). Selector card: hero header (PenRuler icon) + 2-col combo grid (entity type + action). Content card: dynamic icon + title (updated via `UpdateContentHeader`). Footer: archive (outlined) + save (cta, mode-aware text/icon).
-- **SettingsForm layout:** 2×3 card grid (Preferences, Reporting, Paths, Logging, AI, Factors) inside scrollable base_pnl (Dock=Fill, AutoScroll). Hero header (Gears icon + title). Sticky `apply_pnl` (Dock=Bottom, 88px) with full-width cta button.
-- **Card shell pattern:** outer Panel (Tag="base") → body Panel (Tag="card", padding 22) → 56px header (IconPictureBox Tag="accent-icon" + title Label 11pt Semibold) → divider Panel (Tag="divider", 1px) → body TableLayoutPanel.
-- **ModifyForm field grid pattern:** base_pnl (Tag="base", Dock=Fill, padding 28/24) → fields_table (160px label col + fill input col, 52px rows). Row 0: search_row Panel (Dock=Fill TextBox Tag="flat" + Dock=Right IconButton Tag="outlined" MagnifyingGlass). All labels Tag="muted", all TextBoxes Tag="flat". Button type: `FontAwesome.Sharp.IconButton`.
-- **ModifySale 2-column layout:** root_table (48%/52%, Dock=Top) → left_pnl (sale_fields + cart_section with accent title + divider + cart_fields + cart_buttons: cta CartPlus + outlined TrashCan) → right_pnl (Tag="card", DataGridView Dock=Fill). base_pnl has AutoScroll=true for full-form scrolling.
-- **Filter controls:** Attach tooltips to specific labels via `ToolTipHelp.AddToolTip(label, text)` — never form-level.
+- **New form shell:** outer Panel (Tag="base") → body Panel (Tag="card", padding 22) → 56px header (IconPictureBox Tag="accent-icon" + title Label 11pt Semibold) → divider Panel (Tag="divider", 1px) → body TableLayoutPanel.
+- **ModifyForm field grid:** base_pnl (Tag="base", Dock=Fill) → fields_table (160px label col + fill input col, 52px rows). Row 0: search_row (TextBox Tag="flat" + `FontAwesome.Sharp.IconButton` Tag="outlined" MagnifyingGlass). All labels Tag="muted", all inputs Tag="flat".
+- **Filter tooltips:** `ToolTipHelp.AddToolTip(label, text)` — never form-level.
 
 ---
 
-## 📂 Project Structure
+## ThemeManager — 12-Color Palette
 
-```
-Classes/Data/
-  ├── DTOs/ (11 filter criteria + AnalyticsResult, AnomalyPoint)
-  ├── Interfaces/ (8 interfaces for services, AI, data)
-  ├── Repositories/ (GenericRepository<T>)
-  └── Services/ (AnalyticsFacade, 8 CRUD + 2 Schedulers + AI providers)
+**Dark (Midnight Cobalt):** Background `#0E1420` | Surface `#161D2E` | SurfaceHover `#1E2740` | Accent `#F5B547` (amber) | TextPrimary `#E6EBF5` | TextSecondary `#94A0B8` | Border `#252E47`
 
-Classes/Models/ (12 EF entities + AiForecast, EconometricModel, AiStockRecommendation)
-Classes/Settings/ (AppSettings, SettingsManager, PathsManager)
-Classes/Utils/ (SecurityService, SessionManager, SmartStockContext, ThemeManager, ActivityLogger, EmailService, etc.)
-
-Forms/
-  ├── User Control/
-  │   ├── AddForms/ (8 + base)
-  │   ├── ModifyForms/ (8 + base)
-  │   ├── SearchForms/ (8 filters)
-  │   └── AnalysisForms/ (DemandForecast, CorrelationAnalysis, StockOptimization, LanguageQuery)
-  ├── LoginForms/ (Login, AddAccount, MailConfirmation, Settings)
-  └── Main: LoginForm, MenuForm, AnalyzeForm, SearchForm, SettingsForm
-```
-
----
-
-## 🎨 ThemeManager — 12-Color Palette
-
-**Dark (Midnight Cobalt):** Background #0E1420 | Surface #161D2E | SurfaceHover #1E2740 | Accent #F5B547 (amber) | TextPrimary #E6EBF5 | TextSecondary #94A0B8 | Border #252E47 | Success/Warning/Danger
-
-**Light:** Background #FAFAF7 | Surface #F0EFE9 | Accent #0D7D6B (teal) | TextPrimary #1A1D1A | TextSecondary #5C615E | Border #D4D1C5
+**Light:** Background `#FAFAF7` | Surface `#F0EFE9` | Accent `#0D7D6B` (teal) | TextPrimary `#1A1D1A` | TextSecondary `#5C615E` | Border `#D4D1C5`
 
 **Rule:** 60–30–10 (Background–Surface–Accent). Legacy aliases: `LightColor → Surface`, `DarkColor → Background`, `Text → TextPrimary`.
 
 ---
 
-## ⚙️ Config & Bootstrap
+## Config & Bootstrap
 
 | Config | Location | Purpose |
 |---|---|---|
 | **paths.cfg** | Resources/ | Database + appSettings.json paths (loaded first) |
-| **appSettings.json** | (PathsManager.SettingsFilePath) | Theme, API keys, feature flags, log settings |
-| **.env** | Project root | Fallback for API keys (DEEPSEEK_API_KEY, ALPHAVANTAGE_API_KEY, PREDICTHQ_API_KEY) |
-| **activity.log** | LogFilePath or Resources/ | User actions, AI ops, system events (thread-safe, rotates at LogMaxSizeMb) |
+| **appSettings.json** | PathsManager.SettingsFilePath | Theme, API keys, feature flags, log settings |
+| **.env** | Project root | Fallback API keys (DEEPSEEK_API_KEY, ALPHAVANTAGE_API_KEY, PREDICTHQ_API_KEY) |
+| **activity.log** | LogFilePath or Resources/ | User actions, AI ops, system events (rotates at LogMaxSizeMb) |
 
 **Load order:** PathsManager → SettingsManager → DB Migrate → ReportScheduler.Start → ExternalFactorsScheduler.Start (deferred 2 min).
 
 ---
 
-## 🔐 Security & Auth
+## Security & Auth
 
 - **SessionManager:** Static, holds CurrentUser after login.
-- **Login flow:** Username/password → SHA-256 hash + salt check → 3-fail lockout → email code validation → session set.
-- **Multi-provider AI:** DeepSeek, OpenAI, Claude selectable in SettingsForm; key resolution deferred at call-time (not constructor).
+- **Login flow:** Username/password → SHA-256 hash + salt → 3-fail lockout → email code validation → session set.
+- **Multi-provider AI:** DeepSeek, OpenAI, Claude selectable in SettingsForm; key resolved at call-time, not constructor.
 - **Email accounts:** `smartstock.auth@gmail.com` (AuthPassword) for codes | `smartstock.reports@gmail.com` (ReportsPassword) for reports.
 
 ---
 
-## 📊 Analytics & Scheduling
+## Analytics & Scheduling
 
 | Feature | Files | Firing conditions |
 |---|---|---|
 | **External Factors Fetch** | ExternalFactorsFetchService, ExternalFactorsScheduler | Enabled + 23h cooldown + ±5min of FetchTime |
 | **Weekly Report** | WeeklyReportService, ReportScheduler | Enabled + non-empty recipient + 7d cooldown + ±5min of ReportTime |
-| **Anomaly Detection** | AnalyticsFacade.ComputeAnomalyDetection | Z-score threshold (1.5/2.0/2.5/3.0), aggregation level (Daily/Weekly/Monthly) |
+| **Anomaly Detection** | AnalyticsFacade.ComputeAnomalyDetection | Z-score threshold (1.5/2.0/2.5/3.0), aggregation (Daily/Weekly/Monthly) |
 | **EOQ Model** | AnalyticsFacade.ComputeEoq | Q* = √(2DS/H), SS = z·σ_d·√L, ROP = d̄·L + SS |
 
 ---
 
-## 📝 Logging
+## Logging
 
 `ActivityLogger` (static, thread-safe, file-locked):
 
 | Action | Used in |
 |---|---|
-| ADD/MODIFY/ARCHIVE/RESTORE/DELETE | All 8 CRUD services |
+| ADD / MODIFY / ARCHIVE / RESTORE / DELETE | All 8 CRUD services |
 | DEMAND_FORECAST / CORRELATION / STOCK_OPTIMIZATION / ANOMALY_DETECTION / TEXT_TO_SQL | AnalyticsFacade, TextToSqlService |
 | EXTERNAL_FETCH | ExternalFactorsFetchService |
 
-Log levels: **Info** (all) | **Warning** (noise suppressed) | **Error** (always writes, bypasses level filter).
+Log levels: **Info** (all) | **Warning** (noise suppressed) | **Error** (always writes).
 
 ---
 
+## Forms Structure
+
+```
+Forms/
+  ├── User Control/
+  │   ├── AddForms/     (8 entity forms + BaseAddInstance)
+  │   ├── ModifyForms/  (8 entity forms + BaseModifyInstance)
+  │   ├── SearchForms/  (8 filter panels)
+  │   └── AnalysisForms/ (DemandForecast, CorrelationAnalysis, StockOptimization, LanguageQuery)
+  ├── LoginForms/       (Login, AddAccount, MailConfirmation, Settings)
+  └── Main:             LoginForm, MenuForm, AnalyzeForm, SearchForm, SettingsForm
+```
+
 ---
 
-## ✅ Session Progress: ModifyForm UI Redesign
+## graphify — RAG Index
 
-**Completed:** 2026-04-16
-- **ModifySupplier.Designer.cs** — Converted to Tag-based field grid (6 rows: Supplier ID+search, Name, Contact Person, Email, Phone, Address)
-- **ModifyTransaction.Designer.cs** — Converted to Tag-based field grid (7 rows: Transaction ID+search, Product ID, Entity ID, User ID, Quantity, Type ComboBox, Date DateTimePicker)
-- **ModifyUser.Designer.cs** — Converted to Tag-based field grid (8 rows: User ID+search, Username, Full Name, Password, Email, Role ComboBox, Is Active CheckBox, Failed Count)
+`graphify-out/` is a pre-built knowledge graph of `Classes/` (70 files, 538 nodes, 902 edges). Use it before reading raw source files.
 
-All three use the standardized pattern: base_pnl (Tag="base") → fields_table (160px label + fill input, 52px rows) → Row 0 search_row (TextBox Tag="flat" + IconButton Tag="outlined"). Button changed from `Button` to `FontAwesome.Sharp.IconButton` (MagnifyingGlass icon).
+**When to use (mandatory):** architecture questions, tracing data flow, adding a new service/interface/DTO.
+
+**How:**
+1. Read `graphify-out/GRAPH_REPORT.md` — god nodes, community map, suggested questions.
+2. Search `graphify-out/graph.json` by label → use `source_file` + `source_location` to jump to the exact file/line.
+3. BFS/DFS the graph to trace cross-class paths before opening files.
+
+**Community map:**
+
+| ID | Name | Key classes |
+|----|------|-------------|
+| 0 | Core CRUD Services | CustomerService, ProductService, SaleService, TransactionService, ExternalFactorService |
+| 1 | Category & Activity Logging | CategoryService, ActivityLogger (user actions) |
+| 2 | Analytics Facade & AI | AnalyticsFacade (24 edges) — forecast, anomaly, EOQ, correlation |
+| 3 | UI Utilities & Session | ThemeManager, SessionManager, ComboBoxHelper, DataLayer |
+| 4 | Forecast & Recommendation | ForecastService, RecommendationService, GenericRepository (bridge) |
+| 5 | Activity Logging | ActivityLogger (system/AI actions) |
+| 6 | User Auth & Security | UserService, SecurityService |
+| 7 | Weekly Reports & Scheduling | WeeklyReportService, ReportScheduler |
+| 8 | AI Providers | DeepSeekAiProvider, FallbackAiReasoningProvider |
+| 9 | DB Context & Seeding | SmartStockContext, DataSeeder |
+| 10 | Supplier Management | SupplierService |
+| 11–21 | Interfaces | IRepository, ISaveableControl, IFilterControl, IEconometricEngine, IExternalDataProvider, ITextToSqlProvider, IAIReasoningProvider, ILLMPromptBuilder, IAnalysisParameterControl |
+| 22 | Paths Configuration | PathsManager |
+| 27–38 | Filter DTOs | One per entity (Category, Customer, Product, Sale, Supplier, Transaction, User, ExternalFactor, EOQ, Analysis, Anomaly) |
+| 39–50 | EF Models | One per entity model |
+| 51 | App Settings | AppSettings |
+
+**God nodes** (high blast radius — touch carefully):
+1. `AnalyticsFacade` — 24 edges
+2. `UserService` — 21 edges
+3. `CustomerService` / `ExternalFactorService` — 19 edges each
+4. `SaleService` — 17 edges
+5. `ThemeManager` — 14 edges
+
+**After modifying `Classes/` files:** run `/graphify ./Classes --update` to refresh (AST-only, ~5s, no API cost).
 
 ---
 
-## 🔗 See Also
+## See Also
 
-- [/docs/FEATURES.md](docs/FEATURES.md) — Full feature checklist
-- [/docs/UI_ARCHITECTURE.md](docs/UI_ARCHITECTURE.md) — AnalyzeForm, ModifySale cart, SettingsForm scroll patterns
-- [/docs/SYSTEMS.md](docs/SYSTEMS.md) — Detailed architecture of Forecasting, Weekly Reports, External Factors, Logging
-- [/docs/PATTERNS.md](docs/PATTERNS.md) — Repository ClearChanges, BindingList DataSource, Filter tooltips, ThemeManager evolution
-- `.claude/rules/solid.md` — SOLID principles
+- [docs/FEATURES.md](docs/FEATURES.md) — Full feature checklist
+- [docs/UI_ARCHITECTURE.md](docs/UI_ARCHITECTURE.md) — AnalyzeForm, ModifySale cart, SettingsForm scroll patterns
+- [docs/SYSTEMS.md](docs/SYSTEMS.md) — Forecasting, Weekly Reports, External Factors, Logging architecture
+- [docs/PATTERNS.md](docs/PATTERNS.md) — Repository ClearChanges, BindingList DataSource, Filter tooltips, ThemeManager evolution
+- [.claude/rules/solid.md](.claude/rules/solid.md) — SOLID principles
