@@ -77,6 +77,15 @@ namespace SmartStock.Classes.Utils
             {
                 frm.BackColor = theme.Background;
                 frm.ForeColor = theme.TextPrimary;
+
+                string iconName = CurrentThemeName == "Dark" ? "icon_dark.ico" : "icon_light.ico";
+                string iconPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", iconName);
+                if (File.Exists(iconPath))
+                {
+                    var oldIcon = frm.Icon;
+                    frm.Icon = new Icon(iconPath);
+                    oldIcon?.Dispose();
+                }
             }
 
             foreach (Control c in parent.Controls)
@@ -160,6 +169,18 @@ namespace SmartStock.Classes.Utils
                         if (btn is IconButton cleanIcn)
                             cleanIcn.IconColor = theme.Text;
                     }
+                    else if ("view_pass".Equals(btn.Tag))
+                    {
+                        btn.BackColor = Color.Transparent;
+                        btn.FlatAppearance.BorderSize = 0;
+                        btn.FlatAppearance.MouseOverBackColor = Color.Transparent;
+                        btn.FlatAppearance.MouseDownBackColor = Color.Transparent;
+                        if (btn is IconButton cleanIcn)
+                        {
+                            cleanIcn.IconColor = theme.TextSecondary;
+                            cleanIcn.IconSize = 30;
+                        }
+                    }
                     else
                     {
                         btn.BackColor = theme.LightColor;
@@ -180,7 +201,7 @@ namespace SmartStock.Classes.Utils
                     {
                         // OTP digit boxes: SurfaceHover bg + amber digit text + single border
                         txt.BackColor   = theme.SurfaceHover;
-                        txt.ForeColor   = theme.Accent;
+                        txt.ForeColor   = theme.Text;
                         txt.BorderStyle = BorderStyle.FixedSingle;
                     }
                     else

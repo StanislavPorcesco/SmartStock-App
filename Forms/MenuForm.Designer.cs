@@ -96,7 +96,7 @@ namespace SmartStock.Forms
             root_shell.Name = "root_shell";
             root_shell.RowCount = 1;
             root_shell.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            root_shell.Size = new Size(1902, 1055);
+            root_shell.Size = new Size(1361, 757);
             root_shell.TabIndex = 0;
             // 
             // menu_pnl
@@ -107,7 +107,7 @@ namespace SmartStock.Forms
             menu_pnl.Margin = new Padding(0);
             menu_pnl.MinimumSize = new Size(320, 0);
             menu_pnl.Name = "menu_pnl";
-            menu_pnl.Size = new Size(320, 1055);
+            menu_pnl.Size = new Size(320, 757);
             menu_pnl.TabIndex = 0;
             menu_pnl.Tag = "base";
             // 
@@ -126,7 +126,7 @@ namespace SmartStock.Forms
             menu_stack.RowStyles.Add(new RowStyle(SizeType.Absolute, 128F));
             menu_stack.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             menu_stack.RowStyles.Add(new RowStyle(SizeType.Absolute, 116F));
-            menu_stack.Size = new Size(320, 1055);
+            menu_stack.Size = new Size(320, 757);
             menu_stack.TabIndex = 0;
             // 
             // brand_pnl
@@ -227,7 +227,7 @@ namespace SmartStock.Forms
             menu_buttons_pnl.Margin = new Padding(0);
             menu_buttons_pnl.Name = "menu_buttons_pnl";
             menu_buttons_pnl.Padding = new Padding(12);
-            menu_buttons_pnl.Size = new Size(320, 811);
+            menu_buttons_pnl.Size = new Size(320, 513);
             menu_buttons_pnl.TabIndex = 1;
             menu_buttons_pnl.Tag = "base";
             // 
@@ -344,7 +344,7 @@ namespace SmartStock.Forms
             user_footer_pnl.Controls.Add(user_card_pnl);
             user_footer_pnl.Controls.Add(user_divider);
             user_footer_pnl.Dock = DockStyle.Fill;
-            user_footer_pnl.Location = new Point(0, 939);
+            user_footer_pnl.Location = new Point(0, 641);
             user_footer_pnl.Margin = new Padding(0);
             user_footer_pnl.Name = "user_footer_pnl";
             user_footer_pnl.Padding = new Padding(12, 0, 12, 12);
@@ -460,7 +460,7 @@ namespace SmartStock.Forms
             right_host.Location = new Point(320, 0);
             right_host.Margin = new Padding(0);
             right_host.Name = "right_host";
-            right_host.Size = new Size(1582, 1055);
+            right_host.Size = new Size(1041, 757);
             right_host.TabIndex = 1;
             right_host.Tag = "base";
             // 
@@ -470,7 +470,7 @@ namespace SmartStock.Forms
             desktop_pnl.Location = new Point(0, 43);
             desktop_pnl.Margin = new Padding(0);
             desktop_pnl.Name = "desktop_pnl";
-            desktop_pnl.Size = new Size(1582, 969);
+            desktop_pnl.Size = new Size(1041, 671);
             desktop_pnl.TabIndex = 1;
             desktop_pnl.Tag = "workplace";
             // 
@@ -478,10 +478,10 @@ namespace SmartStock.Forms
             // 
             bottom_pnl.Controls.Add(bottom_grid);
             bottom_pnl.Dock = DockStyle.Bottom;
-            bottom_pnl.Location = new Point(0, 1012);
+            bottom_pnl.Location = new Point(0, 714);
             bottom_pnl.Margin = new Padding(0);
             bottom_pnl.Name = "bottom_pnl";
-            bottom_pnl.Size = new Size(1582, 43);
+            bottom_pnl.Size = new Size(1041, 43);
             bottom_pnl.TabIndex = 2;
             bottom_pnl.Tag = "base";
             // 
@@ -501,7 +501,7 @@ namespace SmartStock.Forms
             bottom_grid.RowCount = 2;
             bottom_grid.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             bottom_grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 34F));
-            bottom_grid.Size = new Size(1582, 43);
+            bottom_grid.Size = new Size(1041, 43);
             bottom_grid.TabIndex = 0;
             // 
             // panel1
@@ -510,7 +510,7 @@ namespace SmartStock.Forms
             panel1.Dock = DockStyle.Top;
             panel1.Location = new Point(27, 3);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1528, 1);
+            panel1.Size = new Size(987, 1);
             panel1.TabIndex = 2;
             panel1.Tag = "divider";
             // 
@@ -521,7 +521,7 @@ namespace SmartStock.Forms
             status_lbl.Location = new Point(24, 9);
             status_lbl.Margin = new Padding(0);
             status_lbl.Name = "status_lbl";
-            status_lbl.Size = new Size(1426, 34);
+            status_lbl.Size = new Size(885, 34);
             status_lbl.TabIndex = 0;
             status_lbl.Tag = "muted";
             status_lbl.Text = "Ready";
@@ -532,7 +532,7 @@ namespace SmartStock.Forms
             version_lbl.AutoSize = true;
             version_lbl.Dock = DockStyle.Fill;
             version_lbl.Font = new Font("Segoe UI", 8.25F);
-            version_lbl.Location = new Point(1450, 9);
+            version_lbl.Location = new Point(909, 9);
             version_lbl.Margin = new Padding(0);
             version_lbl.Name = "version_lbl";
             version_lbl.Size = new Size(108, 34);
@@ -549,9 +549,11 @@ namespace SmartStock.Forms
             titlebar_pnl.Location = new Point(0, 0);
             titlebar_pnl.Margin = new Padding(0);
             titlebar_pnl.Name = "titlebar_pnl";
-            titlebar_pnl.Size = new Size(1582, 43);
+            titlebar_pnl.Size = new Size(1041, 43);
             titlebar_pnl.TabIndex = 0;
             titlebar_pnl.Tag = "base";
+            titlebar_pnl.MouseDoubleClick += titlebar_pnl_MouseDoubleClick;
+            titlebar_pnl.MouseDown += titlebar_pnl_MouseDown;
             // 
             // tableLayoutPanel1
             // 
@@ -563,7 +565,7 @@ namespace SmartStock.Forms
             tableLayoutPanel1.Controls.Add(maximize_btn, 1, 0);
             tableLayoutPanel1.Controls.Add(close_btn, 2, 0);
             tableLayoutPanel1.Dock = DockStyle.Right;
-            tableLayoutPanel1.Location = new Point(1396, 0);
+            tableLayoutPanel1.Location = new Point(855, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 1;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
@@ -586,6 +588,7 @@ namespace SmartStock.Forms
             minimize_btn.TabIndex = 0;
             minimize_btn.Tag = "titlebar_buttons";
             minimize_btn.UseVisualStyleBackColor = false;
+            minimize_btn.Click += minimize_btn_Click;
             // 
             // maximize_btn
             // 
@@ -602,6 +605,7 @@ namespace SmartStock.Forms
             maximize_btn.TabIndex = 1;
             maximize_btn.Tag = "titlebar_buttons";
             maximize_btn.UseVisualStyleBackColor = true;
+            maximize_btn.Click += maximize_btn_Click;
             // 
             // close_btn
             // 
@@ -618,13 +622,14 @@ namespace SmartStock.Forms
             close_btn.TabIndex = 2;
             close_btn.Tag = "titlebar_buttons";
             close_btn.UseVisualStyleBackColor = true;
+            close_btn.Click += close_btn_Click;
             // 
             // titlebar_divider
             // 
             titlebar_divider.Dock = DockStyle.Bottom;
             titlebar_divider.Location = new Point(0, 42);
             titlebar_divider.Name = "titlebar_divider";
-            titlebar_divider.Size = new Size(1582, 1);
+            titlebar_divider.Size = new Size(1041, 1);
             titlebar_divider.TabIndex = 0;
             titlebar_divider.Tag = "divider";
             // 
@@ -660,8 +665,9 @@ namespace SmartStock.Forms
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1902, 1055);
+            ClientSize = new Size(1361, 757);
             Controls.Add(root_shell);
+            FormBorderStyle = FormBorderStyle.None;
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "MenuForm";
             StartPosition = FormStartPosition.CenterScreen;

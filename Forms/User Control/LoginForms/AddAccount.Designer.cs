@@ -9,9 +9,7 @@ namespace SmartStock.Forms.AddForms
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
-            {
                 components.Dispose();
-            }
             base.Dispose(disposing);
         }
 
@@ -20,6 +18,8 @@ namespace SmartStock.Forms.AddForms
         private void InitializeComponent()
         {
             root_table = new TableLayoutPanel();
+            title_pnl = new Panel();
+            close_btn = new IconButton();
             hero_pnl = new Panel();
             hero_grid = new TableLayoutPanel();
             brand_row = new TableLayoutPanel();
@@ -33,46 +33,37 @@ namespace SmartStock.Forms.AddForms
             tagline2_lbl = new Label();
             subtag_lbl = new Label();
             form_host = new Panel();
-            footer_pnl = new TableLayoutPanel();
-            divider_pnl = new Panel();
-            signin_hint_lbl = new Label();
-            return_btn = new Button();
             form_table = new TableLayoutPanel();
+            footer_pnl = new TableLayoutPanel();
+            panel6 = new Panel();
+            label6 = new Label();
+            return_btn = new Button();
             title_lbl = new Label();
             subtitle_lbl = new Label();
             username_lbl = new Label();
             username_host = new Panel();
-            password_lbl = new Label();
-            password_host = new Panel();
-            fullname_lbl = new Label();
-            fullname_host = new Panel();
-            email_lbl = new Label();
-            email_host = new Panel();
-            create_btn = new Button();
             username_inner = new TableLayoutPanel();
             user_icn = new IconPictureBox();
             username_tb = new TextBox();
+            password_lbl = new Label();
+            password_host = new Panel();
             password_inner = new TableLayoutPanel();
+            view_pass_btn = new IconButton();
             lock_icn = new IconPictureBox();
             password_tb = new TextBox();
+            fullname_lbl = new Label();
+            fullname_host = new Panel();
             fullname_inner = new TableLayoutPanel();
             id_icn = new IconPictureBox();
             fullname_tb = new TextBox();
+            email_lbl = new Label();
+            email_host = new Panel();
             email_inner = new TableLayoutPanel();
             mail_icn = new IconPictureBox();
             email_tb = new TextBox();
-            base_pnl = new Panel();
-            panel1 = new Panel();
-            add_instance_pnl = new Panel();
-            groupBox2 = new GroupBox();
-            tableLayoutPanel2 = new TableLayoutPanel();
-            settings_lbl = new Label();
-            db_lbl = new Label();
-            selector_pnl = new Panel();
-            label1 = new Label();
-            label2 = new Label();
-            label3 = new Label();
+            create_btn = new Button();
             root_table.SuspendLayout();
+            title_pnl.SuspendLayout();
             hero_pnl.SuspendLayout();
             hero_grid.SuspendLayout();
             brand_row.SuspendLayout();
@@ -80,11 +71,19 @@ namespace SmartStock.Forms.AddForms
             brand_stack.SuspendLayout();
             hero_quote.SuspendLayout();
             form_host.SuspendLayout();
-            footer_pnl.SuspendLayout();
             form_table.SuspendLayout();
+            footer_pnl.SuspendLayout();
+            username_host.SuspendLayout();
+            username_inner.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)user_icn).BeginInit();
+            password_host.SuspendLayout();
+            password_inner.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)lock_icn).BeginInit();
+            fullname_host.SuspendLayout();
+            fullname_inner.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)id_icn).BeginInit();
+            email_host.SuspendLayout();
+            email_inner.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)mail_icn).BeginInit();
             SuspendLayout();
             // 
@@ -93,16 +92,47 @@ namespace SmartStock.Forms.AddForms
             root_table.ColumnCount = 2;
             root_table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             root_table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            root_table.Controls.Add(title_pnl, 1, 0);
             root_table.Controls.Add(hero_pnl, 0, 0);
-            root_table.Controls.Add(form_host, 1, 0);
+            root_table.Controls.Add(form_host, 1, 1);
             root_table.Dock = DockStyle.Fill;
             root_table.Location = new Point(0, 0);
             root_table.Margin = new Padding(0);
             root_table.Name = "root_table";
-            root_table.RowCount = 1;
+            root_table.RowCount = 2;
+            root_table.RowStyles.Add(new RowStyle());
             root_table.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            root_table.Size = new Size(890, 584);
+            root_table.Size = new Size(966, 728);
             root_table.TabIndex = 0;
+            // 
+            // title_pnl
+            // 
+            title_pnl.Controls.Add(close_btn);
+            title_pnl.Dock = DockStyle.Fill;
+            title_pnl.Location = new Point(486, 3);
+            title_pnl.MaximumSize = new Size(0, 30);
+            title_pnl.Name = "title_pnl";
+            title_pnl.Size = new Size(477, 20);
+            title_pnl.TabIndex = 3;
+            // 
+            // close_btn
+            // 
+            close_btn.Dock = DockStyle.Right;
+            close_btn.FlatAppearance.BorderSize = 0;
+            close_btn.FlatStyle = FlatStyle.Flat;
+            close_btn.IconChar = IconChar.X;
+            close_btn.IconColor = Color.Black;
+            close_btn.IconFont = IconFont.Auto;
+            close_btn.IconSize = 15;
+            close_btn.Location = new Point(462, 0);
+            close_btn.MaximumSize = new Size(15, 15);
+            close_btn.MinimumSize = new Size(15, 15);
+            close_btn.Name = "close_btn";
+            close_btn.Size = new Size(15, 15);
+            close_btn.TabIndex = 3;
+            close_btn.Tag = "ghost";
+            close_btn.UseVisualStyleBackColor = true;
+            close_btn.Click += close_btn_Click;
             // 
             // hero_pnl
             // 
@@ -111,7 +141,8 @@ namespace SmartStock.Forms.AddForms
             hero_pnl.Location = new Point(3, 3);
             hero_pnl.Name = "hero_pnl";
             hero_pnl.Padding = new Padding(40);
-            hero_pnl.Size = new Size(439, 578);
+            root_table.SetRowSpan(hero_pnl, 2);
+            hero_pnl.Size = new Size(477, 722);
             hero_pnl.TabIndex = 0;
             hero_pnl.Tag = "hero";
             // 
@@ -130,7 +161,7 @@ namespace SmartStock.Forms.AddForms
             hero_grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 96F));
             hero_grid.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             hero_grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 160F));
-            hero_grid.Size = new Size(359, 498);
+            hero_grid.Size = new Size(397, 642);
             hero_grid.TabIndex = 0;
             // 
             // brand_row
@@ -146,7 +177,7 @@ namespace SmartStock.Forms.AddForms
             brand_row.Name = "brand_row";
             brand_row.RowCount = 1;
             brand_row.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            brand_row.Size = new Size(359, 96);
+            brand_row.Size = new Size(397, 96);
             brand_row.TabIndex = 0;
             // 
             // brand_icn
@@ -181,7 +212,7 @@ namespace SmartStock.Forms.AddForms
             brand_stack.RowCount = 2;
             brand_stack.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
             brand_stack.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
-            brand_stack.Size = new Size(276, 96);
+            brand_stack.Size = new Size(314, 96);
             brand_stack.TabIndex = 1;
             // 
             // brand_lbl
@@ -191,7 +222,7 @@ namespace SmartStock.Forms.AddForms
             brand_lbl.Location = new Point(0, 8);
             brand_lbl.Margin = new Padding(0);
             brand_lbl.Name = "brand_lbl";
-            brand_lbl.Size = new Size(276, 50);
+            brand_lbl.Size = new Size(314, 50);
             brand_lbl.TabIndex = 0;
             brand_lbl.Tag = "hero";
             brand_lbl.Text = "SmartStock";
@@ -204,7 +235,7 @@ namespace SmartStock.Forms.AddForms
             wordmark_lbl.Location = new Point(0, 58);
             wordmark_lbl.Margin = new Padding(0);
             wordmark_lbl.Name = "wordmark_lbl";
-            wordmark_lbl.Size = new Size(276, 38);
+            wordmark_lbl.Size = new Size(314, 38);
             wordmark_lbl.TabIndex = 1;
             wordmark_lbl.Tag = "hero-muted";
             wordmark_lbl.Text = "INVENTORY  ·  INTELLIGENCE";
@@ -215,7 +246,7 @@ namespace SmartStock.Forms.AddForms
             hero_spacer.Location = new Point(0, 96);
             hero_spacer.Margin = new Padding(0);
             hero_spacer.Name = "hero_spacer";
-            hero_spacer.Size = new Size(359, 242);
+            hero_spacer.Size = new Size(397, 386);
             hero_spacer.TabIndex = 1;
             hero_spacer.Tag = "hero";
             // 
@@ -227,14 +258,14 @@ namespace SmartStock.Forms.AddForms
             hero_quote.Controls.Add(tagline2_lbl, 0, 1);
             hero_quote.Controls.Add(subtag_lbl, 0, 2);
             hero_quote.Dock = DockStyle.Fill;
-            hero_quote.Location = new Point(0, 338);
+            hero_quote.Location = new Point(0, 482);
             hero_quote.Margin = new Padding(0);
             hero_quote.Name = "hero_quote";
             hero_quote.RowCount = 3;
             hero_quote.RowStyles.Add(new RowStyle(SizeType.Absolute, 52F));
             hero_quote.RowStyles.Add(new RowStyle(SizeType.Absolute, 52F));
             hero_quote.RowStyles.Add(new RowStyle(SizeType.Absolute, 42F));
-            hero_quote.Size = new Size(359, 160);
+            hero_quote.Size = new Size(397, 160);
             hero_quote.TabIndex = 2;
             // 
             // tagline_lbl
@@ -244,7 +275,7 @@ namespace SmartStock.Forms.AddForms
             tagline_lbl.Location = new Point(0, 0);
             tagline_lbl.Margin = new Padding(0);
             tagline_lbl.Name = "tagline_lbl";
-            tagline_lbl.Size = new Size(359, 52);
+            tagline_lbl.Size = new Size(397, 52);
             tagline_lbl.TabIndex = 0;
             tagline_lbl.Tag = "hero";
             tagline_lbl.Text = "Join the team.";
@@ -257,7 +288,7 @@ namespace SmartStock.Forms.AddForms
             tagline2_lbl.Location = new Point(0, 52);
             tagline2_lbl.Margin = new Padding(0);
             tagline2_lbl.Name = "tagline2_lbl";
-            tagline2_lbl.Size = new Size(359, 52);
+            tagline2_lbl.Size = new Size(397, 52);
             tagline2_lbl.TabIndex = 1;
             tagline2_lbl.Tag = "accent";
             tagline2_lbl.Text = "Start in minutes.";
@@ -269,64 +300,105 @@ namespace SmartStock.Forms.AddForms
             subtag_lbl.Location = new Point(0, 110);
             subtag_lbl.Margin = new Padding(0, 6, 0, 0);
             subtag_lbl.Name = "subtag_lbl";
-            subtag_lbl.Size = new Size(359, 50);
+            subtag_lbl.Size = new Size(397, 50);
             subtag_lbl.TabIndex = 2;
             subtag_lbl.Tag = "hero-muted";
             subtag_lbl.Text = "One account unlocks every module — analytics, alerts, AI.";
             // 
             // form_host
             // 
-            form_host.Controls.Add(footer_pnl);
             form_host.Controls.Add(form_table);
             form_host.Dock = DockStyle.Fill;
-            form_host.Location = new Point(448, 3);
+            form_host.Location = new Point(486, 29);
             form_host.Name = "form_host";
-            form_host.Padding = new Padding(48, 28, 48, 28);
-            form_host.Size = new Size(439, 578);
+            form_host.Padding = new Padding(56, 40, 56, 0);
+            form_host.Size = new Size(477, 696);
             form_host.TabIndex = 1;
             form_host.Tag = "base";
+            // 
+            // form_table
+            // 
+            form_table.ColumnCount = 1;
+            form_table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            form_table.Controls.Add(footer_pnl, 0, 17);
+            form_table.Controls.Add(title_lbl, 0, 0);
+            form_table.Controls.Add(subtitle_lbl, 0, 1);
+            form_table.Controls.Add(username_lbl, 0, 3);
+            form_table.Controls.Add(username_host, 0, 4);
+            form_table.Controls.Add(password_lbl, 0, 6);
+            form_table.Controls.Add(password_host, 0, 7);
+            form_table.Controls.Add(fullname_lbl, 0, 9);
+            form_table.Controls.Add(fullname_host, 0, 10);
+            form_table.Controls.Add(email_lbl, 0, 12);
+            form_table.Controls.Add(email_host, 0, 13);
+            form_table.Controls.Add(create_btn, 0, 15);
+            form_table.Dock = DockStyle.Fill;
+            form_table.Location = new Point(56, 40);
+            form_table.Margin = new Padding(0);
+            form_table.Name = "form_table";
+            form_table.RowCount = 18;
+            form_table.RowStyles.Add(new RowStyle());
+            form_table.RowStyles.Add(new RowStyle());
+            form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            form_table.RowStyles.Add(new RowStyle());
+            form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 10F));
+            form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            form_table.RowStyles.Add(new RowStyle());
+            form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 10F));
+            form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            form_table.RowStyles.Add(new RowStyle());
+            form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 10F));
+            form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            form_table.RowStyles.Add(new RowStyle());
+            form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
+            form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 52F));
+            form_table.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 52F));
+            form_table.Size = new Size(365, 656);
+            form_table.TabIndex = 0;
             // 
             // footer_pnl
             // 
             footer_pnl.ColumnCount = 2;
             footer_pnl.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             footer_pnl.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 160F));
-            footer_pnl.Controls.Add(divider_pnl, 0, 0);
-            footer_pnl.Controls.Add(signin_hint_lbl, 0, 1);
+            footer_pnl.Controls.Add(panel6, 0, 0);
+            footer_pnl.Controls.Add(label6, 0, 1);
             footer_pnl.Controls.Add(return_btn, 1, 1);
-            footer_pnl.Dock = DockStyle.Bottom;
-            footer_pnl.Location = new Point(48, 504);
+            footer_pnl.Dock = DockStyle.Fill;
+            footer_pnl.Location = new Point(0, 604);
             footer_pnl.Margin = new Padding(0);
             footer_pnl.Name = "footer_pnl";
             footer_pnl.RowCount = 2;
             footer_pnl.RowStyles.Add(new RowStyle(SizeType.Absolute, 1F));
             footer_pnl.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            footer_pnl.Size = new Size(343, 46);
-            footer_pnl.TabIndex = 1;
+            footer_pnl.Size = new Size(365, 52);
+            footer_pnl.TabIndex = 5;
             // 
-            // divider_pnl
+            // panel6
             // 
-            footer_pnl.SetColumnSpan(divider_pnl, 2);
-            divider_pnl.Dock = DockStyle.Fill;
-            divider_pnl.Location = new Point(0, 0);
-            divider_pnl.Margin = new Padding(0, 0, 0, 10);
-            divider_pnl.Name = "divider_pnl";
-            divider_pnl.Size = new Size(343, 1);
-            divider_pnl.TabIndex = 0;
-            divider_pnl.Tag = "divider";
+            footer_pnl.SetColumnSpan(panel6, 2);
+            panel6.Dock = DockStyle.Fill;
+            panel6.Location = new Point(0, 0);
+            panel6.Margin = new Padding(0, 0, 0, 10);
+            panel6.Name = "panel6";
+            panel6.Size = new Size(365, 1);
+            panel6.TabIndex = 0;
+            panel6.Tag = "divider";
             // 
-            // signin_hint_lbl
+            // label6
             // 
-            signin_hint_lbl.Dock = DockStyle.Fill;
-            signin_hint_lbl.Font = new Font("Segoe UI", 9.5F);
-            signin_hint_lbl.Location = new Point(0, 1);
-            signin_hint_lbl.Margin = new Padding(0);
-            signin_hint_lbl.Name = "signin_hint_lbl";
-            signin_hint_lbl.Size = new Size(183, 45);
-            signin_hint_lbl.TabIndex = 1;
-            signin_hint_lbl.Tag = "muted";
-            signin_hint_lbl.Text = "Already have an account?";
-            signin_hint_lbl.TextAlign = ContentAlignment.MiddleLeft;
+            label6.Dock = DockStyle.Fill;
+            label6.Font = new Font("Segoe UI", 9.5F);
+            label6.Location = new Point(0, 1);
+            label6.Margin = new Padding(0);
+            label6.Name = "label6";
+            label6.Size = new Size(205, 51);
+            label6.TabIndex = 1;
+            label6.Tag = "muted";
+            label6.Text = "Already have an account?";
+            label6.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // return_btn
             // 
@@ -334,64 +406,24 @@ namespace SmartStock.Forms.AddForms
             return_btn.Dock = DockStyle.Fill;
             return_btn.FlatStyle = FlatStyle.Flat;
             return_btn.Font = new Font("Segoe UI Semibold", 9.5F);
-            return_btn.Location = new Point(183, 1);
+            return_btn.Location = new Point(205, 1);
             return_btn.Margin = new Padding(0);
             return_btn.Name = "return_btn";
-            return_btn.Size = new Size(160, 45);
-            return_btn.TabIndex = 6;
+            return_btn.Size = new Size(160, 51);
+            return_btn.TabIndex = 7;
             return_btn.Tag = "ghost";
             return_btn.Text = "Sign in";
             return_btn.UseVisualStyleBackColor = true;
             return_btn.Click += return_btn_Click;
             // 
-            // form_table
-            // 
-            form_table.ColumnCount = 1;
-            form_table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            form_table.Controls.Add(title_lbl, 0, 1);
-            form_table.Controls.Add(subtitle_lbl, 0, 2);
-            form_table.Controls.Add(username_lbl, 0, 4);
-            form_table.Controls.Add(username_host, 0, 5);
-            form_table.Controls.Add(password_lbl, 0, 7);
-            form_table.Controls.Add(password_host, 0, 8);
-            form_table.Controls.Add(fullname_lbl, 0, 10);
-            form_table.Controls.Add(fullname_host, 0, 11);
-            form_table.Controls.Add(email_lbl, 0, 13);
-            form_table.Controls.Add(email_host, 0, 14);
-            form_table.Controls.Add(create_btn, 0, 16);
-            form_table.Dock = DockStyle.Fill;
-            form_table.Location = new Point(48, 28);
-            form_table.Margin = new Padding(0);
-            form_table.Name = "form_table";
-            form_table.RowCount = 17;
-            form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 8F));
-            form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
-            form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 24F));
-            form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 18F));
-            form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
-            form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 10F));
-            form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 18F));
-            form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
-            form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 10F));
-            form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 18F));
-            form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
-            form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 10F));
-            form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 18F));
-            form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
-            form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 18F));
-            form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-            form_table.Size = new Size(343, 522);
-            form_table.TabIndex = 0;
-            // 
             // title_lbl
             // 
             title_lbl.Dock = DockStyle.Fill;
             title_lbl.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
-            title_lbl.Location = new Point(0, 8);
+            title_lbl.Location = new Point(0, 0);
             title_lbl.Margin = new Padding(0);
             title_lbl.Name = "title_lbl";
-            title_lbl.Size = new Size(343, 40);
+            title_lbl.Size = new Size(365, 40);
             title_lbl.TabIndex = 0;
             title_lbl.Text = "Create your account";
             title_lbl.TextAlign = ContentAlignment.MiddleLeft;
@@ -400,10 +432,10 @@ namespace SmartStock.Forms.AddForms
             // 
             subtitle_lbl.Dock = DockStyle.Fill;
             subtitle_lbl.Font = new Font("Segoe UI", 9.5F);
-            subtitle_lbl.Location = new Point(0, 48);
+            subtitle_lbl.Location = new Point(0, 40);
             subtitle_lbl.Margin = new Padding(0);
             subtitle_lbl.Name = "subtitle_lbl";
-            subtitle_lbl.Size = new Size(343, 24);
+            subtitle_lbl.Size = new Size(365, 24);
             subtitle_lbl.TabIndex = 1;
             subtitle_lbl.Tag = "muted";
             subtitle_lbl.Text = "A verification code will be sent to your email.";
@@ -411,265 +443,325 @@ namespace SmartStock.Forms.AddForms
             // 
             // username_lbl
             // 
-            username_lbl.Location = new Point(3, 92);
+            username_lbl.Dock = DockStyle.Fill;
+            username_lbl.Font = new Font("Segoe UI", 8.25F, FontStyle.Bold);
+            username_lbl.Location = new Point(0, 84);
+            username_lbl.Margin = new Padding(0);
             username_lbl.Name = "username_lbl";
-            username_lbl.Size = new Size(100, 18);
+            username_lbl.Size = new Size(365, 20);
             username_lbl.TabIndex = 2;
+            username_lbl.Tag = "muted";
+            username_lbl.Text = "USERNAME";
+            username_lbl.TextAlign = ContentAlignment.BottomLeft;
             // 
             // username_host
             // 
+            username_host.Controls.Add(username_inner);
             username_host.Dock = DockStyle.Fill;
-            username_host.Location = new Point(3, 113);
+            username_host.Location = new Point(0, 104);
+            username_host.Margin = new Padding(0);
             username_host.Name = "username_host";
-            username_host.Size = new Size(337, 38);
-            username_host.TabIndex = 3;
-            // 
-            // password_lbl
-            // 
-            password_lbl.Location = new Point(3, 164);
-            password_lbl.Name = "password_lbl";
-            password_lbl.Size = new Size(100, 18);
-            password_lbl.TabIndex = 4;
-            // 
-            // password_host
-            // 
-            password_host.Dock = DockStyle.Fill;
-            password_host.Location = new Point(3, 185);
-            password_host.Name = "password_host";
-            password_host.Size = new Size(337, 38);
-            password_host.TabIndex = 5;
-            // 
-            // fullname_lbl
-            // 
-            fullname_lbl.Location = new Point(3, 236);
-            fullname_lbl.Name = "fullname_lbl";
-            fullname_lbl.Size = new Size(100, 18);
-            fullname_lbl.TabIndex = 6;
-            // 
-            // fullname_host
-            // 
-            fullname_host.Dock = DockStyle.Fill;
-            fullname_host.Location = new Point(3, 257);
-            fullname_host.Name = "fullname_host";
-            fullname_host.Size = new Size(337, 38);
-            fullname_host.TabIndex = 7;
-            // 
-            // email_lbl
-            // 
-            email_lbl.Location = new Point(3, 308);
-            email_lbl.Name = "email_lbl";
-            email_lbl.Size = new Size(100, 18);
-            email_lbl.TabIndex = 8;
-            // 
-            // email_host
-            // 
-            email_host.Dock = DockStyle.Fill;
-            email_host.Location = new Point(3, 329);
-            email_host.Name = "email_host";
-            email_host.Size = new Size(337, 38);
-            email_host.TabIndex = 9;
-            // 
-            // create_btn
-            // 
-            create_btn.Cursor = Cursors.Hand;
-            create_btn.Dock = DockStyle.Top;
-            create_btn.FlatStyle = FlatStyle.Flat;
-            create_btn.Font = new Font("Segoe UI Semibold", 11F);
-            create_btn.Location = new Point(0, 388);
-            create_btn.Margin = new Padding(0);
-            create_btn.Name = "create_btn";
-            create_btn.Size = new Size(343, 66);
-            create_btn.TabIndex = 5;
-            create_btn.Tag = "cta";
-            create_btn.Text = "Send verification  →";
-            create_btn.UseVisualStyleBackColor = false;
-            create_btn.Click += create_btn_Click;
+            username_host.Size = new Size(365, 44);
+            username_host.TabIndex = 0;
+            username_host.Tag = "input";
             // 
             // username_inner
             // 
+            username_inner.ColumnCount = 2;
+            username_inner.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40F));
+            username_inner.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            username_inner.Controls.Add(user_icn, 0, 0);
+            username_inner.Controls.Add(username_tb, 1, 0);
+            username_inner.Dock = DockStyle.Fill;
             username_inner.Location = new Point(0, 0);
+            username_inner.Margin = new Padding(0);
             username_inner.Name = "username_inner";
-            username_inner.Size = new Size(200, 100);
+            username_inner.RowCount = 1;
+            username_inner.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            username_inner.Size = new Size(365, 44);
             username_inner.TabIndex = 0;
             // 
             // user_icn
             // 
             user_icn.BackColor = SystemColors.Control;
+            user_icn.Dock = DockStyle.Fill;
             user_icn.ForeColor = SystemColors.ControlText;
-            user_icn.IconChar = IconChar.None;
+            user_icn.IconChar = IconChar.User;
             user_icn.IconColor = SystemColors.ControlText;
             user_icn.IconFont = IconFont.Auto;
+            user_icn.IconSize = 40;
             user_icn.Location = new Point(0, 0);
+            user_icn.Margin = new Padding(0);
             user_icn.Name = "user_icn";
-            user_icn.Size = new Size(32, 32);
+            user_icn.Size = new Size(40, 44);
+            user_icn.SizeMode = PictureBoxSizeMode.CenterImage;
             user_icn.TabIndex = 0;
             user_icn.TabStop = false;
+            user_icn.Tag = "input";
             // 
             // username_tb
             // 
-            username_tb.Location = new Point(0, 0);
+            username_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            username_tb.BorderStyle = BorderStyle.None;
+            username_tb.Font = new Font("Segoe UI", 10.5F);
+            username_tb.Location = new Point(40, 10);
+            username_tb.Margin = new Padding(0, 0, 8, 0);
             username_tb.Name = "username_tb";
-            username_tb.Size = new Size(100, 27);
+            username_tb.Size = new Size(317, 24);
             username_tb.TabIndex = 1;
+            username_tb.Tag = "flat";
+            // 
+            // password_lbl
+            // 
+            password_lbl.Dock = DockStyle.Fill;
+            password_lbl.Font = new Font("Segoe UI", 8.25F, FontStyle.Bold);
+            password_lbl.Location = new Point(0, 158);
+            password_lbl.Margin = new Padding(0);
+            password_lbl.Name = "password_lbl";
+            password_lbl.Size = new Size(365, 20);
+            password_lbl.TabIndex = 4;
+            password_lbl.Tag = "muted";
+            password_lbl.Text = "PASSWORD";
+            password_lbl.TextAlign = ContentAlignment.BottomLeft;
+            // 
+            // password_host
+            // 
+            password_host.Controls.Add(password_inner);
+            password_host.Dock = DockStyle.Fill;
+            password_host.Location = new Point(0, 178);
+            password_host.Margin = new Padding(0);
+            password_host.Name = "password_host";
+            password_host.Size = new Size(365, 44);
+            password_host.TabIndex = 1;
+            password_host.Tag = "input";
             // 
             // password_inner
             // 
+            password_inner.ColumnCount = 3;
+            password_inner.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40F));
+            password_inner.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            password_inner.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 30F));
+            password_inner.Controls.Add(view_pass_btn, 2, 0);
+            password_inner.Controls.Add(lock_icn, 0, 0);
+            password_inner.Controls.Add(password_tb, 1, 0);
+            password_inner.Dock = DockStyle.Fill;
             password_inner.Location = new Point(0, 0);
+            password_inner.Margin = new Padding(0);
             password_inner.Name = "password_inner";
-            password_inner.Size = new Size(200, 100);
+            password_inner.Padding = new Padding(0, 0, 10, 0);
+            password_inner.RowCount = 1;
+            password_inner.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            password_inner.Size = new Size(365, 44);
             password_inner.TabIndex = 0;
+            // 
+            // view_pass_btn
+            // 
+            view_pass_btn.Cursor = Cursors.Hand;
+            view_pass_btn.Dock = DockStyle.Fill;
+            view_pass_btn.FlatAppearance.BorderSize = 0;
+            view_pass_btn.FlatAppearance.MouseDownBackColor = Color.Transparent;
+            view_pass_btn.FlatAppearance.MouseOverBackColor = Color.Transparent;
+            view_pass_btn.FlatStyle = FlatStyle.Flat;
+            view_pass_btn.IconChar = IconChar.EyeSlash;
+            view_pass_btn.IconColor = Color.Black;
+            view_pass_btn.IconFont = IconFont.Auto;
+            view_pass_btn.IconSize = 22;
+            view_pass_btn.Location = new Point(331, 9);
+            view_pass_btn.Margin = new Padding(6, 9, 0, 9);
+            view_pass_btn.Name = "view_pass_btn";
+            view_pass_btn.Size = new Size(24, 26);
+            view_pass_btn.TabIndex = 3;
+            view_pass_btn.Tag = "view_pass";
+            view_pass_btn.UseVisualStyleBackColor = false;
             // 
             // lock_icn
             // 
             lock_icn.BackColor = SystemColors.Control;
+            lock_icn.Dock = DockStyle.Fill;
             lock_icn.ForeColor = SystemColors.ControlText;
-            lock_icn.IconChar = IconChar.None;
+            lock_icn.IconChar = IconChar.Lock;
             lock_icn.IconColor = SystemColors.ControlText;
             lock_icn.IconFont = IconFont.Auto;
+            lock_icn.IconSize = 40;
             lock_icn.Location = new Point(0, 0);
+            lock_icn.Margin = new Padding(0);
             lock_icn.Name = "lock_icn";
-            lock_icn.Size = new Size(32, 32);
+            lock_icn.Size = new Size(40, 44);
+            lock_icn.SizeMode = PictureBoxSizeMode.CenterImage;
             lock_icn.TabIndex = 0;
             lock_icn.TabStop = false;
+            lock_icn.Tag = "input";
             // 
             // password_tb
             // 
-            password_tb.Location = new Point(0, 0);
+            password_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            password_tb.BorderStyle = BorderStyle.None;
+            password_tb.Font = new Font("Segoe UI", 10.5F);
+            password_tb.Location = new Point(40, 10);
+            password_tb.Margin = new Padding(0, 0, 8, 0);
             password_tb.Name = "password_tb";
-            password_tb.Size = new Size(100, 27);
+            password_tb.Size = new Size(277, 24);
             password_tb.TabIndex = 2;
+            password_tb.Tag = "flat";
+            password_tb.UseSystemPasswordChar = true;
+            // 
+            // fullname_lbl
+            // 
+            fullname_lbl.Dock = DockStyle.Fill;
+            fullname_lbl.Font = new Font("Segoe UI", 8.25F, FontStyle.Bold);
+            fullname_lbl.Location = new Point(0, 232);
+            fullname_lbl.Margin = new Padding(0);
+            fullname_lbl.Name = "fullname_lbl";
+            fullname_lbl.Size = new Size(365, 20);
+            fullname_lbl.TabIndex = 6;
+            fullname_lbl.Tag = "muted";
+            fullname_lbl.Text = "FULL NAME";
+            fullname_lbl.TextAlign = ContentAlignment.BottomLeft;
+            // 
+            // fullname_host
+            // 
+            fullname_host.Controls.Add(fullname_inner);
+            fullname_host.Dock = DockStyle.Fill;
+            fullname_host.Location = new Point(0, 252);
+            fullname_host.Margin = new Padding(0);
+            fullname_host.Name = "fullname_host";
+            fullname_host.Size = new Size(365, 44);
+            fullname_host.TabIndex = 2;
+            fullname_host.Tag = "input";
             // 
             // fullname_inner
             // 
+            fullname_inner.ColumnCount = 2;
+            fullname_inner.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40F));
+            fullname_inner.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            fullname_inner.Controls.Add(id_icn, 0, 0);
+            fullname_inner.Controls.Add(fullname_tb, 1, 0);
+            fullname_inner.Dock = DockStyle.Fill;
             fullname_inner.Location = new Point(0, 0);
+            fullname_inner.Margin = new Padding(0);
             fullname_inner.Name = "fullname_inner";
-            fullname_inner.Size = new Size(200, 100);
+            fullname_inner.RowCount = 1;
+            fullname_inner.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            fullname_inner.Size = new Size(365, 44);
             fullname_inner.TabIndex = 0;
             // 
             // id_icn
             // 
             id_icn.BackColor = SystemColors.Control;
+            id_icn.Dock = DockStyle.Fill;
             id_icn.ForeColor = SystemColors.ControlText;
-            id_icn.IconChar = IconChar.None;
+            id_icn.IconChar = IconChar.Vcard;
             id_icn.IconColor = SystemColors.ControlText;
             id_icn.IconFont = IconFont.Auto;
+            id_icn.IconSize = 40;
             id_icn.Location = new Point(0, 0);
+            id_icn.Margin = new Padding(0);
             id_icn.Name = "id_icn";
-            id_icn.Size = new Size(32, 32);
+            id_icn.Size = new Size(40, 44);
+            id_icn.SizeMode = PictureBoxSizeMode.CenterImage;
             id_icn.TabIndex = 0;
             id_icn.TabStop = false;
+            id_icn.Tag = "input";
             // 
             // fullname_tb
             // 
-            fullname_tb.Location = new Point(0, 0);
+            fullname_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            fullname_tb.BorderStyle = BorderStyle.None;
+            fullname_tb.Font = new Font("Segoe UI", 10.5F);
+            fullname_tb.Location = new Point(40, 10);
+            fullname_tb.Margin = new Padding(0, 0, 8, 0);
             fullname_tb.Name = "fullname_tb";
-            fullname_tb.Size = new Size(100, 27);
-            fullname_tb.TabIndex = 3;
+            fullname_tb.Size = new Size(317, 24);
+            fullname_tb.TabIndex = 1;
+            fullname_tb.Tag = "flat";
+            // 
+            // email_lbl
+            // 
+            email_lbl.Dock = DockStyle.Fill;
+            email_lbl.Font = new Font("Segoe UI", 8.25F, FontStyle.Bold);
+            email_lbl.Location = new Point(0, 306);
+            email_lbl.Margin = new Padding(0);
+            email_lbl.Name = "email_lbl";
+            email_lbl.Size = new Size(365, 20);
+            email_lbl.TabIndex = 8;
+            email_lbl.Tag = "muted";
+            email_lbl.Text = "EMAIL";
+            email_lbl.TextAlign = ContentAlignment.BottomLeft;
+            // 
+            // email_host
+            // 
+            email_host.Controls.Add(email_inner);
+            email_host.Dock = DockStyle.Fill;
+            email_host.Location = new Point(0, 326);
+            email_host.Margin = new Padding(0);
+            email_host.Name = "email_host";
+            email_host.Size = new Size(365, 44);
+            email_host.TabIndex = 3;
+            email_host.Tag = "input";
             // 
             // email_inner
             // 
+            email_inner.ColumnCount = 2;
+            email_inner.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40F));
+            email_inner.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            email_inner.Controls.Add(mail_icn, 0, 0);
+            email_inner.Controls.Add(email_tb, 1, 0);
+            email_inner.Dock = DockStyle.Fill;
             email_inner.Location = new Point(0, 0);
+            email_inner.Margin = new Padding(0);
             email_inner.Name = "email_inner";
-            email_inner.Size = new Size(200, 100);
+            email_inner.RowCount = 1;
+            email_inner.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            email_inner.Size = new Size(365, 44);
             email_inner.TabIndex = 0;
             // 
             // mail_icn
             // 
             mail_icn.BackColor = SystemColors.Control;
+            mail_icn.Dock = DockStyle.Fill;
             mail_icn.ForeColor = SystemColors.ControlText;
-            mail_icn.IconChar = IconChar.None;
+            mail_icn.IconChar = IconChar.Envelope;
             mail_icn.IconColor = SystemColors.ControlText;
             mail_icn.IconFont = IconFont.Auto;
+            mail_icn.IconSize = 40;
             mail_icn.Location = new Point(0, 0);
+            mail_icn.Margin = new Padding(0);
             mail_icn.Name = "mail_icn";
-            mail_icn.Size = new Size(32, 32);
+            mail_icn.Size = new Size(40, 44);
+            mail_icn.SizeMode = PictureBoxSizeMode.CenterImage;
             mail_icn.TabIndex = 0;
             mail_icn.TabStop = false;
+            mail_icn.Tag = "input";
             // 
             // email_tb
             // 
-            email_tb.Location = new Point(0, 0);
+            email_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            email_tb.BorderStyle = BorderStyle.None;
+            email_tb.Font = new Font("Segoe UI", 10.5F);
+            email_tb.Location = new Point(40, 10);
+            email_tb.Margin = new Padding(0, 0, 8, 0);
             email_tb.Name = "email_tb";
-            email_tb.Size = new Size(100, 27);
-            email_tb.TabIndex = 4;
+            email_tb.Size = new Size(317, 24);
+            email_tb.TabIndex = 1;
+            email_tb.Tag = "flat";
             // 
-            // base_pnl
+            // create_btn
             // 
-            base_pnl.Location = new Point(0, 0);
-            base_pnl.Name = "base_pnl";
-            base_pnl.Size = new Size(200, 100);
-            base_pnl.TabIndex = 0;
-            // 
-            // panel1
-            // 
-            panel1.Location = new Point(0, 0);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(200, 100);
-            panel1.TabIndex = 0;
-            // 
-            // add_instance_pnl
-            // 
-            add_instance_pnl.Location = new Point(0, 0);
-            add_instance_pnl.Name = "add_instance_pnl";
-            add_instance_pnl.Size = new Size(200, 100);
-            add_instance_pnl.TabIndex = 0;
-            // 
-            // groupBox2
-            // 
-            groupBox2.Location = new Point(0, 0);
-            groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(200, 100);
-            groupBox2.TabIndex = 0;
-            groupBox2.TabStop = false;
-            // 
-            // tableLayoutPanel2
-            // 
-            tableLayoutPanel2.Location = new Point(0, 0);
-            tableLayoutPanel2.Name = "tableLayoutPanel2";
-            tableLayoutPanel2.Size = new Size(200, 100);
-            tableLayoutPanel2.TabIndex = 0;
-            // 
-            // settings_lbl
-            // 
-            settings_lbl.Location = new Point(0, 0);
-            settings_lbl.Name = "settings_lbl";
-            settings_lbl.Size = new Size(100, 23);
-            settings_lbl.TabIndex = 0;
-            // 
-            // db_lbl
-            // 
-            db_lbl.Location = new Point(0, 0);
-            db_lbl.Name = "db_lbl";
-            db_lbl.Size = new Size(100, 23);
-            db_lbl.TabIndex = 0;
-            // 
-            // selector_pnl
-            // 
-            selector_pnl.Location = new Point(0, 0);
-            selector_pnl.Name = "selector_pnl";
-            selector_pnl.Size = new Size(200, 100);
-            selector_pnl.TabIndex = 0;
-            // 
-            // label1
-            // 
-            label1.Location = new Point(0, 0);
-            label1.Name = "label1";
-            label1.Size = new Size(100, 23);
-            label1.TabIndex = 0;
-            // 
-            // label2
-            // 
-            label2.Location = new Point(0, 0);
-            label2.Name = "label2";
-            label2.Size = new Size(100, 23);
-            label2.TabIndex = 0;
-            // 
-            // label3
-            // 
-            label3.Location = new Point(0, 0);
-            label3.Name = "label3";
-            label3.Size = new Size(100, 23);
-            label3.TabIndex = 0;
+            create_btn.Cursor = Cursors.Hand;
+            create_btn.Dock = DockStyle.Fill;
+            create_btn.FlatStyle = FlatStyle.Flat;
+            create_btn.Font = new Font("Segoe UI Semibold", 11F);
+            create_btn.Location = new Point(0, 398);
+            create_btn.Margin = new Padding(0, 0, 0, 16);
+            create_btn.MaximumSize = new Size(0, 52);
+            create_btn.MinimumSize = new Size(0, 52);
+            create_btn.Name = "create_btn";
+            create_btn.Size = new Size(365, 52);
+            create_btn.TabIndex = 4;
+            create_btn.Tag = "cta";
+            create_btn.Text = "Send verification";
+            create_btn.UseVisualStyleBackColor = false;
+            create_btn.Click += create_btn_Click;
             // 
             // AddAccount
             // 
@@ -677,8 +769,9 @@ namespace SmartStock.Forms.AddForms
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(root_table);
             Name = "AddAccount";
-            Size = new Size(890, 584);
+            Size = new Size(966, 728);
             root_table.ResumeLayout(false);
+            title_pnl.ResumeLayout(false);
             hero_pnl.ResumeLayout(false);
             hero_grid.ResumeLayout(false);
             brand_row.ResumeLayout(false);
@@ -686,72 +779,29 @@ namespace SmartStock.Forms.AddForms
             brand_stack.ResumeLayout(false);
             hero_quote.ResumeLayout(false);
             form_host.ResumeLayout(false);
-            footer_pnl.ResumeLayout(false);
             form_table.ResumeLayout(false);
+            footer_pnl.ResumeLayout(false);
+            username_host.ResumeLayout(false);
+            username_inner.ResumeLayout(false);
+            username_inner.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)user_icn).EndInit();
+            password_host.ResumeLayout(false);
+            password_inner.ResumeLayout(false);
+            password_inner.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)lock_icn).EndInit();
+            fullname_host.ResumeLayout(false);
+            fullname_inner.ResumeLayout(false);
+            fullname_inner.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)id_icn).EndInit();
+            email_host.ResumeLayout(false);
+            email_inner.ResumeLayout(false);
+            email_inner.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)mail_icn).EndInit();
             ResumeLayout(false);
         }
 
-        // --- Local helpers (kept inside Designer for self-containment) -----------------
-        private static void ConfigureFieldLabel(Label lbl, string caption)
-        {
-            lbl.Dock = DockStyle.Fill;
-            lbl.Font = new Font("Segoe UI", 8.25F, FontStyle.Bold);
-            lbl.Text = caption;
-            lbl.TextAlign = ContentAlignment.BottomLeft;
-            lbl.Tag = "muted";
-            lbl.Margin = new Padding(0, 0, 0, 2);
-        }
-
-        private static void ConfigureInputHost(
-            Panel host, TableLayoutPanel inner, IconPictureBox icon,
-            TextBox tb, IconChar iconChar, bool isPassword, int tabIndex, string name)
-        {
-            host.Dock = DockStyle.Fill;
-            host.Tag = "input";
-            host.Margin = new Padding(0);
-            host.Name = name + "_host";
-            host.Controls.Add(inner);
-
-            inner.Dock = DockStyle.Fill;
-            inner.ColumnCount = 2;
-            inner.RowCount = 1;
-            inner.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40F));
-            inner.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            inner.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            inner.Controls.Add(icon, 0, 0);
-            inner.Controls.Add(tb, 1, 0);
-            inner.Padding = new Padding(0, 0, 12, 0);
-            inner.Margin = new Padding(0);
-            inner.Name = name + "_inner";
-
-            icon.IconChar = iconChar;
-            icon.IconSize = 16;
-            icon.Size = new Size(40, 44);
-            icon.SizeMode = PictureBoxSizeMode.CenterImage;
-            icon.Tag = "input";
-            icon.Margin = new Padding(0);
-            icon.Name = name + "_icn";
-            icon.TabStop = false;
-
-            tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            tb.BorderStyle = BorderStyle.None;
-            tb.Font = new Font("Segoe UI", 10.5F, FontStyle.Regular);
-            tb.UseSystemPasswordChar = isPassword;
-            tb.Tag = "flat";
-            tb.Location = new Point(0, 12);
-            tb.Size = new Size(200, 20);
-            tb.Margin = new Padding(0);
-            tb.Name = name + "_tb";
-            tb.TabIndex = tabIndex;
-        }
-
         #endregion
 
-        // New controls
         private TableLayoutPanel root_table;
 
         private Panel            hero_pnl;
@@ -769,7 +819,6 @@ namespace SmartStock.Forms.AddForms
 
         private Panel            form_host;
         private TableLayoutPanel form_table;
-        private Label            title_lbl;
         private Label            subtitle_lbl;
 
         private Label            username_lbl;
@@ -797,22 +846,13 @@ namespace SmartStock.Forms.AddForms
         private TextBox          email_tb;
 
         private Button           create_btn;
-        private Panel            divider_pnl;
+        private Panel title_pnl;
+        private IconButton close_btn;
+        private Label title_lbl;
         private TableLayoutPanel footer_pnl;
-        private Button           return_btn;
-        private Label            signin_hint_lbl;
-
-        // Legacy placeholders
-        private Panel            base_pnl;
-        private Panel            panel1;
-        private Panel            add_instance_pnl;
-        private GroupBox         groupBox2;
-        private TableLayoutPanel tableLayoutPanel2;
-        private Label            settings_lbl;
-        private Label            db_lbl;
-        private Panel            selector_pnl;
-        private Label            label1;
-        private Label            label2;
-        private Label            label3;
+        private Panel panel6;
+        private Label label6;
+        private Button return_btn;
+        private IconButton view_pass_btn;
     }
 }

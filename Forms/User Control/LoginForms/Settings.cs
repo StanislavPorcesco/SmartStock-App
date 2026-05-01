@@ -41,5 +41,10 @@ namespace SmartStock.Forms.AddForms
 
             MessageBox.Show("Settings saved successfully!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+
+        private void close_btn_Click(object sender, EventArgs e)
+        {
+            this.FindForm().Close();
+        }
     }
 }

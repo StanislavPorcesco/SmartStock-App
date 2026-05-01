@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LoginForm));
             SuspendLayout();
             // 
             // LoginForm
@@ -35,8 +36,9 @@
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(54, 54, 54);
-            ClientSize = new Size(1007, 670);
-            FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            ClientSize = new Size(948, 685);
+            FormBorderStyle = FormBorderStyle.None;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MinimizeBox = false;
             Name = "LoginForm";
             Padding = new Padding(30);

@@ -1,4 +1,5 @@
 ﻿
+using System.Runtime.InteropServices;
 using FontAwesome.Sharp;
 using SmartStock.Classes.Data.Services;
 using SmartStock.Classes.Data.Repositories;
@@ -13,6 +14,87 @@ namespace SmartStock.Forms
         private IconButton currentBtn = new IconButton();
         private Panel leftBorderBtn;
         private Form currentChildForm = new Form();
+
+        // ── Borderless window support ─────────────────────────────────────────
+
+        private const int ResizeBorder = 6;
+
+        private const int HTLEFT        = 10;
+        private const int HTRIGHT       = 11;
+        private const int HTTOP         = 12;
+        private const int HTTOPLEFT     = 13;
+        private const int HTTOPRIGHT    = 14;
+        private const int HTBOTTOM      = 15;
+        private const int HTBOTTOMLEFT  = 16;
+        private const int HTBOTTOMRIGHT = 17;
+        private const int WM_NCHITTEST  = 0x0084;
+
+        [DllImport("user32.dll")]
+        private static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+        [DllImport("user32.dll")]
+        private static extern bool ReleaseCapture();
+
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == WM_NCHITTEST && WindowState == FormWindowState.Normal)
+            {
+                var pos   = PointToClient(new Point(m.LParam.ToInt32() & 0xFFFF,
+                                                     m.LParam.ToInt32() >> 16));
+                bool left   = pos.X <= ResizeBorder;
+                bool right  = pos.X >= ClientSize.Width  - ResizeBorder;
+                bool top    = pos.Y <= ResizeBorder;
+                bool bottom = pos.Y >= ClientSize.Height - ResizeBorder;
+
+                if      (top    && left)  m.Result = (IntPtr)HTTOPLEFT;
+                else if (top    && right) m.Result = (IntPtr)HTTOPRIGHT;
+                else if (bottom && left)  m.Result = (IntPtr)HTBOTTOMLEFT;
+                else if (bottom && right) m.Result = (IntPtr)HTBOTTOMRIGHT;
+                else if (left)            m.Result = (IntPtr)HTLEFT;
+                else if (right)           m.Result = (IntPtr)HTRIGHT;
+                else if (top)             m.Result = (IntPtr)HTTOP;
+                else if (bottom)          m.Result = (IntPtr)HTBOTTOM;
+                else base.WndProc(ref m);
+                return;
+            }
+            base.WndProc(ref m);
+        }
+
+        // Drag the titlebar to move the window.
+        private void titlebar_pnl_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ReleaseCapture();
+                SendMessage(Handle, 0xA1 /*WM_NCLBUTTONDOWN*/, 0x2 /*HTCAPTION*/, 0);
+            }
+        }
+
+        // Double-click the titlebar to maximise / restore.
+        private void titlebar_pnl_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+                maximize_btn_Click(maximize_btn, EventArgs.Empty);
+        }
+
+        private void minimize_btn_Click(object sender, EventArgs e)
+            => WindowState = FormWindowState.Minimized;
+
+        private void maximize_btn_Click(object sender, EventArgs e)
+        {
+            if (WindowState == FormWindowState.Maximized)
+            {
+                WindowState = FormWindowState.Normal;
+                maximize_btn.IconChar = IconChar.WindowMaximize;
+            }
+            else
+            {
+                WindowState = FormWindowState.Maximized;
+                maximize_btn.IconChar = IconChar.WindowRestore;
+            }
+        }
+
+        private void close_btn_Click(object sender, EventArgs e)
+            => Close();
 
         public MenuForm()
         {

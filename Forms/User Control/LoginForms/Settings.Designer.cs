@@ -20,6 +20,8 @@ namespace SmartStock.Forms.AddForms
         private void InitializeComponent()
         {
             root_table = new TableLayoutPanel();
+            title_pnl = new Panel();
+            close_btn = new IconButton();
             hero_pnl = new Panel();
             hero_grid = new TableLayoutPanel();
             brand_row = new TableLayoutPanel();
@@ -55,6 +57,7 @@ namespace SmartStock.Forms.AddForms
             label1 = new Label();
             label2 = new Label();
             root_table.SuspendLayout();
+            title_pnl.SuspendLayout();
             hero_pnl.SuspendLayout();
             hero_grid.SuspendLayout();
             brand_row.SuspendLayout();
@@ -74,16 +77,47 @@ namespace SmartStock.Forms.AddForms
             root_table.ColumnCount = 2;
             root_table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             root_table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            root_table.Controls.Add(title_pnl, 1, 0);
             root_table.Controls.Add(hero_pnl, 0, 0);
-            root_table.Controls.Add(form_host, 1, 0);
+            root_table.Controls.Add(form_host, 1, 1);
             root_table.Dock = DockStyle.Fill;
             root_table.Location = new Point(0, 0);
             root_table.Margin = new Padding(0);
             root_table.Name = "root_table";
-            root_table.RowCount = 1;
+            root_table.RowCount = 2;
+            root_table.RowStyles.Add(new RowStyle());
             root_table.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             root_table.Size = new Size(1121, 682);
             root_table.TabIndex = 0;
+            // 
+            // title_pnl
+            // 
+            title_pnl.Controls.Add(close_btn);
+            title_pnl.Dock = DockStyle.Fill;
+            title_pnl.Location = new Point(563, 3);
+            title_pnl.MaximumSize = new Size(0, 30);
+            title_pnl.Name = "title_pnl";
+            title_pnl.Size = new Size(555, 20);
+            title_pnl.TabIndex = 3;
+            // 
+            // close_btn
+            // 
+            close_btn.Dock = DockStyle.Right;
+            close_btn.FlatAppearance.BorderSize = 0;
+            close_btn.FlatStyle = FlatStyle.Flat;
+            close_btn.IconChar = IconChar.X;
+            close_btn.IconColor = Color.Black;
+            close_btn.IconFont = IconFont.Auto;
+            close_btn.IconSize = 15;
+            close_btn.Location = new Point(540, 0);
+            close_btn.MaximumSize = new Size(15, 15);
+            close_btn.MinimumSize = new Size(15, 15);
+            close_btn.Name = "close_btn";
+            close_btn.Size = new Size(15, 15);
+            close_btn.TabIndex = 3;
+            close_btn.Tag = "ghost";
+            close_btn.UseVisualStyleBackColor = true;
+            close_btn.Click += close_btn_Click;
             // 
             // hero_pnl
             // 
@@ -92,6 +126,7 @@ namespace SmartStock.Forms.AddForms
             hero_pnl.Location = new Point(3, 3);
             hero_pnl.Name = "hero_pnl";
             hero_pnl.Padding = new Padding(40);
+            root_table.SetRowSpan(hero_pnl, 2);
             hero_pnl.Size = new Size(554, 676);
             hero_pnl.TabIndex = 0;
             hero_pnl.Tag = "hero";
@@ -259,10 +294,10 @@ namespace SmartStock.Forms.AddForms
             // 
             form_host.Controls.Add(form_table);
             form_host.Dock = DockStyle.Fill;
-            form_host.Location = new Point(563, 3);
+            form_host.Location = new Point(563, 29);
             form_host.Name = "form_host";
             form_host.Padding = new Padding(56, 40, 56, 40);
-            form_host.Size = new Size(555, 676);
+            form_host.Size = new Size(555, 650);
             form_host.TabIndex = 1;
             form_host.Tag = "base";
             // 
@@ -281,8 +316,8 @@ namespace SmartStock.Forms.AddForms
             form_table.Name = "form_table";
             form_table.RowCount = 5;
             form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 92F));
-            form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 18F));
-            form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
+            form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
+            form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
             form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 36F));
             form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 64F));
             form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
@@ -290,7 +325,7 @@ namespace SmartStock.Forms.AddForms
             form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             form_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            form_table.Size = new Size(443, 596);
+            form_table.Size = new Size(443, 570);
             form_table.TabIndex = 0;
             // 
             // footer_pnl
@@ -302,7 +337,7 @@ namespace SmartStock.Forms.AddForms
             footer_pnl.Controls.Add(return_btn, 0, 0);
             footer_pnl.Controls.Add(apply_btn, 2, 0);
             footer_pnl.Dock = DockStyle.Bottom;
-            footer_pnl.Location = new Point(0, 543);
+            footer_pnl.Location = new Point(0, 517);
             footer_pnl.Margin = new Padding(0);
             footer_pnl.Name = "footer_pnl";
             footer_pnl.RowCount = 1;
@@ -418,7 +453,7 @@ namespace SmartStock.Forms.AddForms
             subtitle_lbl.Location = new Point(0, 92);
             subtitle_lbl.Margin = new Padding(0);
             subtitle_lbl.Name = "subtitle_lbl";
-            subtitle_lbl.Size = new Size(443, 18);
+            subtitle_lbl.Size = new Size(443, 28);
             subtitle_lbl.TabIndex = 1;
             subtitle_lbl.Tag = "muted";
             subtitle_lbl.Text = "Customize your SmartStock experience.";
@@ -428,10 +463,10 @@ namespace SmartStock.Forms.AddForms
             // 
             theme_lbl.Dock = DockStyle.Fill;
             theme_lbl.Font = new Font("Segoe UI", 8.25F, FontStyle.Bold);
-            theme_lbl.Location = new Point(0, 110);
+            theme_lbl.Location = new Point(0, 120);
             theme_lbl.Margin = new Padding(0, 0, 0, 4);
             theme_lbl.Name = "theme_lbl";
-            theme_lbl.Size = new Size(443, 36);
+            theme_lbl.Size = new Size(443, 26);
             theme_lbl.TabIndex = 2;
             theme_lbl.Tag = "muted";
             theme_lbl.Text = "THEME";
@@ -516,6 +551,7 @@ namespace SmartStock.Forms.AddForms
             Name = "Settings";
             Size = new Size(1121, 682);
             root_table.ResumeLayout(false);
+            title_pnl.ResumeLayout(false);
             hero_pnl.ResumeLayout(false);
             hero_grid.ResumeLayout(false);
             brand_row.ResumeLayout(false);
@@ -573,5 +609,7 @@ namespace SmartStock.Forms.AddForms
         private Label            label2;
         private Label title_lbl;
         private TableLayoutPanel tableLayoutPanel1;
+        private Panel title_pnl;
+        private IconButton close_btn;
     }
 }

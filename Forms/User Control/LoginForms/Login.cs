@@ -8,9 +8,23 @@ namespace SmartStock.Forms.User_Control
 {
     public partial class Login : UserControl
     {
+        private bool _passwordVisible = false;
+
         public Login()
         {
             InitializeComponent();
+            view_pass_btn.Click += TogglePasswordVisibility;
+            username_tb.KeyDown += OnEnterPressed;
+            password_tb.KeyDown += OnEnterPressed;
+        }
+
+        private void OnEnterPressed(object? sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                login_btn_Click(sender, e);
+            }
         }
 
         private void account_btn_Click(object sender, EventArgs e)
@@ -27,7 +41,7 @@ namespace SmartStock.Forms.User_Control
         {
             if (string.IsNullOrWhiteSpace(username_tb.Text) || string.IsNullOrWhiteSpace(password_tb.Text))
             {
-                MessageBox.Show("Please enter both the username and the password.", "Completion Error",
+                MessageBox.Show("All fields are mandatory!", "Completion Error",
                                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -76,6 +90,20 @@ namespace SmartStock.Forms.User_Control
             {
                 Cursor = Cursors.Default;
             }
+        }
+
+        private void TogglePasswordVisibility(object? sender, EventArgs e)
+        {
+            _passwordVisible = !_passwordVisible;
+            password_tb.UseSystemPasswordChar = !_passwordVisible;
+            view_pass_btn.IconChar = _passwordVisible
+                ? FontAwesome.Sharp.IconChar.Eye
+                : FontAwesome.Sharp.IconChar.EyeSlash;
+        }
+
+        private void close_btn_Click(object sender, EventArgs e)
+        {
+            this.FindForm().Close();
         }
     }
 }

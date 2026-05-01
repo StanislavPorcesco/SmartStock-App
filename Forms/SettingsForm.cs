@@ -2,6 +2,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using SmartStock.Classes.Settings;
 using SmartStock.Classes.Utils;
+using SmartStock.Utils;
 
 namespace SmartStock
 {
@@ -110,6 +111,14 @@ namespace SmartStock
             manual_fetch_btn.Click += manual_fetch_btn_Click;
 
             UpdateNextFetchLabel();
+            ToolTipHelp.AddToolTip(commodity_api_lbl, "Alpha Vantage");
+            ToolTipHelp.AddToolTip(economic_api_lbl,  "World Bank");
+            ToolTipHelp.AddToolTip(events_api_lbl,    "PredictHQ");
+            ToolTipHelp.AddToolTip(weather_api_lbl,   "Open-Meteo");
+            _ = CheckCommodityApiAsync();
+            _ = CheckEconomicApiAsync();
+            _ = CheckEventsApiAsync();
+            _ = CheckWeatherApiAsync();
 
             ThemeManager.Apply(this);
             ThemeManager.OnThemeChanged += HandleThemeUpdate;
@@ -345,7 +354,77 @@ namespace SmartStock
             _ = CheckApiStatusAsync();
         }
 
-        // --- API status check ---
+        // --- External factors API status checks ---
+        private async Task CheckCommodityApiAsync()
+        {
+            SetStatus(commodity_status_color_lbl, commodity_status_lbl, null, "Checking...");
+            var key = SettingsManager.Current.AlphaVantageApiKey?.Trim();
+            if (string.IsNullOrWhiteSpace(key)) { SetStatus(commodity_status_color_lbl, commodity_status_lbl, false, "No Key"); return; }
+            try
+            {
+                using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(10) };
+                var response = await client.GetAsync($"https://www.alphavantage.co/query?function=WTI&interval=monthly&apikey={key}");
+                bool active = response.IsSuccessStatusCode;
+                SetStatus(commodity_status_color_lbl, commodity_status_lbl, active, active ? "Active" : "Inactive");
+            }
+            catch { SetStatus(commodity_status_color_lbl, commodity_status_lbl, false, "Error"); }
+        }
+
+        private async Task CheckEconomicApiAsync()
+        {
+            SetStatus(economic_status_color_lbl, economic_status_lbl, null, "Checking...");
+            try
+            {
+                using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(10) };
+                var response = await client.GetAsync("https://api.worldbank.org/v2/country/RO/indicator/FP.CPI.TOTL.ZG?format=json&mrv=1&per_page=1");
+                bool active = response.IsSuccessStatusCode;
+                SetStatus(economic_status_color_lbl, economic_status_lbl, active, active ? "Active" : "Inactive");
+            }
+            catch { SetStatus(economic_status_color_lbl, economic_status_lbl, false, "Error"); }
+        }
+
+        private async Task CheckEventsApiAsync()
+        {
+            SetStatus(events_status_color_lbl, events_status_lbl, null, "Checking...");
+            var key = SettingsManager.Current.PredictHQApiKey?.Trim();
+            if (string.IsNullOrWhiteSpace(key)) { SetStatus(events_status_color_lbl, events_status_lbl, false, "No Key"); return; }
+            try
+            {
+                using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(10) };
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", key);
+                var response = await client.GetAsync("https://api.predicthq.com/v1/events/?limit=1");
+                bool active = response.IsSuccessStatusCode;
+                SetStatus(events_status_color_lbl, events_status_lbl, active, active ? "Active" : "Inactive");
+            }
+            catch { SetStatus(events_status_color_lbl, events_status_lbl, false, "Error"); }
+        }
+
+        private async Task CheckWeatherApiAsync()
+        {
+            SetStatus(weather_status_color_lbl, weather_status_lbl, null, "Checking...");
+            try
+            {
+                using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(10) };
+                var response = await client.GetAsync("https://api.open-meteo.com/v1/forecast?latitude=44.43&longitude=26.10&daily=temperature_2m_max&timezone=auto&forecast_days=1");
+                bool active = response.IsSuccessStatusCode;
+                SetStatus(weather_status_color_lbl, weather_status_lbl, active, active ? "Active" : "Inactive");
+            }
+            catch { SetStatus(weather_status_color_lbl, weather_status_lbl, false, "Error"); }
+        }
+
+        private void SetStatus(Label colorLbl, Label textLbl, bool? active, string text)
+        {
+            if (InvokeRequired) { BeginInvoke(() => SetStatus(colorLbl, textLbl, active, text)); return; }
+            textLbl.Text = text;
+            colorLbl.ForeColor = active switch
+            {
+                true  => Color.LimeGreen,
+                false => Color.Red,
+                null  => Color.Gray
+            };
+        }
+
+        // --- AI agent API status check ---
         private async Task CheckApiStatusAsync()
         {
             SetApiStatus(null, "Checking...");
@@ -368,17 +447,8 @@ namespace SmartStock
             }
         }
 
-        private void SetApiStatus(bool? active, string text)
-        {
-            if (InvokeRequired) { BeginInvoke(() => SetApiStatus(active, text)); return; }
-            api_status_lbl.Text = text;
-            status_color_lbl.ForeColor = active switch
-            {
-                true => Color.LimeGreen,
-                false => Color.Red,
-                null => Color.Gray
-            };
-        }
+        private void SetApiStatus(bool? active, string text) =>
+            SetStatus(status_color_lbl, api_status_lbl, active, text);
 
         private static async Task<bool> PingProviderAsync(string provider, string apiKey)
         {

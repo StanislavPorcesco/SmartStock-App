@@ -26,7 +26,7 @@ namespace SmartStock.Forms.User_Control
         }
         private void confirm_btn_Click(object sender, EventArgs e)
         {
-            if(generatedCode == textBox0.Text + textBox1.Text + textBox2.Text + textBox3.Text + textBox4.Text + textBox5.Text)
+            if (generatedCode == textBox0.Text + textBox1.Text + textBox2.Text + textBox3.Text + textBox4.Text + textBox5.Text)
             {
                 FinalizeAccountCreation(username, password, fullname, email);
             }
@@ -142,5 +142,14 @@ namespace SmartStock.Forms.User_Control
             }
         }
 
+        private void close_btn_Click(object sender, EventArgs e)
+        {
+            this.FindForm().Close();
+        }
+
+        private void return_btn_Click(object sender, EventArgs e)
+        {
+            DataLayer.OpenUserControl(this.FindForm(), new Login());
+        }
     }
 }
