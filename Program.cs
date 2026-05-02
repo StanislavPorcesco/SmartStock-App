@@ -7,6 +7,25 @@ using SmartStock.Classes.Utils;
 
 namespace SmartStock
 {
+    internal sealed class MouseWheelRedirector : IMessageFilter
+    {
+        private const int WM_MOUSEWHEEL = 0x020A;
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr WindowFromPoint(Point p);
+        [DllImport("user32.dll")]
+        private static extern bool PostMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
+
+        public bool PreFilterMessage(ref Message m)
+        {
+            if (m.Msg != WM_MOUSEWHEEL) return false;
+            var target = WindowFromPoint(Cursor.Position);
+            if (target == IntPtr.Zero || target == m.HWnd) return false;
+            PostMessage(target, m.Msg, m.WParam, m.LParam);
+            return true;
+        }
+    }
+
     internal static class Program
     {
         [DllImport("kernel32.dll")]
@@ -60,6 +79,7 @@ namespace SmartStock
                 ReportScheduler.Stop();
                 ExternalFactorsScheduler.Stop();
             };
+            Application.AddMessageFilter(new MouseWheelRedirector());
             Application.Run(loginForm);
             
         }

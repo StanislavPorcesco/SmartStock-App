@@ -55,10 +55,14 @@ namespace SmartStock.Forms
             _                                       => Cursors.Default,
         };
 
-        private const int WM_SETCURSOR = 0x0020;
+        private const int WM_SETCURSOR    = 0x0020;
+        private const int WM_ERASEBKGND   = 0x0014;
 
         protected override void WndProc(ref Message m)
         {
+            // Suppress background erase — prevents the white flash before repaint.
+            if (m.Msg == WM_ERASEBKGND) { m.Result = (IntPtr)1; return; }
+
             // WM_SETCURSOR fires per-HWND: child controls handle it themselves,
             // so this only runs when the cursor is over the form background (5px border)
             // or during active resize (Capture=true routes all messages here).
@@ -90,6 +94,7 @@ namespace SmartStock.Forms
             if ((_resizeDir & ResizeDir.Top)    != 0) { b.Y = _startBounds.Bottom - Math.Max(MinimumSize.Height, _startBounds.Height - dy); b.Height = _startBounds.Bottom - b.Y; }
 
             Bounds = b;
+            Invalidate(true);
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
@@ -169,9 +174,19 @@ namespace SmartStock.Forms
         private void close_btn_Click(object sender, EventArgs e)
             => Close();
 
+        protected override void OnSizeChanged(EventArgs e)
+        {
+            base.OnSizeChanged(e);
+            maximize_btn.IconChar = WindowState == FormWindowState.Maximized
+                ? IconChar.WindowRestore
+                : IconChar.WindowMaximize;
+        }
+
         public MenuForm()
         {
             InitializeComponent();
+            DoubleBuffered = true;
+            SetStyle(ControlStyles.ResizeRedraw, true);
             ThemeManager.Apply(this);
             this.Refresh();
             ThemeManager.OnThemeChanged += HandleThemeUpdate;
@@ -182,8 +197,10 @@ namespace SmartStock.Forms
             leftBorderBtn.Visible = false;
 
             PopulateUserCard();
-
+            InitMenuButtonStates();
             add_btn_Click(this.add_btn, EventArgs.Empty);
+
+            maximize_btn_Click(maximize_btn, EventArgs.Empty);
         }
 
         private void PopulateUserCard()
@@ -205,9 +222,25 @@ namespace SmartStock.Forms
 
         //Metode 
 
+        private void InitMenuButtonStates()
+        {
+            var p = ThemeManager.GetCurrentPalette();
+            foreach (Control c in menu_buttons_pnl.Controls)
+            {
+                if (c is IconButton btn)
+                {
+                    btn.ForeColor = p.TextSecondary;
+                    btn.BackColor = Color.Transparent;
+                    btn.IconColor = p.TextSecondary;
+                }
+            }
+        }
+
         private void HandleThemeUpdate()
         {
             ThemeManager.Apply(this);
+            InitMenuButtonStates();
+            ActivateButton(currentBtn);
             ApplyThemeToChildForms();
             this.Refresh();
         }
@@ -257,6 +290,7 @@ namespace SmartStock.Forms
                 currentBtn.TextAlign  = ContentAlignment.MiddleLeft;
                 currentBtn.IconColor  = p.TextSecondary;
                 leftBorderBtn.Visible = false;
+                currentBtn.Refresh();
             }
         }
 
