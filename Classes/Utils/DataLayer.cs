@@ -172,44 +172,6 @@ namespace SmartStock.Classes.Utils
             // Forțăm utilizatorul să aleagă doar din listă, nu să scrie text liber
             selector.DropDownStyle = ComboBoxStyle.DropDownList;
         }
-
-        public static System.EventHandler OpenAddInstanceForm(UserControl container, ComboBox selector_cb)
-        {
-            return (sender, e) =>
-            {
-                string selectedOption = selector_cb.SelectedItem as string;
-                if (selectedOption == null) return;
-                if (selectedOption == "User" && (SessionManager.CurrentUser == null || SessionManager.CurrentUser.Role != "Admin"))
-                {
-                    MessageBox.Show("Unauthorized access! Only administrators can manage user accounts.",
-                                    "Access Denied", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                    return;
-                }
-                container.SuspendLayout();
-                container.Controls.Clear();
-                UserControl controlToOpen = selectedOption switch
-                {
-                    "Product" => new AddProduct(),
-                    "Category" => new AddCategory(),
-                    "Supplier" => new AddSupplier(),
-                    "Transaction" => new AddTransaction(),
-                    "Customer" => new AddCustomer(),
-                    "Sale" => new AddSale(),
-                    "ExternalFactor" => new AddExternalFactor(),
-                    "User" => new AddUser()
-                };
-
-                if (controlToOpen != null)
-                {
-                    controlToOpen.Dock = DockStyle.Fill;
-                    container.Controls.Add(controlToOpen);
-                    ThemeManager.Apply(controlToOpen);
-                }
-
-                container.ResumeLayout(true);
-            };
-        }
-
         public static System.EventHandler OpenModifyInstanceForm(UserControl container, ComboBox selector_cb)
         {
             return (sender, e) =>

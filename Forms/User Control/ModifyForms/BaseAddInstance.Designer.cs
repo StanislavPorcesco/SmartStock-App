@@ -269,9 +269,9 @@ namespace SmartStock
             content_card.Controls.Add(content_header_pnl);
             content_card.Dock = DockStyle.Fill;
             content_card.Location = new Point(0, 0);
-            content_card.Margin = new Padding(0, 0, 12, 0);
+            content_card.Margin = new Padding(0, 0, 10, 0);
             content_card.Name = "content_card";
-            content_card.Size = new Size(411, 380);
+            content_card.Size = new Size(413, 380);
             content_card.TabIndex = 0;
             content_card.Tag = "main_card";
             // 
@@ -281,7 +281,7 @@ namespace SmartStock
             usercontrol_pnl.Location = new Point(0, 57);
             usercontrol_pnl.Name = "usercontrol_pnl";
             usercontrol_pnl.Padding = new Padding(4);
-            usercontrol_pnl.Size = new Size(411, 323);
+            usercontrol_pnl.Size = new Size(413, 323);
             usercontrol_pnl.TabIndex = 2;
             usercontrol_pnl.Tag = "card";
             // 
@@ -290,7 +290,7 @@ namespace SmartStock
             content_divider.Dock = DockStyle.Top;
             content_divider.Location = new Point(0, 56);
             content_divider.Name = "content_divider";
-            content_divider.Size = new Size(411, 1);
+            content_divider.Size = new Size(413, 1);
             content_divider.TabIndex = 3;
             content_divider.Tag = "divider";
             // 
@@ -302,7 +302,7 @@ namespace SmartStock
             content_header_pnl.Location = new Point(0, 0);
             content_header_pnl.Name = "content_header_pnl";
             content_header_pnl.Padding = new Padding(24, 0, 24, 0);
-            content_header_pnl.Size = new Size(411, 56);
+            content_header_pnl.Size = new Size(413, 56);
             content_header_pnl.TabIndex = 4;
             content_header_pnl.Tag = "card";
             // 
@@ -338,10 +338,10 @@ namespace SmartStock
             browser_card.Controls.Add(browser_divider);
             browser_card.Controls.Add(browser_header_pnl);
             browser_card.Dock = DockStyle.Fill;
-            browser_card.Location = new Point(423, 0);
-            browser_card.Margin = new Padding(0);
+            browser_card.Location = new Point(433, 0);
+            browser_card.Margin = new Padding(10, 0, 0, 0);
             browser_card.Name = "browser_card";
-            browser_card.Size = new Size(848, 380);
+            browser_card.Size = new Size(838, 380);
             browser_card.TabIndex = 1;
             browser_card.Tag = "main_card";
             // 
@@ -364,7 +364,7 @@ namespace SmartStock
             browser_dgv.RowHeadersVisible = false;
             browser_dgv.RowHeadersWidth = 51;
             browser_dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            browser_dgv.Size = new Size(848, 323);
+            browser_dgv.Size = new Size(838, 323);
             browser_dgv.TabIndex = 3;
             browser_dgv.CellClick += browser_dgv_CellClick;
             // 
@@ -373,7 +373,7 @@ namespace SmartStock
             browser_divider.Dock = DockStyle.Top;
             browser_divider.Location = new Point(0, 56);
             browser_divider.Name = "browser_divider";
-            browser_divider.Size = new Size(848, 1);
+            browser_divider.Size = new Size(838, 1);
             browser_divider.TabIndex = 2;
             browser_divider.Tag = "divider";
             // 
@@ -385,7 +385,7 @@ namespace SmartStock
             browser_header_pnl.Location = new Point(0, 0);
             browser_header_pnl.Name = "browser_header_pnl";
             browser_header_pnl.Padding = new Padding(24, 0, 24, 0);
-            browser_header_pnl.Size = new Size(848, 56);
+            browser_header_pnl.Size = new Size(838, 56);
             browser_header_pnl.TabIndex = 0;
             browser_header_pnl.Tag = "card";
             // 
@@ -418,8 +418,8 @@ namespace SmartStock
             // footer_pnl
             // 
             footer_pnl.ColumnCount = 2;
-            footer_pnl.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 36F));
-            footer_pnl.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 64F));
+            footer_pnl.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+            footer_pnl.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 66.6666641F));
             footer_pnl.Controls.Add(archive_btn, 0, 0);
             footer_pnl.Controls.Add(save_btn, 1, 0);
             footer_pnl.Dock = DockStyle.Fill;
@@ -446,12 +446,12 @@ namespace SmartStock
             archive_btn.IconFont = IconFont.Auto;
             archive_btn.IconSize = 30;
             archive_btn.Location = new Point(0, 16);
-            archive_btn.Margin = new Padding(0, 0, 12, 0);
+            archive_btn.Margin = new Padding(0, 0, 10, 0);
             archive_btn.MaximumSize = new Size(0, 70);
             archive_btn.MinimumSize = new Size(0, 70);
             archive_btn.Name = "archive_btn";
             archive_btn.Padding = new Padding(24, 0, 24, 0);
-            archive_btn.Size = new Size(445, 70);
+            archive_btn.Size = new Size(413, 70);
             archive_btn.TabIndex = 0;
             archive_btn.Tag = "outlined";
             archive_btn.Text = "  Archive Instance";
@@ -471,13 +471,13 @@ namespace SmartStock
             save_btn.IconColor = Color.Black;
             save_btn.IconFont = IconFont.Auto;
             save_btn.IconSize = 30;
-            save_btn.Location = new Point(469, 16);
-            save_btn.Margin = new Padding(12, 0, 0, 0);
+            save_btn.Location = new Point(433, 16);
+            save_btn.Margin = new Padding(10, 0, 0, 0);
             save_btn.MaximumSize = new Size(0, 70);
             save_btn.MinimumSize = new Size(0, 70);
             save_btn.Name = "save_btn";
             save_btn.Padding = new Padding(24, 0, 24, 0);
-            save_btn.Size = new Size(802, 70);
+            save_btn.Size = new Size(838, 70);
             save_btn.TabIndex = 1;
             save_btn.Tag = "cta";
             save_btn.Text = "  Save Changes";

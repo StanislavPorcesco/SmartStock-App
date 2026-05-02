@@ -26,9 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Forms\User Control\AddForms\AddUser.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Update="Forms\LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -44,19 +41,7 @@
     <Compile Update="Forms\User Control\LoginForms\AddAccount.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="Forms\User Control\AddForms\AddExternalFactor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Forms\User Control\AddForms\AddCustomer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Forms\User Control\AddForms\AddTransaction.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Forms\User Control\AddForms\AddSupplier.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Forms\User Control\AddForms\BaseAddInstance.cs">
+    <Compile Update="Forms\User Control\ModifyForms\BaseAddInstance.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\User Control\ModifyForms\ModifyCustomer.cs">

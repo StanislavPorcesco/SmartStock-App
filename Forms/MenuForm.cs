@@ -15,48 +15,102 @@ namespace SmartStock.Forms
         private Panel leftBorderBtn;
         private Form currentChildForm = new Form();
 
-        // ── Borderless window support ─────────────────────────────────────────
-
-        private const int ResizeBorder = 6;
-
-        private const int HTLEFT        = 10;
-        private const int HTRIGHT       = 11;
-        private const int HTTOP         = 12;
-        private const int HTTOPLEFT     = 13;
-        private const int HTTOPRIGHT    = 14;
-        private const int HTBOTTOM      = 15;
-        private const int HTBOTTOMLEFT  = 16;
-        private const int HTBOTTOMRIGHT = 17;
-        private const int WM_NCHITTEST  = 0x0084;
+        // ── Borderless window: manual resize + drag ──────────────────────────
 
         [DllImport("user32.dll")]
         private static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
         [DllImport("user32.dll")]
         private static extern bool ReleaseCapture();
 
+        private const int ResizeBorder = 5;
+
+        [Flags]
+        private enum ResizeDir { None = 0, Left = 1, Right = 2, Top = 4, Bottom = 8 }
+
+        private bool      _resizing   = false;
+        private ResizeDir _resizeDir  = ResizeDir.None;
+        private Point     _resizeStart;
+        private Rectangle _startBounds;
+
+        private ResizeDir HitDir(Point p)
+        {
+            var d = ResizeDir.None;
+            if (p.X <= ResizeBorder)                        d |= ResizeDir.Left;
+            if (p.X >= ClientSize.Width  - ResizeBorder)   d |= ResizeDir.Right;
+            if (p.Y <= ResizeBorder)                        d |= ResizeDir.Top;
+            if (p.Y >= ClientSize.Height - ResizeBorder)   d |= ResizeDir.Bottom;
+            return d;
+        }
+
+        private static Cursor CursorFor(ResizeDir d) => d switch
+        {
+            ResizeDir.Left                          => Cursors.SizeWE,
+            ResizeDir.Right                         => Cursors.SizeWE,
+            ResizeDir.Top                           => Cursors.SizeNS,
+            ResizeDir.Bottom                        => Cursors.SizeNS,
+            ResizeDir.Top    | ResizeDir.Left       => Cursors.SizeNWSE,
+            ResizeDir.Bottom | ResizeDir.Right      => Cursors.SizeNWSE,
+            ResizeDir.Top    | ResizeDir.Right      => Cursors.SizeNESW,
+            ResizeDir.Bottom | ResizeDir.Left       => Cursors.SizeNESW,
+            _                                       => Cursors.Default,
+        };
+
+        private const int WM_SETCURSOR = 0x0020;
+
         protected override void WndProc(ref Message m)
         {
-            if (m.Msg == WM_NCHITTEST && WindowState == FormWindowState.Normal)
+            // WM_SETCURSOR fires per-HWND: child controls handle it themselves,
+            // so this only runs when the cursor is over the form background (5px border)
+            // or during active resize (Capture=true routes all messages here).
+            if (m.Msg == WM_SETCURSOR && WindowState == FormWindowState.Normal)
             {
-                var pos   = PointToClient(new Point(m.LParam.ToInt32() & 0xFFFF,
-                                                     m.LParam.ToInt32() >> 16));
-                bool left   = pos.X <= ResizeBorder;
-                bool right  = pos.X >= ClientSize.Width  - ResizeBorder;
-                bool top    = pos.Y <= ResizeBorder;
-                bool bottom = pos.Y >= ClientSize.Height - ResizeBorder;
-
-                if      (top    && left)  m.Result = (IntPtr)HTTOPLEFT;
-                else if (top    && right) m.Result = (IntPtr)HTTOPRIGHT;
-                else if (bottom && left)  m.Result = (IntPtr)HTBOTTOMLEFT;
-                else if (bottom && right) m.Result = (IntPtr)HTBOTTOMRIGHT;
-                else if (left)            m.Result = (IntPtr)HTLEFT;
-                else if (right)           m.Result = (IntPtr)HTRIGHT;
-                else if (top)             m.Result = (IntPtr)HTTOP;
-                else if (bottom)          m.Result = (IntPtr)HTBOTTOM;
-                else base.WndProc(ref m);
-                return;
+                var dir = _resizing ? _resizeDir : HitDir(PointToClient(Cursor.Position));
+                if (dir != ResizeDir.None)
+                {
+                    Cursor.Current = CursorFor(dir);
+                    m.Result = (IntPtr)1;
+                    return;
+                }
             }
             base.WndProc(ref m);
+        }
+
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+            if (!_resizing || WindowState != FormWindowState.Normal) return;
+
+            int dx = e.X + Location.X - _resizeStart.X;
+            int dy = e.Y + Location.Y - _resizeStart.Y;
+            var b  = _startBounds;
+
+            if ((_resizeDir & ResizeDir.Right)  != 0) b.Width  = Math.Max(MinimumSize.Width,  _startBounds.Width  + dx);
+            if ((_resizeDir & ResizeDir.Bottom) != 0) b.Height = Math.Max(MinimumSize.Height, _startBounds.Height + dy);
+            if ((_resizeDir & ResizeDir.Left)   != 0) { b.X = _startBounds.Right - Math.Max(MinimumSize.Width,  _startBounds.Width  - dx); b.Width  = _startBounds.Right  - b.X; }
+            if ((_resizeDir & ResizeDir.Top)    != 0) { b.Y = _startBounds.Bottom - Math.Max(MinimumSize.Height, _startBounds.Height - dy); b.Height = _startBounds.Bottom - b.Y; }
+
+            Bounds = b;
+        }
+
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            base.OnMouseDown(e);
+            if (e.Button != MouseButtons.Left || WindowState != FormWindowState.Normal) return;
+
+            var dir = HitDir(e.Location);
+            if (dir == ResizeDir.None) return;
+
+            _resizing    = true;
+            _resizeDir   = dir;
+            _resizeStart = new Point(e.X + Location.X, e.Y + Location.Y);
+            _startBounds = Bounds;
+            Capture      = true;
+        }
+
+        protected override void OnMouseUp(MouseEventArgs e)
+        {
+            base.OnMouseUp(e);
+            if (_resizing) { _resizing = false; Capture = false; }
         }
 
         // Drag the titlebar to move the window.
@@ -81,13 +135,32 @@ namespace SmartStock.Forms
 
         private void maximize_btn_Click(object sender, EventArgs e)
         {
-            if (WindowState == FormWindowState.Maximized)
+          /*if (WindowState == FormWindowState.Maximized)
             {
                 WindowState = FormWindowState.Normal;
                 maximize_btn.IconChar = IconChar.WindowMaximize;
             }
             else
             {
+                WindowState = FormWindowState.Maximized;
+                maximize_btn.IconChar = IconChar.WindowRestore;
+            }*/
+            if (WindowState == FormWindowState.Maximized)
+            {
+                // Scoatem limita de dimensiune când revenim la normal
+                this.MaximumSize = new Size(0, 0);
+                WindowState = FormWindowState.Normal;
+                maximize_btn.IconChar = IconChar.WindowMaximize;
+            }
+            else
+            {
+                // Obținem ecranul pe care se află fereastra în acest moment (suportă multi-monitor)
+                Screen currentScreen = Screen.FromHandle(this.Handle);
+
+                // Setăm dimensiunea maximă la zona de lucru (WorkingArea exclude taskbar-ul)
+                this.MaximizedBounds = currentScreen.WorkingArea;
+                this.MaximumSize = currentScreen.WorkingArea.Size;
+
                 WindowState = FormWindowState.Maximized;
                 maximize_btn.IconChar = IconChar.WindowRestore;
             }
