@@ -27,36 +27,36 @@ namespace SmartStock.Forms
         [Flags]
         private enum ResizeDir { None = 0, Left = 1, Right = 2, Top = 4, Bottom = 8 }
 
-        private bool      _resizing   = false;
-        private ResizeDir _resizeDir  = ResizeDir.None;
-        private Point     _resizeStart;
+        private bool _resizing = false;
+        private ResizeDir _resizeDir = ResizeDir.None;
+        private Point _resizeStart;
         private Rectangle _startBounds;
 
         private ResizeDir HitDir(Point p)
         {
             var d = ResizeDir.None;
-            if (p.X <= ResizeBorder)                        d |= ResizeDir.Left;
-            if (p.X >= ClientSize.Width  - ResizeBorder)   d |= ResizeDir.Right;
-            if (p.Y <= ResizeBorder)                        d |= ResizeDir.Top;
-            if (p.Y >= ClientSize.Height - ResizeBorder)   d |= ResizeDir.Bottom;
+            if (p.X <= ResizeBorder) d |= ResizeDir.Left;
+            if (p.X >= ClientSize.Width - ResizeBorder) d |= ResizeDir.Right;
+            if (p.Y <= ResizeBorder) d |= ResizeDir.Top;
+            if (p.Y >= ClientSize.Height - ResizeBorder) d |= ResizeDir.Bottom;
             return d;
         }
 
         private static Cursor CursorFor(ResizeDir d) => d switch
         {
-            ResizeDir.Left                          => Cursors.SizeWE,
-            ResizeDir.Right                         => Cursors.SizeWE,
-            ResizeDir.Top                           => Cursors.SizeNS,
-            ResizeDir.Bottom                        => Cursors.SizeNS,
-            ResizeDir.Top    | ResizeDir.Left       => Cursors.SizeNWSE,
-            ResizeDir.Bottom | ResizeDir.Right      => Cursors.SizeNWSE,
-            ResizeDir.Top    | ResizeDir.Right      => Cursors.SizeNESW,
-            ResizeDir.Bottom | ResizeDir.Left       => Cursors.SizeNESW,
-            _                                       => Cursors.Default,
+            ResizeDir.Left => Cursors.SizeWE,
+            ResizeDir.Right => Cursors.SizeWE,
+            ResizeDir.Top => Cursors.SizeNS,
+            ResizeDir.Bottom => Cursors.SizeNS,
+            ResizeDir.Top | ResizeDir.Left => Cursors.SizeNWSE,
+            ResizeDir.Bottom | ResizeDir.Right => Cursors.SizeNWSE,
+            ResizeDir.Top | ResizeDir.Right => Cursors.SizeNESW,
+            ResizeDir.Bottom | ResizeDir.Left => Cursors.SizeNESW,
+            _ => Cursors.Default,
         };
 
-        private const int WM_SETCURSOR    = 0x0020;
-        private const int WM_ERASEBKGND   = 0x0014;
+        private const int WM_SETCURSOR = 0x0020;
+        private const int WM_ERASEBKGND = 0x0014;
 
         protected override void WndProc(ref Message m)
         {
@@ -86,12 +86,12 @@ namespace SmartStock.Forms
 
             int dx = e.X + Location.X - _resizeStart.X;
             int dy = e.Y + Location.Y - _resizeStart.Y;
-            var b  = _startBounds;
+            var b = _startBounds;
 
-            if ((_resizeDir & ResizeDir.Right)  != 0) b.Width  = Math.Max(MinimumSize.Width,  _startBounds.Width  + dx);
+            if ((_resizeDir & ResizeDir.Right) != 0) b.Width = Math.Max(MinimumSize.Width, _startBounds.Width + dx);
             if ((_resizeDir & ResizeDir.Bottom) != 0) b.Height = Math.Max(MinimumSize.Height, _startBounds.Height + dy);
-            if ((_resizeDir & ResizeDir.Left)   != 0) { b.X = _startBounds.Right - Math.Max(MinimumSize.Width,  _startBounds.Width  - dx); b.Width  = _startBounds.Right  - b.X; }
-            if ((_resizeDir & ResizeDir.Top)    != 0) { b.Y = _startBounds.Bottom - Math.Max(MinimumSize.Height, _startBounds.Height - dy); b.Height = _startBounds.Bottom - b.Y; }
+            if ((_resizeDir & ResizeDir.Left) != 0) { b.X = _startBounds.Right - Math.Max(MinimumSize.Width, _startBounds.Width - dx); b.Width = _startBounds.Right - b.X; }
+            if ((_resizeDir & ResizeDir.Top) != 0) { b.Y = _startBounds.Bottom - Math.Max(MinimumSize.Height, _startBounds.Height - dy); b.Height = _startBounds.Bottom - b.Y; }
 
             Bounds = b;
             Invalidate(true);
@@ -105,11 +105,11 @@ namespace SmartStock.Forms
             var dir = HitDir(e.Location);
             if (dir == ResizeDir.None) return;
 
-            _resizing    = true;
-            _resizeDir   = dir;
+            _resizing = true;
+            _resizeDir = dir;
             _resizeStart = new Point(e.X + Location.X, e.Y + Location.Y);
             _startBounds = Bounds;
-            Capture      = true;
+            Capture = true;
         }
 
         protected override void OnMouseUp(MouseEventArgs e)
@@ -140,16 +140,16 @@ namespace SmartStock.Forms
 
         private void maximize_btn_Click(object sender, EventArgs e)
         {
-          /*if (WindowState == FormWindowState.Maximized)
-            {
-                WindowState = FormWindowState.Normal;
-                maximize_btn.IconChar = IconChar.WindowMaximize;
-            }
-            else
-            {
-                WindowState = FormWindowState.Maximized;
-                maximize_btn.IconChar = IconChar.WindowRestore;
-            }*/
+            /*if (WindowState == FormWindowState.Maximized)
+              {
+                  WindowState = FormWindowState.Normal;
+                  maximize_btn.IconChar = IconChar.WindowMaximize;
+              }
+              else
+              {
+                  WindowState = FormWindowState.Maximized;
+                  maximize_btn.IconChar = IconChar.WindowRestore;
+              }*/
             if (WindowState == FormWindowState.Maximized)
             {
                 // Scoatem limita de dimensiune când revenim la normal
@@ -210,13 +210,13 @@ namespace SmartStock.Forms
             {
                 user_name_lbl.Text = string.IsNullOrWhiteSpace(user.FullName) ? user.Username : user.FullName;
                 user_role_lbl.Text = (user.Role ?? "USER").ToUpperInvariant();
-                status_lbl.Text    = $"Signed in as {user.Username}";
+                status_lbl.Text = $"Signed in as {user.Username}";
             }
             else
             {
                 user_name_lbl.Text = "Guest";
                 user_role_lbl.Text = "OFFLINE";
-                status_lbl.Text    = "Ready";
+                status_lbl.Text = "Ready";
             }
         }
 
@@ -274,8 +274,8 @@ namespace SmartStock.Forms
                 // Left border: amber accent strip marks the active section
                 leftBorderBtn.BackColor = p.Accent;
                 leftBorderBtn.Location = new Point(0, currentBtn.Location.Y);
-                leftBorderBtn.Height   = currentBtn.Height;
-                leftBorderBtn.Visible  = true;
+                leftBorderBtn.Height = currentBtn.Height;
+                leftBorderBtn.Visible = true;
                 leftBorderBtn.BringToFront();
             }
         }
@@ -287,8 +287,8 @@ namespace SmartStock.Forms
                 var p = ThemeManager.GetCurrentPalette();
                 currentBtn.ForeColor = p.TextSecondary;
                 currentBtn.BackColor = Color.Transparent;
-                currentBtn.TextAlign  = ContentAlignment.MiddleLeft;
-                currentBtn.IconColor  = p.TextSecondary;
+                currentBtn.TextAlign = ContentAlignment.MiddleLeft;
+                currentBtn.IconColor = p.TextSecondary;
                 leftBorderBtn.Visible = false;
                 currentBtn.Refresh();
             }
@@ -361,6 +361,12 @@ namespace SmartStock.Forms
 
             // Exit the application
             Application.Exit();
+        }
+
+        private void test_btn_Click(object sender, EventArgs e)
+        {
+            ActivateButton(sender);
+            OpenChildForm(new test());
         }
     }
 }

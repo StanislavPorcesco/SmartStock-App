@@ -54,7 +54,7 @@ namespace SmartStock
             selector_icon = new IconPictureBox();
             selector_divider = new Panel();
             selector_fields_pnl = new TableLayoutPanel();
-            selector_cb = new ComboBox();
+            selector_cb = new SmartStock.Classes.Utils.ThemedComboBox();
             instance_lbl = new Label();
             tableLayoutPanel1 = new TableLayoutPanel();
             result_pnl.SuspendLayout();
@@ -497,7 +497,7 @@ namespace SmartStock
         private Panel selector_divider;
         private TableLayoutPanel selector_fields_pnl;
         private Label instance_lbl;
-        private ComboBox selector_cb;
+        private SmartStock.Classes.Utils.ThemedComboBox selector_cb;
         private TableLayoutPanel tableLayoutPanel1;
     }
 }

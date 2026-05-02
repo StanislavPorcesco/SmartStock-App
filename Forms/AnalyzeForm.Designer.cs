@@ -29,9 +29,9 @@ namespace SmartStock.Forms
             selector_divider = new Panel();
             selector_fields_pnl = new TableLayoutPanel();
             analisys_lbl = new Label();
-            analysis_type_cb = new ComboBox();
+            analysis_type_cb = new SmartStock.Classes.Utils.ThemedComboBox();
             label1 = new Label();
-            target_subject_cb = new ComboBox();
+            target_subject_cb = new SmartStock.Classes.Utils.ThemedComboBox();
             label2 = new Label();
             start_date_dtp = new DateTimePicker();
             end_date_lbl = new Label();
@@ -254,14 +254,15 @@ namespace SmartStock.Forms
             // analysis_type_cb
             // 
             analysis_type_cb.Dock = DockStyle.Fill;
+            analysis_type_cb.DrawMode = DrawMode.OwnerDrawFixed;
             analysis_type_cb.DropDownStyle = ComboBoxStyle.DropDownList;
             analysis_type_cb.FlatStyle = FlatStyle.Flat;
             analysis_type_cb.Font = new Font("Segoe UI", 11F);
-            analysis_type_cb.FormattingEnabled = true;
+            analysis_type_cb.ItemHeight = 30;
             analysis_type_cb.Location = new Point(0, 28);
             analysis_type_cb.Margin = new Padding(0, 0, 8, 0);
             analysis_type_cb.Name = "analysis_type_cb";
-            analysis_type_cb.Size = new Size(265, 33);
+            analysis_type_cb.Size = new Size(265, 36);
             analysis_type_cb.TabIndex = 1;
             // 
             // label1
@@ -280,14 +281,15 @@ namespace SmartStock.Forms
             // target_subject_cb
             // 
             target_subject_cb.Dock = DockStyle.Fill;
+            target_subject_cb.DrawMode = DrawMode.OwnerDrawFixed;
             target_subject_cb.DropDownStyle = ComboBoxStyle.DropDownList;
             target_subject_cb.FlatStyle = FlatStyle.Flat;
             target_subject_cb.Font = new Font("Segoe UI", 11F);
-            target_subject_cb.FormattingEnabled = true;
+            target_subject_cb.ItemHeight = 30;
             target_subject_cb.Location = new Point(273, 28);
             target_subject_cb.Margin = new Padding(0, 0, 8, 0);
             target_subject_cb.Name = "target_subject_cb";
-            target_subject_cb.Size = new Size(265, 33);
+            target_subject_cb.Size = new Size(265, 36);
             target_subject_cb.TabIndex = 2;
             // 
             // label2
@@ -939,9 +941,9 @@ namespace SmartStock.Forms
         private Panel selector_divider;
         private TableLayoutPanel selector_fields_pnl;
         private Label analisys_lbl;
-        private ComboBox analysis_type_cb;
+        private SmartStock.Classes.Utils.ThemedComboBox analysis_type_cb;
         private Label label1;
-        private ComboBox target_subject_cb;
+        private SmartStock.Classes.Utils.ThemedComboBox target_subject_cb;
         private Label label2;
         private DateTimePicker start_date_dtp;
         private Label end_date_lbl;

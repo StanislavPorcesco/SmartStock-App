@@ -42,7 +42,7 @@ namespace SmartStock.Forms.AddForms
             theme_host = new Panel();
             tableLayoutPanel1 = new TableLayoutPanel();
             theme_icn = new IconPictureBox();
-            themes_cb = new ComboBox();
+            themes_cb = new SmartStock.Classes.Utils.ThemedComboBox();
             title_lbl = new Label();
             subtitle_lbl = new Label();
             theme_lbl = new Label();
@@ -591,7 +591,7 @@ namespace SmartStock.Forms.AddForms
         private Label            theme_lbl;
         private Panel            theme_host;
         private IconPictureBox   theme_icn;
-        private ComboBox         themes_cb;
+        private SmartStock.Classes.Utils.ThemedComboBox         themes_cb;
         private TableLayoutPanel footer_pnl;
         private Button           return_btn;
         private Button           apply_btn;

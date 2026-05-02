@@ -196,9 +196,23 @@ namespace SmartStock.Forms.User_Control.SearchForms
         {
             try
             {
-                // Value Type ComboBox
                 value_type_cb.Items.Clear();
-                value_type_cb.Items.AddRange(new object[] { "All Value Types", "Absolute", "Percentage", "Multiplier" });
+                value_type_cb.Items.Add("All Value Types");
+                using (var db = new SmartStockContext())
+                {
+                    var factor_types = db.ExternalFactors
+                        .AsNoTracking()
+                        .Where(f => f.ValueType != null)
+                        .Select(f => f.ValueType)
+                        .Distinct()
+                        .OrderBy(r => r)
+                        .ToList();
+
+                    foreach (var valueType in factor_types)
+                    {
+                        value_type_cb.Items.Add(valueType);
+                    }
+                }
                 value_type_cb.SelectedIndex = 0;
 
                 // Direction ComboBox

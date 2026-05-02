@@ -95,7 +95,7 @@ namespace SmartStock.Classes.Utils
                 themes_cb.SelectedIndex = 1;
             }
         }
-        public static void PopulateCategorySelector(ComboBox selector)
+        public static void PopulateCategorySelector(ThemedComboBox selector)
         {
             using (var db = new SmartStockContext())
             {
@@ -111,13 +111,9 @@ namespace SmartStock.Classes.Utils
 
                 if (categories.Count > 0)
                 {
-                    // 3. Setăm lista de obiecte ca sursă de date
-                    selector.DataSource = categories;
-
-                    // 4. Îi spunem ce să afișeze (Numele) și ce să țină în spate (ID-ul)
                     selector.DisplayMember = "CategoryName";
-                    selector.ValueMember = "CategoryId";
-
+                    selector.ValueMember   = "CategoryId";
+                    selector.DataSource    = categories;
                     selector.SelectedIndex = 0;
                 }
             }

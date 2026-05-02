@@ -33,7 +33,7 @@ namespace SmartStock.Forms.User_Control.SearchForms
             search_lbl = new Label();
             date_lbl = new Label();
             city_lbl = new Label();
-            city_cb = new ComboBox();
+            city_cb = new SmartStock.Classes.Utils.ThemedComboBox();
             registration_end = new DateTimePicker();
             sales_count_lbl = new Label();
             panel3 = new Panel();
@@ -47,6 +47,9 @@ namespace SmartStock.Forms.User_Control.SearchForms
             inactive_rb = new RadioButton();
             active_rb = new RadioButton();
             all_rb = new RadioButton();
+            border_theme_pnl = new Panel();
+            container_theme_pnl = new Panel();
+            tableLayoutPanel6 = new TableLayoutPanel();
             panel1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             panel6.SuspendLayout();
@@ -59,6 +62,9 @@ namespace SmartStock.Forms.User_Control.SearchForms
             ((System.ComponentModel.ISupportInitialize)sale_count_min).BeginInit();
             radio_pnl.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
+            border_theme_pnl.SuspendLayout();
+            container_theme_pnl.SuspendLayout();
+            tableLayoutPanel6.SuspendLayout();
             SuspendLayout();
             // 
             // panel1
@@ -68,7 +74,7 @@ namespace SmartStock.Forms.User_Control.SearchForms
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
             panel1.Padding = new Padding(0, 10, 0, 0);
-            panel1.Size = new Size(872, 744);
+            panel1.Size = new Size(872, 817);
             panel1.TabIndex = 0;
             panel1.Tag = "card";
             // 
@@ -78,7 +84,7 @@ namespace SmartStock.Forms.User_Control.SearchForms
             tableLayoutPanel1.ColumnCount = 2;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.Controls.Add(name_or_phone_tb, 1, 0);
+            tableLayoutPanel1.Controls.Add(border_theme_pnl, 1, 0);
             tableLayoutPanel1.Controls.Add(status_lbl, 0, 10);
             tableLayoutPanel1.Controls.Add(dead_stock_end, 1, 5);
             tableLayoutPanel1.Controls.Add(dead_stock_start, 1, 4);
@@ -111,7 +117,8 @@ namespace SmartStock.Forms.User_Control.SearchForms
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.Size = new Size(872, 734);
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel1.Size = new Size(872, 807);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // name_or_phone_tb
@@ -119,18 +126,19 @@ namespace SmartStock.Forms.User_Control.SearchForms
             name_or_phone_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             name_or_phone_tb.BackColor = SystemColors.Window;
             name_or_phone_tb.Font = new Font("Segoe UI", 10.5F);
-            name_or_phone_tb.Location = new Point(442, 10);
-            name_or_phone_tb.Margin = new Padding(6, 10, 0, 10);
+            name_or_phone_tb.Location = new Point(0, 0);
+            name_or_phone_tb.Margin = new Padding(0);
             name_or_phone_tb.Name = "name_or_phone_tb";
-            name_or_phone_tb.Size = new Size(430, 31);
+            name_or_phone_tb.Size = new Size(428, 31);
             name_or_phone_tb.TabIndex = 44;
+            name_or_phone_tb.Tag = "borderless";
             // 
             // status_lbl
             // 
             status_lbl.AutoSize = true;
             status_lbl.Dock = DockStyle.Top;
             status_lbl.Font = new Font("Segoe UI", 10F);
-            status_lbl.Location = new Point(10, 525);
+            status_lbl.Location = new Point(10, 531);
             status_lbl.Margin = new Padding(10, 13, 3, 0);
             status_lbl.Name = "status_lbl";
             status_lbl.Size = new Size(423, 23);
@@ -144,7 +152,7 @@ namespace SmartStock.Forms.User_Control.SearchForms
             dead_stock_end.DropDownAlign = LeftRightAlignment.Right;
             dead_stock_end.Font = new Font("Segoe UI", 11F);
             dead_stock_end.Format = DateTimePickerFormat.Custom;
-            dead_stock_end.Location = new Point(442, 270);
+            dead_stock_end.Location = new Point(442, 276);
             dead_stock_end.Margin = new Padding(6, 10, 0, 10);
             dead_stock_end.Name = "dead_stock_end";
             dead_stock_end.Size = new Size(430, 32);
@@ -156,7 +164,7 @@ namespace SmartStock.Forms.User_Control.SearchForms
             dead_stock_start.DropDownAlign = LeftRightAlignment.Right;
             dead_stock_start.Font = new Font("Segoe UI", 11F);
             dead_stock_start.Format = DateTimePickerFormat.Custom;
-            dead_stock_start.Location = new Point(442, 218);
+            dead_stock_start.Location = new Point(442, 224);
             dead_stock_start.Margin = new Padding(6, 10, 0, 10);
             dead_stock_start.Name = "dead_stock_start";
             dead_stock_start.Size = new Size(430, 32);
@@ -167,7 +175,7 @@ namespace SmartStock.Forms.User_Control.SearchForms
             no_sales_lbl.AutoSize = true;
             no_sales_lbl.Dock = DockStyle.Fill;
             no_sales_lbl.Font = new Font("Segoe UI", 10F);
-            no_sales_lbl.Location = new Point(10, 208);
+            no_sales_lbl.Location = new Point(10, 214);
             no_sales_lbl.Margin = new Padding(10, 0, 3, 0);
             no_sales_lbl.Name = "no_sales_lbl";
             tableLayoutPanel1.SetRowSpan(no_sales_lbl, 2);
@@ -182,7 +190,7 @@ namespace SmartStock.Forms.User_Control.SearchForms
             panel6.Controls.Add(label3);
             panel6.Controls.Add(spent_max);
             panel6.Dock = DockStyle.Fill;
-            panel6.Location = new Point(442, 472);
+            panel6.Location = new Point(442, 478);
             panel6.Margin = new Padding(6, 10, 0, 10);
             panel6.MaximumSize = new Size(0, 30);
             panel6.Name = "panel6";
@@ -219,7 +227,7 @@ namespace SmartStock.Forms.User_Control.SearchForms
             panel5.Controls.Add(label2);
             panel5.Controls.Add(spent_min);
             panel5.Dock = DockStyle.Fill;
-            panel5.Location = new Point(442, 422);
+            panel5.Location = new Point(442, 428);
             panel5.Margin = new Padding(6, 10, 0, 10);
             panel5.MaximumSize = new Size(0, 30);
             panel5.Name = "panel5";
@@ -257,7 +265,7 @@ namespace SmartStock.Forms.User_Control.SearchForms
             total_spent_lbl.AutoSize = true;
             total_spent_lbl.Dock = DockStyle.Fill;
             total_spent_lbl.Font = new Font("Segoe UI", 10F);
-            total_spent_lbl.Location = new Point(10, 412);
+            total_spent_lbl.Location = new Point(10, 418);
             total_spent_lbl.Margin = new Padding(10, 0, 3, 0);
             total_spent_lbl.Name = "total_spent_lbl";
             tableLayoutPanel1.SetRowSpan(total_spent_lbl, 2);
@@ -273,7 +281,7 @@ namespace SmartStock.Forms.User_Control.SearchForms
             registration_start.DropDownAlign = LeftRightAlignment.Right;
             registration_start.Font = new Font("Segoe UI", 11F);
             registration_start.Format = DateTimePickerFormat.Custom;
-            registration_start.Location = new Point(442, 114);
+            registration_start.Location = new Point(442, 120);
             registration_start.Margin = new Padding(6, 10, 0, 10);
             registration_start.Name = "registration_start";
             registration_start.Size = new Size(430, 32);
@@ -287,7 +295,7 @@ namespace SmartStock.Forms.User_Control.SearchForms
             search_lbl.Location = new Point(10, 0);
             search_lbl.Margin = new Padding(10, 0, 3, 0);
             search_lbl.Name = "search_lbl";
-            search_lbl.Size = new Size(423, 51);
+            search_lbl.Size = new Size(423, 54);
             search_lbl.TabIndex = 8;
             search_lbl.Tag = "muted";
             search_lbl.Text = "Search by Name / Phone / Email";
@@ -298,7 +306,7 @@ namespace SmartStock.Forms.User_Control.SearchForms
             date_lbl.AutoSize = true;
             date_lbl.Dock = DockStyle.Fill;
             date_lbl.Font = new Font("Segoe UI", 10F);
-            date_lbl.Location = new Point(10, 104);
+            date_lbl.Location = new Point(10, 110);
             date_lbl.Margin = new Padding(10, 0, 3, 0);
             date_lbl.Name = "date_lbl";
             tableLayoutPanel1.SetRowSpan(date_lbl, 2);
@@ -313,10 +321,10 @@ namespace SmartStock.Forms.User_Control.SearchForms
             city_lbl.AutoSize = true;
             city_lbl.Dock = DockStyle.Fill;
             city_lbl.Font = new Font("Segoe UI", 10F);
-            city_lbl.Location = new Point(10, 51);
+            city_lbl.Location = new Point(10, 54);
             city_lbl.Margin = new Padding(10, 0, 3, 0);
             city_lbl.Name = "city_lbl";
-            city_lbl.Size = new Size(423, 53);
+            city_lbl.Size = new Size(423, 56);
             city_lbl.TabIndex = 25;
             city_lbl.Tag = "muted";
             city_lbl.Text = "Location / City";
@@ -325,13 +333,15 @@ namespace SmartStock.Forms.User_Control.SearchForms
             // city_cb
             // 
             city_cb.Dock = DockStyle.Fill;
+            city_cb.DrawMode = DrawMode.OwnerDrawFixed;
             city_cb.FlatStyle = FlatStyle.Flat;
             city_cb.Font = new Font("Segoe UI", 11F);
             city_cb.FormattingEnabled = true;
-            city_cb.Location = new Point(442, 61);
+            city_cb.ItemHeight = 30;
+            city_cb.Location = new Point(442, 64);
             city_cb.Margin = new Padding(6, 10, 0, 10);
             city_cb.Name = "city_cb";
-            city_cb.Size = new Size(430, 33);
+            city_cb.Size = new Size(430, 36);
             city_cb.TabIndex = 31;
             // 
             // registration_end
@@ -340,7 +350,7 @@ namespace SmartStock.Forms.User_Control.SearchForms
             registration_end.DropDownAlign = LeftRightAlignment.Right;
             registration_end.Font = new Font("Segoe UI", 11F);
             registration_end.Format = DateTimePickerFormat.Custom;
-            registration_end.Location = new Point(442, 166);
+            registration_end.Location = new Point(442, 172);
             registration_end.Margin = new Padding(6, 10, 0, 10);
             registration_end.Name = "registration_end";
             registration_end.Size = new Size(430, 32);
@@ -351,7 +361,7 @@ namespace SmartStock.Forms.User_Control.SearchForms
             sales_count_lbl.AutoSize = true;
             sales_count_lbl.Dock = DockStyle.Fill;
             sales_count_lbl.Font = new Font("Segoe UI", 10F);
-            sales_count_lbl.Location = new Point(10, 312);
+            sales_count_lbl.Location = new Point(10, 318);
             sales_count_lbl.Margin = new Padding(10, 0, 3, 0);
             sales_count_lbl.Name = "sales_count_lbl";
             tableLayoutPanel1.SetRowSpan(sales_count_lbl, 2);
@@ -366,7 +376,7 @@ namespace SmartStock.Forms.User_Control.SearchForms
             panel3.Controls.Add(label5);
             panel3.Controls.Add(sale_count_max);
             panel3.Dock = DockStyle.Fill;
-            panel3.Location = new Point(442, 372);
+            panel3.Location = new Point(442, 378);
             panel3.Margin = new Padding(6, 10, 0, 10);
             panel3.MaximumSize = new Size(0, 30);
             panel3.Name = "panel3";
@@ -403,7 +413,7 @@ namespace SmartStock.Forms.User_Control.SearchForms
             panel2.Controls.Add(label4);
             panel2.Controls.Add(sale_count_min);
             panel2.Dock = DockStyle.Fill;
-            panel2.Location = new Point(442, 322);
+            panel2.Location = new Point(442, 328);
             panel2.Margin = new Padding(6, 10, 0, 10);
             panel2.MaximumSize = new Size(0, 30);
             panel2.Name = "panel2";
@@ -440,7 +450,7 @@ namespace SmartStock.Forms.User_Control.SearchForms
             // 
             radio_pnl.Controls.Add(tableLayoutPanel2);
             radio_pnl.Dock = DockStyle.Top;
-            radio_pnl.Location = new Point(439, 515);
+            radio_pnl.Location = new Point(439, 521);
             radio_pnl.MaximumSize = new Size(0, 140);
             radio_pnl.MinimumSize = new Size(0, 140);
             radio_pnl.Name = "radio_pnl";
@@ -510,13 +520,52 @@ namespace SmartStock.Forms.User_Control.SearchForms
             all_rb.Text = "All";
             all_rb.UseVisualStyleBackColor = true;
             // 
+            // border_theme_pnl
+            // 
+            border_theme_pnl.Controls.Add(container_theme_pnl);
+            border_theme_pnl.Dock = DockStyle.Fill;
+            border_theme_pnl.Location = new Point(442, 10);
+            border_theme_pnl.Margin = new Padding(6, 10, 0, 10);
+            border_theme_pnl.Name = "border_theme_pnl";
+            border_theme_pnl.Padding = new Padding(1);
+            border_theme_pnl.Size = new Size(430, 34);
+            border_theme_pnl.TabIndex = 45;
+            border_theme_pnl.Tag = "border_pnl";
+            // 
+            // container_theme_pnl
+            // 
+            container_theme_pnl.Controls.Add(tableLayoutPanel6);
+            container_theme_pnl.Dock = DockStyle.Fill;
+            container_theme_pnl.Location = new Point(1, 1);
+            container_theme_pnl.Margin = new Padding(0);
+            container_theme_pnl.Name = "container_theme_pnl";
+            container_theme_pnl.Size = new Size(428, 32);
+            container_theme_pnl.TabIndex = 0;
+            container_theme_pnl.Tag = "card";
+            // 
+            // tableLayoutPanel6
+            // 
+            tableLayoutPanel6.ColumnCount = 1;
+            tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel6.Controls.Add(name_or_phone_tb, 0, 0);
+            tableLayoutPanel6.Dock = DockStyle.Fill;
+            tableLayoutPanel6.Location = new Point(0, 0);
+            tableLayoutPanel6.Margin = new Padding(0);
+            tableLayoutPanel6.Name = "tableLayoutPanel6";
+            tableLayoutPanel6.RowCount = 1;
+            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel6.Size = new Size(428, 32);
+            tableLayoutPanel6.TabIndex = 0;
+            // 
             // FilterCustomers
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(panel1);
             Name = "FilterCustomers";
-            Size = new Size(872, 744);
+            Size = new Size(872, 817);
             panel1.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
@@ -535,6 +584,10 @@ namespace SmartStock.Forms.User_Control.SearchForms
             radio_pnl.ResumeLayout(false);
             tableLayoutPanel2.ResumeLayout(false);
             tableLayoutPanel2.PerformLayout();
+            border_theme_pnl.ResumeLayout(false);
+            container_theme_pnl.ResumeLayout(false);
+            tableLayoutPanel6.ResumeLayout(false);
+            tableLayoutPanel6.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -553,7 +606,7 @@ namespace SmartStock.Forms.User_Control.SearchForms
         private NumericUpDown sale_count_max;
         private Label city_lbl;
         private DateTimePicker registration_start;
-        private ComboBox city_cb;
+        private SmartStock.Classes.Utils.ThemedComboBox city_cb;
         private DateTimePicker registration_end;
         private Label total_spent_lbl;
         private Panel panel6;
@@ -572,5 +625,8 @@ namespace SmartStock.Forms.User_Control.SearchForms
         private RadioButton all_rb;
         private Label status_lbl;
         private TextBox name_or_phone_tb;
+        private Panel border_theme_pnl;
+        private Panel container_theme_pnl;
+        private TableLayoutPanel tableLayoutPanel6;
     }
 }

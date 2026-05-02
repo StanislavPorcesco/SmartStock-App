@@ -32,8 +32,8 @@ namespace SmartStock.Forms.User_Control.SearchForms
             tableLayoutPanel1 = new TableLayoutPanel();
             date_lbl = new Label();
             date_start = new DateTimePicker();
-            user_cb = new ComboBox();
-            type_cb = new ComboBox();
+            user_cb = new SmartStock.Classes.Utils.ThemedComboBox();
+            type_cb = new SmartStock.Classes.Utils.ThemedComboBox();
             user_lbl = new Label();
             type_lbl = new Label();
             date_end = new DateTimePicker();
@@ -122,25 +122,29 @@ namespace SmartStock.Forms.User_Control.SearchForms
             // user_cb
             // 
             user_cb.Dock = DockStyle.Fill;
+            user_cb.DrawMode = DrawMode.OwnerDrawFixed;
             user_cb.FlatStyle = FlatStyle.Flat;
             user_cb.Font = new Font("Segoe UI", 11F);
             user_cb.FormattingEnabled = true;
-            user_cb.Location = new Point(365, 167);
+            user_cb.ItemHeight = 30;
+            user_cb.Location = new Point(365, 170);
             user_cb.Margin = new Padding(6, 10, 0, 10);
             user_cb.Name = "user_cb";
-            user_cb.Size = new Size(354, 33);
+            user_cb.Size = new Size(354, 36);
             user_cb.TabIndex = 30;
             // 
             // type_cb
             // 
             type_cb.Dock = DockStyle.Fill;
+            type_cb.DrawMode = DrawMode.OwnerDrawFixed;
             type_cb.FlatStyle = FlatStyle.Flat;
             type_cb.Font = new Font("Segoe UI", 11F);
             type_cb.FormattingEnabled = true;
+            type_cb.ItemHeight = 30;
             type_cb.Location = new Point(365, 114);
             type_cb.Margin = new Padding(6, 10, 0, 10);
             type_cb.Name = "type_cb";
-            type_cb.Size = new Size(354, 33);
+            type_cb.Size = new Size(354, 36);
             type_cb.TabIndex = 29;
             // 
             // user_lbl
@@ -148,10 +152,10 @@ namespace SmartStock.Forms.User_Control.SearchForms
             user_lbl.AutoSize = true;
             user_lbl.Dock = DockStyle.Fill;
             user_lbl.Font = new Font("Segoe UI", 10F);
-            user_lbl.Location = new Point(10, 157);
+            user_lbl.Location = new Point(10, 160);
             user_lbl.Margin = new Padding(10, 0, 3, 0);
             user_lbl.Name = "user_lbl";
-            user_lbl.Size = new Size(346, 53);
+            user_lbl.Size = new Size(346, 56);
             user_lbl.TabIndex = 18;
             user_lbl.Tag = "muted";
             user_lbl.Text = "User / Employee";
@@ -165,7 +169,7 @@ namespace SmartStock.Forms.User_Control.SearchForms
             type_lbl.Location = new Point(10, 104);
             type_lbl.Margin = new Padding(10, 0, 3, 0);
             type_lbl.Name = "type_lbl";
-            type_lbl.Size = new Size(346, 53);
+            type_lbl.Size = new Size(346, 56);
             type_lbl.TabIndex = 16;
             type_lbl.Tag = "muted";
             type_lbl.Text = "Transaction Type";
@@ -188,7 +192,7 @@ namespace SmartStock.Forms.User_Control.SearchForms
             range_lbl.AutoSize = true;
             range_lbl.Dock = DockStyle.Fill;
             range_lbl.Font = new Font("Segoe UI", 10F);
-            range_lbl.Location = new Point(10, 210);
+            range_lbl.Location = new Point(10, 216);
             range_lbl.Margin = new Padding(10, 0, 3, 0);
             range_lbl.Name = "range_lbl";
             tableLayoutPanel1.SetRowSpan(range_lbl, 2);
@@ -203,7 +207,7 @@ namespace SmartStock.Forms.User_Control.SearchForms
             panel2.Controls.Add(label4);
             panel2.Controls.Add(min_numeric);
             panel2.Dock = DockStyle.Fill;
-            panel2.Location = new Point(365, 220);
+            panel2.Location = new Point(365, 226);
             panel2.Margin = new Padding(6, 10, 0, 10);
             panel2.MaximumSize = new Size(0, 30);
             panel2.Name = "panel2";
@@ -241,7 +245,7 @@ namespace SmartStock.Forms.User_Control.SearchForms
             panel3.Controls.Add(label5);
             panel3.Controls.Add(max_numeric);
             panel3.Dock = DockStyle.Fill;
-            panel3.Location = new Point(365, 270);
+            panel3.Location = new Point(365, 276);
             panel3.Margin = new Padding(6, 10, 0, 10);
             panel3.MaximumSize = new Size(0, 30);
             panel3.Name = "panel3";
@@ -307,8 +311,8 @@ namespace SmartStock.Forms.User_Control.SearchForms
         private Label label5;
         private NumericUpDown max_numeric;
         private DateTimePicker date_start;
-        private ComboBox type_cb;
-        private ComboBox user_cb;
+        private SmartStock.Classes.Utils.ThemedComboBox type_cb;
+        private SmartStock.Classes.Utils.ThemedComboBox user_cb;
         private DateTimePicker date_end;
     }
 }

@@ -30,7 +30,7 @@ namespace SmartStock.Forms.User_Control.AnalysisForms
             label_ordering_unit = new Label();
             ordering_cost_nud = new NumericUpDown();
             label2 = new Label();
-            risk_cb = new ComboBox();
+            risk_cb = new SmartStock.Classes.Utils.ThemedComboBox();
             panel1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             panel3.SuspendLayout();
@@ -290,7 +290,7 @@ namespace SmartStock.Forms.User_Control.AnalysisForms
         private Panel panel4;
         private Label label_ordering_unit;
         private NumericUpDown ordering_cost_nud;
-        private ComboBox risk_cb;
+        private SmartStock.Classes.Utils.ThemedComboBox risk_cb;
         private Panel panel2;
         private Label label4;
         private NumericUpDown delivery_days_nud;

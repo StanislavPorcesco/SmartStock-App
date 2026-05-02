@@ -30,8 +30,8 @@ namespace SmartStock
             selector_fields_pnl = new TableLayoutPanel();
             instance_lbl = new Label();
             action_lbl = new Label();
-            selector_cb = new ComboBox();
-            action_cb = new ComboBox();
+            selector_cb = new SmartStock.Classes.Utils.ThemedComboBox();
+            action_cb = new SmartStock.Classes.Utils.ThemedComboBox();
             content_row = new TableLayoutPanel();
             content_card = new Panel();
             usercontrol_pnl = new Panel();
@@ -220,28 +220,32 @@ namespace SmartStock
             // selector_cb
             // 
             selector_cb.Dock = DockStyle.Top;
+            selector_cb.DrawMode = DrawMode.OwnerDrawFixed;
             selector_cb.DropDownStyle = ComboBoxStyle.DropDownList;
             selector_cb.FlatStyle = FlatStyle.Flat;
             selector_cb.Font = new Font("Segoe UI", 11F);
             selector_cb.FormattingEnabled = true;
+            selector_cb.ItemHeight = 30;
             selector_cb.Location = new Point(0, 35);
             selector_cb.Margin = new Padding(0, 5, 10, 5);
             selector_cb.Name = "selector_cb";
-            selector_cb.Size = new Size(598, 33);
+            selector_cb.Size = new Size(598, 36);
             selector_cb.TabIndex = 2;
             selector_cb.SelectedIndexChanged += selector_cb_SelectedIndexChanged;
             // 
             // action_cb
             // 
             action_cb.Dock = DockStyle.Top;
+            action_cb.DrawMode = DrawMode.OwnerDrawFixed;
             action_cb.DropDownStyle = ComboBoxStyle.DropDownList;
             action_cb.FlatStyle = FlatStyle.Flat;
             action_cb.Font = new Font("Segoe UI", 11F);
             action_cb.FormattingEnabled = true;
+            action_cb.ItemHeight = 30;
             action_cb.Location = new Point(618, 35);
             action_cb.Margin = new Padding(10, 5, 0, 5);
             action_cb.Name = "action_cb";
-            action_cb.Size = new Size(599, 33);
+            action_cb.Size = new Size(599, 36);
             action_cb.TabIndex = 3;
             action_cb.SelectedIndexChanged += action_cb_SelectedIndexChanged;
             // 
@@ -533,8 +537,8 @@ namespace SmartStock
         private TableLayoutPanel selector_fields_pnl;
         private Label instance_lbl;
         private Label action_lbl;
-        private ComboBox selector_cb;
-        private ComboBox action_cb;
+        private SmartStock.Classes.Utils.ThemedComboBox selector_cb;
+        private SmartStock.Classes.Utils.ThemedComboBox action_cb;
 
         private TableLayoutPanel content_row;
 

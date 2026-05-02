@@ -4,6 +4,9 @@
     <_LastSelectedProfileId>D:\Files\Degree\App\SmartStock\Properties\PublishProfiles\FolderProfile.pubxml</_LastSelectedProfileId>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Update="Classes\Utils\ThemedComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Update="Forms\DetailsPopupForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -14,6 +17,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\SettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\test.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\User Control\AnalysisForms\AnomalyDetection.cs">

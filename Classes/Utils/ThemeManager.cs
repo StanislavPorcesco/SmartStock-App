@@ -204,6 +204,11 @@ namespace SmartStock.Classes.Utils
                         txt.ForeColor   = theme.Text;
                         txt.BorderStyle = BorderStyle.FixedSingle;
                     }
+                    else if("borderless".Equals(txt.Tag))
+                    {
+                        txt.BorderStyle = BorderStyle.None;
+                        txt.Font = new Font(txt.Font.FontFamily, 10, FontStyle.Bold);
+                    }
                     else
                     {
                         txt.BorderStyle = BorderStyle.Fixed3D;
@@ -284,21 +289,26 @@ namespace SmartStock.Classes.Utils
 
                     break;
                 case ComboBox combo:
-                    combo.FlatStyle = FlatStyle.Flat; 
-                 
-                    combo.BackColor = theme.LightColor;
-                    combo.ForeColor = theme.Text;
-                    combo.DisableMouseWheelScroll();
+                    combo.FlatStyle  = FlatStyle.Flat;
+                    combo.BackColor  = theme.Surface;
+                    combo.ForeColor  = theme.TextPrimary;
 
-                    // IMPORTANT: Set AutoCompleteSource BEFORE AutoCompleteMode
-                    // to avoid NotSupportedException with DropDownList style
-                    combo.AutoCompleteSource = AutoCompleteSource.ListItems;
-                    combo.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                    if (combo is not ThemedComboBox)
+                    {
+                        combo.DisableMouseWheelScroll();
+                        // IMPORTANT: Set AutoCompleteSource BEFORE AutoCompleteMode
+                        // to avoid NotSupportedException with DropDownList style
+                        combo.AutoCompleteSource = AutoCompleteSource.ListItems;
+                        combo.AutoCompleteMode   = AutoCompleteMode.SuggestAppend;
+                    }
                     break;
                 case Panel pnl:
                     var ptag = pnl.Tag?.ToString();
                     switch (ptag)
                     {
+                        case "border_pnl":
+                            pnl.BackColor = theme.Border;
+                            break;
                         case "hero":
                             pnl.BackColor = theme.Surface;
                             break;

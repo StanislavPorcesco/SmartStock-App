@@ -18,9 +18,9 @@ namespace SmartStock.Forms.User_Control.AnalysisForms
             panel1 = new Panel();
             tableLayoutPanel1 = new TableLayoutPanel();
             lbl_sensitivity = new Label();
-            sensitivity_cb = new ComboBox();
+            sensitivity_cb = new SmartStock.Classes.Utils.ThemedComboBox();
             lbl_aggregation = new Label();
-            aggregation_cb = new ComboBox();
+            aggregation_cb = new SmartStock.Classes.Utils.ThemedComboBox();
             lbl_info = new Label();
             panel1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
@@ -145,9 +145,9 @@ namespace SmartStock.Forms.User_Control.AnalysisForms
         private Panel panel1;
         private TableLayoutPanel tableLayoutPanel1;
         private Label lbl_sensitivity;
-        private ComboBox sensitivity_cb;
+        private SmartStock.Classes.Utils.ThemedComboBox sensitivity_cb;
         private Label lbl_aggregation;
-        private ComboBox aggregation_cb;
+        private SmartStock.Classes.Utils.ThemedComboBox aggregation_cb;
         private Label lbl_info;
     }
 }

@@ -33,7 +33,6 @@ namespace SmartStock.Forms.User_Control
             base_pnl = new Panel();
             fields_table = new TableLayoutPanel();
             transaction_id = new Label();
-            search_row = new Panel();
             factor_id_tb = new TextBox();
             search_btn = new IconButton();
             db_lbl = new Label();
@@ -45,12 +44,43 @@ namespace SmartStock.Forms.User_Control
             label2 = new Label();
             impact_value_tb = new TextBox();
             label4 = new Label();
-            value_type_cb = new ComboBox();
+            value_type_cb = new SmartStock.Classes.Utils.ThemedComboBox();
             label3 = new Label();
             date_picker = new DateTimePicker();
+            tableLayoutPanel1 = new TableLayoutPanel();
+            border_theme_pnl = new Panel();
+            container_theme_pnl = new Panel();
+            tableLayoutPanel6 = new TableLayoutPanel();
+            panel1 = new Panel();
+            panel2 = new Panel();
+            tableLayoutPanel2 = new TableLayoutPanel();
+            panel3 = new Panel();
+            panel4 = new Panel();
+            tableLayoutPanel3 = new TableLayoutPanel();
+            panel5 = new Panel();
+            panel6 = new Panel();
+            tableLayoutPanel4 = new TableLayoutPanel();
+            panel7 = new Panel();
+            panel8 = new Panel();
+            tableLayoutPanel5 = new TableLayoutPanel();
             base_pnl.SuspendLayout();
             fields_table.SuspendLayout();
-            search_row.SuspendLayout();
+            tableLayoutPanel1.SuspendLayout();
+            border_theme_pnl.SuspendLayout();
+            container_theme_pnl.SuspendLayout();
+            tableLayoutPanel6.SuspendLayout();
+            panel1.SuspendLayout();
+            panel2.SuspendLayout();
+            tableLayoutPanel2.SuspendLayout();
+            panel3.SuspendLayout();
+            panel4.SuspendLayout();
+            tableLayoutPanel3.SuspendLayout();
+            panel5.SuspendLayout();
+            panel6.SuspendLayout();
+            tableLayoutPanel4.SuspendLayout();
+            panel7.SuspendLayout();
+            panel8.SuspendLayout();
+            tableLayoutPanel5.SuspendLayout();
             SuspendLayout();
             // 
             // base_pnl
@@ -69,32 +99,32 @@ namespace SmartStock.Forms.User_Control
             fields_table.ColumnCount = 2;
             fields_table.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 160F));
             fields_table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            fields_table.Controls.Add(panel7, 1, 4);
+            fields_table.Controls.Add(panel5, 1, 3);
+            fields_table.Controls.Add(panel3, 1, 2);
+            fields_table.Controls.Add(panel1, 1, 1);
             fields_table.Controls.Add(transaction_id, 0, 0);
-            fields_table.Controls.Add(search_row, 1, 0);
             fields_table.Controls.Add(db_lbl, 0, 1);
-            fields_table.Controls.Add(factor_type_tb, 1, 1);
             fields_table.Controls.Add(logs_lbl, 0, 2);
-            fields_table.Controls.Add(description_tb, 1, 2);
             fields_table.Controls.Add(label5, 0, 3);
-            fields_table.Controls.Add(region_tb, 1, 3);
             fields_table.Controls.Add(label2, 0, 4);
-            fields_table.Controls.Add(impact_value_tb, 1, 4);
             fields_table.Controls.Add(label4, 0, 5);
             fields_table.Controls.Add(value_type_cb, 1, 5);
             fields_table.Controls.Add(label3, 0, 6);
             fields_table.Controls.Add(date_picker, 1, 6);
+            fields_table.Controls.Add(tableLayoutPanel1, 1, 0);
             fields_table.Dock = DockStyle.Top;
             fields_table.Location = new Point(28, 24);
             fields_table.Name = "fields_table";
             fields_table.RowCount = 7;
-            fields_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 52F));
-            fields_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 52F));
-            fields_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 52F));
-            fields_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 52F));
-            fields_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 52F));
-            fields_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 52F));
-            fields_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 52F));
-            fields_table.Size = new Size(851, 364);
+            fields_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 54F));
+            fields_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 54F));
+            fields_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 54F));
+            fields_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 54F));
+            fields_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 54F));
+            fields_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 54F));
+            fields_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 54F));
+            fields_table.Size = new Size(851, 376);
             fields_table.TabIndex = 0;
             // 
             // transaction_id
@@ -104,33 +134,22 @@ namespace SmartStock.Forms.User_Control
             transaction_id.Location = new Point(0, 0);
             transaction_id.Margin = new Padding(0);
             transaction_id.Name = "transaction_id";
-            transaction_id.Size = new Size(160, 52);
+            transaction_id.Size = new Size(160, 54);
             transaction_id.TabIndex = 0;
             transaction_id.Tag = "muted";
             transaction_id.Text = "Factor ID";
             transaction_id.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // search_row
-            // 
-            search_row.Controls.Add(factor_id_tb);
-            search_row.Controls.Add(search_btn);
-            search_row.Dock = DockStyle.Fill;
-            search_row.Location = new Point(163, 3);
-            search_row.Name = "search_row";
-            search_row.Size = new Size(685, 46);
-            search_row.TabIndex = 1;
-            search_row.Tag = "card";
-            // 
             // factor_id_tb
             // 
             factor_id_tb.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             factor_id_tb.Font = new Font("Segoe UI", 11F);
-            factor_id_tb.Location = new Point(0, 8);
+            factor_id_tb.Location = new Point(0, 0);
             factor_id_tb.Margin = new Padding(0);
             factor_id_tb.Name = "factor_id_tb";
-            factor_id_tb.Size = new Size(533, 32);
+            factor_id_tb.Size = new Size(573, 32);
             factor_id_tb.TabIndex = 0;
-            factor_id_tb.Tag = "";
+            factor_id_tb.Tag = "borderless";
             // 
             // search_btn
             // 
@@ -141,9 +160,10 @@ namespace SmartStock.Forms.User_Control
             search_btn.IconColor = Color.Black;
             search_btn.IconFont = IconFont.Auto;
             search_btn.IconSize = 18;
-            search_btn.Location = new Point(545, 4);
+            search_btn.Location = new Point(587, 10);
+            search_btn.Margin = new Padding(6, 10, 0, 10);
             search_btn.Name = "search_btn";
-            search_btn.Size = new Size(140, 38);
+            search_btn.Size = new Size(104, 34);
             search_btn.TabIndex = 1;
             search_btn.Tag = "outlined";
             search_btn.Text = "  Search";
@@ -155,10 +175,10 @@ namespace SmartStock.Forms.User_Control
             // 
             db_lbl.Dock = DockStyle.Fill;
             db_lbl.Font = new Font("Segoe UI", 10F);
-            db_lbl.Location = new Point(0, 52);
+            db_lbl.Location = new Point(0, 54);
             db_lbl.Margin = new Padding(0);
             db_lbl.Name = "db_lbl";
-            db_lbl.Size = new Size(160, 52);
+            db_lbl.Size = new Size(160, 54);
             db_lbl.TabIndex = 2;
             db_lbl.Tag = "muted";
             db_lbl.Text = "Factor Type";
@@ -168,21 +188,21 @@ namespace SmartStock.Forms.User_Control
             // 
             factor_type_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             factor_type_tb.Font = new Font("Segoe UI", 11F);
-            factor_type_tb.Location = new Point(163, 62);
-            factor_type_tb.Margin = new Padding(3, 5, 3, 5);
+            factor_type_tb.Location = new Point(0, 0);
+            factor_type_tb.Margin = new Padding(0);
             factor_type_tb.Name = "factor_type_tb";
-            factor_type_tb.Size = new Size(685, 32);
+            factor_type_tb.Size = new Size(683, 32);
             factor_type_tb.TabIndex = 3;
-            factor_type_tb.Tag = "";
+            factor_type_tb.Tag = "borderless";
             // 
             // logs_lbl
             // 
             logs_lbl.Dock = DockStyle.Fill;
             logs_lbl.Font = new Font("Segoe UI", 10F);
-            logs_lbl.Location = new Point(0, 104);
+            logs_lbl.Location = new Point(0, 108);
             logs_lbl.Margin = new Padding(0);
             logs_lbl.Name = "logs_lbl";
-            logs_lbl.Size = new Size(160, 52);
+            logs_lbl.Size = new Size(160, 54);
             logs_lbl.TabIndex = 4;
             logs_lbl.Tag = "muted";
             logs_lbl.Text = "Description";
@@ -192,21 +212,21 @@ namespace SmartStock.Forms.User_Control
             // 
             description_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             description_tb.Font = new Font("Segoe UI", 11F);
-            description_tb.Location = new Point(163, 114);
-            description_tb.Margin = new Padding(3, 5, 3, 5);
+            description_tb.Location = new Point(0, 0);
+            description_tb.Margin = new Padding(0);
             description_tb.Name = "description_tb";
-            description_tb.Size = new Size(685, 32);
+            description_tb.Size = new Size(683, 32);
             description_tb.TabIndex = 5;
-            description_tb.Tag = "";
+            description_tb.Tag = "borderless";
             // 
             // label5
             // 
             label5.Dock = DockStyle.Fill;
             label5.Font = new Font("Segoe UI", 10F);
-            label5.Location = new Point(0, 156);
+            label5.Location = new Point(0, 162);
             label5.Margin = new Padding(0);
             label5.Name = "label5";
-            label5.Size = new Size(160, 52);
+            label5.Size = new Size(160, 54);
             label5.TabIndex = 6;
             label5.Tag = "muted";
             label5.Text = "Region";
@@ -216,21 +236,21 @@ namespace SmartStock.Forms.User_Control
             // 
             region_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             region_tb.Font = new Font("Segoe UI", 11F);
-            region_tb.Location = new Point(163, 166);
-            region_tb.Margin = new Padding(3, 5, 3, 5);
+            region_tb.Location = new Point(0, 0);
+            region_tb.Margin = new Padding(0);
             region_tb.Name = "region_tb";
-            region_tb.Size = new Size(685, 32);
+            region_tb.Size = new Size(683, 32);
             region_tb.TabIndex = 7;
-            region_tb.Tag = "";
+            region_tb.Tag = "borderless";
             // 
             // label2
             // 
             label2.Dock = DockStyle.Fill;
             label2.Font = new Font("Segoe UI", 10F);
-            label2.Location = new Point(0, 208);
+            label2.Location = new Point(0, 216);
             label2.Margin = new Padding(0);
             label2.Name = "label2";
-            label2.Size = new Size(160, 52);
+            label2.Size = new Size(160, 54);
             label2.TabIndex = 8;
             label2.Tag = "muted";
             label2.Text = "Impact Value";
@@ -240,21 +260,21 @@ namespace SmartStock.Forms.User_Control
             // 
             impact_value_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             impact_value_tb.Font = new Font("Segoe UI", 11F);
-            impact_value_tb.Location = new Point(163, 218);
-            impact_value_tb.Margin = new Padding(3, 5, 3, 5);
+            impact_value_tb.Location = new Point(0, 0);
+            impact_value_tb.Margin = new Padding(0);
             impact_value_tb.Name = "impact_value_tb";
-            impact_value_tb.Size = new Size(685, 32);
+            impact_value_tb.Size = new Size(683, 32);
             impact_value_tb.TabIndex = 9;
-            impact_value_tb.Tag = "";
+            impact_value_tb.Tag = "borderless";
             // 
             // label4
             // 
             label4.Dock = DockStyle.Fill;
             label4.Font = new Font("Segoe UI", 10F);
-            label4.Location = new Point(0, 260);
+            label4.Location = new Point(0, 270);
             label4.Margin = new Padding(0);
             label4.Name = "label4";
-            label4.Size = new Size(160, 52);
+            label4.Size = new Size(160, 54);
             label4.TabIndex = 10;
             label4.Tag = "muted";
             label4.Text = "Value Type";
@@ -263,24 +283,26 @@ namespace SmartStock.Forms.User_Control
             // value_type_cb
             // 
             value_type_cb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            value_type_cb.DrawMode = DrawMode.OwnerDrawFixed;
             value_type_cb.DropDownStyle = ComboBoxStyle.DropDownList;
             value_type_cb.FlatStyle = FlatStyle.Flat;
             value_type_cb.Font = new Font("Segoe UI", 11F);
             value_type_cb.FormattingEnabled = true;
-            value_type_cb.Location = new Point(163, 269);
+            value_type_cb.ItemHeight = 30;
+            value_type_cb.Location = new Point(163, 279);
             value_type_cb.Margin = new Padding(3, 5, 3, 5);
             value_type_cb.Name = "value_type_cb";
-            value_type_cb.Size = new Size(685, 33);
+            value_type_cb.Size = new Size(685, 36);
             value_type_cb.TabIndex = 11;
             // 
             // label3
             // 
             label3.Dock = DockStyle.Fill;
             label3.Font = new Font("Segoe UI", 10F);
-            label3.Location = new Point(0, 312);
+            label3.Location = new Point(0, 324);
             label3.Margin = new Padding(0);
             label3.Name = "label3";
-            label3.Size = new Size(160, 52);
+            label3.Size = new Size(160, 54);
             label3.TabIndex = 12;
             label3.Tag = "muted";
             label3.Text = "Date";
@@ -291,11 +313,222 @@ namespace SmartStock.Forms.User_Control
             date_picker.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             date_picker.Font = new Font("Segoe UI", 11F);
             date_picker.Format = DateTimePickerFormat.Short;
-            date_picker.Location = new Point(163, 322);
+            date_picker.Location = new Point(163, 335);
             date_picker.Margin = new Padding(3, 5, 3, 5);
             date_picker.Name = "date_picker";
             date_picker.Size = new Size(685, 32);
             date_picker.TabIndex = 13;
+            // 
+            // tableLayoutPanel1
+            // 
+            tableLayoutPanel1.ColumnCount = 2;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 110F));
+            tableLayoutPanel1.Controls.Add(border_theme_pnl, 0, 0);
+            tableLayoutPanel1.Controls.Add(search_btn, 1, 0);
+            tableLayoutPanel1.Dock = DockStyle.Fill;
+            tableLayoutPanel1.Location = new Point(160, 0);
+            tableLayoutPanel1.Margin = new Padding(0);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 1;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel1.Size = new Size(691, 54);
+            tableLayoutPanel1.TabIndex = 14;
+            // 
+            // border_theme_pnl
+            // 
+            border_theme_pnl.Controls.Add(container_theme_pnl);
+            border_theme_pnl.Dock = DockStyle.Fill;
+            border_theme_pnl.Location = new Point(6, 10);
+            border_theme_pnl.Margin = new Padding(6, 10, 0, 10);
+            border_theme_pnl.Name = "border_theme_pnl";
+            border_theme_pnl.Padding = new Padding(1);
+            border_theme_pnl.Size = new Size(575, 34);
+            border_theme_pnl.TabIndex = 7;
+            border_theme_pnl.Tag = "border_pnl";
+            // 
+            // container_theme_pnl
+            // 
+            container_theme_pnl.Controls.Add(tableLayoutPanel6);
+            container_theme_pnl.Dock = DockStyle.Fill;
+            container_theme_pnl.Location = new Point(1, 1);
+            container_theme_pnl.Margin = new Padding(0);
+            container_theme_pnl.Name = "container_theme_pnl";
+            container_theme_pnl.Size = new Size(573, 32);
+            container_theme_pnl.TabIndex = 0;
+            container_theme_pnl.Tag = "card";
+            // 
+            // tableLayoutPanel6
+            // 
+            tableLayoutPanel6.ColumnCount = 1;
+            tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel6.Controls.Add(factor_id_tb, 0, 0);
+            tableLayoutPanel6.Dock = DockStyle.Fill;
+            tableLayoutPanel6.Location = new Point(0, 0);
+            tableLayoutPanel6.Margin = new Padding(0);
+            tableLayoutPanel6.Name = "tableLayoutPanel6";
+            tableLayoutPanel6.RowCount = 1;
+            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel6.Size = new Size(573, 32);
+            tableLayoutPanel6.TabIndex = 0;
+            // 
+            // panel1
+            // 
+            panel1.Controls.Add(panel2);
+            panel1.Dock = DockStyle.Fill;
+            panel1.Location = new Point(166, 64);
+            panel1.Margin = new Padding(6, 10, 0, 10);
+            panel1.Name = "panel1";
+            panel1.Padding = new Padding(1);
+            panel1.Size = new Size(685, 34);
+            panel1.TabIndex = 15;
+            panel1.Tag = "border_pnl";
+            // 
+            // panel2
+            // 
+            panel2.Controls.Add(tableLayoutPanel2);
+            panel2.Dock = DockStyle.Fill;
+            panel2.Location = new Point(1, 1);
+            panel2.Margin = new Padding(0);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(683, 32);
+            panel2.TabIndex = 0;
+            panel2.Tag = "card";
+            // 
+            // tableLayoutPanel2
+            // 
+            tableLayoutPanel2.ColumnCount = 1;
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel2.Controls.Add(factor_type_tb, 0, 0);
+            tableLayoutPanel2.Dock = DockStyle.Fill;
+            tableLayoutPanel2.Location = new Point(0, 0);
+            tableLayoutPanel2.Margin = new Padding(0);
+            tableLayoutPanel2.Name = "tableLayoutPanel2";
+            tableLayoutPanel2.RowCount = 1;
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel2.Size = new Size(683, 32);
+            tableLayoutPanel2.TabIndex = 0;
+            // 
+            // panel3
+            // 
+            panel3.Controls.Add(panel4);
+            panel3.Dock = DockStyle.Fill;
+            panel3.Location = new Point(166, 118);
+            panel3.Margin = new Padding(6, 10, 0, 10);
+            panel3.Name = "panel3";
+            panel3.Padding = new Padding(1);
+            panel3.Size = new Size(685, 34);
+            panel3.TabIndex = 16;
+            panel3.Tag = "border_pnl";
+            // 
+            // panel4
+            // 
+            panel4.Controls.Add(tableLayoutPanel3);
+            panel4.Dock = DockStyle.Fill;
+            panel4.Location = new Point(1, 1);
+            panel4.Margin = new Padding(0);
+            panel4.Name = "panel4";
+            panel4.Size = new Size(683, 32);
+            panel4.TabIndex = 0;
+            panel4.Tag = "card";
+            // 
+            // tableLayoutPanel3
+            // 
+            tableLayoutPanel3.ColumnCount = 1;
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel3.Controls.Add(description_tb, 0, 0);
+            tableLayoutPanel3.Dock = DockStyle.Fill;
+            tableLayoutPanel3.Location = new Point(0, 0);
+            tableLayoutPanel3.Margin = new Padding(0);
+            tableLayoutPanel3.Name = "tableLayoutPanel3";
+            tableLayoutPanel3.RowCount = 1;
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel3.Size = new Size(683, 32);
+            tableLayoutPanel3.TabIndex = 0;
+            // 
+            // panel5
+            // 
+            panel5.Controls.Add(panel6);
+            panel5.Dock = DockStyle.Fill;
+            panel5.Location = new Point(166, 172);
+            panel5.Margin = new Padding(6, 10, 0, 10);
+            panel5.Name = "panel5";
+            panel5.Padding = new Padding(1);
+            panel5.Size = new Size(685, 34);
+            panel5.TabIndex = 17;
+            panel5.Tag = "border_pnl";
+            // 
+            // panel6
+            // 
+            panel6.Controls.Add(tableLayoutPanel4);
+            panel6.Dock = DockStyle.Fill;
+            panel6.Location = new Point(1, 1);
+            panel6.Margin = new Padding(0);
+            panel6.Name = "panel6";
+            panel6.Size = new Size(683, 32);
+            panel6.TabIndex = 0;
+            panel6.Tag = "card";
+            // 
+            // tableLayoutPanel4
+            // 
+            tableLayoutPanel4.ColumnCount = 1;
+            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel4.Controls.Add(region_tb, 0, 0);
+            tableLayoutPanel4.Dock = DockStyle.Fill;
+            tableLayoutPanel4.Location = new Point(0, 0);
+            tableLayoutPanel4.Margin = new Padding(0);
+            tableLayoutPanel4.Name = "tableLayoutPanel4";
+            tableLayoutPanel4.RowCount = 1;
+            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel4.Size = new Size(683, 32);
+            tableLayoutPanel4.TabIndex = 0;
+            // 
+            // panel7
+            // 
+            panel7.Controls.Add(panel8);
+            panel7.Dock = DockStyle.Fill;
+            panel7.Location = new Point(166, 226);
+            panel7.Margin = new Padding(6, 10, 0, 10);
+            panel7.Name = "panel7";
+            panel7.Padding = new Padding(1);
+            panel7.Size = new Size(685, 34);
+            panel7.TabIndex = 18;
+            panel7.Tag = "border_pnl";
+            // 
+            // panel8
+            // 
+            panel8.Controls.Add(tableLayoutPanel5);
+            panel8.Dock = DockStyle.Fill;
+            panel8.Location = new Point(1, 1);
+            panel8.Margin = new Padding(0);
+            panel8.Name = "panel8";
+            panel8.Size = new Size(683, 32);
+            panel8.TabIndex = 0;
+            panel8.Tag = "card";
+            // 
+            // tableLayoutPanel5
+            // 
+            tableLayoutPanel5.ColumnCount = 1;
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel5.Controls.Add(impact_value_tb, 0, 0);
+            tableLayoutPanel5.Dock = DockStyle.Fill;
+            tableLayoutPanel5.Location = new Point(0, 0);
+            tableLayoutPanel5.Margin = new Padding(0);
+            tableLayoutPanel5.Name = "tableLayoutPanel5";
+            tableLayoutPanel5.RowCount = 1;
+            tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel5.Size = new Size(683, 32);
+            tableLayoutPanel5.TabIndex = 0;
             // 
             // ModifyExternalFactor
             // 
@@ -306,9 +539,27 @@ namespace SmartStock.Forms.User_Control
             Size = new Size(907, 572);
             base_pnl.ResumeLayout(false);
             fields_table.ResumeLayout(false);
-            fields_table.PerformLayout();
-            search_row.ResumeLayout(false);
-            search_row.PerformLayout();
+            tableLayoutPanel1.ResumeLayout(false);
+            border_theme_pnl.ResumeLayout(false);
+            container_theme_pnl.ResumeLayout(false);
+            tableLayoutPanel6.ResumeLayout(false);
+            tableLayoutPanel6.PerformLayout();
+            panel1.ResumeLayout(false);
+            panel2.ResumeLayout(false);
+            tableLayoutPanel2.ResumeLayout(false);
+            tableLayoutPanel2.PerformLayout();
+            panel3.ResumeLayout(false);
+            panel4.ResumeLayout(false);
+            tableLayoutPanel3.ResumeLayout(false);
+            tableLayoutPanel3.PerformLayout();
+            panel5.ResumeLayout(false);
+            panel6.ResumeLayout(false);
+            tableLayoutPanel4.ResumeLayout(false);
+            tableLayoutPanel4.PerformLayout();
+            panel7.ResumeLayout(false);
+            panel8.ResumeLayout(false);
+            tableLayoutPanel5.ResumeLayout(false);
+            tableLayoutPanel5.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -317,7 +568,6 @@ namespace SmartStock.Forms.User_Control
         private Panel base_pnl;
         private TableLayoutPanel fields_table;
         private Label transaction_id;
-        private Panel search_row;
         private TextBox factor_id_tb;
         private IconButton search_btn;
         private Label db_lbl;
@@ -329,8 +579,24 @@ namespace SmartStock.Forms.User_Control
         private Label label2;
         private TextBox impact_value_tb;
         private Label label4;
-        private ComboBox value_type_cb;
+        private SmartStock.Classes.Utils.ThemedComboBox value_type_cb;
         private Label label3;
         private DateTimePicker date_picker;
+        private TableLayoutPanel tableLayoutPanel1;
+        private Panel panel7;
+        private Panel panel8;
+        private TableLayoutPanel tableLayoutPanel5;
+        private Panel panel5;
+        private Panel panel6;
+        private TableLayoutPanel tableLayoutPanel4;
+        private Panel panel3;
+        private Panel panel4;
+        private TableLayoutPanel tableLayoutPanel3;
+        private Panel panel1;
+        private Panel panel2;
+        private TableLayoutPanel tableLayoutPanel2;
+        private Panel border_theme_pnl;
+        private Panel container_theme_pnl;
+        private TableLayoutPanel tableLayoutPanel6;
     }
 }

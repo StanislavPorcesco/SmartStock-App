@@ -19,6 +19,8 @@ namespace SmartStock.Forms.User_Control
         {
             InitializeComponent();
             InitializeService();
+            ThemeManager.Apply(this);
+            ThemeManager.OnThemeChanged += () => ThemeManager.Apply(this);
             DataLayer.PopulateCategorySelector(product_category_cb);
         }
 

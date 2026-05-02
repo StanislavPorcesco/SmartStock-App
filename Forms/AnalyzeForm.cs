@@ -132,9 +132,9 @@ namespace SmartStock.Forms
         private async Task LoadProductsAsync()
         {
             var products = await _productService.GetAllActiveProductsAsync();
-            target_subject_cb.DataSource = products;
             target_subject_cb.DisplayMember = nameof(Product.ProductName);
             target_subject_cb.ValueMember = nameof(Product.ProductId);
+            target_subject_cb.DataSource = products;
             target_subject_cb.SelectedIndex = products.Count > 0 ? 0 : -1;
         }
 

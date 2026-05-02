@@ -31,13 +31,13 @@ namespace SmartStock.Forms.User_Control.AnalysisForms
             panel1 = new Panel();
             tableLayoutPanel1 = new TableLayoutPanel();
             range_lbl = new Label();
-            factor_type_cb = new ComboBox();
+            factor_type_cb = new SmartStock.Classes.Utils.ThemedComboBox();
             label1 = new Label();
             panel2 = new Panel();
             label4 = new Label();
             lag_nud = new NumericUpDown();
             label2 = new Label();
-            interval_cb = new ComboBox();
+            interval_cb = new SmartStock.Classes.Utils.ThemedComboBox();
             panel1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             panel2.SuspendLayout();
@@ -204,12 +204,12 @@ namespace SmartStock.Forms.User_Control.AnalysisForms
         private Panel panel1;
         private TableLayoutPanel tableLayoutPanel1;
         private Label range_lbl;
-        private ComboBox factor_type_cb;
+        private SmartStock.Classes.Utils.ThemedComboBox factor_type_cb;
         private Label label1;
         private Panel panel2;
         private Label label4;
         private NumericUpDown lag_nud;
         private Label label2;
-        private ComboBox interval_cb;
+        private SmartStock.Classes.Utils.ThemedComboBox interval_cb;
     }
 }
