@@ -1,4 +1,6 @@
 using FontAwesome.Sharp;
+using SmartStock.Classes.Utils;
+using System.Text;
 
 namespace SmartStock
 {
@@ -25,14 +27,14 @@ namespace SmartStock
             preferences_pnl = new Panel();
             preferences_body = new Panel();
             tableLayoutPanel1 = new TableLayoutPanel();
-            border_theme_pnl = new Panel();
-            container_theme_pnl = new Panel();
-            tableLayoutPanel6 = new TableLayoutPanel();
-            textBox1 = new TextBox();
+            panel12 = new Panel();
+            panel13 = new Panel();
+            tableLayoutPanel13 = new TableLayoutPanel();
+            currency_symbol_tb = new TextBox();
             theme_lbl = new Label();
-            themes_cb = new SmartStock.Classes.Utils.ThemedComboBox();
+            themes_cb = new ThemedComboBox();
+            languages_cb = new ThemedComboBox();
             language_lbl = new Label();
-            languages_cb = new SmartStock.Classes.Utils.ThemedComboBox();
             label4 = new Label();
             preferences_divider = new Panel();
             preferences_header = new Panel();
@@ -48,7 +50,7 @@ namespace SmartStock
             label2 = new Label();
             enable_reports_chk = new CheckBox();
             label1 = new Label();
-            time_picker = new DateTimePicker();
+            time_picker = new ThemedDateTimePicker();
             label3 = new Label();
             label7 = new Label();
             report_row_pnl = new Panel();
@@ -91,9 +93,9 @@ namespace SmartStock
             ai_logs_lbl = new Label();
             ai_logs_ck = new CheckBox();
             label5 = new Label();
-            max_size_numeric = new NumericUpDown();
+            max_size_numeric = new ThemedNumericUpDown();
+            log_level_cb = new ThemedComboBox();
             label8 = new Label();
-            log_level_cb = new SmartStock.Classes.Utils.ThemedComboBox();
             open_log_btn = new IconButton();
             logging_divider = new Panel();
             logging_header = new Panel();
@@ -109,13 +111,13 @@ namespace SmartStock
             api_lbl = new Label();
             view_api_btn = new IconButton();
             label9 = new Label();
-            provider_cb = new SmartStock.Classes.Utils.ThemedComboBox();
+            provider_cb = new ThemedComboBox();
             label12 = new Label();
             panel1 = new Panel();
             api_status_lbl = new Label();
             status_color_lbl = new Label();
             label16 = new Label();
-            temperature_numeric = new NumericUpDown();
+            temperature_numeric = new ThemedNumericUpDown();
             ai_divider = new Panel();
             ai_header = new Panel();
             ai_title_lbl = new Label();
@@ -126,7 +128,7 @@ namespace SmartStock
             label15 = new Label();
             enable_daily_fetching = new CheckBox();
             label14 = new Label();
-            fetching_time = new DateTimePicker();
+            fetching_time = new ThemedDateTimePicker();
             label11 = new Label();
             next_fetch_lbl = new Label();
             commodity_api_lbl = new Label();
@@ -162,9 +164,9 @@ namespace SmartStock
             preferences_pnl.SuspendLayout();
             preferences_body.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
-            border_theme_pnl.SuspendLayout();
-            container_theme_pnl.SuspendLayout();
-            tableLayoutPanel6.SuspendLayout();
+            panel12.SuspendLayout();
+            panel13.SuspendLayout();
+            tableLayoutPanel13.SuspendLayout();
             preferences_header.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)preferences_icon).BeginInit();
             reporting_pnl.SuspendLayout();
@@ -294,11 +296,11 @@ namespace SmartStock
             tableLayoutPanel1.ColumnCount = 2;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 200F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Controls.Add(border_theme_pnl, 1, 2);
+            tableLayoutPanel1.Controls.Add(panel12, 1, 2);
             tableLayoutPanel1.Controls.Add(theme_lbl, 0, 0);
             tableLayoutPanel1.Controls.Add(themes_cb, 1, 0);
-            tableLayoutPanel1.Controls.Add(language_lbl, 0, 1);
             tableLayoutPanel1.Controls.Add(languages_cb, 1, 1);
+            tableLayoutPanel1.Controls.Add(language_lbl, 0, 1);
             tableLayoutPanel1.Controls.Add(label4, 0, 2);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(22, 57);
@@ -313,54 +315,55 @@ namespace SmartStock
             tableLayoutPanel1.Size = new Size(541, 209);
             tableLayoutPanel1.TabIndex = 3;
             // 
-            // border_theme_pnl
+            // panel12
             // 
-            border_theme_pnl.Controls.Add(container_theme_pnl);
-            border_theme_pnl.Dock = DockStyle.Fill;
-            border_theme_pnl.Location = new Point(206, 116);
-            border_theme_pnl.Margin = new Padding(6, 10, 0, 10);
-            border_theme_pnl.Name = "border_theme_pnl";
-            border_theme_pnl.Padding = new Padding(1);
-            border_theme_pnl.Size = new Size(335, 34);
-            border_theme_pnl.TabIndex = 5;
-            border_theme_pnl.Tag = "border_pnl";
+            panel12.Controls.Add(panel13);
+            panel12.Dock = DockStyle.Fill;
+            panel12.Location = new Point(206, 116);
+            panel12.Margin = new Padding(6, 10, 0, 10);
+            panel12.Name = "panel12";
+            panel12.Padding = new Padding(1);
+            panel12.Size = new Size(335, 34);
+            panel12.TabIndex = 8;
+            panel12.Tag = "border_pnl";
             // 
-            // container_theme_pnl
+            // panel13
             // 
-            container_theme_pnl.Controls.Add(tableLayoutPanel6);
-            container_theme_pnl.Dock = DockStyle.Fill;
-            container_theme_pnl.Location = new Point(1, 1);
-            container_theme_pnl.Margin = new Padding(0);
-            container_theme_pnl.Name = "container_theme_pnl";
-            container_theme_pnl.Size = new Size(333, 32);
-            container_theme_pnl.TabIndex = 0;
-            container_theme_pnl.Tag = "card";
+            panel13.Controls.Add(tableLayoutPanel13);
+            panel13.Dock = DockStyle.Fill;
+            panel13.Location = new Point(1, 1);
+            panel13.Margin = new Padding(0);
+            panel13.Name = "panel13";
+            panel13.Size = new Size(333, 32);
+            panel13.TabIndex = 0;
+            panel13.Tag = "card";
             // 
-            // tableLayoutPanel6
+            // tableLayoutPanel13
             // 
-            tableLayoutPanel6.ColumnCount = 1;
-            tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel6.Controls.Add(textBox1, 0, 0);
-            tableLayoutPanel6.Dock = DockStyle.Fill;
-            tableLayoutPanel6.Location = new Point(0, 0);
-            tableLayoutPanel6.Margin = new Padding(0);
-            tableLayoutPanel6.Name = "tableLayoutPanel6";
-            tableLayoutPanel6.RowCount = 1;
-            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel6.Size = new Size(333, 32);
-            tableLayoutPanel6.TabIndex = 0;
+            tableLayoutPanel13.ColumnCount = 1;
+            tableLayoutPanel13.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel13.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel13.Controls.Add(currency_symbol_tb, 0, 0);
+            tableLayoutPanel13.Dock = DockStyle.Fill;
+            tableLayoutPanel13.Location = new Point(0, 0);
+            tableLayoutPanel13.Margin = new Padding(0);
+            tableLayoutPanel13.Name = "tableLayoutPanel13";
+            tableLayoutPanel13.RowCount = 1;
+            tableLayoutPanel13.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel13.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel13.Size = new Size(333, 32);
+            tableLayoutPanel13.TabIndex = 0;
             // 
-            // textBox1
+            // currency_symbol_tb
             // 
-            textBox1.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            textBox1.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            textBox1.Location = new Point(3, 3);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(327, 30);
-            textBox1.TabIndex = 0;
-            textBox1.Tag = "borderless";
+            currency_symbol_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            currency_symbol_tb.Font = new Font("Segoe UI", 11F);
+            currency_symbol_tb.Location = new Point(0, 0);
+            currency_symbol_tb.Margin = new Padding(0);
+            currency_symbol_tb.Name = "currency_symbol_tb";
+            currency_symbol_tb.Size = new Size(333, 32);
+            currency_symbol_tb.TabIndex = 3;
+            currency_symbol_tb.Tag = "borderless";
             // 
             // theme_lbl
             // 
@@ -390,19 +393,6 @@ namespace SmartStock
             themes_cb.Size = new Size(335, 36);
             themes_cb.TabIndex = 1;
             // 
-            // language_lbl
-            // 
-            language_lbl.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            language_lbl.AutoSize = true;
-            language_lbl.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            language_lbl.Location = new Point(3, 72);
-            language_lbl.Name = "language_lbl";
-            language_lbl.Size = new Size(194, 23);
-            language_lbl.TabIndex = 2;
-            language_lbl.Tag = "muted";
-            language_lbl.Text = "Language";
-            language_lbl.TextAlign = ContentAlignment.MiddleLeft;
-            // 
             // languages_cb
             // 
             languages_cb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
@@ -417,6 +407,19 @@ namespace SmartStock
             languages_cb.Name = "languages_cb";
             languages_cb.Size = new Size(335, 36);
             languages_cb.TabIndex = 3;
+            // 
+            // language_lbl
+            // 
+            language_lbl.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            language_lbl.AutoSize = true;
+            language_lbl.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+            language_lbl.Location = new Point(3, 72);
+            language_lbl.Name = "language_lbl";
+            language_lbl.Size = new Size(194, 23);
+            language_lbl.TabIndex = 2;
+            language_lbl.Tag = "muted";
+            language_lbl.Text = "Language";
+            language_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // label4
             // 
@@ -568,12 +571,12 @@ namespace SmartStock
             // email_recipient_tb
             // 
             email_recipient_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            email_recipient_tb.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            email_recipient_tb.Location = new Point(0, 1);
+            email_recipient_tb.Font = new Font("Segoe UI", 11F);
+            email_recipient_tb.Location = new Point(0, 0);
             email_recipient_tb.Margin = new Padding(0);
             email_recipient_tb.Name = "email_recipient_tb";
-            email_recipient_tb.Size = new Size(333, 30);
-            email_recipient_tb.TabIndex = 5;
+            email_recipient_tb.Size = new Size(333, 32);
+            email_recipient_tb.TabIndex = 16;
             email_recipient_tb.Tag = "borderless";
             // 
             // label2
@@ -597,7 +600,7 @@ namespace SmartStock
             enable_reports_chk.Margin = new Padding(6, 10, 0, 10);
             enable_reports_chk.Name = "enable_reports_chk";
             enable_reports_chk.Size = new Size(18, 17);
-            enable_reports_chk.TabIndex = 1;
+            enable_reports_chk.TabIndex = 14;
             enable_reports_chk.UseVisualStyleBackColor = true;
             // 
             // label1
@@ -616,12 +619,14 @@ namespace SmartStock
             // time_picker
             // 
             time_picker.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            time_picker.CustomFormat = "dd MMM yyyy";
             time_picker.Font = new Font("Segoe UI", 10.5F);
+            time_picker.Format = DateTimePickerFormat.Custom;
             time_picker.Location = new Point(206, 72);
             time_picker.Margin = new Padding(6, 10, 0, 10);
             time_picker.Name = "time_picker";
             time_picker.Size = new Size(335, 31);
-            time_picker.TabIndex = 3;
+            time_picker.TabIndex = 15;
             // 
             // label3
             // 
@@ -690,7 +695,7 @@ namespace SmartStock
             sent_test_btn.Name = "sent_test_btn";
             sent_test_btn.Padding = new Padding(14, 0, 16, 0);
             sent_test_btn.Size = new Size(166, 37);
-            sent_test_btn.TabIndex = 9;
+            sent_test_btn.TabIndex = 17;
             sent_test_btn.Tag = "cta";
             sent_test_btn.Text = "  Send Test";
             sent_test_btn.TextImageRelation = TextImageRelation.ImageBeforeText;
@@ -836,12 +841,12 @@ namespace SmartStock
             // logs_tb
             // 
             logs_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            logs_tb.Font = new Font("Segoe UI", 10F);
-            logs_tb.Location = new Point(0, 1);
+            logs_tb.Font = new Font("Segoe UI", 11F);
+            logs_tb.Location = new Point(0, 0);
             logs_tb.Margin = new Padding(0);
             logs_tb.Name = "logs_tb";
-            logs_tb.Size = new Size(293, 30);
-            logs_tb.TabIndex = 7;
+            logs_tb.Size = new Size(293, 32);
+            logs_tb.TabIndex = 8;
             logs_tb.Tag = "borderless";
             // 
             // panel6
@@ -886,12 +891,12 @@ namespace SmartStock
             // db_tb
             // 
             db_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            db_tb.Font = new Font("Segoe UI", 10F);
-            db_tb.Location = new Point(0, 1);
+            db_tb.Font = new Font("Segoe UI", 11F);
+            db_tb.Location = new Point(0, 0);
             db_tb.Margin = new Padding(0);
             db_tb.Name = "db_tb";
-            db_tb.Size = new Size(293, 30);
-            db_tb.TabIndex = 4;
+            db_tb.Size = new Size(293, 32);
+            db_tb.TabIndex = 6;
             db_tb.Tag = "borderless";
             // 
             // panel4
@@ -936,12 +941,12 @@ namespace SmartStock
             // settings_tb
             // 
             settings_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            settings_tb.Font = new Font("Segoe UI", 10F);
-            settings_tb.Location = new Point(0, 1);
+            settings_tb.Font = new Font("Segoe UI", 11F);
+            settings_tb.Location = new Point(0, 0);
             settings_tb.Margin = new Padding(0);
             settings_tb.Name = "settings_tb";
-            settings_tb.Size = new Size(293, 30);
-            settings_tb.TabIndex = 1;
+            settings_tb.Size = new Size(293, 32);
+            settings_tb.TabIndex = 4;
             settings_tb.Tag = "borderless";
             // 
             // settings_lbl
@@ -970,7 +975,7 @@ namespace SmartStock
             browse_settings_btn.Margin = new Padding(6, 10, 0, 10);
             browse_settings_btn.Name = "browse_settings_btn";
             browse_settings_btn.Size = new Size(34, 34);
-            browse_settings_btn.TabIndex = 2;
+            browse_settings_btn.TabIndex = 5;
             browse_settings_btn.Tag = "outlined";
             browse_settings_btn.TextAlign = ContentAlignment.BottomCenter;
             browse_settings_btn.UseVisualStyleBackColor = false;
@@ -1001,7 +1006,7 @@ namespace SmartStock
             browse_db_btn.Margin = new Padding(6, 9, 0, 9);
             browse_db_btn.Name = "browse_db_btn";
             browse_db_btn.Size = new Size(34, 36);
-            browse_db_btn.TabIndex = 5;
+            browse_db_btn.TabIndex = 7;
             browse_db_btn.Tag = "outlined";
             browse_db_btn.UseVisualStyleBackColor = false;
             // 
@@ -1031,7 +1036,7 @@ namespace SmartStock
             browse_logs_btn.Margin = new Padding(6, 9, 0, 9);
             browse_logs_btn.Name = "browse_logs_btn";
             browse_logs_btn.Size = new Size(34, 36);
-            browse_logs_btn.TabIndex = 8;
+            browse_logs_btn.TabIndex = 9;
             browse_logs_btn.Tag = "outlined";
             browse_logs_btn.UseVisualStyleBackColor = false;
             // 
@@ -1116,8 +1121,8 @@ namespace SmartStock
             tableLayoutPanel5.Controls.Add(ai_logs_ck, 1, 1);
             tableLayoutPanel5.Controls.Add(label5, 0, 2);
             tableLayoutPanel5.Controls.Add(max_size_numeric, 1, 2);
-            tableLayoutPanel5.Controls.Add(label8, 0, 3);
             tableLayoutPanel5.Controls.Add(log_level_cb, 1, 3);
+            tableLayoutPanel5.Controls.Add(label8, 0, 3);
             tableLayoutPanel5.Controls.Add(open_log_btn, 0, 4);
             tableLayoutPanel5.Dock = DockStyle.Fill;
             tableLayoutPanel5.Location = new Point(22, 57);
@@ -1153,7 +1158,7 @@ namespace SmartStock
             enable_logging_chk.Margin = new Padding(6, 10, 0, 10);
             enable_logging_chk.Name = "enable_logging_chk";
             enable_logging_chk.Size = new Size(18, 17);
-            enable_logging_chk.TabIndex = 1;
+            enable_logging_chk.TabIndex = 18;
             enable_logging_chk.UseVisualStyleBackColor = true;
             // 
             // ai_logs_lbl
@@ -1177,7 +1182,7 @@ namespace SmartStock
             ai_logs_ck.Margin = new Padding(6, 10, 0, 10);
             ai_logs_ck.Name = "ai_logs_ck";
             ai_logs_ck.Size = new Size(18, 17);
-            ai_logs_ck.TabIndex = 3;
+            ai_logs_ck.TabIndex = 19;
             ai_logs_ck.UseVisualStyleBackColor = true;
             // 
             // label5
@@ -1196,27 +1201,15 @@ namespace SmartStock
             // max_size_numeric
             // 
             max_size_numeric.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            max_size_numeric.Font = new Font("Segoe UI", 10.5F);
+            max_size_numeric.BorderStyle = BorderStyle.None;
+            max_size_numeric.Font = new Font("Segoe UI", 11F);
             max_size_numeric.Location = new Point(206, 112);
             max_size_numeric.Margin = new Padding(6, 10, 0, 10);
             max_size_numeric.Maximum = new decimal(new int[] { 999, 0, 0, 0 });
             max_size_numeric.Name = "max_size_numeric";
-            max_size_numeric.Size = new Size(335, 31);
+            max_size_numeric.Size = new Size(335, 28);
             max_size_numeric.TabIndex = 5;
             max_size_numeric.Tag = "range_lock";
-            // 
-            // label8
-            // 
-            label8.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            label8.AutoSize = true;
-            label8.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            label8.Location = new Point(3, 156);
-            label8.Name = "label8";
-            label8.Size = new Size(194, 23);
-            label8.TabIndex = 6;
-            label8.Tag = "muted";
-            label8.Text = "Log Level";
-            label8.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // log_level_cb
             // 
@@ -1232,6 +1225,19 @@ namespace SmartStock
             log_level_cb.Name = "log_level_cb";
             log_level_cb.Size = new Size(335, 36);
             log_level_cb.TabIndex = 7;
+            // 
+            // label8
+            // 
+            label8.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            label8.AutoSize = true;
+            label8.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+            label8.Location = new Point(3, 156);
+            label8.Name = "label8";
+            label8.Size = new Size(194, 23);
+            label8.TabIndex = 6;
+            label8.Tag = "muted";
+            label8.Text = "Log Level";
+            label8.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // open_log_btn
             // 
@@ -1250,7 +1256,7 @@ namespace SmartStock
             open_log_btn.Name = "open_log_btn";
             open_log_btn.Padding = new Padding(14, 0, 14, 0);
             open_log_btn.Size = new Size(541, 44);
-            open_log_btn.TabIndex = 9;
+            open_log_btn.TabIndex = 22;
             open_log_btn.Tag = "outlined";
             open_log_btn.Text = "  Open Log File";
             open_log_btn.TextImageRelation = TextImageRelation.ImageBeforeText;
@@ -1396,12 +1402,12 @@ namespace SmartStock
             // api_tb
             // 
             api_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            api_tb.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            api_tb.Location = new Point(0, 1);
+            api_tb.Font = new Font("Segoe UI", 11F);
+            api_tb.Location = new Point(0, 0);
             api_tb.Margin = new Padding(0);
             api_tb.Name = "api_tb";
-            api_tb.Size = new Size(293, 30);
-            api_tb.TabIndex = 1;
+            api_tb.Size = new Size(293, 32);
+            api_tb.TabIndex = 10;
             api_tb.Tag = "borderless";
             // 
             // api_lbl
@@ -1433,7 +1439,7 @@ namespace SmartStock
             view_api_btn.Margin = new Padding(6, 9, 0, 9);
             view_api_btn.Name = "view_api_btn";
             view_api_btn.Size = new Size(34, 26);
-            view_api_btn.TabIndex = 2;
+            view_api_btn.TabIndex = 11;
             view_api_btn.Tag = "clean_icon";
             view_api_btn.TextAlign = ContentAlignment.TopCenter;
             view_api_btn.UseVisualStyleBackColor = false;
@@ -1454,7 +1460,6 @@ namespace SmartStock
             // provider_cb
             // 
             provider_cb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            tableLayoutPanel3.SetColumnSpan(provider_cb, 2);
             provider_cb.DrawMode = DrawMode.OwnerDrawFixed;
             provider_cb.DropDownStyle = ComboBoxStyle.DropDownList;
             provider_cb.FlatStyle = FlatStyle.Flat;
@@ -1464,7 +1469,7 @@ namespace SmartStock
             provider_cb.Location = new Point(206, 78);
             provider_cb.Margin = new Padding(6, 10, 0, 10);
             provider_cb.Name = "provider_cb";
-            provider_cb.Size = new Size(335, 36);
+            provider_cb.Size = new Size(295, 36);
             provider_cb.TabIndex = 4;
             // 
             // label12
@@ -1536,14 +1541,15 @@ namespace SmartStock
             // temperature_numeric
             // 
             temperature_numeric.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            temperature_numeric.BorderStyle = BorderStyle.None;
             tableLayoutPanel3.SetColumnSpan(temperature_numeric, 2);
             temperature_numeric.Font = new Font("Segoe UI", 10.5F);
             temperature_numeric.Location = new Point(206, 166);
             temperature_numeric.Margin = new Padding(6, 10, 0, 10);
             temperature_numeric.Maximum = new decimal(new int[] { 2, 0, 0, 0 });
             temperature_numeric.Name = "temperature_numeric";
-            temperature_numeric.Size = new Size(335, 31);
-            temperature_numeric.TabIndex = 9;
+            temperature_numeric.Size = new Size(335, 27);
+            temperature_numeric.TabIndex = 13;
             temperature_numeric.Tag = "range_lock";
             // 
             // ai_divider
@@ -1673,7 +1679,7 @@ namespace SmartStock
             enable_daily_fetching.Margin = new Padding(6, 10, 0, 10);
             enable_daily_fetching.Name = "enable_daily_fetching";
             enable_daily_fetching.Size = new Size(18, 17);
-            enable_daily_fetching.TabIndex = 1;
+            enable_daily_fetching.TabIndex = 23;
             enable_daily_fetching.UseVisualStyleBackColor = true;
             // 
             // label14
@@ -1692,12 +1698,14 @@ namespace SmartStock
             // fetching_time
             // 
             fetching_time.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            fetching_time.CustomFormat = "dd MMM yyyy";
             fetching_time.Font = new Font("Segoe UI", 10.5F);
+            fetching_time.Format = DateTimePickerFormat.Custom;
             fetching_time.Location = new Point(206, 67);
             fetching_time.Margin = new Padding(6, 9, 0, 9);
             fetching_time.Name = "fetching_time";
             fetching_time.Size = new Size(335, 31);
-            fetching_time.TabIndex = 3;
+            fetching_time.TabIndex = 24;
             // 
             // label11
             // 
@@ -1955,7 +1963,7 @@ namespace SmartStock
             manual_fetch_btn.Name = "manual_fetch_btn";
             manual_fetch_btn.Padding = new Padding(14, 0, 14, 0);
             manual_fetch_btn.Size = new Size(541, 44);
-            manual_fetch_btn.TabIndex = 7;
+            manual_fetch_btn.TabIndex = 25;
             manual_fetch_btn.Tag = "outlined";
             manual_fetch_btn.Text = "  Fetch Now";
             manual_fetch_btn.TextImageRelation = TextImageRelation.ImageBeforeText;
@@ -2108,10 +2116,10 @@ namespace SmartStock
             preferences_body.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
-            border_theme_pnl.ResumeLayout(false);
-            container_theme_pnl.ResumeLayout(false);
-            tableLayoutPanel6.ResumeLayout(false);
-            tableLayoutPanel6.PerformLayout();
+            panel12.ResumeLayout(false);
+            panel13.ResumeLayout(false);
+            tableLayoutPanel13.ResumeLayout(false);
+            tableLayoutPanel13.PerformLayout();
             preferences_header.ResumeLayout(false);
             preferences_header.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)preferences_icon).EndInit();
@@ -2210,9 +2218,9 @@ namespace SmartStock
         private Panel preferences_divider;
         private TableLayoutPanel tableLayoutPanel1;
         private Label theme_lbl;
-        private SmartStock.Classes.Utils.ThemedComboBox themes_cb;
+        private ThemedComboBox themes_cb;
         private Label language_lbl;
-        private SmartStock.Classes.Utils.ThemedComboBox languages_cb;
+        private ThemedComboBox languages_cb;
         private Label label4;
 
         // Reporting
@@ -2226,7 +2234,7 @@ namespace SmartStock
         private Label label2;
         private CheckBox enable_reports_chk;
         private Label label1;
-        private DateTimePicker time_picker;
+        private ThemedDateTimePicker time_picker;
         private Label label3;
         private TextBox email_recipient_tb;
         private Label label7;
@@ -2265,7 +2273,7 @@ namespace SmartStock
         private Label ai_logs_lbl;
         private CheckBox ai_logs_ck;
         private Label label5;
-        private NumericUpDown max_size_numeric;
+        private ThemedNumericUpDown max_size_numeric;
         private Label label8;
         private SmartStock.Classes.Utils.ThemedComboBox log_level_cb;
         private IconButton open_log_btn;
@@ -2288,7 +2296,7 @@ namespace SmartStock
         private Label status_color_lbl;
         private Label api_status_lbl;
         private Label label16;
-        private NumericUpDown temperature_numeric;
+        private ThemedNumericUpDown temperature_numeric;
 
         // Factors
         private Panel factors_pnl;
@@ -2301,7 +2309,7 @@ namespace SmartStock
         private Label label15;
         private CheckBox enable_daily_fetching;
         private Label label14;
-        private DateTimePicker fetching_time;
+        private ThemedDateTimePicker fetching_time;
         private Label label11;
         private Label next_fetch_lbl;
         private IconButton manual_fetch_btn;
@@ -2325,10 +2333,6 @@ namespace SmartStock
         // Apply footer
         private Panel apply_pnl;
         private IconButton apply_btn;
-        private Panel border_theme_pnl;
-        private Panel container_theme_pnl;
-        private TableLayoutPanel tableLayoutPanel6;
-        private TextBox textBox1;
         private Panel panel2;
         private Panel panel3;
         private TableLayoutPanel tableLayoutPanel8;
@@ -2344,5 +2348,9 @@ namespace SmartStock
         private Panel panel10;
         private Panel panel11;
         private TableLayoutPanel tableLayoutPanel12;
+        private Panel panel12;
+        private Panel panel13;
+        private TableLayoutPanel tableLayoutPanel13;
+        private TextBox currency_symbol_tb;
     }
 }

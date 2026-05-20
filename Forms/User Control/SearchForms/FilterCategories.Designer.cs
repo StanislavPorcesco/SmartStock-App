@@ -1,3 +1,5 @@
+using SmartStock.Classes.Utils;
+
 namespace SmartStock.Forms.User_Control.SearchForms
 {
     partial class FilterCategories
@@ -26,18 +28,18 @@ namespace SmartStock.Forms.User_Control.SearchForms
             range_lbl = new Label();
             panel2 = new Panel();
             label4 = new Label();
-            min_numeric = new NumericUpDown();
+            min_numeric = new ThemedNumericUpDown();
             panel3 = new Panel();
             label5 = new Label();
-            max_numeric = new NumericUpDown();
+            max_numeric = new ThemedNumericUpDown();
             total_lbl = new Label();
             total_ck = new CheckBox();
             panel5 = new Panel();
             label2 = new Label();
-            value_min = new NumericUpDown();
+            value_min = new ThemedNumericUpDown();
             panel6 = new Panel();
             label3 = new Label();
-            value_max = new NumericUpDown();
+            value_max = new ThemedNumericUpDown();
             radio_pnl = new Panel();
             tableLayoutPanel2 = new TableLayoutPanel();
             inactive_rb = new RadioButton();
@@ -506,19 +508,19 @@ namespace SmartStock.Forms.User_Control.SearchForms
         private Label category_name_lbl;
         private Panel panel2;
         private Label label4;
-        private NumericUpDown min_numeric;
+        private ThemedNumericUpDown min_numeric;
         private CheckBox total_ck;
         private Label total_lbl;
         private Panel panel3;
         private Label label5;
-        private NumericUpDown max_numeric;
+        private ThemedNumericUpDown max_numeric;
         private Label total_range_lbl;
         private Panel panel5;
         private Label label2;
-        private NumericUpDown value_min;
+        private ThemedNumericUpDown value_min;
         private Panel panel6;
         private Label label3;
-        private NumericUpDown value_max;
+        private ThemedNumericUpDown value_max;
         private Panel radio_pnl;
         private TableLayoutPanel tableLayoutPanel2;
         private RadioButton inactive_rb;

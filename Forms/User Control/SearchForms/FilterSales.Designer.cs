@@ -1,3 +1,5 @@
+using SmartStock.Classes.Utils;
+
 namespace SmartStock.Forms.User_Control.SearchForms
 {
     partial class FilterSales
@@ -53,10 +55,10 @@ namespace SmartStock.Forms.User_Control.SearchForms
             activity_status_lbl = new Label();
             panel5 = new Panel();
             label7 = new Label();
-            items_count_min = new NumericUpDown();
-            sale_date_start = new DateTimePicker();
-            payment_method_cb = new SmartStock.Classes.Utils.ThemedComboBox();
-            payment_status_cb = new SmartStock.Classes.Utils.ThemedComboBox();
+            items_count_min = new ThemedNumericUpDown();
+            sale_date_start = new ThemedDateTimePicker();
+            payment_method_cb = new ThemedComboBox();
+            payment_status_cb = new ThemedComboBox();
             search_by_name_lbl = new Label();
             sale_date_range_lbl = new Label();
             payment_method_lbl = new Label();
@@ -64,19 +66,19 @@ namespace SmartStock.Forms.User_Control.SearchForms
             user_id_lbl = new Label();
             customer_id_lbl = new Label();
             total_amount_lbl = new Label();
-            sale_date_end = new DateTimePicker();
+            sale_date_end = new ThemedDateTimePicker();
             panel2 = new Panel();
             label5 = new Label();
-            total_amount_min = new NumericUpDown();
+            total_amount_min = new ThemedNumericUpDown();
             itemss_count_lbl = new Label();
             category_id_lbl = new Label();
             product_id_lbl = new Label();
             panel3 = new Panel();
             label6 = new Label();
-            total_amount_max = new NumericUpDown();
+            total_amount_max = new ThemedNumericUpDown();
             panel6 = new Panel();
             label8 = new Label();
-            items_count_max = new NumericUpDown();
+            items_count_max = new ThemedNumericUpDown();
             radio_pnl = new Panel();
             tableLayoutPanel2 = new TableLayoutPanel();
             inactive_rb = new RadioButton();
@@ -931,22 +933,22 @@ namespace SmartStock.Forms.User_Control.SearchForms
         private Label product_id_lbl;
         private Label category_id_lbl;
         private Label itemss_count_lbl;
-        private SmartStock.Classes.Utils.ThemedComboBox payment_method_cb;
-        private SmartStock.Classes.Utils.ThemedComboBox payment_status_cb;
-        private DateTimePicker sale_date_start;
-        private DateTimePicker sale_date_end;
+        private ThemedComboBox payment_method_cb;
+        private ThemedComboBox payment_status_cb;
+        private ThemedDateTimePicker sale_date_start;
+        private ThemedDateTimePicker sale_date_end;
         private Panel panel2;
         private Label label5;
-        private NumericUpDown total_amount_min;
+        private ThemedNumericUpDown total_amount_min;
         private Panel panel3;
         private Label label6;
-        private NumericUpDown total_amount_max;
+        private ThemedNumericUpDown total_amount_max;
         private Panel panel5;
         private Label label7;
-        private NumericUpDown items_count_min;
+        private ThemedNumericUpDown items_count_min;
         private Panel panel6;
         private Label label8;
-        private NumericUpDown items_count_max;
+        private ThemedNumericUpDown items_count_max;
         private Label activity_status_lbl;
         private Panel radio_pnl;
         private TableLayoutPanel tableLayoutPanel2;

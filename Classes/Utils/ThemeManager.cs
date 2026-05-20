@@ -362,11 +362,15 @@ namespace SmartStock.Classes.Utils
                     date.CalendarTrailingForeColor = theme.Text;
                     date.BackColor = theme.LightColor;
                     date.ForeColor = theme.Text;
+                    // ThemedDateTimePicker se ocupă singur de chrome (border + chevron)
+                    // dar îi aplicăm aceleași Calendar* properties pentru popup-ul nativ.
                     break;
                 case RadioButton radio:
                     radio.BackColor = theme.LightColor;
                     radio.ForeColor = theme.TextSecondary;
                     break;
+                case ThemedNumericUpDown:
+                    break; // self-styling via ThemeManager.OnThemeChanged
                 case NumericUpDown num:
                     num.BackColor = theme.LightColor;
                     num.ForeColor = theme.Text;

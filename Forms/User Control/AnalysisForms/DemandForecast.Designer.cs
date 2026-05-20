@@ -1,3 +1,5 @@
+using SmartStock.Classes.Utils;
+
 namespace SmartStock.Forms.User_Control.AnalysisForms
 {
     partial class DemandForecast
@@ -21,7 +23,7 @@ namespace SmartStock.Forms.User_Control.AnalysisForms
             label1 = new Label();
             panel2 = new Panel();
             label4 = new Label();
-            horizon_nud = new NumericUpDown();
+            horizon_nud = new ThemedNumericUpDown();
             range_lbl = new Label();
             factors_clb = new CheckedListBox();
             confidence_tb = new TrackBar();
@@ -193,7 +195,7 @@ namespace SmartStock.Forms.User_Control.AnalysisForms
         private Label label2;
         private Label label1;
         private Panel panel2;
-        private NumericUpDown horizon_nud;
+        private ThemedNumericUpDown horizon_nud;
         private CheckedListBox factors_clb;
         private TrackBar confidence_tb;
         private Label label4;

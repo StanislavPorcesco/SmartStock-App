@@ -401,14 +401,16 @@ namespace SmartStock
             // selector_cb
             // 
             selector_cb.Dock = DockStyle.Fill;
+            selector_cb.DrawMode = DrawMode.OwnerDrawFixed;
             selector_cb.DropDownStyle = ComboBoxStyle.DropDownList;
             selector_cb.FlatStyle = FlatStyle.Flat;
             selector_cb.Font = new Font("Segoe UI", 11F);
             selector_cb.FormattingEnabled = true;
+            selector_cb.ItemHeight = 30;
             selector_cb.Location = new Point(0, 35);
             selector_cb.Margin = new Padding(0, 5, 0, 5);
             selector_cb.Name = "selector_cb";
-            selector_cb.Size = new Size(1113, 33);
+            selector_cb.Size = new Size(1113, 36);
             selector_cb.TabIndex = 16;
             selector_cb.SelectedIndexChanged += selector_cb_SelectedIndexChanged;
             // 

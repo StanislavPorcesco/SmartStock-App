@@ -1,3 +1,5 @@
+using SmartStock.Classes.Utils;
+
 namespace SmartStock.Forms.User_Control.SearchForms
 {
     partial class FilterTransactions
@@ -31,19 +33,19 @@ namespace SmartStock.Forms.User_Control.SearchForms
             panel1 = new Panel();
             tableLayoutPanel1 = new TableLayoutPanel();
             date_lbl = new Label();
-            date_start = new DateTimePicker();
+            date_start = new ThemedDateTimePicker();
             user_cb = new SmartStock.Classes.Utils.ThemedComboBox();
             type_cb = new SmartStock.Classes.Utils.ThemedComboBox();
             user_lbl = new Label();
             type_lbl = new Label();
-            date_end = new DateTimePicker();
+            date_end = new ThemedDateTimePicker();
             range_lbl = new Label();
             panel2 = new Panel();
             label4 = new Label();
-            min_numeric = new NumericUpDown();
+            min_numeric = new ThemedNumericUpDown();
             panel3 = new Panel();
             label5 = new Label();
-            max_numeric = new NumericUpDown();
+            max_numeric = new ThemedNumericUpDown();
             panel1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             panel2.SuspendLayout();
@@ -306,13 +308,13 @@ namespace SmartStock.Forms.User_Control.SearchForms
         private Label date_lbl;
         private Panel panel2;
         private Label label4;
-        private NumericUpDown min_numeric;
+        private ThemedNumericUpDown min_numeric;
         private Panel panel3;
         private Label label5;
-        private NumericUpDown max_numeric;
-        private DateTimePicker date_start;
-        private SmartStock.Classes.Utils.ThemedComboBox type_cb;
-        private SmartStock.Classes.Utils.ThemedComboBox user_cb;
-        private DateTimePicker date_end;
+        private ThemedNumericUpDown max_numeric;
+        private ThemedDateTimePicker date_start;
+        private ThemedComboBox type_cb;
+        private ThemedComboBox user_cb;
+        private ThemedDateTimePicker date_end;
     }
 }

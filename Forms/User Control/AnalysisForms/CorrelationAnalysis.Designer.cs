@@ -1,3 +1,5 @@
+using SmartStock.Classes.Utils;
+
 namespace SmartStock.Forms.User_Control.AnalysisForms
 {
     partial class CorrelationAnalysis
@@ -35,7 +37,7 @@ namespace SmartStock.Forms.User_Control.AnalysisForms
             label1 = new Label();
             panel2 = new Panel();
             label4 = new Label();
-            lag_nud = new NumericUpDown();
+            lag_nud = new ThemedNumericUpDown();
             label2 = new Label();
             interval_cb = new SmartStock.Classes.Utils.ThemedComboBox();
             panel1.SuspendLayout();
@@ -208,7 +210,7 @@ namespace SmartStock.Forms.User_Control.AnalysisForms
         private Label label1;
         private Panel panel2;
         private Label label4;
-        private NumericUpDown lag_nud;
+        private ThemedNumericUpDown lag_nud;
         private Label label2;
         private SmartStock.Classes.Utils.ThemedComboBox interval_cb;
     }

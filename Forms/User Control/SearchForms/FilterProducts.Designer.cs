@@ -1,3 +1,5 @@
+using SmartStock.Classes.Utils;
+
 namespace SmartStock.Forms.User_Control.SearchForms
 {
     partial class FilterProducts
@@ -32,8 +34,8 @@ namespace SmartStock.Forms.User_Control.SearchForms
             tableLayoutPanel1 = new TableLayoutPanel();
             supplier_tb = new TextBox();
             status_lbl = new Label();
-            dead_stock_max = new DateTimePicker();
-            dead_stock_min = new DateTimePicker();
+            dead_stock_max = new ThemedDateTimePicker();
+            dead_stock_min = new ThemedDateTimePicker();
             product_name_lbl = new Label();
             dead_lbl = new Label();
             safety_lbl = new Label();
@@ -41,15 +43,15 @@ namespace SmartStock.Forms.User_Control.SearchForms
             category_lbl = new Label();
             under_limit_ck = new CheckBox();
             category_cb = new SmartStock.Classes.Utils.ThemedComboBox();
-            range_max = new DateTimePicker();
-            range_min = new DateTimePicker();
+            range_max = new ThemedDateTimePicker();
+            range_min = new ThemedDateTimePicker();
             top_sellers_ck = new CheckBox();
             panel3 = new Panel();
             label5 = new Label();
-            max_numeric = new NumericUpDown();
+            max_numeric = new ThemedNumericUpDown();
             panel2 = new Panel();
             label4 = new Label();
-            min_numeric = new NumericUpDown();
+            min_numeric = new ThemedNumericUpDown();
             total_sells_range = new Label();
             top_lbl = new Label();
             range_lbl = new Label();
@@ -653,18 +655,18 @@ namespace SmartStock.Forms.User_Control.SearchForms
         private CheckBox under_limit_ck;
         private Panel panel2;
         private Label label4;
-        private NumericUpDown min_numeric;
+        private ThemedNumericUpDown min_numeric;
         private Panel panel3;
         private Label label5;
-        private NumericUpDown max_numeric;
+        private ThemedNumericUpDown max_numeric;
         private CheckBox top_sellers_ck;
         private Label top_lbl;
         private Label product_name_lbl;
         private Label total_sells_range;
-        private DateTimePicker range_max;
-        private DateTimePicker range_min;
-        private DateTimePicker dead_stock_max;
-        private DateTimePicker dead_stock_min;
+        private ThemedDateTimePicker range_max;
+        private ThemedDateTimePicker range_min;
+        private ThemedDateTimePicker dead_stock_max;
+        private ThemedDateTimePicker dead_stock_min;
         private Panel radio_pnl;
         private TableLayoutPanel tableLayoutPanel2;
         private RadioButton inactive_rb;

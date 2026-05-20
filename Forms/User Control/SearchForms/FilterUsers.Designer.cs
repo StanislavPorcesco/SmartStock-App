@@ -1,3 +1,5 @@
+using SmartStock.Classes.Utils;
+
 namespace SmartStock.Forms.User_Control.SearchForms
 {
     partial class FilterUsers
@@ -37,10 +39,10 @@ namespace SmartStock.Forms.User_Control.SearchForms
             status_lbl = new Label();
             panel2 = new Panel();
             label4 = new Label();
-            min_numeric = new NumericUpDown();
+            min_numeric = new ThemedNumericUpDown();
             panel3 = new Panel();
             label5 = new Label();
-            max_numeric = new NumericUpDown();
+            max_numeric = new ThemedNumericUpDown();
             panel1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             panel2.SuspendLayout();
@@ -261,10 +263,10 @@ namespace SmartStock.Forms.User_Control.SearchForms
         private Label status_lbl;
         private Panel panel2;
         private Label label4;
-        private NumericUpDown min_numeric;
+        private ThemedNumericUpDown min_numeric;
         private Panel panel3;
         private Label label5;
-        private NumericUpDown max_numeric;
+        private ThemedNumericUpDown max_numeric;
         private CheckBox total_ck;
         private Label total_lbl;
         private CheckBox status_ck;

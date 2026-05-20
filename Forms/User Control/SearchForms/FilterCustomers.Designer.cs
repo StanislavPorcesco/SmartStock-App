@@ -1,3 +1,5 @@
+using SmartStock.Classes.Utils;
+
 namespace SmartStock.Forms.User_Control.SearchForms
 {
     partial class FilterCustomers
@@ -19,29 +21,29 @@ namespace SmartStock.Forms.User_Control.SearchForms
             tableLayoutPanel1 = new TableLayoutPanel();
             name_or_phone_tb = new TextBox();
             status_lbl = new Label();
-            dead_stock_end = new DateTimePicker();
-            dead_stock_start = new DateTimePicker();
+            dead_stock_end = new ThemedDateTimePicker();
+            dead_stock_start = new ThemedDateTimePicker();
             no_sales_lbl = new Label();
             panel6 = new Panel();
             label3 = new Label();
-            spent_max = new NumericUpDown();
+            spent_max = new ThemedNumericUpDown();
             panel5 = new Panel();
             label2 = new Label();
-            spent_min = new NumericUpDown();
+            spent_min = new ThemedNumericUpDown();
             total_spent_lbl = new Label();
-            registration_start = new DateTimePicker();
+            registration_start = new ThemedDateTimePicker();
             search_lbl = new Label();
             date_lbl = new Label();
             city_lbl = new Label();
-            city_cb = new SmartStock.Classes.Utils.ThemedComboBox();
-            registration_end = new DateTimePicker();
+            city_cb = new ThemedComboBox();
+            registration_end = new ThemedDateTimePicker();
             sales_count_lbl = new Label();
             panel3 = new Panel();
             label5 = new Label();
-            sale_count_max = new NumericUpDown();
+            sale_count_max = new ThemedNumericUpDown();
             panel2 = new Panel();
             label4 = new Label();
-            sale_count_min = new NumericUpDown();
+            sale_count_min = new ThemedNumericUpDown();
             radio_pnl = new Panel();
             tableLayoutPanel2 = new TableLayoutPanel();
             inactive_rb = new RadioButton();
@@ -600,23 +602,23 @@ namespace SmartStock.Forms.User_Control.SearchForms
         private Label search_lbl;
         private Panel panel2;
         private Label label4;
-        private NumericUpDown sale_count_min;
+        private ThemedNumericUpDown sale_count_min;
         private Panel panel3;
         private Label label5;
-        private NumericUpDown sale_count_max;
+        private ThemedNumericUpDown sale_count_max;
         private Label city_lbl;
-        private DateTimePicker registration_start;
-        private SmartStock.Classes.Utils.ThemedComboBox city_cb;
-        private DateTimePicker registration_end;
+        private ThemedDateTimePicker registration_start;
+        private ThemedComboBox city_cb;
+        private ThemedDateTimePicker registration_end;
         private Label total_spent_lbl;
         private Panel panel6;
         private Label label3;
-        private NumericUpDown spent_max;
+        private ThemedNumericUpDown spent_max;
         private Panel panel5;
         private Label label2;
-        private NumericUpDown spent_min;
-        private DateTimePicker dead_stock_end;
-        private DateTimePicker dead_stock_start;
+        private ThemedNumericUpDown spent_min;
+        private ThemedDateTimePicker dead_stock_end;
+        private ThemedDateTimePicker dead_stock_start;
         private Label no_sales_lbl;
         private Panel radio_pnl;
         private TableLayoutPanel tableLayoutPanel2;

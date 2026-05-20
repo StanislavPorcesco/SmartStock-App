@@ -1,4 +1,5 @@
 using FontAwesome.Sharp;
+using SmartStock.Classes.Utils;
 
 namespace SmartStock.Forms
 {
@@ -29,13 +30,13 @@ namespace SmartStock.Forms
             selector_divider = new Panel();
             selector_fields_pnl = new TableLayoutPanel();
             analisys_lbl = new Label();
-            analysis_type_cb = new SmartStock.Classes.Utils.ThemedComboBox();
+            analysis_type_cb = new ThemedComboBox();
             label1 = new Label();
-            target_subject_cb = new SmartStock.Classes.Utils.ThemedComboBox();
+            target_subject_cb = new ThemedComboBox();
             label2 = new Label();
-            start_date_dtp = new DateTimePicker();
+            start_date_dtp = new ThemedDateTimePicker();
             end_date_lbl = new Label();
-            end_date_dtp = new DateTimePicker();
+            end_date_dtp = new ThemedDateTimePicker();
             content_tbl = new TableLayoutPanel();
             params_card = new Panel();
             dynamic_params_pnl = new Panel();
@@ -307,6 +308,7 @@ namespace SmartStock.Forms
             // 
             // start_date_dtp
             // 
+            start_date_dtp.CustomFormat = "dd MMM yyyy";
             start_date_dtp.Dock = DockStyle.Fill;
             start_date_dtp.DropDownAlign = LeftRightAlignment.Right;
             start_date_dtp.Font = new Font("Segoe UI", 11F);
@@ -332,6 +334,7 @@ namespace SmartStock.Forms
             // 
             // end_date_dtp
             // 
+            end_date_dtp.CustomFormat = "dd MMM yyyy";
             end_date_dtp.Dock = DockStyle.Fill;
             end_date_dtp.DropDownAlign = LeftRightAlignment.Right;
             end_date_dtp.Font = new Font("Segoe UI", 11F);
@@ -941,13 +944,13 @@ namespace SmartStock.Forms
         private Panel selector_divider;
         private TableLayoutPanel selector_fields_pnl;
         private Label analisys_lbl;
-        private SmartStock.Classes.Utils.ThemedComboBox analysis_type_cb;
+        private ThemedComboBox analysis_type_cb;
         private Label label1;
-        private SmartStock.Classes.Utils.ThemedComboBox target_subject_cb;
+        private ThemedComboBox target_subject_cb;
         private Label label2;
-        private DateTimePicker start_date_dtp;
+        private ThemedDateTimePicker start_date_dtp;
         private Label end_date_lbl;
-        private DateTimePicker end_date_dtp;
+        private ThemedDateTimePicker end_date_dtp;
         private TableLayoutPanel content_tbl;
         private Panel params_card;
         private Panel params_header_pnl;

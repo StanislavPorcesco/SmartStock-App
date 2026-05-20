@@ -7,6 +7,12 @@
     <Compile Update="Classes\Utils\ThemedComboBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Update="Classes\Utils\ThemedDateTimePicker.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Classes\Utils\ThemedNumericUpDown.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Update="Forms\DetailsPopupForm.cs">
       <SubType>Form</SubType>
     </Compile>

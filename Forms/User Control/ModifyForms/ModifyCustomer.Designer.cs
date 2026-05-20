@@ -32,51 +32,51 @@ namespace SmartStock.Forms.User_Control
         {
             base_pnl = new Panel();
             fields_table = new TableLayoutPanel();
-            transaction_id = new Label();
-            customer_id_tb = new TextBox();
-            search_btn = new IconButton();
-            db_lbl = new Label();
-            full_name_tb = new TextBox();
-            label3 = new Label();
-            city_tb = new TextBox();
-            label2 = new Label();
-            phone_tb = new TextBox();
-            logs_lbl = new Label();
+            panel7 = new Panel();
+            panel8 = new Panel();
+            tableLayoutPanel5 = new TableLayoutPanel();
             email_tb = new TextBox();
+            panel5 = new Panel();
+            panel6 = new Panel();
+            tableLayoutPanel4 = new TableLayoutPanel();
+            phone_tb = new TextBox();
+            panel3 = new Panel();
+            panel4 = new Panel();
+            tableLayoutPanel3 = new TableLayoutPanel();
+            city_tb = new TextBox();
+            panel1 = new Panel();
+            panel2 = new Panel();
+            tableLayoutPanel2 = new TableLayoutPanel();
+            full_name_tb = new TextBox();
+            transaction_id = new Label();
+            db_lbl = new Label();
+            label3 = new Label();
+            label2 = new Label();
+            logs_lbl = new Label();
             tableLayoutPanel1 = new TableLayoutPanel();
             border_theme_pnl = new Panel();
             container_theme_pnl = new Panel();
             tableLayoutPanel6 = new TableLayoutPanel();
-            panel1 = new Panel();
-            panel2 = new Panel();
-            tableLayoutPanel2 = new TableLayoutPanel();
-            panel3 = new Panel();
-            panel4 = new Panel();
-            tableLayoutPanel3 = new TableLayoutPanel();
-            panel5 = new Panel();
-            panel6 = new Panel();
-            tableLayoutPanel4 = new TableLayoutPanel();
-            panel7 = new Panel();
-            panel8 = new Panel();
-            tableLayoutPanel5 = new TableLayoutPanel();
+            customer_id_tb = new TextBox();
+            search_btn = new IconButton();
             base_pnl.SuspendLayout();
             fields_table.SuspendLayout();
+            panel7.SuspendLayout();
+            panel8.SuspendLayout();
+            tableLayoutPanel5.SuspendLayout();
+            panel5.SuspendLayout();
+            panel6.SuspendLayout();
+            tableLayoutPanel4.SuspendLayout();
+            panel3.SuspendLayout();
+            panel4.SuspendLayout();
+            tableLayoutPanel3.SuspendLayout();
+            panel1.SuspendLayout();
+            panel2.SuspendLayout();
+            tableLayoutPanel2.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             border_theme_pnl.SuspendLayout();
             container_theme_pnl.SuspendLayout();
             tableLayoutPanel6.SuspendLayout();
-            panel1.SuspendLayout();
-            panel2.SuspendLayout();
-            tableLayoutPanel2.SuspendLayout();
-            panel3.SuspendLayout();
-            panel4.SuspendLayout();
-            tableLayoutPanel3.SuspendLayout();
-            panel5.SuspendLayout();
-            panel6.SuspendLayout();
-            tableLayoutPanel4.SuspendLayout();
-            panel7.SuspendLayout();
-            panel8.SuspendLayout();
-            tableLayoutPanel5.SuspendLayout();
             SuspendLayout();
             // 
             // base_pnl
@@ -118,6 +118,206 @@ namespace SmartStock.Forms.User_Control
             fields_table.Size = new Size(851, 271);
             fields_table.TabIndex = 0;
             // 
+            // panel7
+            // 
+            panel7.Controls.Add(panel8);
+            panel7.Dock = DockStyle.Fill;
+            panel7.Location = new Point(166, 226);
+            panel7.Margin = new Padding(6, 10, 0, 10);
+            panel7.Name = "panel7";
+            panel7.Padding = new Padding(1);
+            panel7.Size = new Size(685, 35);
+            panel7.TabIndex = 14;
+            panel7.Tag = "border_pnl";
+            // 
+            // panel8
+            // 
+            panel8.Controls.Add(tableLayoutPanel5);
+            panel8.Dock = DockStyle.Fill;
+            panel8.Location = new Point(1, 1);
+            panel8.Margin = new Padding(0);
+            panel8.Name = "panel8";
+            panel8.Size = new Size(683, 33);
+            panel8.TabIndex = 0;
+            panel8.Tag = "card";
+            // 
+            // tableLayoutPanel5
+            // 
+            tableLayoutPanel5.ColumnCount = 1;
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel5.Controls.Add(email_tb, 0, 0);
+            tableLayoutPanel5.Dock = DockStyle.Fill;
+            tableLayoutPanel5.Location = new Point(0, 0);
+            tableLayoutPanel5.Margin = new Padding(0);
+            tableLayoutPanel5.Name = "tableLayoutPanel5";
+            tableLayoutPanel5.RowCount = 1;
+            tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel5.Size = new Size(683, 33);
+            tableLayoutPanel5.TabIndex = 0;
+            // 
+            // email_tb
+            // 
+            email_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            email_tb.Font = new Font("Segoe UI", 11F);
+            email_tb.Location = new Point(0, 0);
+            email_tb.Margin = new Padding(0);
+            email_tb.Name = "email_tb";
+            email_tb.Size = new Size(683, 32);
+            email_tb.TabIndex = 9;
+            email_tb.Tag = "borderless";
+            // 
+            // panel5
+            // 
+            panel5.Controls.Add(panel6);
+            panel5.Dock = DockStyle.Fill;
+            panel5.Location = new Point(166, 172);
+            panel5.Margin = new Padding(6, 10, 0, 10);
+            panel5.Name = "panel5";
+            panel5.Padding = new Padding(1);
+            panel5.Size = new Size(685, 34);
+            panel5.TabIndex = 13;
+            panel5.Tag = "border_pnl";
+            // 
+            // panel6
+            // 
+            panel6.Controls.Add(tableLayoutPanel4);
+            panel6.Dock = DockStyle.Fill;
+            panel6.Location = new Point(1, 1);
+            panel6.Margin = new Padding(0);
+            panel6.Name = "panel6";
+            panel6.Size = new Size(683, 32);
+            panel6.TabIndex = 0;
+            panel6.Tag = "card";
+            // 
+            // tableLayoutPanel4
+            // 
+            tableLayoutPanel4.ColumnCount = 1;
+            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel4.Controls.Add(phone_tb, 0, 0);
+            tableLayoutPanel4.Dock = DockStyle.Fill;
+            tableLayoutPanel4.Location = new Point(0, 0);
+            tableLayoutPanel4.Margin = new Padding(0);
+            tableLayoutPanel4.Name = "tableLayoutPanel4";
+            tableLayoutPanel4.RowCount = 1;
+            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel4.Size = new Size(683, 32);
+            tableLayoutPanel4.TabIndex = 0;
+            // 
+            // phone_tb
+            // 
+            phone_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            phone_tb.Font = new Font("Segoe UI", 11F);
+            phone_tb.Location = new Point(0, 0);
+            phone_tb.Margin = new Padding(0);
+            phone_tb.Name = "phone_tb";
+            phone_tb.Size = new Size(683, 32);
+            phone_tb.TabIndex = 7;
+            phone_tb.Tag = "borderless";
+            // 
+            // panel3
+            // 
+            panel3.Controls.Add(panel4);
+            panel3.Dock = DockStyle.Fill;
+            panel3.Location = new Point(166, 118);
+            panel3.Margin = new Padding(6, 10, 0, 10);
+            panel3.Name = "panel3";
+            panel3.Padding = new Padding(1);
+            panel3.Size = new Size(685, 34);
+            panel3.TabIndex = 12;
+            panel3.Tag = "border_pnl";
+            // 
+            // panel4
+            // 
+            panel4.Controls.Add(tableLayoutPanel3);
+            panel4.Dock = DockStyle.Fill;
+            panel4.Location = new Point(1, 1);
+            panel4.Margin = new Padding(0);
+            panel4.Name = "panel4";
+            panel4.Size = new Size(683, 32);
+            panel4.TabIndex = 0;
+            panel4.Tag = "card";
+            // 
+            // tableLayoutPanel3
+            // 
+            tableLayoutPanel3.ColumnCount = 1;
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel3.Controls.Add(city_tb, 0, 0);
+            tableLayoutPanel3.Dock = DockStyle.Fill;
+            tableLayoutPanel3.Location = new Point(0, 0);
+            tableLayoutPanel3.Margin = new Padding(0);
+            tableLayoutPanel3.Name = "tableLayoutPanel3";
+            tableLayoutPanel3.RowCount = 1;
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel3.Size = new Size(683, 32);
+            tableLayoutPanel3.TabIndex = 0;
+            // 
+            // city_tb
+            // 
+            city_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            city_tb.Font = new Font("Segoe UI", 11F);
+            city_tb.Location = new Point(0, 0);
+            city_tb.Margin = new Padding(0);
+            city_tb.Name = "city_tb";
+            city_tb.Size = new Size(683, 32);
+            city_tb.TabIndex = 5;
+            city_tb.Tag = "borderless";
+            // 
+            // panel1
+            // 
+            panel1.Controls.Add(panel2);
+            panel1.Dock = DockStyle.Fill;
+            panel1.Location = new Point(166, 64);
+            panel1.Margin = new Padding(6, 10, 0, 10);
+            panel1.Name = "panel1";
+            panel1.Padding = new Padding(1);
+            panel1.Size = new Size(685, 34);
+            panel1.TabIndex = 11;
+            panel1.Tag = "border_pnl";
+            // 
+            // panel2
+            // 
+            panel2.Controls.Add(tableLayoutPanel2);
+            panel2.Dock = DockStyle.Fill;
+            panel2.Location = new Point(1, 1);
+            panel2.Margin = new Padding(0);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(683, 32);
+            panel2.TabIndex = 0;
+            panel2.Tag = "card";
+            // 
+            // tableLayoutPanel2
+            // 
+            tableLayoutPanel2.ColumnCount = 1;
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel2.Controls.Add(full_name_tb, 0, 0);
+            tableLayoutPanel2.Dock = DockStyle.Fill;
+            tableLayoutPanel2.Location = new Point(0, 0);
+            tableLayoutPanel2.Margin = new Padding(0);
+            tableLayoutPanel2.Name = "tableLayoutPanel2";
+            tableLayoutPanel2.RowCount = 1;
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel2.Size = new Size(683, 32);
+            tableLayoutPanel2.TabIndex = 0;
+            // 
+            // full_name_tb
+            // 
+            full_name_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            full_name_tb.Font = new Font("Segoe UI", 11F);
+            full_name_tb.Location = new Point(0, 0);
+            full_name_tb.Margin = new Padding(0);
+            full_name_tb.Name = "full_name_tb";
+            full_name_tb.Size = new Size(683, 32);
+            full_name_tb.TabIndex = 3;
+            full_name_tb.Tag = "borderless";
+            // 
             // transaction_id
             // 
             transaction_id.Dock = DockStyle.Fill;
@@ -130,37 +330,6 @@ namespace SmartStock.Forms.User_Control
             transaction_id.Tag = "muted";
             transaction_id.Text = "Customer ID";
             transaction_id.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // customer_id_tb
-            // 
-            customer_id_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            customer_id_tb.Font = new Font("Segoe UI", 11F);
-            customer_id_tb.Location = new Point(0, 0);
-            customer_id_tb.Margin = new Padding(0);
-            customer_id_tb.Name = "customer_id_tb";
-            customer_id_tb.Size = new Size(573, 32);
-            customer_id_tb.TabIndex = 0;
-            customer_id_tb.Tag = "borderless";
-            // 
-            // search_btn
-            // 
-            search_btn.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            search_btn.FlatStyle = FlatStyle.Flat;
-            search_btn.Font = new Font("Segoe UI Semibold", 9.5F, FontStyle.Bold);
-            search_btn.IconChar = IconChar.Search;
-            search_btn.IconColor = Color.Black;
-            search_btn.IconFont = IconFont.Auto;
-            search_btn.IconSize = 18;
-            search_btn.Location = new Point(587, 10);
-            search_btn.Margin = new Padding(6, 10, 0, 10);
-            search_btn.Name = "search_btn";
-            search_btn.Size = new Size(104, 34);
-            search_btn.TabIndex = 1;
-            search_btn.Tag = "outlined";
-            search_btn.Text = "  Search";
-            search_btn.TextImageRelation = TextImageRelation.ImageBeforeText;
-            search_btn.UseVisualStyleBackColor = true;
-            search_btn.Click += search_btn_Click;
             // 
             // db_lbl
             // 
@@ -175,17 +344,6 @@ namespace SmartStock.Forms.User_Control
             db_lbl.Text = "Full Name";
             db_lbl.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // full_name_tb
-            // 
-            full_name_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            full_name_tb.Font = new Font("Segoe UI", 11F);
-            full_name_tb.Location = new Point(0, 0);
-            full_name_tb.Margin = new Padding(0);
-            full_name_tb.Name = "full_name_tb";
-            full_name_tb.Size = new Size(683, 32);
-            full_name_tb.TabIndex = 3;
-            full_name_tb.Tag = "borderless";
-            // 
             // label3
             // 
             label3.Dock = DockStyle.Fill;
@@ -198,17 +356,6 @@ namespace SmartStock.Forms.User_Control
             label3.Tag = "muted";
             label3.Text = "City";
             label3.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // city_tb
-            // 
-            city_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            city_tb.Font = new Font("Segoe UI", 11F);
-            city_tb.Location = new Point(0, 0);
-            city_tb.Margin = new Padding(0);
-            city_tb.Name = "city_tb";
-            city_tb.Size = new Size(683, 32);
-            city_tb.TabIndex = 5;
-            city_tb.Tag = "borderless";
             // 
             // label2
             // 
@@ -223,17 +370,6 @@ namespace SmartStock.Forms.User_Control
             label2.Text = "Phone";
             label2.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // phone_tb
-            // 
-            phone_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            phone_tb.Font = new Font("Segoe UI", 11F);
-            phone_tb.Location = new Point(0, 0);
-            phone_tb.Margin = new Padding(0);
-            phone_tb.Name = "phone_tb";
-            phone_tb.Size = new Size(683, 32);
-            phone_tb.TabIndex = 7;
-            phone_tb.Tag = "borderless";
-            // 
             // logs_lbl
             // 
             logs_lbl.Dock = DockStyle.Fill;
@@ -246,17 +382,6 @@ namespace SmartStock.Forms.User_Control
             logs_lbl.Tag = "muted";
             logs_lbl.Text = "Email";
             logs_lbl.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // email_tb
-            // 
-            email_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            email_tb.Font = new Font("Segoe UI", 11F);
-            email_tb.Location = new Point(0, 0);
-            email_tb.Margin = new Padding(0);
-            email_tb.Name = "email_tb";
-            email_tb.Size = new Size(683, 32);
-            email_tb.TabIndex = 9;
-            email_tb.Tag = "borderless";
             // 
             // tableLayoutPanel1
             // 
@@ -313,161 +438,36 @@ namespace SmartStock.Forms.User_Control
             tableLayoutPanel6.Size = new Size(573, 32);
             tableLayoutPanel6.TabIndex = 0;
             // 
-            // panel1
+            // customer_id_tb
             // 
-            panel1.Controls.Add(panel2);
-            panel1.Dock = DockStyle.Fill;
-            panel1.Location = new Point(166, 64);
-            panel1.Margin = new Padding(6, 10, 0, 10);
-            panel1.Name = "panel1";
-            panel1.Padding = new Padding(1);
-            panel1.Size = new Size(685, 34);
-            panel1.TabIndex = 11;
-            panel1.Tag = "border_pnl";
+            customer_id_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            customer_id_tb.Font = new Font("Segoe UI", 11F);
+            customer_id_tb.Location = new Point(0, 0);
+            customer_id_tb.Margin = new Padding(0);
+            customer_id_tb.Name = "customer_id_tb";
+            customer_id_tb.Size = new Size(573, 32);
+            customer_id_tb.TabIndex = 0;
+            customer_id_tb.Tag = "borderless";
             // 
-            // panel2
+            // search_btn
             // 
-            panel2.Controls.Add(tableLayoutPanel2);
-            panel2.Dock = DockStyle.Fill;
-            panel2.Location = new Point(1, 1);
-            panel2.Margin = new Padding(0);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(683, 32);
-            panel2.TabIndex = 0;
-            panel2.Tag = "card";
-            // 
-            // tableLayoutPanel2
-            // 
-            tableLayoutPanel2.ColumnCount = 1;
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel2.Controls.Add(full_name_tb, 0, 0);
-            tableLayoutPanel2.Dock = DockStyle.Fill;
-            tableLayoutPanel2.Location = new Point(0, 0);
-            tableLayoutPanel2.Margin = new Padding(0);
-            tableLayoutPanel2.Name = "tableLayoutPanel2";
-            tableLayoutPanel2.RowCount = 1;
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel2.Size = new Size(683, 32);
-            tableLayoutPanel2.TabIndex = 0;
-            // 
-            // panel3
-            // 
-            panel3.Controls.Add(panel4);
-            panel3.Dock = DockStyle.Fill;
-            panel3.Location = new Point(166, 118);
-            panel3.Margin = new Padding(6, 10, 0, 10);
-            panel3.Name = "panel3";
-            panel3.Padding = new Padding(1);
-            panel3.Size = new Size(685, 34);
-            panel3.TabIndex = 12;
-            panel3.Tag = "border_pnl";
-            // 
-            // panel4
-            // 
-            panel4.Controls.Add(tableLayoutPanel3);
-            panel4.Dock = DockStyle.Fill;
-            panel4.Location = new Point(1, 1);
-            panel4.Margin = new Padding(0);
-            panel4.Name = "panel4";
-            panel4.Size = new Size(683, 32);
-            panel4.TabIndex = 0;
-            panel4.Tag = "card";
-            // 
-            // tableLayoutPanel3
-            // 
-            tableLayoutPanel3.ColumnCount = 1;
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel3.Controls.Add(city_tb, 0, 0);
-            tableLayoutPanel3.Dock = DockStyle.Fill;
-            tableLayoutPanel3.Location = new Point(0, 0);
-            tableLayoutPanel3.Margin = new Padding(0);
-            tableLayoutPanel3.Name = "tableLayoutPanel3";
-            tableLayoutPanel3.RowCount = 1;
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel3.Size = new Size(683, 32);
-            tableLayoutPanel3.TabIndex = 0;
-            // 
-            // panel5
-            // 
-            panel5.Controls.Add(panel6);
-            panel5.Dock = DockStyle.Fill;
-            panel5.Location = new Point(166, 172);
-            panel5.Margin = new Padding(6, 10, 0, 10);
-            panel5.Name = "panel5";
-            panel5.Padding = new Padding(1);
-            panel5.Size = new Size(685, 34);
-            panel5.TabIndex = 13;
-            panel5.Tag = "border_pnl";
-            // 
-            // panel6
-            // 
-            panel6.Controls.Add(tableLayoutPanel4);
-            panel6.Dock = DockStyle.Fill;
-            panel6.Location = new Point(1, 1);
-            panel6.Margin = new Padding(0);
-            panel6.Name = "panel6";
-            panel6.Size = new Size(683, 32);
-            panel6.TabIndex = 0;
-            panel6.Tag = "card";
-            // 
-            // tableLayoutPanel4
-            // 
-            tableLayoutPanel4.ColumnCount = 1;
-            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel4.Controls.Add(phone_tb, 0, 0);
-            tableLayoutPanel4.Dock = DockStyle.Fill;
-            tableLayoutPanel4.Location = new Point(0, 0);
-            tableLayoutPanel4.Margin = new Padding(0);
-            tableLayoutPanel4.Name = "tableLayoutPanel4";
-            tableLayoutPanel4.RowCount = 1;
-            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel4.Size = new Size(683, 32);
-            tableLayoutPanel4.TabIndex = 0;
-            // 
-            // panel7
-            // 
-            panel7.Controls.Add(panel8);
-            panel7.Dock = DockStyle.Fill;
-            panel7.Location = new Point(166, 226);
-            panel7.Margin = new Padding(6, 10, 0, 10);
-            panel7.Name = "panel7";
-            panel7.Padding = new Padding(1);
-            panel7.Size = new Size(685, 35);
-            panel7.TabIndex = 14;
-            panel7.Tag = "border_pnl";
-            // 
-            // panel8
-            // 
-            panel8.Controls.Add(tableLayoutPanel5);
-            panel8.Dock = DockStyle.Fill;
-            panel8.Location = new Point(1, 1);
-            panel8.Margin = new Padding(0);
-            panel8.Name = "panel8";
-            panel8.Size = new Size(683, 33);
-            panel8.TabIndex = 0;
-            panel8.Tag = "card";
-            // 
-            // tableLayoutPanel5
-            // 
-            tableLayoutPanel5.ColumnCount = 1;
-            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel5.Controls.Add(email_tb, 0, 0);
-            tableLayoutPanel5.Dock = DockStyle.Fill;
-            tableLayoutPanel5.Location = new Point(0, 0);
-            tableLayoutPanel5.Margin = new Padding(0);
-            tableLayoutPanel5.Name = "tableLayoutPanel5";
-            tableLayoutPanel5.RowCount = 1;
-            tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel5.Size = new Size(683, 33);
-            tableLayoutPanel5.TabIndex = 0;
+            search_btn.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            search_btn.FlatStyle = FlatStyle.Flat;
+            search_btn.Font = new Font("Segoe UI Semibold", 9.5F, FontStyle.Bold);
+            search_btn.IconChar = IconChar.Search;
+            search_btn.IconColor = Color.Black;
+            search_btn.IconFont = IconFont.Auto;
+            search_btn.IconSize = 18;
+            search_btn.Location = new Point(587, 10);
+            search_btn.Margin = new Padding(6, 10, 0, 10);
+            search_btn.Name = "search_btn";
+            search_btn.Size = new Size(104, 34);
+            search_btn.TabIndex = 1;
+            search_btn.Tag = "outlined";
+            search_btn.Text = "  Search";
+            search_btn.TextImageRelation = TextImageRelation.ImageBeforeText;
+            search_btn.UseVisualStyleBackColor = true;
+            search_btn.Click += search_btn_Click;
             // 
             // ModifyCustomer
             // 
@@ -478,27 +478,27 @@ namespace SmartStock.Forms.User_Control
             Size = new Size(907, 572);
             base_pnl.ResumeLayout(false);
             fields_table.ResumeLayout(false);
+            panel7.ResumeLayout(false);
+            panel8.ResumeLayout(false);
+            tableLayoutPanel5.ResumeLayout(false);
+            tableLayoutPanel5.PerformLayout();
+            panel5.ResumeLayout(false);
+            panel6.ResumeLayout(false);
+            tableLayoutPanel4.ResumeLayout(false);
+            tableLayoutPanel4.PerformLayout();
+            panel3.ResumeLayout(false);
+            panel4.ResumeLayout(false);
+            tableLayoutPanel3.ResumeLayout(false);
+            tableLayoutPanel3.PerformLayout();
+            panel1.ResumeLayout(false);
+            panel2.ResumeLayout(false);
+            tableLayoutPanel2.ResumeLayout(false);
+            tableLayoutPanel2.PerformLayout();
             tableLayoutPanel1.ResumeLayout(false);
             border_theme_pnl.ResumeLayout(false);
             container_theme_pnl.ResumeLayout(false);
             tableLayoutPanel6.ResumeLayout(false);
             tableLayoutPanel6.PerformLayout();
-            panel1.ResumeLayout(false);
-            panel2.ResumeLayout(false);
-            tableLayoutPanel2.ResumeLayout(false);
-            tableLayoutPanel2.PerformLayout();
-            panel3.ResumeLayout(false);
-            panel4.ResumeLayout(false);
-            tableLayoutPanel3.ResumeLayout(false);
-            tableLayoutPanel3.PerformLayout();
-            panel5.ResumeLayout(false);
-            panel6.ResumeLayout(false);
-            tableLayoutPanel4.ResumeLayout(false);
-            tableLayoutPanel4.PerformLayout();
-            panel7.ResumeLayout(false);
-            panel8.ResumeLayout(false);
-            tableLayoutPanel5.ResumeLayout(false);
-            tableLayoutPanel5.PerformLayout();
             ResumeLayout(false);
         }
 

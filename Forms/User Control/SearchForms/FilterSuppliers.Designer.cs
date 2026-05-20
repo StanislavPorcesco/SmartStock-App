@@ -1,3 +1,5 @@
+using SmartStock.Classes.Utils;
+
 namespace SmartStock.Forms.User_Control.SearchForms
 {
     partial class FilterSuppliers
@@ -45,7 +47,7 @@ namespace SmartStock.Forms.User_Control.SearchForms
             supplier_lbl = new Label();
             panel2 = new Panel();
             label4 = new Label();
-            max_numeric = new NumericUpDown();
+            max_numeric = new ThemedNumericUpDown();
             radio_pnl = new Panel();
             tableLayoutPanel2 = new TableLayoutPanel();
             inactive_rb = new RadioButton();
@@ -53,7 +55,7 @@ namespace SmartStock.Forms.User_Control.SearchForms
             all_rb = new RadioButton();
             panel3 = new Panel();
             label5 = new Label();
-            min_numeric = new NumericUpDown();
+            min_numeric = new ThemedNumericUpDown();
             range_lbl = new Label();
             panel1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
@@ -488,10 +490,10 @@ namespace SmartStock.Forms.User_Control.SearchForms
         private Label supplier_lbl;
         private Panel panel2;
         private Label label4;
-        private NumericUpDown max_numeric;
+        private ThemedNumericUpDown max_numeric;
         private Panel panel3;
         private Label label5;
-        private NumericUpDown min_numeric;
+        private ThemedNumericUpDown min_numeric;
         private Label status_lbl;
         private SmartStock.Classes.Utils.ThemedComboBox category_cb;
         private Panel radio_pnl;

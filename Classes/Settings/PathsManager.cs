@@ -11,23 +11,27 @@ namespace SmartStock.Classes.Settings
     /// </summary>
     public static class PathsManager
     {
-        private static readonly string BootstrapPath = Path.Combine(
-            AppDomain.CurrentDomain.BaseDirectory, "Resources", "paths.cfg");
+        private static readonly string DataDir = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+            "SmartStock");
+
+        private static readonly string BootstrapPath = Path.Combine(DataDir, "paths.cfg");
 
         public static string SettingsFilePath { get; private set; } = DefaultSettingsPath;
         public static string DatabasePath     { get; private set; } = DefaultDatabasePath;
 
         public static string DefaultSettingsPath =>
-            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "appSettings.json");
+            Path.Combine(DataDir, "appSettings.json");
 
         public static string DefaultDatabasePath =>
-            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "SmartStock.db");
+            Path.Combine(DataDir, "SmartStock.db");
 
         // ── Load ──────────────────────────────────────────────────────────────
 
         public static void Load()
         {
-            // Always start from defaults so missing keys fall back gracefully
+            if (!Directory.Exists(DataDir)) Directory.CreateDirectory(DataDir);
+
             SettingsFilePath = DefaultSettingsPath;
             DatabasePath     = DefaultDatabasePath;
 

@@ -1,3 +1,5 @@
+using SmartStock.Classes.Utils;
+
 namespace SmartStock.Forms.User_Control.SearchForms
 {
     partial class FilterFactors
@@ -51,17 +53,17 @@ namespace SmartStock.Forms.User_Control.SearchForms
             region_lbl = new Label();
             factor_lbl = new Label();
             Search_description_lbl = new Label();
-            date_from_dtp = new DateTimePicker();
-            date_to_dtp = new DateTimePicker();
+            date_from_dtp = new ThemedDateTimePicker();
+            date_to_dtp = new ThemedDateTimePicker();
             panel2 = new Panel();
             label5 = new Label();
-            impact_min_nud = new NumericUpDown();
+            impact_min_nud = new ThemedNumericUpDown();
             panel3 = new Panel();
             label8 = new Label();
-            impact_max_nud = new NumericUpDown();
-            value_type_cb = new SmartStock.Classes.Utils.ThemedComboBox();
-            direction_cb = new SmartStock.Classes.Utils.ThemedComboBox();
-            region_cb = new SmartStock.Classes.Utils.ThemedComboBox();
+            impact_max_nud = new ThemedNumericUpDown();
+            value_type_cb = new ThemedComboBox();
+            direction_cb = new ThemedComboBox();
+            region_cb = new ThemedComboBox();
             panel4 = new Panel();
             factor_types_clb = new CheckedListBox();
             panel6 = new Panel();
@@ -678,23 +680,23 @@ namespace SmartStock.Forms.User_Control.SearchForms
         private Label factor_lbl;
         private CheckedListBox factor_types_clb;
         private Label region_lbl;
-        private SmartStock.Classes.Utils.ThemedComboBox region_cb;
-        private DateTimePicker date_from_dtp;
-        private DateTimePicker date_to_dtp;
+        private ThemedComboBox region_cb;
+        private ThemedDateTimePicker date_from_dtp;
+        private ThemedDateTimePicker date_to_dtp;
         private Label seasonality_lbl;
         private Label date_range_lbl;
         private Label days_lbl;
         private Panel panel2;
         private Label label5;
-        private NumericUpDown impact_min_nud;
+        private ThemedNumericUpDown impact_min_nud;
         private Label value_range_lbl;
         private Panel panel3;
         private Label label8;
-        private NumericUpDown impact_max_nud;
+        private ThemedNumericUpDown impact_max_nud;
         private Label direction_lbl;
         private Label value_type_lbl;
-        private SmartStock.Classes.Utils.ThemedComboBox value_type_cb;
-        private SmartStock.Classes.Utils.ThemedComboBox direction_cb;
+        private ThemedComboBox value_type_cb;
+        private ThemedComboBox direction_cb;
         private Panel radio_pnl;
         private TableLayoutPanel tableLayoutPanel2;
         private RadioButton inactive_rb;

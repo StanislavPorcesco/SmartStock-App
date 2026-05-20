@@ -112,9 +112,9 @@ namespace SmartStock
 
             UpdateNextFetchLabel();
             ToolTipHelp.AddToolTip(commodity_api_lbl, "Alpha Vantage");
-            ToolTipHelp.AddToolTip(economic_api_lbl,  "World Bank");
-            ToolTipHelp.AddToolTip(events_api_lbl,    "PredictHQ");
-            ToolTipHelp.AddToolTip(weather_api_lbl,   "Open-Meteo");
+            ToolTipHelp.AddToolTip(economic_api_lbl, "World Bank");
+            ToolTipHelp.AddToolTip(events_api_lbl, "PredictHQ");
+            ToolTipHelp.AddToolTip(weather_api_lbl, "Open-Meteo");
             _ = CheckCommodityApiAsync();
             _ = CheckEconomicApiAsync();
             _ = CheckEventsApiAsync();
@@ -178,7 +178,7 @@ namespace SmartStock
             SettingsManager.Current.OpenAIApiKey = _providerKeys.GetValueOrDefault("OpenAI", string.Empty);
             SettingsManager.Current.ClaudeApiKey = _providerKeys.GetValueOrDefault("Claude", string.Empty);
             SettingsManager.Current.SelectedAiProvider = _currentProvider;
-            SettingsManager.Current.AiTemperature     = (double)temperature_numeric.Value;
+            SettingsManager.Current.AiTemperature = (double)temperature_numeric.Value;
 
             // Persist file paths (written to paths.cfg, takes effect on next app start)
             PathsManager.Save(settings_tb.Text.Trim(), db_tb.Text.Trim());
@@ -418,9 +418,9 @@ namespace SmartStock
             textLbl.Text = text;
             colorLbl.ForeColor = active switch
             {
-                true  => Color.LimeGreen,
+                true => Color.LimeGreen,
                 false => Color.Red,
-                null  => Color.Gray
+                null => Color.Gray
             };
         }
 
@@ -486,6 +486,5 @@ namespace SmartStock
                     req.Headers.Add(name, value);
             return req;
         }
-
     }
 }

@@ -1,4 +1,5 @@
 using FontAwesome.Sharp;
+using SmartStock.Classes.Utils;
 
 namespace SmartStock.Forms.User_Control
 {
@@ -46,7 +47,7 @@ namespace SmartStock.Forms.User_Control
             label4 = new Label();
             value_type_cb = new SmartStock.Classes.Utils.ThemedComboBox();
             label3 = new Label();
-            date_picker = new DateTimePicker();
+            date_picker = new ThemedDateTimePicker();
             tableLayoutPanel1 = new TableLayoutPanel();
             border_theme_pnl = new Panel();
             container_theme_pnl = new Panel();
@@ -581,7 +582,7 @@ namespace SmartStock.Forms.User_Control
         private Label label4;
         private SmartStock.Classes.Utils.ThemedComboBox value_type_cb;
         private Label label3;
-        private DateTimePicker date_picker;
+        private ThemedDateTimePicker date_picker;
         private TableLayoutPanel tableLayoutPanel1;
         private Panel panel7;
         private Panel panel8;

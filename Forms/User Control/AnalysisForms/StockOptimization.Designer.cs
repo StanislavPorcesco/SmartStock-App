@@ -1,3 +1,5 @@
+using SmartStock.Classes.Utils;
+
 namespace SmartStock.Forms.User_Control.AnalysisForms
 {
     partial class StockOptimization
@@ -20,15 +22,15 @@ namespace SmartStock.Forms.User_Control.AnalysisForms
             range_lbl = new Label();
             panel3 = new Panel();
             label3 = new Label();
-            buffer_nud = new NumericUpDown();
+            buffer_nud = new ThemedNumericUpDown();
             label1 = new Label();
             panel2 = new Panel();
             label4 = new Label();
-            delivery_days_nud = new NumericUpDown();
+            delivery_days_nud = new ThemedNumericUpDown();
             label_ordering = new Label();
             panel4 = new Panel();
             label_ordering_unit = new Label();
-            ordering_cost_nud = new NumericUpDown();
+            ordering_cost_nud = new ThemedNumericUpDown();
             label2 = new Label();
             risk_cb = new SmartStock.Classes.Utils.ThemedComboBox();
             panel1.SuspendLayout();
@@ -286,14 +288,14 @@ namespace SmartStock.Forms.User_Control.AnalysisForms
         private TableLayoutPanel tableLayoutPanel1;
         private Panel panel3;
         private Label label3;
-        private NumericUpDown buffer_nud;
+        private ThemedNumericUpDown buffer_nud;
         private Panel panel4;
         private Label label_ordering_unit;
-        private NumericUpDown ordering_cost_nud;
+        private ThemedNumericUpDown ordering_cost_nud;
         private SmartStock.Classes.Utils.ThemedComboBox risk_cb;
         private Panel panel2;
         private Label label4;
-        private NumericUpDown delivery_days_nud;
+        private ThemedNumericUpDown delivery_days_nud;
         private Label label2;
         private Label label1;
         private Label label_ordering;
