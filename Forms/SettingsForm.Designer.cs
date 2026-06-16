@@ -40,26 +40,6 @@ namespace SmartStock
             preferences_header = new Panel();
             preferences_title_lbl = new Label();
             preferences_icon = new IconPictureBox();
-            reporting_pnl = new Panel();
-            reporting_body = new Panel();
-            tableLayoutPanel4 = new TableLayoutPanel();
-            panel2 = new Panel();
-            panel3 = new Panel();
-            tableLayoutPanel8 = new TableLayoutPanel();
-            email_recipient_tb = new TextBox();
-            label2 = new Label();
-            enable_reports_chk = new CheckBox();
-            label1 = new Label();
-            time_picker = new ThemedDateTimePicker();
-            label3 = new Label();
-            label7 = new Label();
-            report_row_pnl = new Panel();
-            next_report_date_time_lbl = new Label();
-            sent_test_btn = new IconButton();
-            reporting_divider = new Panel();
-            reporting_header = new Panel();
-            reporting_title_lbl = new Label();
-            reporting_icon = new IconPictureBox();
             paths_pnl = new Panel();
             paths_body = new Panel();
             tableLayoutPanel2 = new TableLayoutPanel();
@@ -85,22 +65,6 @@ namespace SmartStock
             paths_header = new Panel();
             paths_title_lbl = new Label();
             paths_icon = new IconPictureBox();
-            logging_pnl = new Panel();
-            logging_body = new Panel();
-            tableLayoutPanel5 = new TableLayoutPanel();
-            label6 = new Label();
-            enable_logging_chk = new CheckBox();
-            ai_logs_lbl = new Label();
-            ai_logs_ck = new CheckBox();
-            label5 = new Label();
-            max_size_numeric = new ThemedNumericUpDown();
-            log_level_cb = new ThemedComboBox();
-            label8 = new Label();
-            open_log_btn = new IconButton();
-            logging_divider = new Panel();
-            logging_header = new Panel();
-            logging_title_lbl = new Label();
-            logging_icon = new IconPictureBox();
             ai_pnl = new Panel();
             ai_body = new Panel();
             tableLayoutPanel3 = new TableLayoutPanel();
@@ -152,6 +116,42 @@ namespace SmartStock
             factors_header = new Panel();
             factors_title_lbl = new Label();
             factors_icon = new IconPictureBox();
+            reporting_pnl = new Panel();
+            reporting_body = new Panel();
+            tableLayoutPanel4 = new TableLayoutPanel();
+            panel2 = new Panel();
+            panel3 = new Panel();
+            tableLayoutPanel8 = new TableLayoutPanel();
+            email_recipient_tb = new TextBox();
+            label2 = new Label();
+            enable_reports_chk = new CheckBox();
+            label1 = new Label();
+            time_picker = new ThemedDateTimePicker();
+            label3 = new Label();
+            label7 = new Label();
+            report_row_pnl = new Panel();
+            next_report_date_time_lbl = new Label();
+            sent_test_btn = new IconButton();
+            reporting_divider = new Panel();
+            reporting_header = new Panel();
+            reporting_title_lbl = new Label();
+            reporting_icon = new IconPictureBox();
+            logging_pnl = new Panel();
+            logging_body = new Panel();
+            tableLayoutPanel5 = new TableLayoutPanel();
+            enable_logging_lbl = new Label();
+            enable_logging_chk = new CheckBox();
+            ai_logs_lbl = new Label();
+            ai_logs_ck = new CheckBox();
+            label5 = new Label();
+            max_size_numeric = new ThemedNumericUpDown();
+            log_level_cb = new ThemedComboBox();
+            log_level_lbl = new Label();
+            open_log_btn = new IconButton();
+            logging_divider = new Panel();
+            logging_header = new Panel();
+            logging_title_lbl = new Label();
+            logging_icon = new IconPictureBox();
             hero_pnl = new Panel();
             hero_subtitle_lbl = new Label();
             hero_title_lbl = new Label();
@@ -169,15 +169,6 @@ namespace SmartStock
             tableLayoutPanel13.SuspendLayout();
             preferences_header.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)preferences_icon).BeginInit();
-            reporting_pnl.SuspendLayout();
-            reporting_body.SuspendLayout();
-            tableLayoutPanel4.SuspendLayout();
-            panel2.SuspendLayout();
-            panel3.SuspendLayout();
-            tableLayoutPanel8.SuspendLayout();
-            report_row_pnl.SuspendLayout();
-            reporting_header.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)reporting_icon).BeginInit();
             paths_pnl.SuspendLayout();
             paths_body.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
@@ -192,12 +183,6 @@ namespace SmartStock
             tableLayoutPanel9.SuspendLayout();
             paths_header.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)paths_icon).BeginInit();
-            logging_pnl.SuspendLayout();
-            logging_body.SuspendLayout();
-            tableLayoutPanel5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)max_size_numeric).BeginInit();
-            logging_header.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)logging_icon).BeginInit();
             ai_pnl.SuspendLayout();
             ai_body.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
@@ -217,6 +202,21 @@ namespace SmartStock
             weather_status_pnl.SuspendLayout();
             factors_header.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)factors_icon).BeginInit();
+            reporting_pnl.SuspendLayout();
+            reporting_body.SuspendLayout();
+            tableLayoutPanel4.SuspendLayout();
+            panel2.SuspendLayout();
+            panel3.SuspendLayout();
+            tableLayoutPanel8.SuspendLayout();
+            report_row_pnl.SuspendLayout();
+            reporting_header.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)reporting_icon).BeginInit();
+            logging_pnl.SuspendLayout();
+            logging_body.SuspendLayout();
+            tableLayoutPanel5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)max_size_numeric).BeginInit();
+            logging_header.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)logging_icon).BeginInit();
             hero_pnl.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)hero_icon).BeginInit();
             apply_pnl.SuspendLayout();
@@ -251,20 +251,20 @@ namespace SmartStock
             settings_table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             settings_table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             settings_table.Controls.Add(preferences_pnl, 0, 0);
-            settings_table.Controls.Add(reporting_pnl, 1, 0);
             settings_table.Controls.Add(paths_pnl, 0, 1);
-            settings_table.Controls.Add(logging_pnl, 1, 1);
             settings_table.Controls.Add(ai_pnl, 0, 2);
             settings_table.Controls.Add(factors_pnl, 1, 2);
+            settings_table.Controls.Add(reporting_pnl, 1, 1);
+            settings_table.Controls.Add(logging_pnl, 1, 0);
             settings_table.Dock = DockStyle.Top;
             settings_table.Location = new Point(0, 90);
             settings_table.Margin = new Padding(0);
             settings_table.Name = "settings_table";
             settings_table.RowCount = 3;
-            settings_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 300F));
-            settings_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 360F));
-            settings_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 360F));
-            settings_table.Size = new Size(1190, 1137);
+            settings_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 336F));
+            settings_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 301F));
+            settings_table.RowStyles.Add(new RowStyle(SizeType.Absolute, 383F));
+            settings_table.Size = new Size(1190, 1093);
             settings_table.TabIndex = 1;
             // 
             // preferences_pnl
@@ -274,7 +274,7 @@ namespace SmartStock
             preferences_pnl.Location = new Point(0, 0);
             preferences_pnl.Margin = new Padding(0, 0, 10, 16);
             preferences_pnl.Name = "preferences_pnl";
-            preferences_pnl.Size = new Size(585, 284);
+            preferences_pnl.Size = new Size(585, 320);
             preferences_pnl.TabIndex = 0;
             preferences_pnl.Tag = "base";
             // 
@@ -287,7 +287,7 @@ namespace SmartStock
             preferences_body.Location = new Point(0, 0);
             preferences_body.Name = "preferences_body";
             preferences_body.Padding = new Padding(22, 0, 22, 18);
-            preferences_body.Size = new Size(585, 284);
+            preferences_body.Size = new Size(585, 320);
             preferences_body.TabIndex = 0;
             preferences_body.Tag = "main_card";
             // 
@@ -312,7 +312,7 @@ namespace SmartStock
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 54F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Size = new Size(541, 209);
+            tableLayoutPanel1.Size = new Size(541, 245);
             tableLayoutPanel1.TabIndex = 3;
             // 
             // panel12
@@ -460,9 +460,9 @@ namespace SmartStock
             preferences_title_lbl.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
             preferences_title_lbl.Location = new Point(32, 18);
             preferences_title_lbl.Name = "preferences_title_lbl";
-            preferences_title_lbl.Size = new Size(194, 28);
+            preferences_title_lbl.Size = new Size(228, 28);
             preferences_title_lbl.TabIndex = 1;
-            preferences_title_lbl.Text = "Theme & Preferences";
+            preferences_title_lbl.Text = "Theme and Preferences";
             // 
             // preferences_icon
             // 
@@ -480,282 +480,14 @@ namespace SmartStock
             preferences_icon.TabStop = false;
             preferences_icon.Tag = "accent-icon";
             // 
-            // reporting_pnl
-            // 
-            reporting_pnl.Controls.Add(reporting_body);
-            reporting_pnl.Dock = DockStyle.Fill;
-            reporting_pnl.Location = new Point(605, 0);
-            reporting_pnl.Margin = new Padding(10, 0, 0, 16);
-            reporting_pnl.Name = "reporting_pnl";
-            reporting_pnl.Size = new Size(585, 284);
-            reporting_pnl.TabIndex = 1;
-            reporting_pnl.Tag = "base";
-            // 
-            // reporting_body
-            // 
-            reporting_body.Controls.Add(tableLayoutPanel4);
-            reporting_body.Controls.Add(reporting_divider);
-            reporting_body.Controls.Add(reporting_header);
-            reporting_body.Dock = DockStyle.Fill;
-            reporting_body.Location = new Point(0, 0);
-            reporting_body.Name = "reporting_body";
-            reporting_body.Padding = new Padding(22, 0, 22, 18);
-            reporting_body.Size = new Size(585, 284);
-            reporting_body.TabIndex = 0;
-            reporting_body.Tag = "main_card";
-            // 
-            // tableLayoutPanel4
-            // 
-            tableLayoutPanel4.ColumnCount = 2;
-            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 200F));
-            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel4.Controls.Add(panel2, 1, 2);
-            tableLayoutPanel4.Controls.Add(label2, 0, 0);
-            tableLayoutPanel4.Controls.Add(enable_reports_chk, 1, 0);
-            tableLayoutPanel4.Controls.Add(label1, 0, 1);
-            tableLayoutPanel4.Controls.Add(time_picker, 1, 1);
-            tableLayoutPanel4.Controls.Add(label3, 0, 2);
-            tableLayoutPanel4.Controls.Add(label7, 0, 3);
-            tableLayoutPanel4.Controls.Add(report_row_pnl, 1, 3);
-            tableLayoutPanel4.Dock = DockStyle.Fill;
-            tableLayoutPanel4.Location = new Point(22, 57);
-            tableLayoutPanel4.Name = "tableLayoutPanel4";
-            tableLayoutPanel4.Padding = new Padding(0, 18, 0, 0);
-            tableLayoutPanel4.RowCount = 4;
-            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
-            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
-            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 54F));
-            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel4.Size = new Size(541, 209);
-            tableLayoutPanel4.TabIndex = 3;
-            // 
-            // panel2
-            // 
-            panel2.Controls.Add(panel3);
-            panel2.Dock = DockStyle.Fill;
-            panel2.Location = new Point(206, 116);
-            panel2.Margin = new Padding(6, 10, 0, 10);
-            panel2.Name = "panel2";
-            panel2.Padding = new Padding(1);
-            panel2.Size = new Size(335, 34);
-            panel2.TabIndex = 8;
-            panel2.Tag = "border_pnl";
-            // 
-            // panel3
-            // 
-            panel3.Controls.Add(tableLayoutPanel8);
-            panel3.Dock = DockStyle.Fill;
-            panel3.Location = new Point(1, 1);
-            panel3.Margin = new Padding(0);
-            panel3.Name = "panel3";
-            panel3.Size = new Size(333, 32);
-            panel3.TabIndex = 0;
-            panel3.Tag = "card";
-            // 
-            // tableLayoutPanel8
-            // 
-            tableLayoutPanel8.ColumnCount = 1;
-            tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel8.Controls.Add(email_recipient_tb, 0, 0);
-            tableLayoutPanel8.Dock = DockStyle.Fill;
-            tableLayoutPanel8.Location = new Point(0, 0);
-            tableLayoutPanel8.Margin = new Padding(0);
-            tableLayoutPanel8.Name = "tableLayoutPanel8";
-            tableLayoutPanel8.RowCount = 1;
-            tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel8.Size = new Size(333, 32);
-            tableLayoutPanel8.TabIndex = 0;
-            // 
-            // email_recipient_tb
-            // 
-            email_recipient_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            email_recipient_tb.Font = new Font("Segoe UI", 11F);
-            email_recipient_tb.Location = new Point(0, 0);
-            email_recipient_tb.Margin = new Padding(0);
-            email_recipient_tb.Name = "email_recipient_tb";
-            email_recipient_tb.Size = new Size(333, 32);
-            email_recipient_tb.TabIndex = 16;
-            email_recipient_tb.Tag = "borderless";
-            // 
-            // label2
-            // 
-            label2.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            label2.Location = new Point(3, 28);
-            label2.Name = "label2";
-            label2.Size = new Size(194, 23);
-            label2.TabIndex = 0;
-            label2.Tag = "muted";
-            label2.Text = "Enable Weekly Reports";
-            label2.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // enable_reports_chk
-            // 
-            enable_reports_chk.Anchor = AnchorStyles.Left;
-            enable_reports_chk.AutoSize = true;
-            enable_reports_chk.Location = new Point(206, 31);
-            enable_reports_chk.Margin = new Padding(6, 10, 0, 10);
-            enable_reports_chk.Name = "enable_reports_chk";
-            enable_reports_chk.Size = new Size(18, 17);
-            enable_reports_chk.TabIndex = 14;
-            enable_reports_chk.UseVisualStyleBackColor = true;
-            // 
-            // label1
-            // 
-            label1.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            label1.Location = new Point(3, 72);
-            label1.Name = "label1";
-            label1.Size = new Size(194, 23);
-            label1.TabIndex = 2;
-            label1.Tag = "muted";
-            label1.Text = "Schedule Time";
-            label1.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // time_picker
-            // 
-            time_picker.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            time_picker.CustomFormat = "dd MMM yyyy";
-            time_picker.Font = new Font("Segoe UI", 10.5F);
-            time_picker.Format = DateTimePickerFormat.Custom;
-            time_picker.Location = new Point(206, 72);
-            time_picker.Margin = new Padding(6, 10, 0, 10);
-            time_picker.Name = "time_picker";
-            time_picker.Size = new Size(335, 31);
-            time_picker.TabIndex = 15;
-            // 
-            // label3
-            // 
-            label3.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            label3.AutoSize = true;
-            label3.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            label3.Location = new Point(3, 121);
-            label3.Name = "label3";
-            label3.Size = new Size(194, 23);
-            label3.TabIndex = 4;
-            label3.Tag = "muted";
-            label3.Text = "E-mail Recipient";
-            label3.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // label7
-            // 
-            label7.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            label7.AutoSize = true;
-            label7.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            label7.Location = new Point(3, 173);
-            label7.Name = "label7";
-            label7.Size = new Size(194, 23);
-            label7.TabIndex = 6;
-            label7.Tag = "muted";
-            label7.Text = "Next Report Scheduled";
-            label7.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // report_row_pnl
-            // 
-            report_row_pnl.Controls.Add(next_report_date_time_lbl);
-            report_row_pnl.Controls.Add(sent_test_btn);
-            report_row_pnl.Dock = DockStyle.Fill;
-            report_row_pnl.Location = new Point(206, 166);
-            report_row_pnl.Margin = new Padding(6, 6, 0, 6);
-            report_row_pnl.Name = "report_row_pnl";
-            report_row_pnl.Size = new Size(335, 37);
-            report_row_pnl.TabIndex = 7;
-            report_row_pnl.Tag = "card";
-            // 
-            // next_report_date_time_lbl
-            // 
-            next_report_date_time_lbl.Dock = DockStyle.Fill;
-            next_report_date_time_lbl.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            next_report_date_time_lbl.Location = new Point(0, 0);
-            next_report_date_time_lbl.Name = "next_report_date_time_lbl";
-            next_report_date_time_lbl.Padding = new Padding(0, 0, 8, 0);
-            next_report_date_time_lbl.Size = new Size(169, 37);
-            next_report_date_time_lbl.TabIndex = 7;
-            next_report_date_time_lbl.Tag = "accent";
-            next_report_date_time_lbl.Text = "—";
-            next_report_date_time_lbl.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // sent_test_btn
-            // 
-            sent_test_btn.Cursor = Cursors.Hand;
-            sent_test_btn.Dock = DockStyle.Right;
-            sent_test_btn.FlatAppearance.BorderSize = 0;
-            sent_test_btn.FlatStyle = FlatStyle.Flat;
-            sent_test_btn.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            sent_test_btn.IconChar = IconChar.PaperPlane;
-            sent_test_btn.IconColor = Color.Black;
-            sent_test_btn.IconFont = IconFont.Auto;
-            sent_test_btn.IconSize = 25;
-            sent_test_btn.ImageAlign = ContentAlignment.MiddleLeft;
-            sent_test_btn.Location = new Point(169, 0);
-            sent_test_btn.Name = "sent_test_btn";
-            sent_test_btn.Padding = new Padding(14, 0, 16, 0);
-            sent_test_btn.Size = new Size(166, 37);
-            sent_test_btn.TabIndex = 17;
-            sent_test_btn.Tag = "cta";
-            sent_test_btn.Text = "  Send Test";
-            sent_test_btn.TextImageRelation = TextImageRelation.ImageBeforeText;
-            sent_test_btn.UseVisualStyleBackColor = false;
-            // 
-            // reporting_divider
-            // 
-            reporting_divider.Dock = DockStyle.Top;
-            reporting_divider.Location = new Point(22, 56);
-            reporting_divider.Name = "reporting_divider";
-            reporting_divider.Size = new Size(541, 1);
-            reporting_divider.TabIndex = 4;
-            reporting_divider.Tag = "divider";
-            // 
-            // reporting_header
-            // 
-            reporting_header.Controls.Add(reporting_title_lbl);
-            reporting_header.Controls.Add(reporting_icon);
-            reporting_header.Dock = DockStyle.Top;
-            reporting_header.Location = new Point(22, 0);
-            reporting_header.Name = "reporting_header";
-            reporting_header.Size = new Size(541, 56);
-            reporting_header.TabIndex = 5;
-            reporting_header.Tag = "card";
-            // 
-            // reporting_title_lbl
-            // 
-            reporting_title_lbl.AutoSize = true;
-            reporting_title_lbl.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
-            reporting_title_lbl.Location = new Point(32, 18);
-            reporting_title_lbl.Name = "reporting_title_lbl";
-            reporting_title_lbl.Size = new Size(210, 28);
-            reporting_title_lbl.TabIndex = 1;
-            reporting_title_lbl.Text = "Automated Reporting";
-            // 
-            // reporting_icon
-            // 
-            reporting_icon.BackColor = SystemColors.Control;
-            reporting_icon.ForeColor = SystemColors.ControlText;
-            reporting_icon.IconChar = IconChar.Envelope;
-            reporting_icon.IconColor = SystemColors.ControlText;
-            reporting_icon.IconFont = IconFont.Auto;
-            reporting_icon.IconSize = 29;
-            reporting_icon.Location = new Point(0, 17);
-            reporting_icon.Margin = new Padding(0);
-            reporting_icon.Name = "reporting_icon";
-            reporting_icon.Size = new Size(29, 37);
-            reporting_icon.SizeMode = PictureBoxSizeMode.CenterImage;
-            reporting_icon.TabIndex = 0;
-            reporting_icon.TabStop = false;
-            reporting_icon.Tag = "accent-icon";
-            // 
             // paths_pnl
             // 
             paths_pnl.Controls.Add(paths_body);
             paths_pnl.Dock = DockStyle.Fill;
-            paths_pnl.Location = new Point(0, 300);
+            paths_pnl.Location = new Point(0, 336);
             paths_pnl.Margin = new Padding(0, 0, 10, 16);
             paths_pnl.Name = "paths_pnl";
-            paths_pnl.Size = new Size(585, 344);
+            paths_pnl.Size = new Size(585, 285);
             paths_pnl.TabIndex = 2;
             paths_pnl.Tag = "base";
             // 
@@ -768,7 +500,7 @@ namespace SmartStock
             paths_body.Location = new Point(0, 0);
             paths_body.Name = "paths_body";
             paths_body.Padding = new Padding(22, 0, 22, 18);
-            paths_body.Size = new Size(585, 344);
+            paths_body.Size = new Size(585, 285);
             paths_body.TabIndex = 0;
             paths_body.Tag = "main_card";
             // 
@@ -796,7 +528,7 @@ namespace SmartStock
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 54F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 54F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel2.Size = new Size(541, 269);
+            tableLayoutPanel2.Size = new Size(541, 210);
             tableLayoutPanel2.TabIndex = 3;
             // 
             // panel8
@@ -1086,236 +818,14 @@ namespace SmartStock
             paths_icon.TabStop = false;
             paths_icon.Tag = "accent-icon";
             // 
-            // logging_pnl
-            // 
-            logging_pnl.Controls.Add(logging_body);
-            logging_pnl.Dock = DockStyle.Fill;
-            logging_pnl.Location = new Point(605, 300);
-            logging_pnl.Margin = new Padding(10, 0, 0, 16);
-            logging_pnl.Name = "logging_pnl";
-            logging_pnl.Size = new Size(585, 344);
-            logging_pnl.TabIndex = 3;
-            logging_pnl.Tag = "base";
-            // 
-            // logging_body
-            // 
-            logging_body.Controls.Add(tableLayoutPanel5);
-            logging_body.Controls.Add(logging_divider);
-            logging_body.Controls.Add(logging_header);
-            logging_body.Dock = DockStyle.Fill;
-            logging_body.Location = new Point(0, 0);
-            logging_body.Name = "logging_body";
-            logging_body.Padding = new Padding(22, 0, 22, 18);
-            logging_body.Size = new Size(585, 344);
-            logging_body.TabIndex = 0;
-            logging_body.Tag = "main_card";
-            // 
-            // tableLayoutPanel5
-            // 
-            tableLayoutPanel5.ColumnCount = 2;
-            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 200F));
-            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel5.Controls.Add(label6, 0, 0);
-            tableLayoutPanel5.Controls.Add(enable_logging_chk, 1, 0);
-            tableLayoutPanel5.Controls.Add(ai_logs_lbl, 0, 1);
-            tableLayoutPanel5.Controls.Add(ai_logs_ck, 1, 1);
-            tableLayoutPanel5.Controls.Add(label5, 0, 2);
-            tableLayoutPanel5.Controls.Add(max_size_numeric, 1, 2);
-            tableLayoutPanel5.Controls.Add(log_level_cb, 1, 3);
-            tableLayoutPanel5.Controls.Add(label8, 0, 3);
-            tableLayoutPanel5.Controls.Add(open_log_btn, 0, 4);
-            tableLayoutPanel5.Dock = DockStyle.Fill;
-            tableLayoutPanel5.Location = new Point(22, 57);
-            tableLayoutPanel5.Name = "tableLayoutPanel5";
-            tableLayoutPanel5.Padding = new Padding(0, 14, 0, 0);
-            tableLayoutPanel5.RowCount = 5;
-            tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
-            tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
-            tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
-            tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
-            tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel5.Size = new Size(541, 269);
-            tableLayoutPanel5.TabIndex = 3;
-            // 
-            // label6
-            // 
-            label6.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            label6.AutoSize = true;
-            label6.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            label6.Location = new Point(3, 24);
-            label6.Name = "label6";
-            label6.Size = new Size(194, 23);
-            label6.TabIndex = 0;
-            label6.Tag = "muted";
-            label6.Text = "Enable Logging";
-            label6.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // enable_logging_chk
-            // 
-            enable_logging_chk.Anchor = AnchorStyles.Left;
-            enable_logging_chk.AutoSize = true;
-            enable_logging_chk.Location = new Point(206, 27);
-            enable_logging_chk.Margin = new Padding(6, 10, 0, 10);
-            enable_logging_chk.Name = "enable_logging_chk";
-            enable_logging_chk.Size = new Size(18, 17);
-            enable_logging_chk.TabIndex = 18;
-            enable_logging_chk.UseVisualStyleBackColor = true;
-            // 
-            // ai_logs_lbl
-            // 
-            ai_logs_lbl.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            ai_logs_lbl.AutoSize = true;
-            ai_logs_lbl.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            ai_logs_lbl.Location = new Point(3, 68);
-            ai_logs_lbl.Name = "ai_logs_lbl";
-            ai_logs_lbl.Size = new Size(194, 23);
-            ai_logs_lbl.TabIndex = 2;
-            ai_logs_lbl.Tag = "muted";
-            ai_logs_lbl.Text = "Detailed Logs for AI";
-            ai_logs_lbl.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // ai_logs_ck
-            // 
-            ai_logs_ck.Anchor = AnchorStyles.Left;
-            ai_logs_ck.AutoSize = true;
-            ai_logs_ck.Location = new Point(206, 71);
-            ai_logs_ck.Margin = new Padding(6, 10, 0, 10);
-            ai_logs_ck.Name = "ai_logs_ck";
-            ai_logs_ck.Size = new Size(18, 17);
-            ai_logs_ck.TabIndex = 19;
-            ai_logs_ck.UseVisualStyleBackColor = true;
-            // 
-            // label5
-            // 
-            label5.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            label5.AutoSize = true;
-            label5.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            label5.Location = new Point(3, 112);
-            label5.Name = "label5";
-            label5.Size = new Size(194, 23);
-            label5.TabIndex = 4;
-            label5.Tag = "muted";
-            label5.Text = "Max File Size (MB)";
-            label5.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // max_size_numeric
-            // 
-            max_size_numeric.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            max_size_numeric.BorderStyle = BorderStyle.None;
-            max_size_numeric.Font = new Font("Segoe UI", 11F);
-            max_size_numeric.Location = new Point(206, 112);
-            max_size_numeric.Margin = new Padding(6, 10, 0, 10);
-            max_size_numeric.Maximum = new decimal(new int[] { 999, 0, 0, 0 });
-            max_size_numeric.Name = "max_size_numeric";
-            max_size_numeric.Size = new Size(335, 28);
-            max_size_numeric.TabIndex = 5;
-            max_size_numeric.Tag = "range_lock";
-            // 
-            // log_level_cb
-            // 
-            log_level_cb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            log_level_cb.DrawMode = DrawMode.OwnerDrawFixed;
-            log_level_cb.DropDownStyle = ComboBoxStyle.DropDownList;
-            log_level_cb.FlatStyle = FlatStyle.Flat;
-            log_level_cb.Font = new Font("Segoe UI", 10F);
-            log_level_cb.FormattingEnabled = true;
-            log_level_cb.ItemHeight = 30;
-            log_level_cb.Location = new Point(206, 156);
-            log_level_cb.Margin = new Padding(6, 10, 0, 10);
-            log_level_cb.Name = "log_level_cb";
-            log_level_cb.Size = new Size(335, 36);
-            log_level_cb.TabIndex = 7;
-            // 
-            // label8
-            // 
-            label8.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            label8.AutoSize = true;
-            label8.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            label8.Location = new Point(3, 156);
-            label8.Name = "label8";
-            label8.Size = new Size(194, 23);
-            label8.TabIndex = 6;
-            label8.Tag = "muted";
-            label8.Text = "Log Level";
-            label8.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // open_log_btn
-            // 
-            open_log_btn.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            tableLayoutPanel5.SetColumnSpan(open_log_btn, 2);
-            open_log_btn.Cursor = Cursors.Hand;
-            open_log_btn.FlatStyle = FlatStyle.Flat;
-            open_log_btn.Font = new Font("Segoe UI Semibold", 10.5F, FontStyle.Bold);
-            open_log_btn.IconChar = IconChar.FileUpload;
-            open_log_btn.IconColor = Color.Black;
-            open_log_btn.IconFont = IconFont.Auto;
-            open_log_btn.IconSize = 18;
-            open_log_btn.ImageAlign = ContentAlignment.MiddleLeft;
-            open_log_btn.Location = new Point(0, 225);
-            open_log_btn.Margin = new Padding(0, 14, 0, 0);
-            open_log_btn.Name = "open_log_btn";
-            open_log_btn.Padding = new Padding(14, 0, 14, 0);
-            open_log_btn.Size = new Size(541, 44);
-            open_log_btn.TabIndex = 22;
-            open_log_btn.Tag = "outlined";
-            open_log_btn.Text = "  Open Log File";
-            open_log_btn.TextImageRelation = TextImageRelation.ImageBeforeText;
-            open_log_btn.UseVisualStyleBackColor = false;
-            // 
-            // logging_divider
-            // 
-            logging_divider.Dock = DockStyle.Top;
-            logging_divider.Location = new Point(22, 56);
-            logging_divider.Name = "logging_divider";
-            logging_divider.Size = new Size(541, 1);
-            logging_divider.TabIndex = 4;
-            logging_divider.Tag = "divider";
-            // 
-            // logging_header
-            // 
-            logging_header.Controls.Add(logging_title_lbl);
-            logging_header.Controls.Add(logging_icon);
-            logging_header.Dock = DockStyle.Top;
-            logging_header.Location = new Point(22, 0);
-            logging_header.Name = "logging_header";
-            logging_header.Size = new Size(541, 56);
-            logging_header.TabIndex = 5;
-            logging_header.Tag = "card";
-            // 
-            // logging_title_lbl
-            // 
-            logging_title_lbl.AutoSize = true;
-            logging_title_lbl.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
-            logging_title_lbl.Location = new Point(32, 18);
-            logging_title_lbl.Name = "logging_title_lbl";
-            logging_title_lbl.Size = new Size(159, 28);
-            logging_title_lbl.TabIndex = 1;
-            logging_title_lbl.Text = "Logging System";
-            // 
-            // logging_icon
-            // 
-            logging_icon.BackColor = SystemColors.Control;
-            logging_icon.ForeColor = SystemColors.ControlText;
-            logging_icon.IconChar = IconChar.FileText;
-            logging_icon.IconColor = SystemColors.ControlText;
-            logging_icon.IconFont = IconFont.Auto;
-            logging_icon.IconSize = 29;
-            logging_icon.Location = new Point(0, 17);
-            logging_icon.Name = "logging_icon";
-            logging_icon.Size = new Size(29, 37);
-            logging_icon.SizeMode = PictureBoxSizeMode.CenterImage;
-            logging_icon.TabIndex = 0;
-            logging_icon.TabStop = false;
-            logging_icon.Tag = "accent-icon";
-            // 
             // ai_pnl
             // 
             ai_pnl.Controls.Add(ai_body);
             ai_pnl.Dock = DockStyle.Fill;
-            ai_pnl.Location = new Point(0, 660);
+            ai_pnl.Location = new Point(0, 637);
             ai_pnl.Margin = new Padding(0, 0, 10, 0);
             ai_pnl.Name = "ai_pnl";
-            ai_pnl.Size = new Size(585, 477);
+            ai_pnl.Size = new Size(585, 456);
             ai_pnl.TabIndex = 4;
             ai_pnl.Tag = "base";
             // 
@@ -1328,7 +838,7 @@ namespace SmartStock
             ai_body.Location = new Point(0, 0);
             ai_body.Name = "ai_body";
             ai_body.Padding = new Padding(22, 0, 22, 18);
-            ai_body.Size = new Size(585, 477);
+            ai_body.Size = new Size(585, 456);
             ai_body.TabIndex = 0;
             ai_body.Tag = "main_card";
             // 
@@ -1357,7 +867,7 @@ namespace SmartStock
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel3.Size = new Size(541, 402);
+            tableLayoutPanel3.Size = new Size(541, 381);
             tableLayoutPanel3.TabIndex = 3;
             // 
             // panel10
@@ -1602,10 +1112,10 @@ namespace SmartStock
             // 
             factors_pnl.Controls.Add(factors_body);
             factors_pnl.Dock = DockStyle.Fill;
-            factors_pnl.Location = new Point(605, 660);
+            factors_pnl.Location = new Point(605, 637);
             factors_pnl.Margin = new Padding(10, 0, 0, 0);
             factors_pnl.Name = "factors_pnl";
-            factors_pnl.Size = new Size(585, 477);
+            factors_pnl.Size = new Size(585, 456);
             factors_pnl.TabIndex = 5;
             factors_pnl.Tag = "base";
             // 
@@ -1618,7 +1128,7 @@ namespace SmartStock
             factors_body.Location = new Point(0, 0);
             factors_body.Name = "factors_body";
             factors_body.Padding = new Padding(22, 0, 22, 18);
-            factors_body.Size = new Size(585, 477);
+            factors_body.Size = new Size(585, 456);
             factors_body.TabIndex = 0;
             factors_body.Tag = "main_card";
             // 
@@ -1655,7 +1165,7 @@ namespace SmartStock
             tableLayoutPanel7.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
             tableLayoutPanel7.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
             tableLayoutPanel7.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel7.Size = new Size(541, 402);
+            tableLayoutPanel7.Size = new Size(541, 381);
             tableLayoutPanel7.TabIndex = 3;
             // 
             // label15
@@ -1958,8 +1468,9 @@ namespace SmartStock
             manual_fetch_btn.IconFont = IconFont.Auto;
             manual_fetch_btn.IconSize = 25;
             manual_fetch_btn.ImageAlign = ContentAlignment.MiddleLeft;
-            manual_fetch_btn.Location = new Point(0, 358);
+            manual_fetch_btn.Location = new Point(0, 337);
             manual_fetch_btn.Margin = new Padding(0, 14, 0, 0);
+            manual_fetch_btn.MaximumSize = new Size(0, 44);
             manual_fetch_btn.Name = "manual_fetch_btn";
             manual_fetch_btn.Padding = new Padding(14, 0, 14, 0);
             manual_fetch_btn.Size = new Size(541, 44);
@@ -2014,6 +1525,498 @@ namespace SmartStock
             factors_icon.TabIndex = 0;
             factors_icon.TabStop = false;
             factors_icon.Tag = "accent-icon";
+            // 
+            // reporting_pnl
+            // 
+            reporting_pnl.Controls.Add(reporting_body);
+            reporting_pnl.Dock = DockStyle.Fill;
+            reporting_pnl.Location = new Point(605, 336);
+            reporting_pnl.Margin = new Padding(10, 0, 0, 16);
+            reporting_pnl.Name = "reporting_pnl";
+            reporting_pnl.Size = new Size(585, 285);
+            reporting_pnl.TabIndex = 1;
+            reporting_pnl.Tag = "base";
+            // 
+            // reporting_body
+            // 
+            reporting_body.Controls.Add(tableLayoutPanel4);
+            reporting_body.Controls.Add(reporting_divider);
+            reporting_body.Controls.Add(reporting_header);
+            reporting_body.Dock = DockStyle.Fill;
+            reporting_body.Location = new Point(0, 0);
+            reporting_body.Name = "reporting_body";
+            reporting_body.Padding = new Padding(22, 0, 22, 18);
+            reporting_body.Size = new Size(585, 285);
+            reporting_body.TabIndex = 0;
+            reporting_body.Tag = "main_card";
+            // 
+            // tableLayoutPanel4
+            // 
+            tableLayoutPanel4.ColumnCount = 2;
+            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 200F));
+            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel4.Controls.Add(panel2, 1, 2);
+            tableLayoutPanel4.Controls.Add(label2, 0, 0);
+            tableLayoutPanel4.Controls.Add(enable_reports_chk, 1, 0);
+            tableLayoutPanel4.Controls.Add(label1, 0, 1);
+            tableLayoutPanel4.Controls.Add(time_picker, 1, 1);
+            tableLayoutPanel4.Controls.Add(label3, 0, 2);
+            tableLayoutPanel4.Controls.Add(label7, 0, 3);
+            tableLayoutPanel4.Controls.Add(report_row_pnl, 1, 3);
+            tableLayoutPanel4.Dock = DockStyle.Fill;
+            tableLayoutPanel4.Location = new Point(22, 57);
+            tableLayoutPanel4.Name = "tableLayoutPanel4";
+            tableLayoutPanel4.Padding = new Padding(0, 18, 0, 0);
+            tableLayoutPanel4.RowCount = 4;
+            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
+            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
+            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 54F));
+            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel4.Size = new Size(541, 210);
+            tableLayoutPanel4.TabIndex = 3;
+            // 
+            // panel2
+            // 
+            panel2.Controls.Add(panel3);
+            panel2.Dock = DockStyle.Fill;
+            panel2.Location = new Point(206, 116);
+            panel2.Margin = new Padding(6, 10, 0, 10);
+            panel2.Name = "panel2";
+            panel2.Padding = new Padding(1);
+            panel2.Size = new Size(335, 34);
+            panel2.TabIndex = 8;
+            panel2.Tag = "border_pnl";
+            // 
+            // panel3
+            // 
+            panel3.Controls.Add(tableLayoutPanel8);
+            panel3.Dock = DockStyle.Fill;
+            panel3.Location = new Point(1, 1);
+            panel3.Margin = new Padding(0);
+            panel3.Name = "panel3";
+            panel3.Size = new Size(333, 32);
+            panel3.TabIndex = 0;
+            panel3.Tag = "card";
+            // 
+            // tableLayoutPanel8
+            // 
+            tableLayoutPanel8.ColumnCount = 1;
+            tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel8.Controls.Add(email_recipient_tb, 0, 0);
+            tableLayoutPanel8.Dock = DockStyle.Fill;
+            tableLayoutPanel8.Location = new Point(0, 0);
+            tableLayoutPanel8.Margin = new Padding(0);
+            tableLayoutPanel8.Name = "tableLayoutPanel8";
+            tableLayoutPanel8.RowCount = 1;
+            tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel8.Size = new Size(333, 32);
+            tableLayoutPanel8.TabIndex = 0;
+            // 
+            // email_recipient_tb
+            // 
+            email_recipient_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            email_recipient_tb.Font = new Font("Segoe UI", 11F);
+            email_recipient_tb.Location = new Point(0, 0);
+            email_recipient_tb.Margin = new Padding(0);
+            email_recipient_tb.Name = "email_recipient_tb";
+            email_recipient_tb.Size = new Size(333, 32);
+            email_recipient_tb.TabIndex = 16;
+            email_recipient_tb.Tag = "borderless";
+            // 
+            // label2
+            // 
+            label2.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            label2.AutoSize = true;
+            label2.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+            label2.Location = new Point(3, 28);
+            label2.Name = "label2";
+            label2.Size = new Size(194, 23);
+            label2.TabIndex = 0;
+            label2.Tag = "muted";
+            label2.Text = "Enable Weekly Reports";
+            label2.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // enable_reports_chk
+            // 
+            enable_reports_chk.Anchor = AnchorStyles.Left;
+            enable_reports_chk.AutoSize = true;
+            enable_reports_chk.Location = new Point(206, 31);
+            enable_reports_chk.Margin = new Padding(6, 10, 0, 10);
+            enable_reports_chk.Name = "enable_reports_chk";
+            enable_reports_chk.Size = new Size(18, 17);
+            enable_reports_chk.TabIndex = 14;
+            enable_reports_chk.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            label1.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+            label1.Location = new Point(3, 72);
+            label1.Name = "label1";
+            label1.Size = new Size(194, 23);
+            label1.TabIndex = 2;
+            label1.Tag = "muted";
+            label1.Text = "Schedule Time";
+            label1.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // time_picker
+            // 
+            time_picker.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            time_picker.CustomFormat = "dd MMM yyyy";
+            time_picker.Font = new Font("Segoe UI", 10.5F);
+            time_picker.Format = DateTimePickerFormat.Custom;
+            time_picker.Location = new Point(206, 72);
+            time_picker.Margin = new Padding(6, 10, 0, 10);
+            time_picker.Name = "time_picker";
+            time_picker.Size = new Size(335, 31);
+            time_picker.TabIndex = 15;
+            // 
+            // label3
+            // 
+            label3.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            label3.AutoSize = true;
+            label3.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+            label3.Location = new Point(3, 121);
+            label3.Name = "label3";
+            label3.Size = new Size(194, 23);
+            label3.TabIndex = 4;
+            label3.Tag = "muted";
+            label3.Text = "E-mail Recipient";
+            label3.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // label7
+            // 
+            label7.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            label7.AutoSize = true;
+            label7.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+            label7.Location = new Point(3, 173);
+            label7.Name = "label7";
+            label7.Size = new Size(194, 23);
+            label7.TabIndex = 6;
+            label7.Tag = "muted";
+            label7.Text = "Next Report Scheduled";
+            label7.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // report_row_pnl
+            // 
+            report_row_pnl.Controls.Add(next_report_date_time_lbl);
+            report_row_pnl.Controls.Add(sent_test_btn);
+            report_row_pnl.Dock = DockStyle.Fill;
+            report_row_pnl.Location = new Point(206, 166);
+            report_row_pnl.Margin = new Padding(6, 6, 0, 6);
+            report_row_pnl.Name = "report_row_pnl";
+            report_row_pnl.Size = new Size(335, 38);
+            report_row_pnl.TabIndex = 7;
+            report_row_pnl.Tag = "card";
+            // 
+            // next_report_date_time_lbl
+            // 
+            next_report_date_time_lbl.Dock = DockStyle.Fill;
+            next_report_date_time_lbl.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+            next_report_date_time_lbl.Location = new Point(0, 0);
+            next_report_date_time_lbl.Name = "next_report_date_time_lbl";
+            next_report_date_time_lbl.Padding = new Padding(0, 0, 8, 0);
+            next_report_date_time_lbl.Size = new Size(169, 38);
+            next_report_date_time_lbl.TabIndex = 7;
+            next_report_date_time_lbl.Tag = "accent";
+            next_report_date_time_lbl.Text = "—";
+            next_report_date_time_lbl.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // sent_test_btn
+            // 
+            sent_test_btn.Cursor = Cursors.Hand;
+            sent_test_btn.Dock = DockStyle.Right;
+            sent_test_btn.FlatAppearance.BorderSize = 0;
+            sent_test_btn.FlatStyle = FlatStyle.Flat;
+            sent_test_btn.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+            sent_test_btn.IconChar = IconChar.PaperPlane;
+            sent_test_btn.IconColor = Color.Black;
+            sent_test_btn.IconFont = IconFont.Auto;
+            sent_test_btn.IconSize = 25;
+            sent_test_btn.ImageAlign = ContentAlignment.MiddleLeft;
+            sent_test_btn.Location = new Point(169, 0);
+            sent_test_btn.MaximumSize = new Size(166, 44);
+            sent_test_btn.Name = "sent_test_btn";
+            sent_test_btn.Padding = new Padding(14, 0, 16, 0);
+            sent_test_btn.Size = new Size(166, 38);
+            sent_test_btn.TabIndex = 17;
+            sent_test_btn.Tag = "cta";
+            sent_test_btn.Text = "  Send Test";
+            sent_test_btn.TextImageRelation = TextImageRelation.ImageBeforeText;
+            sent_test_btn.UseVisualStyleBackColor = false;
+            // 
+            // reporting_divider
+            // 
+            reporting_divider.Dock = DockStyle.Top;
+            reporting_divider.Location = new Point(22, 56);
+            reporting_divider.Name = "reporting_divider";
+            reporting_divider.Size = new Size(541, 1);
+            reporting_divider.TabIndex = 4;
+            reporting_divider.Tag = "divider";
+            // 
+            // reporting_header
+            // 
+            reporting_header.Controls.Add(reporting_title_lbl);
+            reporting_header.Controls.Add(reporting_icon);
+            reporting_header.Dock = DockStyle.Top;
+            reporting_header.Location = new Point(22, 0);
+            reporting_header.Name = "reporting_header";
+            reporting_header.Size = new Size(541, 56);
+            reporting_header.TabIndex = 5;
+            reporting_header.Tag = "card";
+            // 
+            // reporting_title_lbl
+            // 
+            reporting_title_lbl.AutoSize = true;
+            reporting_title_lbl.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
+            reporting_title_lbl.Location = new Point(32, 18);
+            reporting_title_lbl.Name = "reporting_title_lbl";
+            reporting_title_lbl.Size = new Size(210, 28);
+            reporting_title_lbl.TabIndex = 1;
+            reporting_title_lbl.Text = "Automated Reporting";
+            // 
+            // reporting_icon
+            // 
+            reporting_icon.BackColor = SystemColors.Control;
+            reporting_icon.ForeColor = SystemColors.ControlText;
+            reporting_icon.IconChar = IconChar.Envelope;
+            reporting_icon.IconColor = SystemColors.ControlText;
+            reporting_icon.IconFont = IconFont.Auto;
+            reporting_icon.IconSize = 29;
+            reporting_icon.Location = new Point(0, 17);
+            reporting_icon.Margin = new Padding(0);
+            reporting_icon.Name = "reporting_icon";
+            reporting_icon.Size = new Size(29, 37);
+            reporting_icon.SizeMode = PictureBoxSizeMode.CenterImage;
+            reporting_icon.TabIndex = 0;
+            reporting_icon.TabStop = false;
+            reporting_icon.Tag = "accent-icon";
+            // 
+            // logging_pnl
+            // 
+            logging_pnl.Controls.Add(logging_body);
+            logging_pnl.Dock = DockStyle.Fill;
+            logging_pnl.Location = new Point(605, 0);
+            logging_pnl.Margin = new Padding(10, 0, 0, 16);
+            logging_pnl.Name = "logging_pnl";
+            logging_pnl.Size = new Size(585, 320);
+            logging_pnl.TabIndex = 3;
+            logging_pnl.Tag = "base";
+            // 
+            // logging_body
+            // 
+            logging_body.Controls.Add(tableLayoutPanel5);
+            logging_body.Controls.Add(logging_divider);
+            logging_body.Controls.Add(logging_header);
+            logging_body.Dock = DockStyle.Fill;
+            logging_body.Location = new Point(0, 0);
+            logging_body.Name = "logging_body";
+            logging_body.Padding = new Padding(22, 0, 22, 18);
+            logging_body.Size = new Size(585, 320);
+            logging_body.TabIndex = 0;
+            logging_body.Tag = "main_card";
+            // 
+            // tableLayoutPanel5
+            // 
+            tableLayoutPanel5.ColumnCount = 2;
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 200F));
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel5.Controls.Add(enable_logging_lbl, 0, 0);
+            tableLayoutPanel5.Controls.Add(enable_logging_chk, 1, 0);
+            tableLayoutPanel5.Controls.Add(ai_logs_lbl, 0, 1);
+            tableLayoutPanel5.Controls.Add(ai_logs_ck, 1, 1);
+            tableLayoutPanel5.Controls.Add(label5, 0, 2);
+            tableLayoutPanel5.Controls.Add(max_size_numeric, 1, 2);
+            tableLayoutPanel5.Controls.Add(log_level_cb, 1, 3);
+            tableLayoutPanel5.Controls.Add(log_level_lbl, 0, 3);
+            tableLayoutPanel5.Controls.Add(open_log_btn, 0, 4);
+            tableLayoutPanel5.Dock = DockStyle.Fill;
+            tableLayoutPanel5.Location = new Point(22, 57);
+            tableLayoutPanel5.Name = "tableLayoutPanel5";
+            tableLayoutPanel5.Padding = new Padding(0, 14, 0, 0);
+            tableLayoutPanel5.RowCount = 5;
+            tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
+            tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
+            tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
+            tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
+            tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel5.Size = new Size(541, 245);
+            tableLayoutPanel5.TabIndex = 3;
+            // 
+            // enable_logging_lbl
+            // 
+            enable_logging_lbl.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            enable_logging_lbl.AutoSize = true;
+            enable_logging_lbl.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+            enable_logging_lbl.Location = new Point(3, 24);
+            enable_logging_lbl.Name = "enable_logging_lbl";
+            enable_logging_lbl.Size = new Size(194, 23);
+            enable_logging_lbl.TabIndex = 0;
+            enable_logging_lbl.Tag = "muted";
+            enable_logging_lbl.Text = "Enable Logging";
+            enable_logging_lbl.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // enable_logging_chk
+            // 
+            enable_logging_chk.Anchor = AnchorStyles.Left;
+            enable_logging_chk.AutoSize = true;
+            enable_logging_chk.Location = new Point(206, 27);
+            enable_logging_chk.Margin = new Padding(6, 10, 0, 10);
+            enable_logging_chk.Name = "enable_logging_chk";
+            enable_logging_chk.Size = new Size(18, 17);
+            enable_logging_chk.TabIndex = 18;
+            enable_logging_chk.UseVisualStyleBackColor = true;
+            // 
+            // ai_logs_lbl
+            // 
+            ai_logs_lbl.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            ai_logs_lbl.AutoSize = true;
+            ai_logs_lbl.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+            ai_logs_lbl.Location = new Point(3, 68);
+            ai_logs_lbl.Name = "ai_logs_lbl";
+            ai_logs_lbl.Size = new Size(194, 23);
+            ai_logs_lbl.TabIndex = 2;
+            ai_logs_lbl.Tag = "muted";
+            ai_logs_lbl.Text = "Detailed Logs for AI";
+            ai_logs_lbl.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // ai_logs_ck
+            // 
+            ai_logs_ck.Anchor = AnchorStyles.Left;
+            ai_logs_ck.AutoSize = true;
+            ai_logs_ck.Location = new Point(206, 71);
+            ai_logs_ck.Margin = new Padding(6, 10, 0, 10);
+            ai_logs_ck.Name = "ai_logs_ck";
+            ai_logs_ck.Size = new Size(18, 17);
+            ai_logs_ck.TabIndex = 19;
+            ai_logs_ck.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            label5.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            label5.AutoSize = true;
+            label5.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+            label5.Location = new Point(3, 112);
+            label5.Name = "label5";
+            label5.Size = new Size(194, 23);
+            label5.TabIndex = 4;
+            label5.Tag = "muted";
+            label5.Text = "Max File Size (MB)";
+            label5.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // max_size_numeric
+            // 
+            max_size_numeric.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            max_size_numeric.BorderStyle = BorderStyle.None;
+            max_size_numeric.Font = new Font("Segoe UI", 11F);
+            max_size_numeric.Location = new Point(206, 112);
+            max_size_numeric.Margin = new Padding(6, 10, 0, 10);
+            max_size_numeric.Maximum = new decimal(new int[] { 999, 0, 0, 0 });
+            max_size_numeric.Name = "max_size_numeric";
+            max_size_numeric.Size = new Size(335, 28);
+            max_size_numeric.TabIndex = 5;
+            max_size_numeric.Tag = "range_lock";
+            // 
+            // log_level_cb
+            // 
+            log_level_cb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            log_level_cb.DrawMode = DrawMode.OwnerDrawFixed;
+            log_level_cb.DropDownStyle = ComboBoxStyle.DropDownList;
+            log_level_cb.FlatStyle = FlatStyle.Flat;
+            log_level_cb.Font = new Font("Segoe UI", 10F);
+            log_level_cb.FormattingEnabled = true;
+            log_level_cb.ItemHeight = 30;
+            log_level_cb.Location = new Point(206, 156);
+            log_level_cb.Margin = new Padding(6, 10, 0, 10);
+            log_level_cb.Name = "log_level_cb";
+            log_level_cb.Size = new Size(335, 36);
+            log_level_cb.TabIndex = 7;
+            // 
+            // log_level_lbl
+            // 
+            log_level_lbl.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            log_level_lbl.AutoSize = true;
+            log_level_lbl.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+            log_level_lbl.Location = new Point(3, 156);
+            log_level_lbl.Name = "log_level_lbl";
+            log_level_lbl.Size = new Size(194, 23);
+            log_level_lbl.TabIndex = 6;
+            log_level_lbl.Tag = "muted";
+            log_level_lbl.Text = "Log Level";
+            log_level_lbl.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // open_log_btn
+            // 
+            open_log_btn.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            tableLayoutPanel5.SetColumnSpan(open_log_btn, 2);
+            open_log_btn.Cursor = Cursors.Hand;
+            open_log_btn.FlatStyle = FlatStyle.Flat;
+            open_log_btn.Font = new Font("Segoe UI Semibold", 10.5F, FontStyle.Bold);
+            open_log_btn.IconChar = IconChar.FileUpload;
+            open_log_btn.IconColor = Color.Black;
+            open_log_btn.IconFont = IconFont.Auto;
+            open_log_btn.IconSize = 18;
+            open_log_btn.ImageAlign = ContentAlignment.MiddleLeft;
+            open_log_btn.Location = new Point(0, 204);
+            open_log_btn.Margin = new Padding(0, 14, 0, 0);
+            open_log_btn.MaximumSize = new Size(0, 44);
+            open_log_btn.Name = "open_log_btn";
+            open_log_btn.Padding = new Padding(14, 0, 14, 0);
+            open_log_btn.Size = new Size(541, 41);
+            open_log_btn.TabIndex = 22;
+            open_log_btn.Tag = "outlined";
+            open_log_btn.Text = "  Open Log File";
+            open_log_btn.TextImageRelation = TextImageRelation.ImageBeforeText;
+            open_log_btn.UseVisualStyleBackColor = false;
+            // 
+            // logging_divider
+            // 
+            logging_divider.Dock = DockStyle.Top;
+            logging_divider.Location = new Point(22, 56);
+            logging_divider.Name = "logging_divider";
+            logging_divider.Size = new Size(541, 1);
+            logging_divider.TabIndex = 4;
+            logging_divider.Tag = "divider";
+            // 
+            // logging_header
+            // 
+            logging_header.Controls.Add(logging_title_lbl);
+            logging_header.Controls.Add(logging_icon);
+            logging_header.Dock = DockStyle.Top;
+            logging_header.Location = new Point(22, 0);
+            logging_header.Name = "logging_header";
+            logging_header.Size = new Size(541, 56);
+            logging_header.TabIndex = 5;
+            logging_header.Tag = "card";
+            // 
+            // logging_title_lbl
+            // 
+            logging_title_lbl.AutoSize = true;
+            logging_title_lbl.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
+            logging_title_lbl.Location = new Point(32, 18);
+            logging_title_lbl.Name = "logging_title_lbl";
+            logging_title_lbl.Size = new Size(159, 28);
+            logging_title_lbl.TabIndex = 1;
+            logging_title_lbl.Text = "Logging System";
+            // 
+            // logging_icon
+            // 
+            logging_icon.BackColor = SystemColors.Control;
+            logging_icon.ForeColor = SystemColors.ControlText;
+            logging_icon.IconChar = IconChar.FileText;
+            logging_icon.IconColor = SystemColors.ControlText;
+            logging_icon.IconFont = IconFont.Auto;
+            logging_icon.IconSize = 29;
+            logging_icon.Location = new Point(0, 17);
+            logging_icon.Name = "logging_icon";
+            logging_icon.Size = new Size(29, 37);
+            logging_icon.SizeMode = PictureBoxSizeMode.CenterImage;
+            logging_icon.TabIndex = 0;
+            logging_icon.TabStop = false;
+            logging_icon.Tag = "accent-icon";
             // 
             // hero_pnl
             // 
@@ -2123,18 +2126,6 @@ namespace SmartStock
             preferences_header.ResumeLayout(false);
             preferences_header.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)preferences_icon).EndInit();
-            reporting_pnl.ResumeLayout(false);
-            reporting_body.ResumeLayout(false);
-            tableLayoutPanel4.ResumeLayout(false);
-            tableLayoutPanel4.PerformLayout();
-            panel2.ResumeLayout(false);
-            panel3.ResumeLayout(false);
-            tableLayoutPanel8.ResumeLayout(false);
-            tableLayoutPanel8.PerformLayout();
-            report_row_pnl.ResumeLayout(false);
-            reporting_header.ResumeLayout(false);
-            reporting_header.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)reporting_icon).EndInit();
             paths_pnl.ResumeLayout(false);
             paths_body.ResumeLayout(false);
             tableLayoutPanel2.ResumeLayout(false);
@@ -2154,14 +2145,6 @@ namespace SmartStock
             paths_header.ResumeLayout(false);
             paths_header.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)paths_icon).EndInit();
-            logging_pnl.ResumeLayout(false);
-            logging_body.ResumeLayout(false);
-            tableLayoutPanel5.ResumeLayout(false);
-            tableLayoutPanel5.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)max_size_numeric).EndInit();
-            logging_header.ResumeLayout(false);
-            logging_header.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)logging_icon).EndInit();
             ai_pnl.ResumeLayout(false);
             ai_body.ResumeLayout(false);
             tableLayoutPanel3.ResumeLayout(false);
@@ -2191,6 +2174,26 @@ namespace SmartStock
             factors_header.ResumeLayout(false);
             factors_header.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)factors_icon).EndInit();
+            reporting_pnl.ResumeLayout(false);
+            reporting_body.ResumeLayout(false);
+            tableLayoutPanel4.ResumeLayout(false);
+            tableLayoutPanel4.PerformLayout();
+            panel2.ResumeLayout(false);
+            panel3.ResumeLayout(false);
+            tableLayoutPanel8.ResumeLayout(false);
+            tableLayoutPanel8.PerformLayout();
+            report_row_pnl.ResumeLayout(false);
+            reporting_header.ResumeLayout(false);
+            reporting_header.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)reporting_icon).EndInit();
+            logging_pnl.ResumeLayout(false);
+            logging_body.ResumeLayout(false);
+            tableLayoutPanel5.ResumeLayout(false);
+            tableLayoutPanel5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)max_size_numeric).EndInit();
+            logging_header.ResumeLayout(false);
+            logging_header.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)logging_icon).EndInit();
             hero_pnl.ResumeLayout(false);
             hero_pnl.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)hero_icon).EndInit();
@@ -2268,13 +2271,13 @@ namespace SmartStock
         private Label logging_title_lbl;
         private Panel logging_divider;
         private TableLayoutPanel tableLayoutPanel5;
-        private Label label6;
+        private Label enable_logging_lbl;
         private CheckBox enable_logging_chk;
         private Label ai_logs_lbl;
         private CheckBox ai_logs_ck;
         private Label label5;
         private ThemedNumericUpDown max_size_numeric;
-        private Label label8;
+        private Label log_level_lbl;
         private SmartStock.Classes.Utils.ThemedComboBox log_level_cb;
         private IconButton open_log_btn;
 

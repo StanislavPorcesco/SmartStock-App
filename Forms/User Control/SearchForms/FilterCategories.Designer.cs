@@ -230,13 +230,14 @@ namespace SmartStock.Forms.User_Control.SearchForms
             // 
             // min_numeric
             // 
+            min_numeric.BorderStyle = BorderStyle.None;
             min_numeric.Dock = DockStyle.Right;
             min_numeric.Font = new Font("Segoe UI", 11F);
             min_numeric.Location = new Point(151, 0);
             min_numeric.Margin = new Padding(0, 10, 0, 0);
             min_numeric.Maximum = new decimal(new int[] { 999999, 0, 0, 0 });
             min_numeric.Name = "min_numeric";
-            min_numeric.Size = new Size(128, 32);
+            min_numeric.Size = new Size(128, 28);
             min_numeric.TabIndex = 0;
             min_numeric.Tag = "range_lock";
             // 
@@ -268,12 +269,13 @@ namespace SmartStock.Forms.User_Control.SearchForms
             // 
             // max_numeric
             // 
+            max_numeric.BorderStyle = BorderStyle.None;
             max_numeric.Dock = DockStyle.Right;
             max_numeric.Font = new Font("Segoe UI", 11F);
             max_numeric.Location = new Point(151, 0);
             max_numeric.Maximum = new decimal(new int[] { 999999, 0, 0, 0 });
             max_numeric.Name = "max_numeric";
-            max_numeric.Size = new Size(128, 32);
+            max_numeric.Size = new Size(128, 28);
             max_numeric.TabIndex = 0;
             max_numeric.Tag = "range_lock";
             // 
@@ -333,13 +335,14 @@ namespace SmartStock.Forms.User_Control.SearchForms
             // 
             // value_min
             // 
+            value_min.BorderStyle = BorderStyle.None;
             value_min.Dock = DockStyle.Right;
             value_min.Font = new Font("Segoe UI", 11F);
             value_min.Location = new Point(151, 0);
             value_min.Margin = new Padding(0, 10, 0, 0);
             value_min.Maximum = new decimal(new int[] { 999999999, 0, 0, 0 });
             value_min.Name = "value_min";
-            value_min.Size = new Size(128, 32);
+            value_min.Size = new Size(128, 28);
             value_min.TabIndex = 0;
             value_min.Tag = "range_lock";
             // 
@@ -371,12 +374,13 @@ namespace SmartStock.Forms.User_Control.SearchForms
             // 
             // value_max
             // 
+            value_max.BorderStyle = BorderStyle.None;
             value_max.Dock = DockStyle.Right;
             value_max.Font = new Font("Segoe UI", 11F);
             value_max.Location = new Point(151, 0);
             value_max.Maximum = new decimal(new int[] { 999999999, 0, 0, 0 });
             value_max.Name = "value_max";
-            value_max.Size = new Size(128, 32);
+            value_max.Size = new Size(128, 28);
             value_max.TabIndex = 0;
             value_max.Tag = "range_lock";
             // 

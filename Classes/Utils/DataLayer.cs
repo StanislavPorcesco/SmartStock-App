@@ -13,9 +13,14 @@ namespace SmartStock.Classes.Utils
             if (selector != null)
             {
                 selector.Items.Clear();
-                selector.Items.AddRange(new string[] { "Product", "Category", "Supplier", "Transaction", "Customer", "Sale", "ExternalFactor", "User" });
+                // "User" (ModifyUser / FilterUsers) is Admin-only. Excluding it here gates
+                // BOTH the Modify host (BaseAddInstance) and SearchForm in one place.
+                var options = new List<string> { "Product", "Category", "Supplier", "Transaction", "Customer", "Sale", "ExternalFactor" };
+                if (PermissionService.CanManageUsers)
+                    options.Add("User");
+                selector.Items.AddRange(options.ToArray());
                 selector.Text = "Select an option";
-            }            
+            }
         }
 
         public static void PopulatePaymentMethodSelector(ComboBox selector)

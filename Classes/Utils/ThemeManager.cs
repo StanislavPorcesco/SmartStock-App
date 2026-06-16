@@ -15,13 +15,8 @@ namespace SmartStock.Classes.Utils
 
     public static class ThemeManager
     {
-        // Eveniment la care se vor abona toate Form-urile pentru update live
         public static event Action OnThemeChanged;
-
         public static string CurrentThemeName { get; private set; } = "Dark";
-
-        // "Midnight Cobalt" — Analogous blue/indigo base + amber accent (Concept 1).
-        // "Light" — kept as a compatible warm-neutral fallback for the theme toggle.
         public static readonly Dictionary<string, ThemePalette> Themes = new Dictionary<string, ThemePalette>
         {
             { "Dark", new ThemePalette
@@ -63,7 +58,6 @@ namespace SmartStock.Classes.Utils
             if (Themes.ContainsKey(themeName))
             {
                 CurrentThemeName = themeName;
-                // Notificăm toate ferestrele abonate să se redeseneze
                 OnThemeChanged?.Invoke();
             }
         }
@@ -71,8 +65,6 @@ namespace SmartStock.Classes.Utils
         public static void Apply(Control parent)
         {
             if (!Themes.TryGetValue(CurrentThemeName, out var theme)) return;
-
-            // Dacă controlul este o Formă, îi schimbăm fundalul principal
             if (parent is Form frm)
             {
                 frm.BackColor = theme.Background;
@@ -90,10 +82,7 @@ namespace SmartStock.Classes.Utils
 
             foreach (Control c in parent.Controls)
             {
-                // Aplicăm culorile în funcție de tipul controlului
                 ApplyStyleToControl(c, theme);
-
-                // Dacă controlul are alți copii (Panel, GroupBox etc.), intrăm recursiv
                 if (c.HasChildren)
                 {
                     Apply(c);
@@ -104,8 +93,6 @@ namespace SmartStock.Classes.Utils
         private static void ApplyStyleToControl(Control c, ThemePalette theme)
         {
             c.ForeColor = theme.Text;
-
-            // Personalizare logică pe tipuri de controale
             switch (c)
             {
                 case TableLayoutPanel flp:
@@ -156,7 +143,6 @@ namespace SmartStock.Classes.Utils
                     {
                         btn.BackColor = Color.Transparent;
                         btn.FlatAppearance.BorderSize = 0;
-                        //btn.FlatAppearance.MouseOverBackColor = theme.HoverColor;
                         btn.FlatAppearance.MouseOverBackColor = theme.Surface;
                         btn.FlatAppearance.MouseDownBackColor = theme.SurfaceHover;
                     }
@@ -199,7 +185,6 @@ namespace SmartStock.Classes.Utils
                     }
                     else if ("otp".Equals(txt.Tag))
                     {
-                        // OTP digit boxes: SurfaceHover bg + amber digit text + single border
                         txt.BackColor   = theme.SurfaceHover;
                         txt.ForeColor   = theme.Text;
                         txt.BorderStyle = BorderStyle.FixedSingle;
@@ -234,34 +219,28 @@ namespace SmartStock.Classes.Utils
                 case DataGridView dgv:
                     Font gridFont = new Font("Segoe UI", 10, FontStyle.Regular);
                     Font headerFont = new Font("Segoe UI", 10, FontStyle.Bold);
-                    // 1. Fundalul general al controlului (zona fără celule)
                     dgv.BackgroundColor = theme.Surface;
-                    dgv.GridColor = theme.DarkColor; // Culoarea liniilor de demarcație
+                    dgv.GridColor = theme.DarkColor;
 
-                    // 2. Dezactivăm stilul Windows pentru a permite culori custom pe Headere
                     dgv.EnableHeadersVisualStyles = false;
 
-                    // 3. Stilul Celulelor (Date)
                     dgv.DefaultCellStyle.BackColor = theme.LightColor;
                     dgv.DefaultCellStyle.ForeColor = theme.Text;
-                    dgv.DefaultCellStyle.SelectionBackColor = theme.DarkColor; // Recomandat pentru contrast
+                    dgv.DefaultCellStyle.SelectionBackColor = theme.DarkColor;
                     dgv.DefaultCellStyle.SelectionForeColor = theme.Text;
                     dgv.DefaultCellStyle.Font = gridFont;
 
-                    // Forțează selecția rândului întreg la orice click pe o celulă
                     dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
                     dgv.MultiSelect = false;
                     dgv.StandardTab = true;
                     dgv.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
 
-                    // 4. Stilul Headerelor de Coloane
                     dgv.ColumnHeadersDefaultCellStyle.BackColor = theme.Surface;
                     dgv.ColumnHeadersDefaultCellStyle.ForeColor = theme.Text;
-                    dgv.ColumnHeadersDefaultCellStyle.SelectionBackColor = theme.Surface; // Evită schimbarea culorii la click
+                    dgv.ColumnHeadersDefaultCellStyle.SelectionBackColor = theme.Surface;
                     dgv.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
                     dgv.ColumnHeadersDefaultCellStyle.Font = headerFont;
 
-                    // 5. Stilul Headerelor de Rânduri (partea stângă)
                     dgv.RowHeadersDefaultCellStyle.BackColor = theme.DarkColor;
                     dgv.RowHeadersDefaultCellStyle.ForeColor = theme.Text;
                     dgv.RowHeadersDefaultCellStyle.SelectionBackColor = theme.DarkColor;
@@ -296,8 +275,6 @@ namespace SmartStock.Classes.Utils
                     if (combo is not ThemedComboBox)
                     {
                         combo.DisableMouseWheelScroll();
-                        // IMPORTANT: Set AutoCompleteSource BEFORE AutoCompleteMode
-                        // to avoid NotSupportedException with DropDownList style
                         combo.AutoCompleteSource = AutoCompleteSource.ListItems;
                         combo.AutoCompleteMode   = AutoCompleteMode.SuggestAppend;
                     }
@@ -362,15 +339,13 @@ namespace SmartStock.Classes.Utils
                     date.CalendarTrailingForeColor = theme.Text;
                     date.BackColor = theme.LightColor;
                     date.ForeColor = theme.Text;
-                    // ThemedDateTimePicker se ocupă singur de chrome (border + chevron)
-                    // dar îi aplicăm aceleași Calendar* properties pentru popup-ul nativ.
                     break;
                 case RadioButton radio:
                     radio.BackColor = theme.LightColor;
                     radio.ForeColor = theme.TextSecondary;
                     break;
                 case ThemedNumericUpDown:
-                    break; // self-styling via ThemeManager.OnThemeChanged
+                    break;
                 case NumericUpDown num:
                     num.BackColor = theme.LightColor;
                     num.ForeColor = theme.Text;
@@ -401,28 +376,24 @@ namespace SmartStock.Classes.Utils
                     chart.ForeColor = theme.Text;
                     break;
                 default:
-                    // Unknown controls inherit parent bg — never hard-force black.
                     break;
             }
         }
 
         public class ThemePalette
         {
-            // Creative palette (60-30-10, WCAG-compliant)
-            public Color Background    { get; set; }   // 60% — app bg
-            public Color Surface       { get; set; }   // 30% — sidebars/cards/inputs
+            public Color Background    { get; set; } 
+            public Color Surface       { get; set; } 
             public Color SurfaceHover  { get; set; }
-            public Color Accent        { get; set; }   // 10% — CTA
+            public Color Accent        { get; set; }  
             public Color AccentHover   { get; set; }
-            public Color OnAccent      { get; set; }   // text/icon color on Accent bg
+            public Color OnAccent      { get; set; } 
             public Color TextPrimary   { get; set; }
             public Color TextSecondary { get; set; }
             public Color Border        { get; set; }
             public Color Success       { get; set; }
             public Color Warning       { get; set; }
             public Color Danger        { get; set; }
-
-            // Legacy aliases — keep existing call sites working without changes.
             public Color LightColor => Surface;
             public Color DarkColor  => Background;
             public Color HoverColor => SurfaceHover;

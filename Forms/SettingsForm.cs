@@ -36,7 +36,7 @@ namespace SmartStock
             api_tb.UseSystemPasswordChar = true;
             api_tb.Text = _providerKeys.GetValueOrDefault(_currentProvider, string.Empty);
 
-            bool isAdmin = SessionManager.CurrentUser?.Role == "Admin";
+            bool isAdmin = PermissionService.CanViewApiKey;
             view_api_btn.Enabled = isAdmin;
             view_api_btn.IconColor = isAdmin ? Color.White : Color.Gray;
 
@@ -122,6 +122,60 @@ namespace SmartStock
 
             ThemeManager.Apply(this);
             ThemeManager.OnThemeChanged += HandleThemeUpdate;
+
+            // MUST be last: every control value is loaded above; we only now restrict access,
+            // so gating never races with a load (and never blanks a field before it is read).
+            ApplyRolePermissions();
+        }
+
+        /// <summary>
+        /// Restricts the UI to what the current role may see, per <see cref="PermissionService"/>.
+        /// Whole sections the role cannot use are HIDDEN; partially-allowed sections keep only
+        /// their permitted controls. Save-side enforcement lives in <see cref="apply_btn_Click"/>.
+        /// </summary>
+        private void ApplyRolePermissions()
+        {
+            // ── Whole-section gating (hidden = no access) ──────────────────────
+            reporting_pnl.Visible = PermissionService.CanAccessReporting;
+            paths_pnl.Visible     = PermissionService.CanAccessFilePaths;
+            factors_pnl.Visible   = PermissionService.CanAccessExternalFactors;
+            ai_pnl.Visible        = PermissionService.CanAccessAiSettings;
+
+            // ── Theme & Preferences: visible to all; Currency Symbol gated ─────
+            currency_symbol_tb.Visible = PermissionService.CanEditCurrencySymbol;
+            label4.Visible = true;
+
+            // ── AI Settings: Provider + Temperature allowed for Manager/Admin,
+            //    but the API Key (view AND edit) is Admin-only → hide the key controls.
+            if (ai_pnl.Visible && !PermissionService.CanViewApiKey)
+            {
+                api_tb.Visible       = false;
+                api_lbl.Visible      = false;
+                view_api_btn.Visible = false;
+            }
+
+            // ── Logging: the Operator may toggle ONLY "Enable Logging"; the rest of
+            //    the section is locked. Disable every leaf control except that checkbox
+            //    (robust — no reliance on control names / layout cells).
+            if (!PermissionService.CanAccessAdvancedLogging)
+                LockLoggingExceptEnable(logging_body);
+        }
+
+        private void LockLoggingExceptEnable(Control parent)
+        {
+            foreach (Control c in parent.Controls)
+            {
+                if (c.HasChildren)
+                    LockLoggingExceptEnable(c);
+                else if (c != enable_logging_chk && 
+                    c != open_log_btn && 
+                    c != logging_icon && 
+                    c != logging_title_lbl &&
+                    c != enable_logging_lbl &&
+                    c != log_level_lbl &&
+                    c != log_level_cb)
+                    c.Enabled = false;
+            }
         }
 
         private void OpenLogFile()
@@ -169,35 +223,56 @@ namespace SmartStock
 
         private void apply_btn_Click(object sender, EventArgs e)
         {
+            // Theme and the "Enable Logging" toggle are available to every role.
             string selectedTheme = themes_cb.SelectedItem?.ToString() ?? "Light";
             SettingsManager.Current.Theme = selectedTheme;
-
-            // Flush the currently visible key back into the per-provider memory, then persist all
-            _providerKeys[_currentProvider] = api_tb.Text.Trim();
-            SettingsManager.Current.DeepSeekApiKey = _providerKeys.GetValueOrDefault("DeepSeek", string.Empty);
-            SettingsManager.Current.OpenAIApiKey = _providerKeys.GetValueOrDefault("OpenAI", string.Empty);
-            SettingsManager.Current.ClaudeApiKey = _providerKeys.GetValueOrDefault("Claude", string.Empty);
-            SettingsManager.Current.SelectedAiProvider = _currentProvider;
-            SettingsManager.Current.AiTemperature = (double)temperature_numeric.Value;
-
-            // Persist file paths (written to paths.cfg, takes effect on next app start)
-            PathsManager.Save(settings_tb.Text.Trim(), db_tb.Text.Trim());
-
-            // Persist logging settings
             SettingsManager.Current.LoggingEnabled = enable_logging_chk.Checked;
-            SettingsManager.Current.AiLoggingEnabled = ai_logs_ck.Checked;
-            SettingsManager.Current.LogFilePath = logs_tb.Text.Trim();
-            SettingsManager.Current.LogLevel = log_level_cb.SelectedItem?.ToString() ?? "Info";
-            SettingsManager.Current.LogMaxSizeMb = (int)max_size_numeric.Value;
 
-            // Persist report settings
-            SettingsManager.Current.WeeklyReportsEnabled = enable_reports_chk.Checked;
-            SettingsManager.Current.ReportRecipientEmail = email_recipient_tb.Text.Trim();
-            SettingsManager.Current.ReportScheduleTime = time_picker.Value.ToString("HH:mm");
+            // SAVE-SIDE ENFORCEMENT: hiding a control does NOT stop Apply from reading it, so
+            // each block is gated by the same capability that controls its visibility. Without
+            // this, a restricted role could overwrite (blank out) a setting it never saw.
 
-            // Persist external factors fetch settings
-            SettingsManager.Current.ExternalFactorsFetchEnabled = enable_daily_fetching.Checked;
-            SettingsManager.Current.ExternalFactorsFetchTime = fetching_time.Value.ToString("HH:mm");
+            if (PermissionService.CanViewApiKey)
+            {
+                // Flush the visible key into per-provider memory, then persist all three.
+                _providerKeys[_currentProvider] = api_tb.Text.Trim();
+                SettingsManager.Current.DeepSeekApiKey = _providerKeys.GetValueOrDefault("DeepSeek", string.Empty);
+                SettingsManager.Current.OpenAIApiKey   = _providerKeys.GetValueOrDefault("OpenAI", string.Empty);
+                SettingsManager.Current.ClaudeApiKey   = _providerKeys.GetValueOrDefault("Claude", string.Empty);
+            }
+
+            if (PermissionService.CanAccessAiSettings)
+            {
+                SettingsManager.Current.SelectedAiProvider = _currentProvider;
+                SettingsManager.Current.AiTemperature = (double)temperature_numeric.Value;
+            }
+
+            if (PermissionService.CanAccessFilePaths)
+            {
+                // Paths section (settings/db → paths.cfg; log file path → settings store)
+                PathsManager.Save(settings_tb.Text.Trim(), db_tb.Text.Trim());
+                SettingsManager.Current.LogFilePath = logs_tb.Text.Trim();
+            }
+
+            if (PermissionService.CanAccessAdvancedLogging)
+            {
+                SettingsManager.Current.AiLoggingEnabled = ai_logs_ck.Checked;
+                SettingsManager.Current.LogLevel = log_level_cb.SelectedItem?.ToString() ?? "Info";
+                SettingsManager.Current.LogMaxSizeMb = (int)max_size_numeric.Value;
+            }
+
+            if (PermissionService.CanAccessReporting)
+            {
+                SettingsManager.Current.WeeklyReportsEnabled = enable_reports_chk.Checked;
+                SettingsManager.Current.ReportRecipientEmail = email_recipient_tb.Text.Trim();
+                SettingsManager.Current.ReportScheduleTime = time_picker.Value.ToString("HH:mm");
+            }
+
+            if (PermissionService.CanAccessExternalFactors)
+            {
+                SettingsManager.Current.ExternalFactorsFetchEnabled = enable_daily_fetching.Checked;
+                SettingsManager.Current.ExternalFactorsFetchTime = fetching_time.Value.ToString("HH:mm");
+            }
 
             SettingsManager.Save();
             UpdateNextReportLabel();

@@ -15,8 +15,6 @@ namespace SmartStock.Forms
         private Panel leftBorderBtn;
         private Form currentChildForm = new Form();
 
-        // ── Borderless window: manual resize + drag ──────────────────────────
-
         [DllImport("user32.dll")]
         private static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
         [DllImport("user32.dll")]
@@ -60,12 +58,7 @@ namespace SmartStock.Forms
 
         protected override void WndProc(ref Message m)
         {
-            // Suppress background erase — prevents the white flash before repaint.
             if (m.Msg == WM_ERASEBKGND) { m.Result = (IntPtr)1; return; }
-
-            // WM_SETCURSOR fires per-HWND: child controls handle it themselves,
-            // so this only runs when the cursor is over the form background (5px border)
-            // or during active resize (Capture=true routes all messages here).
             if (m.Msg == WM_SETCURSOR && WindowState == FormWindowState.Normal)
             {
                 var dir = _resizing ? _resizeDir : HitDir(PointToClient(Cursor.Position));
@@ -118,7 +111,6 @@ namespace SmartStock.Forms
             if (_resizing) { _resizing = false; Capture = false; }
         }
 
-        // Drag the titlebar to move the window.
         private void titlebar_pnl_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -128,7 +120,6 @@ namespace SmartStock.Forms
             }
         }
 
-        // Double-click the titlebar to maximise / restore.
         private void titlebar_pnl_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -140,29 +131,16 @@ namespace SmartStock.Forms
 
         private void maximize_btn_Click(object sender, EventArgs e)
         {
-            /*if (WindowState == FormWindowState.Maximized)
-              {
-                  WindowState = FormWindowState.Normal;
-                  maximize_btn.IconChar = IconChar.WindowMaximize;
-              }
-              else
-              {
-                  WindowState = FormWindowState.Maximized;
-                  maximize_btn.IconChar = IconChar.WindowRestore;
-              }*/
             if (WindowState == FormWindowState.Maximized)
             {
-                // Scoatem limita de dimensiune când revenim la normal
                 this.MaximumSize = new Size(0, 0);
                 WindowState = FormWindowState.Normal;
                 maximize_btn.IconChar = IconChar.WindowMaximize;
             }
             else
             {
-                // Obținem ecranul pe care se află fereastra în acest moment (suportă multi-monitor)
                 Screen currentScreen = Screen.FromHandle(this.Handle);
 
-                // Setăm dimensiunea maximă la zona de lucru (WorkingArea exclude taskbar-ul)
                 this.MaximizedBounds = currentScreen.WorkingArea;
                 this.MaximumSize = currentScreen.WorkingArea.Size;
 
@@ -198,6 +176,7 @@ namespace SmartStock.Forms
 
             PopulateUserCard();
             InitMenuButtonStates();
+            ApplyRolePermissions();
             add_btn_Click(this.add_btn, EventArgs.Empty);
 
             maximize_btn_Click(maximize_btn, EventArgs.Empty);
@@ -220,8 +199,6 @@ namespace SmartStock.Forms
             }
         }
 
-        //Metode 
-
         private void InitMenuButtonStates()
         {
             var p = ThemeManager.GetCurrentPalette();
@@ -234,6 +211,10 @@ namespace SmartStock.Forms
                     btn.IconColor = p.TextSecondary;
                 }
             }
+        }
+        private void ApplyRolePermissions()
+        {
+            analyze_btn.Visible = PermissionService.CanAccessAnalyze;
         }
 
         private void HandleThemeUpdate()
@@ -271,7 +252,6 @@ namespace SmartStock.Forms
                 currentBtn.ForeColor = p.TextPrimary;
                 currentBtn.IconColor = p.Accent;
 
-                // Left border: amber accent strip marks the active section
                 leftBorderBtn.BackColor = p.Accent;
                 leftBorderBtn.Location = new Point(0, currentBtn.Location.Y);
                 leftBorderBtn.Height = currentBtn.Height;
@@ -320,7 +300,6 @@ namespace SmartStock.Forms
             ActivateButton(sender);
             BaseAddInstance form = new BaseAddInstance();
             OpenChildForm(form);
-            //DataLayer.OpenUserControl(form, new AddProduct());
         }
 
         private void settings_btn_Click(object sender, EventArgs e)
@@ -343,7 +322,6 @@ namespace SmartStock.Forms
 
         private async void MenuForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // Logout using UserService (refactored N-Tier)
             if (SessionManager.CurrentUser != null)
             {
                 try
@@ -354,19 +332,10 @@ namespace SmartStock.Forms
                 }
                 catch (Exception ex)
                 {
-                    // Log error but don't block the application exit
                     Console.WriteLine($"Logout error: {ex.Message}");
                 }
             }
-
-            // Exit the application
             Application.Exit();
-        }
-
-        private void test_btn_Click(object sender, EventArgs e)
-        {
-            ActivateButton(sender);
-            OpenChildForm(new test());
         }
     }
 }

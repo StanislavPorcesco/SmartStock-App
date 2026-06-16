@@ -11,6 +11,9 @@ namespace SmartStock.Classes.Models
         public int ModelId { get; set; }
 
         [Required]
+        public int ProductId { get; set; }
+
+        [Required]
         [StringLength(100)]
         public string ModelName { get; set; } // Ex: "Linear Regression", "ARIMA"
 
@@ -28,5 +31,8 @@ namespace SmartStock.Classes.Models
 
         [Required]
         public DateTime LastTrainedDate { get; set; } = DateTime.Now;
+
+        [ForeignKey("ProductId")]
+        public virtual Product Product { get; set; }
     }
 }

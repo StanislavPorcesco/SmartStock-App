@@ -120,6 +120,8 @@ namespace SmartStock
             main_dgv.Tag = "card";
             main_dgv.CellDoubleClick += main_dgv_CellDoubleClick;
             main_dgv.CellFormatting += main_dgv_CellFormatting;
+            main_dgv.ColumnHeaderMouseClick += main_dgv_ColumnHeaderMouseClick;
+            main_dgv.DataBindingComplete += main_dgv_DataBindingComplete;
             // 
             // result_divider
             // 

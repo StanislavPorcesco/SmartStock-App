@@ -23,12 +23,14 @@ namespace SmartStock.Classes.Data.Services
                 .ToListAsync(cancellationToken);
         }
 
-        public async Task<List<string>> GetDistinctFactorTypesAsync(CancellationToken cancellationToken = default)
+        public async Task<List<string>> GetDistinctFactorOptionsAsync(CancellationToken cancellationToken = default)
         {
+            // Distinct by Description (the specific metric), so "Daily Max Temperature" and
+            // "Daily Precipitation" — both FactorType="Weather" — are separately selectable.
             return await _externalFactorRepository
                 .GetAll()
-                .Where(f => f.IsActive && !string.IsNullOrWhiteSpace(f.FactorType))
-                .Select(f => f.FactorType)
+                .Where(f => f.IsActive && !string.IsNullOrWhiteSpace(f.Description))
+                .Select(f => f.Description)
                 .Distinct()
                 .OrderBy(f => f)
                 .AsNoTracking()

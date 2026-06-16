@@ -65,21 +65,32 @@ namespace SmartStock.Classes.Data.Services
                 .AsNoTracking()
                 .FirstOrDefaultAsync(p => p.ProductId == context.ProductId, cancellationToken)
                 ?? throw new InvalidOperationException("Selected product was not found.");
+            // EndDate vine ca dată la miezul nopții (00:00). Vânzările au oră (ex. 14:30),
+            // deci `SaleDate <= EndDate` ar exclude TOATE vânzările din chiar ziua de end date
+            // → ultima zi din grafic apărea mereu 0. Folosim margine superioară EXCLUSIVĂ la
+            // începutul zilei următoare ca să includem întreaga zi de end date.
+            var endExclusive = context.EndDate.Date.AddDays(1);
             var rawSalesData = await _saleDetailsRepository
                 .GetAll()
                 .Include(sd => sd.Sale)
                 .Where(sd => sd.ProductId == context.ProductId &&
                              sd.Sale.SaleDate >= context.StartDate &&
-                             sd.Sale.SaleDate <= context.EndDate)
+                             sd.Sale.SaleDate < endExclusive)
                 .Select(sd => new { sd.Sale.SaleDate, sd.Quantity })
                 .ToListAsync(cancellationToken);
 
             // ── EOQ branch — skip the OLS pipeline entirely ──────────────────────
             if (isStockOptimization)
             {
-                var dailyDemandSeries = rawSalesData
+                // ZERO-FILL pe grila calendaristică zilnică: media cererii trebuie să includă
+                // și zilele FĂRĂ vânzări, altfel d̄ supraestimează și σ subestimează cererea
+                // (→ Q*, SS, ROP deplasate). Vezi docs/ANALYSIS_MODULE_REVIEW.md (A4).
+                var salesByDay = rawSalesData
                     .GroupBy(sd => sd.SaleDate.Date)
-                    .Select(g => (decimal)g.Sum(x => x.Quantity))
+                    .ToDictionary(g => g.Key, g => (decimal)g.Sum(x => x.Quantity));
+
+                var dailyDemandSeries = BuildBucketGrid(context.StartDate, context.EndDate, "Daily")
+                    .Select(d => salesByDay.TryGetValue(d, out var v) ? v : 0m)
                     .ToList();
 
                 var orderingCost      = GetDecimalParameter(context.Parameters, "OrderingCost", 50m);
@@ -113,25 +124,33 @@ namespace SmartStock.Classes.Data.Services
                     UpperBond       = eoq.HoldingCostCurve.Select(v => (decimal)v).ToList()
                 };
             }
-            var aggregatedData = rawSalesData
-                .GroupBy(sd => {
-                    var d = sd.SaleDate.Date;
-                    return aggregationLevel switch
-                    {
-                        "Weekly" => d.AddDays(-(int)d.DayOfWeek), // Grupează pe prima zi a săptămânii
-                        "Monthly" => new DateTime(d.Year, d.Month, 1), // Grupează pe prima zi a lunii
-                        _ => d // Daily
-                    };
-                })
-                .Select(g => new { Date = g.Key, TotalQuantity = g.Sum(x => x.Quantity) })
-                .OrderBy(g => g.Date)
-                .ToList();
+            var salesByBucket = rawSalesData
+                .GroupBy(sd => BucketOf(sd.SaleDate.Date, aggregationLevel))
+                .ToDictionary(g => g.Key, g => (decimal)g.Sum(x => x.Quantity));
 
-            var historicalDates = aggregatedData.Select(x => x.Date).ToList();
-            var historicalSales = aggregatedData.Select(x => (decimal)x.TotalQuantity).ToList();
-
+            // ── Anomaly Detection: foloseşte DOAR bucket-urile cu vânzări ────────────
+            // Intenționat NU aplicăm zero-fill aici: inundarea seriei cu zerouri pentru
+            // produse cu vânzări sporadice ar prăbuși media și ar umfla σ, transformând
+            // fiecare zi de vânzare într-un "spike" și rupând semantica pragului σ
+            // (1.5/2.0/2.5/3.0) documentată. Vezi docs/ANALYSIS_MODULE_REVIEW.md (A4/B2).
             if (isAnomalyDetection)
-                return ComputeAnomalyDetection(historicalSales, historicalDates, sensitivityThreshold);
+            {
+                var sellingBuckets = salesByBucket
+                    .OrderBy(kv => kv.Key)
+                    .ToList();
+                return ComputeAnomalyDetection(
+                    sellingBuckets.Select(kv => kv.Value).ToList(),
+                    sellingBuckets.Select(kv => kv.Key).ToList(),
+                    sensitivityThreshold);
+            }
+
+            // ── Trend / Correlation / Forecast: ZERO-FILL pe grila calendaristică ────
+            // Seria are puncte echidistante în timp calendaristic (nu indexate pe eveniment),
+            // ceea ce face panta și prognoza valide pe orizont calendaristic. (A4)
+            var historicalDates = BuildBucketGrid(context.StartDate, context.EndDate, aggregationLevel);
+            var historicalSales = historicalDates
+                .Select(d => salesByBucket.TryGetValue(d, out var v) ? v : 0m)
+                .ToList();
 
             var forecastEndDate = isDemandForecast
                 ? context.EndDate.AddDays(Math.Max(1, forecastHorizonDays))
@@ -173,36 +192,152 @@ namespace SmartStock.Classes.Data.Services
                 context.EndDate,
                 historicalSales);
 
-            var trendBands = BuildTrendValues(
-                historicalSales,
-                econometricModel.CoefficientValue,
-                isDemandForecast,
-                forecasts,
-                context.EndDate,
-                forecastHorizonDays,
-                confidencePercent);
+            // ── Corelație vânzări ↔ factori, ALINIATĂ PE DATĂ ───────────────────────
+            // Factorii au fost deja decalați cu lagDays mai sus, deci alinierea pe bucket
+            // respectă lag-ul (lagDays nu mai e no-op). Agregăm impactul factorilor pe
+            // același nivel (Daily/Weekly/Monthly) și facem inner-join pe bucket-urile
+            // care au un factor. Vezi docs/ANALYSIS_MODULE_REVIEW.md (A1/A2).
+            var factorByBucket = factors
+                .Where(f => f.IsActive)
+                .GroupBy(f => BucketOf(f.Date.Date, aggregationLevel))
+                .ToDictionary(g => g.Key, g => g.Average(x => x.ImpactValue));
+
+            var alignedSales = new List<decimal>();
+            var alignedFactors = new List<decimal>();
+            for (var i = 0; i < historicalDates.Count; i++)
+            {
+                if (factorByBucket.TryGetValue(historicalDates[i], out var factorValue))
+                {
+                    alignedSales.Add(historicalSales[i]);
+                    alignedFactors.Add(factorValue);
+                }
+            }
+
+            var (correlation, correlationPValue, correlationN) =
+                _econometricEngine.AnalyzeFactorCorrelation(alignedSales, alignedFactors);
+
+            // ── Multiplicator t-Student pentru benzile CI/PI (B1) ───────────────────
+            // SEE e estimat din reziduuri ⇒ multiplicatorul corect e t_{α/2, n-2}, nu z normal.
+            var degreesOfFreedom = historicalSales.Count - 2;
+            var confidenceMultiplier = degreesOfFreedom >= 1
+                ? _econometricEngine.GetConfidenceMultiplier(confidencePercent, degreesOfFreedom)
+                : MapConfidenceToZScore(confidencePercent);
+
+            // ── REGRESIE MULTIPLĂ pentru Demand Forecast ────────────────────────────
+            // Când utilizatorul bifează factori în DemandForecast, prognoza devine
+            // CONDIȚIONATĂ de aceștia: vânzări ~ intercept + Σ factori. Termenul de TIMP
+            // este omis intenționat (temperatura e coliniară cu timpul, VIF mare, și
+            // încorporează deja deriva sezonieră). Fără factori bifați sau la matrice
+            // singulară → fallback la modelul univariat vânzări~timp.
+            // Vezi docs/ANALYSIS_MODULE_REVIEW.md, „Regresie multiplă".
+            string modelType = "Univariate (sales ~ time)";
+            decimal adjustedRSquared = 0m, fStatistic = 0m, fPValue = 1m;
+            var factorCoefficients = new List<FactorCoefficient>();
+
+            // R² al modelului EFECTIV folosit (multivariat sau univariat), pentru badge +
+            // confidence forecast. NU mutăm econometricModel (persistat) — acela rămâne
+            // descriptorul coerent al trendului univariat (pantă + p-value-ul pantei + R² trend).
+            decimal displayRSquared = econometricModel.RSquared;
+
+            var factorColumns = (isDemandForecast && selectedFactors.Count > 0)
+                ? BuildFactorColumns(factors, historicalDates, aggregationLevel)
+                : new List<(string Name, List<decimal> Values)>();
+
+            MultipleRegressionResult? mlr = factorColumns.Count > 0
+                ? _econometricEngine.FitMultipleRegression(
+                    historicalSales, factorColumns.Select(c => c.Values).ToList())
+                : null;
+
+            TrendBandResult trendBands;
+            if (mlr is { IsValid: true })
+            {
+                int mvDf = historicalSales.Count - mlr.P;
+                decimal mvMultiplier = mvDf >= 1
+                    ? _econometricEngine.GetConfidenceMultiplier(confidencePercent, mvDf)
+                    : MapConfidenceToZScore(confidencePercent);
+
+                trendBands = BuildMultivariateTrend(
+                    historicalSales, factorColumns, mlr, forecastHorizonDays, mvMultiplier);
+
+                modelType = $"Multivariate (sales ~ {string.Join(" + ", factorColumns.Select(c => c.Name))})";
+                adjustedRSquared = (decimal)mlr.AdjustedRSquared;
+                fStatistic = (decimal)mlr.FStatistic;
+                fPValue = (decimal)mlr.FPValue;
+
+                factorCoefficients.Add(new FactorCoefficient
+                {
+                    Name = "Intercept",
+                    Coefficient = (decimal)mlr.Coefficients[0],
+                    PValue = (decimal)mlr.CoefficientPValues[0]
+                });
+                for (int j = 0; j < factorColumns.Count; j++)
+                    factorCoefficients.Add(new FactorCoefficient
+                    {
+                        Name = factorColumns[j].Name,
+                        Coefficient = (decimal)mlr.Coefficients[j + 1],
+                        PValue = (decimal)mlr.CoefficientPValues[j + 1]
+                    });
+
+                // Badge-ul „Reliability (R²)" reflectă modelul efectiv folosit, FĂRĂ a
+                // contamina rândul EconometricModel persistat (rămâne univariat coerent).
+                displayRSquared = (decimal)mlr.RSquared;
+            }
+            else
+            {
+                trendBands = BuildTrendValues(
+                    historicalSales,
+                    econometricModel.CoefficientValue,
+                    isDemandForecast,
+                    forecasts,
+                    context.EndDate,
+                    forecastHorizonDays,
+                    confidenceMultiplier);
+            }
 
             var chartDates = BuildChartDates(historicalDates, context.EndDate, isDemandForecast, forecastHorizonDays);
             var chartLabels = chartDates.Select(d => d.ToString("dd MMM")).ToList();
 
-            var basePrompt = _promptBuilder.BuildInventoryPrompt(product, factors, forecasts);
-            var prompt = BuildAnalysisAwarePrompt(
-                basePrompt,
-                context,
-                historicalSales,
-                trendBands.TrendValues,
-                econometricModel,
-                forecasts);
+            // Promptul AI este specific tipului de analiză. Correlation Analysis cere o
+            // INTERPRETARE a relaţiei factor↔vânzări, NU o recomandare de reaprovizionare —
+            // altfel prompt-ul de inventar (restock + date forecast) face AI-ul să răspundă
+            // ca la Demand Forecast ("avoid overstocking", "no replenishment").
+            string prompt;
+            if (isDemandForecast)
+            {
+                var basePrompt = _promptBuilder.BuildInventoryPrompt(product, factors, forecasts);
+                prompt = BuildAnalysisAwarePrompt(
+                    basePrompt,
+                    context,
+                    historicalSales,
+                    trendBands.TrendValues,
+                    econometricModel,
+                    forecasts,
+                    correlation,
+                    correlationPValue,
+                    correlationN);
+
+                if (mlr is { IsValid: true })
+                    prompt += BuildMultivariatePromptSection(modelType, adjustedRSquared, fStatistic, fPValue, factorCoefficients);
+            }
+            else
+            {
+                prompt = BuildCorrelationPrompt(
+                    product, primaryFactor, correlation, correlationPValue, correlationN, context);
+            }
 
             var recommendation = await _aiReasoningProvider.GetRecommendationAsync(prompt);
 
-            await PersistEconometricModelAsync(econometricModel, cancellationToken);
+            await PersistEconometricModelAsync(econometricModel, context.ProductId, cancellationToken);
             if (isDemandForecast)
-                await PersistForecastsAsync(context.ProductId, trendBands.TrendValues, historicalSales.Count, context.EndDate, forecastHorizonDays, econometricModel.RSquared, cancellationToken);
+                await PersistForecastsAsync(context.ProductId, trendBands.TrendValues, historicalSales.Count, context.EndDate, forecastHorizonDays, displayRSquared, cancellationToken);
 
             var analysisLabel = isDemandForecast ? "DEMAND_FORECAST" : "CORRELATION";
             ActivityLogger.LogAiAction(analysisLabel,
-                $"Product: \"{product.ProductName}\" → R²: {econometricModel.RSquared:F3}, {(isDemandForecast ? $"Horizon: {forecastHorizonDays}d" : $"Factor: {primaryFactor}")}");
+                $"Product: \"{product.ProductName}\" → R²: {displayRSquared:F3}, " +
+                (isDemandForecast
+                    ? $"Horizon: {forecastHorizonDays}d, Model: {modelType}" +
+                      (mlr is { IsValid: true } ? $" (adjR²: {adjustedRSquared:F3}, F p: {fPValue:E1})" : "")
+                    : $"Factor: {primaryFactor}, r: {correlation:F3} (p: {correlationPValue:F3}, n: {correlationN})"));
 
             return new AnalyticsResult
             {
@@ -215,12 +350,229 @@ namespace SmartStock.Classes.Data.Services
                 LowerBond = trendBands.LowerBond,
                 StandardError = trendBands.StandardError,
                 ConfidencePercent = confidencePercent,
+                Correlation = correlation,
+                CorrelationPValue = correlationPValue,
+                CorrelationSampleSize = correlationN,
+                ModelType = modelType,
+                AdjustedRSquared = adjustedRSquared,
+                FStatistic = fStatistic,
+                FPValue = fPValue,
+                FactorCoefficients = factorCoefficients,
                 ChartLabels = chartLabels,
                 AiInsights = recommendation.Reasoning,
-                Reliability = econometricModel.RSquared,
+                Reliability = displayRSquared,
                 TrendLabel = GetTrendPercentageLabel(historicalSales, trendBands.TrendValues, isDemandForecast),
                 AiConfidence = forecasts.Count == 0 ? 0m : forecasts.Average(f => f.ConfidenceScore)
             };
+        }
+
+        // ── Multivariate forecast helpers (sales ~ intercept + Σ factori) ──────────
+
+        /// <summary>
+        /// Construiește câte o coloană de regresor per Description de factor, agregată pe
+        /// același bucket ca vânzările și aliniată la <paramref name="historicalDates"/>
+        /// (0-fill pe bucket-urile fără observație). Coloanele constante sunt sărite
+        /// (varianță nulă → ar face XᵀX singulară și nu aduc informație).
+        /// </summary>
+        private static List<(string Name, List<decimal> Values)> BuildFactorColumns(
+            List<ExternalFactor> factors,
+            List<DateTime> historicalDates,
+            string aggregationLevel)
+        {
+            var columns = new List<(string Name, List<decimal> Values)>();
+            if (factors == null || factors.Count == 0)
+                return columns;
+
+            foreach (var group in factors
+                .Where(f => f.IsActive && !string.IsNullOrWhiteSpace(f.Description))
+                .GroupBy(f => f.Description)
+                .OrderBy(g => g.Key))
+            {
+                var perBucket = group
+                    .GroupBy(f => BucketOf(f.Date.Date, aggregationLevel))
+                    .ToDictionary(b => b.Key, b => b.Average(x => x.ImpactValue));
+
+                var values = historicalDates
+                    .Select(d => perBucket.TryGetValue(d, out var v) ? v : 0m)
+                    .ToList();
+
+                if (values.Distinct().Count() > 1) // skip zero-variance columns
+                    columns.Add((group.Key, values));
+            }
+
+            return columns;
+        }
+
+        private static TrendBandResult BuildMultivariateTrend(
+            List<decimal> historicalSales,
+            List<(string Name, List<decimal> Values)> factorColumns,
+            MultipleRegressionResult mlr,
+            int forecastHorizonDays,
+            decimal multiplier)
+        {
+            int n = historicalSales.Count;
+            int p = mlr.P;
+            double see = mlr.StandardError;
+
+            var trend = new List<decimal>(n + Math.Max(1, forecastHorizonDays));
+            var upper = new List<decimal>(trend.Capacity);
+            var lower = new List<decimal>(trend.Capacity);
+
+            // Istoric: valori ajustate + bandă de încredere a mediei răspunsului (√leverage)
+            for (var i = 0; i < n; i++)
+            {
+                var x = BuildRow(factorColumns, p, j => (double)factorColumns[j].Values[i]);
+                double yhat = mlr.Predict(x);
+                double leverage = Math.Max(0, mlr.Leverage(x));
+                var margin = multiplier * (decimal)(see * Math.Sqrt(leverage));
+                trend.Add((decimal)yhat);
+                upper.Add((decimal)yhat + margin);
+                lower.Add(Math.Max(0m, (decimal)yhat - margin));
+            }
+
+            // Viitor: extrapolăm fiecare factor, prezicem, interval de PREDICȚIE (√(1+leverage))
+            var horizon = Math.Max(1, forecastHorizonDays);
+            var futureColumns = factorColumns
+                .Select(c => ExtrapolateFactor(c.Values, horizon))
+                .ToList();
+
+            for (var i = 0; i < horizon; i++)
+            {
+                var x = BuildRow(factorColumns, p, j => (double)futureColumns[j][i]);
+                double yhat = mlr.Predict(x);
+                double leverage = Math.Max(0, mlr.Leverage(x));
+                var margin = multiplier * (decimal)(see * Math.Sqrt(1.0 + leverage));
+                trend.Add(Math.Max(0m, (decimal)yhat));
+                upper.Add((decimal)yhat + margin);
+                lower.Add(Math.Max(0m, (decimal)yhat - margin));
+            }
+
+            return new TrendBandResult
+            {
+                TrendValues = trend,
+                UpperBond = upper,
+                LowerBond = lower,
+                StandardError = (decimal)see
+            };
+        }
+
+        private static double[] BuildRow(
+            List<(string Name, List<decimal> Values)> factorColumns, int p, Func<int, double> valueAt)
+        {
+            var x = new double[p];
+            x[0] = 1.0; // intercept
+            for (var j = 0; j < factorColumns.Count; j++)
+                x[j + 1] = valueAt(j);
+            return x;
+        }
+
+        /// <summary>
+        /// Proiectează un factor în viitor: trend liniar propriu + reziduul istoric ciclat.
+        /// Reziduul ciclat păstrează oscilația sezonieră (ex. valul de temperatură), astfel
+        /// prognoza condiționată de vreme oscilează vizibil în loc să colapseze într-o dreaptă.
+        /// </summary>
+        private static List<decimal> ExtrapolateFactor(List<decimal> values, int horizon)
+        {
+            int n = values.Count;
+            var future = new List<decimal>(horizon);
+            if (n == 0)
+            {
+                for (var i = 0; i < horizon; i++) future.Add(0m);
+                return future;
+            }
+
+            // OLS al factorului în funcție de timp (1..n)
+            double sx = 0, sy = 0, sxy = 0, sxx = 0;
+            for (var i = 0; i < n; i++)
+            {
+                double t = i + 1, v = (double)values[i];
+                sx += t; sy += v; sxy += t * v; sxx += t * t;
+            }
+            double denom = n * sxx - sx * sx;
+            double slope = denom == 0 ? 0 : (n * sxy - sx * sy) / denom;
+            double intercept = (sy - slope * sx) / n;
+
+            for (var i = 1; i <= horizon; i++)
+            {
+                int w = (n + i - 1) % n; // index istoric ciclat
+                double residual = (double)values[w] - (slope * (w + 1) + intercept);
+                double projected = slope * (n + i) + intercept + residual;
+                future.Add((decimal)projected);
+            }
+
+            return future;
+        }
+
+        private static string BuildMultivariatePromptSection(
+            string modelType,
+            decimal adjustedRSquared,
+            decimal fStatistic,
+            decimal fPValue,
+            List<FactorCoefficient> coefficients)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine();
+            sb.AppendLine("multivariateForecastModel:");
+            sb.AppendLine($"- specification: {modelType}");
+            sb.AppendLine($"- adjustedRSquared: {adjustedRSquared:F4}");
+            sb.AppendLine($"- fStatistic: {fStatistic:F2} (overall significance p: {fPValue:E2})");
+            sb.AppendLine("- coefficients:");
+            foreach (var c in coefficients)
+                sb.AppendLine($"  - {c.Name}: {c.Coefficient:F4} (p: {c.PValue:E2})");
+            sb.AppendLine("- note: the forecast is CONDITIONED on these external factors, not a pure time trend.");
+            sb.AppendLine("- Explain which factors drive demand and whether each is statistically significant (p < 0.05).");
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Prompt pentru Correlation Analysis: interpretarea relaţiei factor↔vânzări.
+        /// NU cere reaprovizionare şi NU foloseşte date de forecast — altfel AI-ul răspunde
+        /// ca la Demand Forecast (recomandări de stoc), nu ca la o analiză de corelaţie.
+        /// </summary>
+        private static string BuildCorrelationPrompt(
+            Product product,
+            string primaryFactor,
+            decimal correlation,
+            decimal correlationPValue,
+            int correlationN,
+            AnalysisContext context)
+        {
+            decimal rSquared = correlation * correlation;
+            string strength = Math.Abs(correlation) switch
+            {
+                >= 0.8m => "very strong",
+                >= 0.6m => "strong",
+                >= 0.4m => "moderate",
+                >= 0.2m => "weak",
+                _ => "negligible"
+            };
+            string direction = correlation > 0
+                ? "positive (sales rise as the factor rises)"
+                : correlation < 0
+                    ? "negative (sales fall as the factor rises)"
+                    : "none";
+            bool significant = correlationN >= 4 && correlationPValue < 0.05m;
+            string factorLabel = string.IsNullOrWhiteSpace(primaryFactor) ? "the selected factor" : primaryFactor;
+
+            var sb = new StringBuilder();
+            sb.AppendLine("task: Interpret a CORRELATION ANALYSIS between a product's daily sales and an external factor.");
+            sb.AppendLine("This is NOT an inventory or restock decision — do NOT recommend order quantities, stock levels, or replenishment, and do NOT invent forecast figures.");
+            sb.AppendLine();
+            sb.AppendLine($"product: {product.ProductName}");
+            sb.AppendLine($"factor: {factorLabel}");
+            sb.AppendLine($"period: {context.StartDate:yyyy-MM-dd} to {context.EndDate:yyyy-MM-dd}");
+            sb.AppendLine("computedStatistics:");
+            sb.AppendLine($"  - pearsonR: {correlation:F3} ({strength}, {direction})");
+            sb.AppendLine($"  - rSquared: {rSquared:F3} (share of sales variance associated with the factor)");
+            sb.AppendLine($"  - pValue: {correlationPValue:E2} ({(significant ? "statistically significant at α=0.05" : "NOT significant at α=0.05")})");
+            sb.AppendLine($"  - sampleSize: {correlationN} date-aligned day pairs");
+            sb.AppendLine();
+            sb.AppendLine("instructions:");
+            sb.AppendLine("- Explain, in plain business terms, what this relationship means for this product.");
+            sb.AppendLine("- State the direction and strength, and whether it is statistically reliable (cite the p-value and sample size).");
+            sb.AppendLine("- Give one practical implication (e.g., how sensitive demand planning for this product is to this factor).");
+            sb.AppendLine("- Keep it concise. Do NOT give restock/replenishment advice.");
+            return sb.ToString();
         }
 
         private static TrendBandResult BuildTrendValues(
@@ -230,7 +582,7 @@ namespace SmartStock.Classes.Data.Services
             List<AiForecast> forecasts,
             DateTime endDate,
             int forecastHorizonDays,
-            int confidencePercent)
+            decimal confidenceMultiplier)
         {
             // CRITICAL FIX: Evităm crash-ul dacă nu avem vânzări în intervalul selectat
             if (historicalSales == null || historicalSales.Count < 2)
@@ -271,8 +623,7 @@ namespace SmartStock.Classes.Data.Services
 
             var historicalTrendValues = trendValues.Take(historicalSales.Count).ToList();
             var standardError = CalculateStandardError(historicalSales, historicalTrendValues);
-            var zScore = MapConfidenceToZScore(confidencePercent);
-            var (upperBond, lowerBond) = BuildConfidenceBounds(trendValues, zScore, standardError, historicalSales.Count);
+            var (upperBond, lowerBond) = BuildConfidenceBounds(trendValues, confidenceMultiplier, standardError, historicalSales.Count);
 
             return new TrendBandResult
             {
@@ -281,6 +632,48 @@ namespace SmartStock.Classes.Data.Services
                 LowerBond = lowerBond,
                 StandardError = standardError
             };
+        }
+
+        /// <summary>
+        /// Cheia de bucket pentru o dată, la nivelul de agregare dat.
+        /// Weekly = prima zi a săptămânii (Duminică), Monthly = prima zi a lunii.
+        /// </summary>
+        private static DateTime BucketOf(DateTime date, string aggregationLevel)
+        {
+            var d = date.Date;
+            return aggregationLevel switch
+            {
+                "Weekly" => d.AddDays(-(int)d.DayOfWeek),
+                "Monthly" => new DateTime(d.Year, d.Month, 1),
+                _ => d
+            };
+        }
+
+        /// <summary>
+        /// Generează TOATE bucket-urile calendaristice din [start, end] la nivelul dat —
+        /// inclusiv cele fără vânzări (necesare pentru zero-fill). Echidistante în timp.
+        /// </summary>
+        private static List<DateTime> BuildBucketGrid(DateTime start, DateTime end, string aggregationLevel)
+        {
+            var grid = new List<DateTime>();
+            if (end < start)
+                return grid;
+
+            var cursor = BucketOf(start, aggregationLevel);
+            var last = BucketOf(end, aggregationLevel);
+
+            while (cursor <= last)
+            {
+                grid.Add(cursor);
+                cursor = aggregationLevel switch
+                {
+                    "Weekly" => cursor.AddDays(7),
+                    "Monthly" => cursor.AddMonths(1),
+                    _ => cursor.AddDays(1)
+                };
+            }
+
+            return grid;
         }
 
         private static List<DateTime> BuildChartDates(
@@ -313,9 +706,13 @@ namespace SmartStock.Classes.Data.Services
             if (!string.IsNullOrWhiteSpace(primaryFactor) &&
                 !primaryFactor.Equals("No Factors Available", StringComparison.OrdinalIgnoreCase))
             {
+                // PrimaryFactor is a factor Description (e.g. "Daily Max Temperature"),
+                // not a FactorType — see IExternalDataProvider.GetDistinctFactorOptionsAsync.
+                // This keeps temperature and precipitation (both FactorType="Weather")
+                // as separate, un-mixed correlation targets.
                 return factors
-                    .Where(f => !string.IsNullOrWhiteSpace(f.FactorType) &&
-                                f.FactorType.Equals(primaryFactor, StringComparison.OrdinalIgnoreCase))
+                    .Where(f => !string.IsNullOrWhiteSpace(f.Description) &&
+                                f.Description.Equals(primaryFactor, StringComparison.OrdinalIgnoreCase))
                     .ToList();
             }
 
@@ -417,7 +814,7 @@ namespace SmartStock.Classes.Data.Services
 
         private static (List<decimal> upperBond, List<decimal> lowerBond) BuildConfidenceBounds(
             List<decimal> trendValues,
-            decimal zScore,
+            decimal confidenceMultiplier,
             decimal standardError,
             int historicalCount)
         {
@@ -462,7 +859,7 @@ namespace SmartStock.Classes.Data.Services
                     ? Math.Sqrt(1.0 + leverage)      // PI — include variabilitatea unei noi obs.
                     : Math.Sqrt(leverage);             // CI — doar incertitudinea mediei ajustate
 
-                var margin = zScore * standardError * (decimal)intervalMultiplier;
+                var margin = confidenceMultiplier * standardError * (decimal)intervalMultiplier;
                 upper.Add(trendValues[i] + margin);
                 lower.Add(Math.Max(0m, trendValues[i] - margin));
             }
@@ -520,7 +917,10 @@ namespace SmartStock.Classes.Data.Services
             List<decimal> historicalSales,
             List<decimal> trendValues,
             EconometricModel econometricModel,
-            List<AiForecast> forecasts)
+            List<AiForecast> forecasts,
+            decimal correlation,
+            decimal correlationPValue,
+            int correlationN)
         {
             var firstHistorical = historicalSales.Count > 0 ? historicalSales.First() : 0m;
             var lastHistorical = historicalSales.Count > 0 ? historicalSales.Last() : 0m;
@@ -540,6 +940,10 @@ namespace SmartStock.Classes.Data.Services
             builder.AppendLine("- computedMetrics:");
             builder.AppendLine($"  - rSquared: {econometricModel.RSquared:F4}");
             builder.AppendLine($"  - slope: {econometricModel.CoefficientValue:F4}");
+            builder.AppendLine($"  - slopePValue: {econometricModel.PValue:F4}");
+            builder.AppendLine($"  - factorCorrelation: {correlation:F4} (date-aligned Pearson r)");
+            builder.AppendLine($"  - correlationPValue: {correlationPValue:F4}");
+            builder.AppendLine($"  - correlationSampleSize: {correlationN}");
             builder.AppendLine($"  - firstHistoricalDailyTotal: {firstHistorical:F2}");
             builder.AppendLine($"  - lastHistoricalDailyTotal: {lastHistorical:F2}");
             builder.AppendLine($"  - firstTrendValue: {firstTrend:F2}");
@@ -584,12 +988,13 @@ namespace SmartStock.Classes.Data.Services
 
         // ── Persistence helpers ───────────────────────────────────────────────────
 
-        private async Task PersistEconometricModelAsync(EconometricModel model, CancellationToken cancellationToken)
+        private async Task PersistEconometricModelAsync(EconometricModel model, int productId, CancellationToken cancellationToken)
         {
             try
             {
                 _econometricModelRepository.Add(new EconometricModel
                 {
+                    ProductId        = productId,
                     ModelName        = model.ModelName,
                     CoefficientValue = model.CoefficientValue,
                     PValue           = model.PValue,

@@ -76,14 +76,16 @@ namespace SmartStock.Forms.User_Control.AnalysisForms
             // sensitivity_cb
             // 
             sensitivity_cb.Dock = DockStyle.Fill;
+            sensitivity_cb.DrawMode = DrawMode.OwnerDrawFixed;
             sensitivity_cb.DropDownStyle = ComboBoxStyle.DropDownList;
             sensitivity_cb.FlatStyle = FlatStyle.Flat;
             sensitivity_cb.Font = new Font("Segoe UI", 11F);
             sensitivity_cb.FormattingEnabled = true;
+            sensitivity_cb.ItemHeight = 30;
             sensitivity_cb.Location = new Point(359, 20);
             sensitivity_cb.Margin = new Padding(0, 10, 10, 10);
             sensitivity_cb.Name = "sensitivity_cb";
-            sensitivity_cb.Size = new Size(350, 33);
+            sensitivity_cb.Size = new Size(350, 36);
             sensitivity_cb.TabIndex = 0;
             // 
             // lbl_aggregation
@@ -103,14 +105,16 @@ namespace SmartStock.Forms.User_Control.AnalysisForms
             // aggregation_cb
             // 
             aggregation_cb.Dock = DockStyle.Fill;
+            aggregation_cb.DrawMode = DrawMode.OwnerDrawFixed;
             aggregation_cb.DropDownStyle = ComboBoxStyle.DropDownList;
             aggregation_cb.FlatStyle = FlatStyle.Flat;
             aggregation_cb.Font = new Font("Segoe UI", 11F);
             aggregation_cb.FormattingEnabled = true;
+            aggregation_cb.ItemHeight = 30;
             aggregation_cb.Location = new Point(359, 75);
             aggregation_cb.Margin = new Padding(0, 10, 10, 10);
             aggregation_cb.Name = "aggregation_cb";
-            aggregation_cb.Size = new Size(350, 33);
+            aggregation_cb.Size = new Size(350, 36);
             aggregation_cb.TabIndex = 1;
             // 
             // lbl_info

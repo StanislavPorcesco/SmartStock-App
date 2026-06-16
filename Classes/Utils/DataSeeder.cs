@@ -2,290 +2,313 @@ using SmartStock.Classes.Models;
 
 namespace SmartStock.Classes.Utils
 {
+    /// <summary>
+    /// Runtime data seeder for a representative café dataset (1 March – 8 July 2026).
+    ///
+    /// WHY RUNTIME (not EF HasData): the dataset is tens of thousands of sales rows.
+    /// HasData would bake every row into a migration (multi-MB file, slow apply, fragile
+    /// hand-managed PK ranges). Here PKs are DB-assigned and seeding runs once when the
+    /// Sales table is empty (Program.cs, right after Database.Migrate()).
+    ///
+    /// STATISTICAL DESIGN (see docs/ANALYSIS_MODULE_REVIEW.md):
+    /// The date-aligned correlation needs DENSE, daily, varying factors. So:
+    ///   • Weather / "Daily Max Temperature"  → continuous daily  → CORRELATION + trend
+    ///       hot drinks fall as temp rises (r ≈ −0.9), cold drinks rise (r ≈ +0.9)
+    ///   • Weather / "Daily Precipitation"    → continuous daily  → CORRELATION
+    ///       comfort drinks (Hot Chocolate) rise on rainy/gloomy days (dominant +r)
+    ///   • Event   / "Public Holiday"         → sparse (≈8 days)  → ANOMALY spikes
+    ///       a sparse constant factor is mathematically r ≈ 0, so holidays are modelled
+    ///       as sales SPIKES detected by Anomaly Detection, not as a correlation.
+    /// Each product has ONE dominant driver so its correlation comes out clean; the
+    /// pastries are a flat baseline whose holiday spikes are the anomaly-detection demo.
+    ///
+    /// Factor vocabulary (FactorType/Description) mirrors ExternalFactorsFetchService so
+    /// seeded and live-fetched factors are interchangeable in the analysis UI.
+    /// </summary>
     public static class DataSeeder
     {
-        // ─── Shared date sets ──────────────────────────────────────────────────────
+        private static readonly DateTime Start = new(2026, 3, 1);
+        private static readonly DateTime End   = new(2026, 7, 8);
+        private static readonly int Days = (End - Start).Days + 1; // 130 days inclusive
+
+        // Romanian public holidays / observances in range — drive sales SPIKES (anomalies)
         private static readonly HashSet<DateTime> HolidayDates = new()
         {
-            new DateTime(2026, 3, 8),  // International Women's Day
-            new DateTime(2026, 4, 10), // Good Friday (Orthodox)
-            new DateTime(2026, 4, 11), // Holy Saturday
-            new DateTime(2026, 4, 12), // Orthodox Easter Sunday
-            new DateTime(2026, 4, 13)  // Easter Monday
+            new(2026, 3, 8),   // International Women's Day (observance)
+            new(2026, 4, 10),  // Orthodox Good Friday
+            new(2026, 4, 11),  // Holy Saturday
+            new(2026, 4, 12),  // Orthodox Easter Sunday
+            new(2026, 4, 13),  // Easter Monday
+            new(2026, 5, 1),   // Labour Day
+            new(2026, 5, 31),  // Orthodox Pentecost
+            new(2026, 6, 1),   // Children's Day / Pentecost Monday
         };
 
-        private static readonly HashSet<DateTime> PromotionDates = BuildPromotionDates();
+        // Product IDs — MUST match the HasData products in SmartStockContext.OnModelCreating
+        private const int Americano = 1, Cappuccino = 2, HotTea = 3, HotChocolate = 4,
+                          ColdBrew = 5, IcedLatte = 6, Lemonade = 7, IcedTea = 8,
+                          Croissant = 9, Cheesecake = 10;
 
-        private static HashSet<DateTime> BuildPromotionDates()
+        private static readonly (int Id, decimal Price)[] ProductSpecs =
         {
-            var set = new HashSet<DateTime>();
-            // Four promotion rounds, 3 days each, spaced ~2 weeks apart
-            foreach (var promoStart in new[]
+            (Americano, 14m), (Cappuccino, 16m), (HotTea, 12m), (HotChocolate, 18m),
+            (ColdBrew, 20m),  (IcedLatte, 22m),  (Lemonade, 15m), (IcedTea, 14m),
+            (Croissant, 8m),  (Cheesecake, 12m),
+        };
+
+        private static bool IsDrink(int productId) => productId <= IcedTea; // 1..8 drinks, 9-10 pastries
+
+        // ─── Default per-role demo accounts ──────────────────────────────────────────
+        // Idempotent: keyed on Username (NOT a fixed PK), so it never collides with users
+        // created at runtime through the UI, and re-running inserts nothing. Convention:
+        // username == password. Admin (UserId 1) is already seeded via HasData/migrations.
+        private static readonly (string Username, string Role, string FullName)[] DefaultAccounts =
+        {
+            ("manager",  "Manager",  "Default Manager"),
+            ("operator", "Operator", "Default Operator"),
+        };
+
+        public static void SeedDefaultAccounts(SmartStockContext context)
+        {
+            bool added = false;
+            foreach (var (username, role, fullName) in DefaultAccounts)
             {
-                new DateTime(2026, 3, 5),
-                new DateTime(2026, 3, 19),
-                new DateTime(2026, 4, 2),
-                new DateTime(2026, 4, 16)
-            })
-            {
-                for (var d = 0; d < 3; d++)
-                    set.Add(promoStart.AddDays(d));
+                if (context.Users.Any(u => u.Username == username)) continue;
+
+                string salt = SecurityService.GenerateSalt();
+                context.Users.Add(new User
+                {
+                    Username     = username,
+                    PasswordHash = SecurityService.HashPassword(username, salt), // password == username
+                    Salt         = salt,
+                    FullName     = fullName,
+                    Role         = role,
+                    Email        = $"{username}@gmail.com",
+                    IsActive     = true,
+                    IsLoggedIn   = 0,
+                });
+                added = true;
             }
-            return set;
+
+            if (added) context.SaveChanges();
         }
 
-        // Returns the same daily temperature used for the Weather factor so that
-        // products derived from it are numerically aligned with the factor series.
-        // i is the day index (0-based) in the transaction loop (March 1 = 0).
-        private static int DailyTemperature(int i)
+        // ─── Public entry point ──────────────────────────────────────────────────────
+        public static void SeedRuntimeData(SmartStockContext context)
         {
-            // Factor loop starts at i=1 (March 2), transaction loop at i=0 (March 1).
-            // Shift by 1 so Cold Brew / Americano correlate with the factor from the
-            // previous day — which is the natural 1-day lag in the factor series.
-            int fi = i + 1; // align to the factor index
-            return fi < 31 ? 5 + (fi % 10) : 15 + (fi % 10);
-        }
+            // Idempotent: only seed an empty database.
+            if (context.Sales.Any()) return;
 
-        // ─── External Factors ──────────────────────────────────────────────────────
-        public static List<ExternalFactor> GenerateFactors()
-        {
-            var factors = new List<ExternalFactor>();
-            var start = new DateTime(2026, 3, 1);
+            var env       = BuildEnvironment();
+            var factors   = GenerateFactors(env);
+            var forecasts = GenerateForecasts(env);
+            var (sales, transactions) = GenerateTransactionalData(env);
 
-            for (int i = 1; i < 61; i++) // March 2 – April 30 (60 days)
+            var previous = context.ChangeTracker.AutoDetectChangesEnabled;
+            context.ChangeTracker.AutoDetectChangesEnabled = false; // bulk-insert perf
+            try
             {
-                var date = start.AddDays(i);
+                context.ExternalFactors.AddRange(factors);
+                context.AiForecasts.AddRange(forecasts);
+                context.Sales.AddRange(sales);            // nested SaleDetails inserted via navigation
+                context.Transactions.AddRange(transactions);
+                context.SaveChanges();
+            }
+            finally
+            {
+                context.ChangeTracker.AutoDetectChangesEnabled = previous;
+            }
+        }
 
-                // Weather — temperature rises from March (5-14 °C) to April (15-24 °C),
-                // oscillating with a 10-day period to create a distinct wave pattern.
-                int temp = i < 31 ? 5 + (i % 10) : 15 + (i % 10);
-                factors.Add(new ExternalFactor
-                {
-                    FactorId = i,
-                    FactorType = "Weather",
-                    Region = "Bucharest",
-                    Description = "Daily Temperature",
-                    ImpactValue = temp,
-                    ValueType = "Absolute",
-                    Date = date,
-                    IsActive = true
-                });
+        // ─── Deterministic daily environment ─────────────────────────────────────────
+        // Built with a fixed seed so the factor values stored in the DB are IDENTICAL to
+        // the values that drive sales — this is what makes the correlation strong and the
+        // forecast trend coherent. Sales add their own (independent) noise on top.
+        private readonly record struct DailyEnv(
+            DateTime Date, double Temp, double Precip, bool IsHoliday, bool IsWeekend);
 
-                // Holiday — binary: 1 on public holidays, 0 otherwise
-                factors.Add(new ExternalFactor
-                {
-                    FactorId = 60 + i,
-                    FactorType = "Holiday",
-                    Region = "Bucharest",
-                    Description = HolidayDates.Contains(date) ? "Public Holiday" : "Regular Day",
-                    ImpactValue = HolidayDates.Contains(date) ? 1m : 0m,
-                    ValueType = "Binary",
-                    Date = date,
-                    IsActive = true
-                });
+        private static DailyEnv[] BuildEnvironment()
+        {
+            var env = new DailyEnv[Days];
+            var rng = new Random(2026); // fixed seed → deterministic across every call
 
-                // Promotion — binary: 1 during active promotion windows, 0 otherwise
-                factors.Add(new ExternalFactor
-                {
-                    FactorId = 120 + i,
-                    FactorType = "Promotion",
-                    Region = "Bucharest",
-                    Description = PromotionDates.Contains(date) ? "Active Promotion" : "No Promotion",
-                    ImpactValue = PromotionDates.Contains(date) ? 1m : 0m,
-                    ValueType = "Binary",
-                    Date = date,
-                    IsActive = true
-                });
+            for (int i = 0; i < Days; i++)
+            {
+                var date = Start.AddDays(i);
+
+                // Seasonal warming 8 °C (March) → 30 °C (July) with a biweekly wave.
+                double trend = 8.0 + 22.0 * i / (Days - 1);
+                double wave  = 3.0 * Math.Sin(2 * Math.PI * i / 14.0);
+                double temp  = Math.Round(trend + wave, 1);
+
+                // ~35% of days are rainy; amount 1–22 mm. Dry days are 0 (kept in the
+                // series so precipitation is a dense daily correlate, not a sparse one).
+                bool rainy    = rng.NextDouble() < 0.35;
+                double precip = rainy ? Math.Round(1 + rng.NextDouble() * 21, 1) : 0.0;
+
+                bool isWeekend = date.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday;
+
+                env[i] = new DailyEnv(date, temp, precip, HolidayDates.Contains(date), isWeekend);
+            }
+            return env;
+        }
+
+        // ─── External Factors ────────────────────────────────────────────────────────
+        private static List<ExternalFactor> GenerateFactors(DailyEnv[] env)
+        {
+            var factors = new List<ExternalFactor>(env.Length * 3);
+
+            foreach (var d in env)
+            {
+                // Dense daily continuous → correlation + forecast trend driver.
+                factors.Add(Factor("Weather", "Daily Max Temperature", (decimal)d.Temp, "Absolute", d.Date));
+
+                // Dense daily (0 on dry days) → correlation driver for comfort drinks.
+                factors.Add(Factor("Weather", "Daily Precipitation", (decimal)d.Precip, "Absolute", d.Date));
+
+                // Sparse → drives sales SPIKES (anomaly detection), NOT correlation.
+                if (d.IsHoliday)
+                    factors.Add(Factor("Event", "Public Holiday", 1.5m, "Multiplier", d.Date));
             }
 
             return factors;
         }
 
-        // ─── AI Forecasts ──────────────────────────────────────────────────────────
-        public static List<AiForecast> GenerateForecasts()
+        private static ExternalFactor Factor(
+            string type, string description, decimal value, string valueType, DateTime date) => new()
         {
-            var forecasts = new List<AiForecast>();
-            var rand = new Random(123);
-            var start = new DateTime(2026, 3, 1);
-            int forecastId = 1;
+            FactorType  = type,
+            Description = description,
+            Region      = "Bucharest",
+            ImpactValue = value,
+            ValueType   = valueType,
+            Date        = date,
+            IsActive    = true,
+        };
 
-            for (int productId = 1; productId <= 3; productId++)
+        // ─── Transactional data (Sales + nested SaleDetails + Transactions) ──────────
+        private static (List<Sale> Sales, List<Transaction> Transactions) GenerateTransactionalData(DailyEnv[] env)
+        {
+            var sales        = new List<Sale>();
+            var transactions = new List<Transaction>();
+
+            int seed = 100;
+            foreach (var (productId, unitPrice) in ProductSpecs)
             {
-                for (int i = 0; i < 90; i++)
+                var rand = new Random(seed++); // per-product stream → reproducible
+
+                foreach (var day in env)
                 {
-                    var date = start.AddDays(i);
-                    int temp = DailyTemperature(i);
+                    int count = DailyCount(productId, rand, day);
 
-                    decimal predicted = productId switch
+                    for (int j = 0; j < count; j++)
                     {
-                        // Americano: inversely tied to temperature
-                        1 => Math.Round(Math.Max(1m, 42m - (temp * 0.9m) + (decimal)(rand.NextDouble() * 8 - 4)), 2),
-                        // Espresso: higher on promotion days
-                        2 => Math.Round(PromotionDates.Contains(date) ? 55m + (decimal)(rand.NextDouble() * 10 - 5) : 16m + (decimal)(rand.NextDouble() * 6 - 3), 2),
-                        // Cold Brew: directly tied to temperature
-                        _ => Math.Round(Math.Max(1m, temp * 1.6m + (decimal)(rand.NextDouble() * 6 - 3)), 2)
-                    };
+                        int qty = rand.Next(1, 4); // 1–3 units per sale
+                        var timestamp = day.Date.AddHours(rand.Next(7, 20)).AddMinutes(rand.Next(0, 60));
 
-                    decimal confidence = productId switch
-                    {
-                        1 => Math.Round(0.72m + (decimal)(rand.NextDouble() * 0.22), 4),
-                        2 => Math.Round(0.65m + (decimal)(rand.NextDouble() * 0.25), 4),
-                        _ => Math.Round(0.60m + (decimal)(rand.NextDouble() * 0.30), 4)
-                    };
+                        sales.Add(new Sale
+                        {
+                            CustomerId    = 1,
+                            UserId        = 1,
+                            TotalAmount   = qty * unitPrice,
+                            SaleDate      = timestamp,
+                            PaymentMethod = rand.Next(0, 2) == 0 ? "Card" : "Cash",
+                            PaymentStatus = "Paid",
+                            IsActive      = true,
+                            SaleDetails   = new List<SaleDetails>
+                            {
+                                new() { ProductId = productId, Quantity = qty, UnitPrice = unitPrice }
+                            }
+                        });
+
+                        transactions.Add(new Transaction
+                        {
+                            ProductId = productId,
+                            EntityId  = 1,
+                            UserId    = 1,
+                            Quantity  = qty,
+                            Type      = "Stock Out",
+                            Date      = timestamp,
+                        });
+                    }
+                }
+            }
+
+            return (sales, transactions);
+        }
+
+        // Deterministic expected daily transaction count per product (the "signal").
+        // Sales add weekend/holiday lift + noise; forecasts read it directly.
+        private static double BaseCount(int productId, DailyEnv e) => productId switch
+        {
+            // Hot drinks — NEGATIVE temperature correlation (fall as it warms)
+            Americano    => 48 - 1.00 * e.Temp,
+            Cappuccino   => 44 - 0.95 * e.Temp,
+            HotTea       => 38 - 0.85 * e.Temp,
+
+            // Hot Chocolate — DOMINANT positive precipitation correlation (gloomy/rainy days)
+            HotChocolate => 14 + 1.30 * e.Precip - 0.25 * e.Temp,
+
+            // Cold drinks — POSITIVE temperature correlation (rise as it warms)
+            ColdBrew     => 8  + 1.15 * e.Temp,
+            IcedLatte    => 6  + 1.10 * e.Temp,
+            Lemonade     => 5  + 1.20 * e.Temp,
+            IcedTea      => 7  + 1.00 * e.Temp,
+
+            // Pastries — FLAT baseline + large holiday spike → anomaly-detection demo
+            Croissant    => 32 + (e.IsHoliday ? 45 : 0),
+            Cheesecake   => 24 + (e.IsHoliday ? 35 : 0),
+
+            _ => 10,
+        };
+
+        private static int DailyCount(int productId, Random r, DailyEnv e)
+        {
+            double v = BaseCount(productId, e);
+
+            if (IsDrink(productId))
+            {
+                if (e.IsWeekend) v += r.Next(5, 12);   // weekend footfall
+                if (e.IsHoliday) v += r.Next(4, 9);    // mild holiday lift for drinks
+            }
+            else if (e.IsWeekend && !e.IsHoliday)
+            {
+                v += r.Next(4, 9);                      // pastries: mild weekend lift (holiday spike is in BaseCount)
+            }
+
+            v += r.Next(-3, 4);                          // daily noise
+            return Math.Max(0, (int)Math.Round(v));
+        }
+
+        // ─── AI Forecasts (populate the table; ~daily expected units per product) ────
+        private static List<AiForecast> GenerateForecasts(DailyEnv[] env)
+        {
+            var forecasts = new List<AiForecast>(ProductSpecs.Length * env.Length);
+            var rand = new Random(321);
+
+            foreach (var (productId, _) in ProductSpecs)
+            {
+                foreach (var day in env)
+                {
+                    // ~2 units per sale on average → expected daily demand in units.
+                    double predicted = Math.Max(1, BaseCount(productId, day) * 2.0);
+
+                    decimal confidence = IsDrink(productId)
+                        ? Math.Round(0.80m + (decimal)(rand.NextDouble() * 0.12), 4)  // clear driver
+                        : Math.Round(0.62m + (decimal)(rand.NextDouble() * 0.13), 4); // noisier
 
                     forecasts.Add(new AiForecast
                     {
-                        ForecastId = forecastId++,
-                        ProductId = productId,
-                        ForecastDate = date,
-                        PredictedDemand = predicted,
+                        ProductId       = productId,
+                        ForecastDate    = day.Date,
+                        PredictedDemand = Math.Round((decimal)predicted, 2),
                         ConfidenceScore = Math.Min(0.99m, confidence),
-                        ModelVersion = "v1.0"
+                        ModelVersion    = "seed-v2",
                     });
                 }
             }
 
             return forecasts;
-        }
-
-        // ─── Transactional Data ────────────────────────────────────────────────────
-        // Each product's daily sales volume is derived directly from the factor it
-        // should correlate with, so EconometricEngine.CalculateCorrelation (Pearson r)
-        // produces a strong coefficient when that factor is selected in the UI.
-        public static (List<Sale> Sales, List<SaleDetails> Details, List<Transaction> Transactions) GenerateTransactionalData()
-        {
-            var sales = new List<Sale>();
-            var details = new List<SaleDetails>();
-            var transactions = new List<Transaction>();
-
-            var start = new DateTime(2026, 3, 1);
-
-            // ── Product 1: Americano Coffee ──────────────────────────────────────
-            // Target: strong NEGATIVE correlation with Weather.
-            // Formula: txCount = 42 - temp * 0.9 + weekend/holiday bonus + noise
-            // As temperature rises (5→24), base count falls (38→20), mirroring the
-            // factor curve in reverse so Pearson r approaches -1 for Weather.
-            GenerateProductTransactions(
-                productId: 1, unitPrice: 20m,
-                saleIdStart: 1, detailIdStart: 1, transIdStart: 1, seed: 42,
-                start,
-                (rand, i, date) =>
-                {
-                    int temp = DailyTemperature(i);
-                    int baseCount = Math.Max(2, 42 - (int)(temp * 0.9) + rand.Next(-3, 4));
-                    bool isWeekend = date.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday;
-                    return baseCount
-                        + (isWeekend ? rand.Next(8, 15) : 0)
-                        + (HolidayDates.Contains(date) ? rand.Next(5, 10) : 0);
-                },
-                sales, details, transactions);
-
-            // ── Product 2: Espresso ──────────────────────────────────────────────
-            // Target: strong POSITIVE correlation with Promotion.
-            // Formula: txCount = 8 (base) + 18-24 promo spike + small weekend noise
-            // The spike is large enough relative to weekend noise that the binary
-            // Promotion series aligns tightly with the sales series (Pearson r > 0.85).
-            GenerateProductTransactions(
-                productId: 2, unitPrice: 18m,
-                saleIdStart: 5000, detailIdStart: 5000, transIdStart: 5000, seed: 99,
-                start,
-                (rand, i, date) =>
-                {
-                    bool isPromo = PromotionDates.Contains(date);
-                    bool isWeekend = date.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday;
-                    return 8
-                        + (isPromo ? rand.Next(18, 24) : 0)   // dominant promo signal
-                        + (isWeekend ? rand.Next(3, 6) : 0)   // minor weekend noise
-                        + rand.Next(-1, 2);
-                },
-                sales, details, transactions);
-
-            // ── Product 3: Cold Brew ─────────────────────────────────────────────
-            // Target: strong POSITIVE correlation with Weather.
-            // Formula: txCount = temp * 1.6 + weekend bonus + noise
-            // Daily count is directly proportional to temperature (same oscillation
-            // pattern as the Weather factor), so Pearson r approaches +1 for Weather.
-            GenerateProductTransactions(
-                productId: 3, unitPrice: 25m,
-                saleIdStart: 10000, detailIdStart: 10000, transIdStart: 10000, seed: 77,
-                start,
-                (rand, i, date) =>
-                {
-                    int temp = DailyTemperature(i);
-                    int baseCount = Math.Max(1, (int)(temp * 1.6) + rand.Next(-3, 4));
-                    bool isWeekend = date.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday;
-                    return baseCount + (isWeekend ? rand.Next(5, 10) : 0);
-                },
-                sales, details, transactions);
-
-            return (sales, details, transactions);
-        }
-
-        private static void GenerateProductTransactions(
-            int productId,
-            decimal unitPrice,
-            int saleIdStart,
-            int detailIdStart,
-            int transIdStart,
-            int seed,
-            DateTime start,
-            Func<Random, int, DateTime, int> dailyVolume,
-            List<Sale> sales,
-            List<SaleDetails> details,
-            List<Transaction> transactions)
-        {
-            var rand = new Random(seed);
-            int saleId = saleIdStart;
-            int detailId = detailIdStart;
-            int transId = transIdStart;
-
-            for (int i = 0; i < 61; i++)
-            {
-                var date = start.AddDays(i);
-                int txCount = Math.Max(0, dailyVolume(rand, i, date));
-
-                for (int j = 0; j < txCount; j++)
-                {
-                    int qty = rand.Next(1, 4);
-                    var saleDate = date.AddHours(rand.Next(7, 20)).AddMinutes(rand.Next(0, 60));
-
-                    sales.Add(new Sale
-                    {
-                        SaleId = saleId,
-                        CustomerId = 1,
-                        UserId = 1,
-                        TotalAmount = qty * unitPrice,
-                        SaleDate = saleDate,
-                        PaymentMethod = rand.Next(0, 2) == 0 ? "Card" : "Cash",
-                        PaymentStatus = "Paid",
-                        IsActive = true
-                    });
-
-                    details.Add(new SaleDetails
-                    {
-                        DetailId = detailId,
-                        SaleId = saleId,
-                        ProductId = productId,
-                        Quantity = qty,
-                        UnitPrice = unitPrice
-                    });
-
-                    transactions.Add(new Transaction
-                    {
-                        TransactionId = transId,
-                        ProductId = productId,
-                        EntityId = 1,
-                        UserId = 1,
-                        Quantity = qty,
-                        Type = "Stock Out",
-                        Date = saleDate
-                    });
-
-                    saleId++;
-                    detailId++;
-                    transId++;
-                }
-            }
         }
     }
 }

@@ -57,6 +57,10 @@ namespace SmartStock
                 using (var db = new SmartStockContext())
                 {
                     db.Database.Migrate();
+                    // Ensure the default per-role demo accounts exist (idempotent, by username).
+                    DataSeeder.SeedDefaultAccounts(db);
+                    // Seed the representative café dataset on first run (empty Sales table).
+                    DataSeeder.SeedRuntimeData(db);
                 }
             }
             catch (Exception ex)

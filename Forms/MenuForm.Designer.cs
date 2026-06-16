@@ -538,7 +538,7 @@ namespace SmartStock.Forms
             version_lbl.Size = new Size(108, 34);
             version_lbl.TabIndex = 1;
             version_lbl.Tag = "muted";
-            version_lbl.Text = "SmartStock v1.1";
+            version_lbl.Text = "SmartStock v1.3";
             version_lbl.TextAlign = ContentAlignment.MiddleRight;
             // 
             // titlebar_pnl

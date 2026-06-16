@@ -19,6 +19,9 @@ namespace SmartStock
         private SaleService _saleService;
         private CustomerService _customerService;
 
+        private int _sortColumnIndex = -1;
+        private SortOrder _sortOrder = SortOrder.None;
+
         public SearchForm()
         {
             InitializeComponent();
@@ -57,6 +60,9 @@ namespace SmartStock
         {
             string selectedOption = selector_cb.SelectedItem as string;
             if (selectedOption == null) return;
+
+            _sortColumnIndex = -1;
+            _sortOrder = SortOrder.None;
 
             // 1. Curățăm panel-ul și oprim layout-ul pentru viteză
             filters_pnl.SuspendLayout();
@@ -307,19 +313,19 @@ namespace SmartStock
             {
                 var filteredData = filterControl.GetFilteredData();
 
-                // Dacă GetFilteredData returnează un Task (pentru că serviciul e asincron)
                 if (filteredData is Task task)
                 {
                     await task;
-                    // Extragem rezultatul din Task folosind Reflection
                     var result = task.GetType().GetProperty("Result")?.GetValue(task);
                     main_dgv.DataSource = result;
                 }
                 else
                 {
-                    // Dacă returnează direct lista (sincron)
                     main_dgv.DataSource = filteredData;
                 }
+
+                if (_sortColumnIndex >= 0 && _sortOrder != SortOrder.None)
+                    ApplyCurrentSort();
             }
             catch (Exception ex)
             {
@@ -572,6 +578,137 @@ namespace SmartStock
                 {
                     filterControl.ResetFilters();
                 }
+            }
+        }
+
+        private void main_dgv_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            try
+            {
+                var column = main_dgv.Columns[e.ColumnIndex];
+                var propName = column.DataPropertyName;
+                if (string.IsNullOrEmpty(propName)) return;
+
+                var source = main_dgv.DataSource as System.Collections.IList;
+                if (source == null || source.Count == 0) return;
+
+                var firstItem = source[0];
+                var prop = firstItem.GetType().GetProperty(propName);
+                if (prop == null) return;
+
+                var propType = prop.PropertyType;
+                bool isCollection = typeof(System.Collections.IEnumerable).IsAssignableFrom(propType)
+                                    && propType != typeof(string);
+                if (isCollection) return;
+
+                if (_sortColumnIndex == e.ColumnIndex)
+                    _sortOrder = _sortOrder == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
+                else
+                {
+                    _sortColumnIndex = e.ColumnIndex;
+                    _sortOrder = SortOrder.Ascending;
+                }
+
+                ApplyCurrentSort();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error sorting: {ex.Message}", "Sort Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void ApplyCurrentSort()
+        {
+            if (_sortColumnIndex < 0 || _sortOrder == SortOrder.None) return;
+            if (_sortColumnIndex >= main_dgv.Columns.Count) return;
+
+            var column = main_dgv.Columns[_sortColumnIndex];
+            var propName = column.DataPropertyName;
+            if (string.IsNullOrEmpty(propName)) return;
+
+            var source = main_dgv.DataSource as System.Collections.IList;
+            if (source == null || source.Count == 0) return;
+
+            var items = source.Cast<object>().ToList();
+            bool ascending = _sortOrder == SortOrder.Ascending;
+
+            var sorted = (ascending
+                ? items.OrderBy(x => GetSortKey(x, propName), NullSafeComparer.Instance)
+                : items.OrderByDescending(x => GetSortKey(x, propName), NullSafeComparer.Instance))
+                .ToList();
+
+            var itemType = items[0].GetType();
+            var typedList = (System.Collections.IList)Activator.CreateInstance(
+                typeof(List<>).MakeGenericType(itemType));
+            foreach (var item in sorted) typedList.Add(item);
+
+            main_dgv.DataSource = typedList;
+        }
+
+        private void main_dgv_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            if (main_dgv.Rows.Count == 0) return;
+            var firstItem = main_dgv.Rows[0].DataBoundItem;
+            if (firstItem == null) return;
+
+            foreach (DataGridViewColumn col in main_dgv.Columns)
+            {
+                if (string.IsNullOrEmpty(col.DataPropertyName))
+                {
+                    col.SortMode = DataGridViewColumnSortMode.NotSortable;
+                    continue;
+                }
+
+                var prop = firstItem.GetType().GetProperty(col.DataPropertyName);
+                if (prop == null) { col.SortMode = DataGridViewColumnSortMode.NotSortable; continue; }
+
+                bool isCollection = typeof(System.Collections.IEnumerable).IsAssignableFrom(prop.PropertyType)
+                                    && prop.PropertyType != typeof(string);
+
+                col.SortMode = isCollection
+                    ? DataGridViewColumnSortMode.NotSortable
+                    : DataGridViewColumnSortMode.Programmatic;
+
+                col.HeaderCell.SortGlyphDirection = (col.Index == _sortColumnIndex)
+                    ? _sortOrder
+                    : SortOrder.None;
+            }
+        }
+
+        private static object GetSortKey(object item, string propName)
+        {
+            var prop = item.GetType().GetProperty(propName);
+            if (prop == null) return null;
+
+            var propType = prop.PropertyType;
+            if (typeof(System.Collections.IEnumerable).IsAssignableFrom(propType) && propType != typeof(string))
+                return null;
+
+            var value = prop.GetValue(item);
+
+            // M:1 relation — sort by the same resolved Name CellFormatting displays
+            if (propType.IsClass && propType != typeof(string) && value != null)
+            {
+                var nameProp = value.GetType().GetProperties()
+                    .FirstOrDefault(p => p.Name.Contains("Name") || p.Name.Contains("Username"));
+                return nameProp?.GetValue(value);
+            }
+
+            return value;
+        }
+
+        private class NullSafeComparer : IComparer<object>
+        {
+            public static readonly NullSafeComparer Instance = new();
+
+            public int Compare(object x, object y)
+            {
+                if (x == null && y == null) return 0;
+                if (x == null) return -1;
+                if (y == null) return 1;
+                if (x is IComparable cx) return cx.CompareTo(y);
+                return string.Compare(x.ToString(), y.ToString(), StringComparison.OrdinalIgnoreCase);
             }
         }
 

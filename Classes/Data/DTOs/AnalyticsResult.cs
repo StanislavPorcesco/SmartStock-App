@@ -22,6 +22,23 @@ namespace SmartStock.Classes.Data.DTOs
         }
         public decimal StandardError { get; set; }
         public int ConfidencePercent { get; set; } = 95;
+
+        /// <summary>
+        /// Coeficientul de corelație Pearson între vânzări și factorii externi,
+        /// aliniate pe dată (bucket de agregare). Interval [-1, 1].
+        /// </summary>
+        public decimal Correlation { get; set; }
+
+        /// <summary>
+        /// P-value bilateral al corelației (testul t cu n-2 grade de libertate).
+        /// Corelația e semnificativă statistic dacă &lt; 0.05.
+        /// </summary>
+        public decimal CorrelationPValue { get; set; } = 1m;
+
+        /// <summary>
+        /// Numărul de perechi (sales, factor) aliniate pe dată folosite în corelație.
+        /// </summary>
+        public int CorrelationSampleSize { get; set; }
         public List<string> ChartLabels { get; set; } = new();
         public List<ExternalFactor> Factors { get; set; } = new();
         public string AiInsights { get; set; } = string.Empty;
@@ -45,5 +62,32 @@ namespace SmartStock.Classes.Data.DTOs
         /// Scorul Z maxim (în valoare absolută) din toate anomaliile detectate.
         /// </summary>
         public decimal MaxSeverityZScore { get; set; }
+
+        // ── Demand Forecast: modelul folosit ────────────────────────────────────
+        /// <summary>
+        /// "Multivariate (sales ~ factors)" când s-au selectat factori şi regresia a reuşit,
+        /// altfel "Univariate (sales ~ time)".
+        /// </summary>
+        public string ModelType { get; set; } = "Univariate (sales ~ time)";
+
+        /// <summary>R² ajustat (penalizează numărul de regresori) — pentru regresia multiplă.</summary>
+        public decimal AdjustedRSquared { get; set; }
+
+        /// <summary>Statistica F pentru semnificaţia globală a modelului multivariat.</summary>
+        public decimal FStatistic { get; set; }
+
+        /// <summary>p-value al testului F (modelul e semnificativ global dacă &lt; 0.05).</summary>
+        public decimal FPValue { get; set; } = 1m;
+
+        /// <summary>Coeficienţii modelului multivariat (intercept + factori), cu p-value.</summary>
+        public List<FactorCoefficient> FactorCoefficients { get; set; } = new();
+    }
+
+    /// <summary>Un coeficient al modelului de regresie multiplă, pentru afişare.</summary>
+    public sealed class FactorCoefficient
+    {
+        public string Name { get; set; } = string.Empty;
+        public decimal Coefficient { get; set; }
+        public decimal PValue { get; set; } = 1m;
     }
 }

@@ -54,6 +54,7 @@ namespace SmartStock.Forms
 
             InitializeUi();
             ThemeManager.Apply(this);
+            ApplyChartTheme();
         }
 
         public AnalyzeForm(AnalyticsFacade analyticsFacade, ProductService productService)
@@ -76,6 +77,7 @@ namespace SmartStock.Forms
 
             InitializeUi();
             ThemeManager.Apply(this);
+            ApplyChartTheme();
         }
 
         public AnalyzeForm(AnalyticsFacade analyticsFacade, ProductService productService, ExternalFactorService externalFactorService)
@@ -98,6 +100,7 @@ namespace SmartStock.Forms
 
             InitializeUi();
             ThemeManager.Apply(this);
+            ApplyChartTheme();
         }
 
         private void InitializeUi()
@@ -198,8 +201,8 @@ namespace SmartStock.Forms
         {
             try
             {
-                var factorTypes = await _externalDataProvider.GetDistinctFactorTypesAsync();
-                control.SetPrimaryFactors(factorTypes);
+                var factorOptions = await _externalDataProvider.GetDistinctFactorOptionsAsync();
+                control.SetPrimaryFactors(factorOptions);
             }
             catch
             {
@@ -215,7 +218,7 @@ namespace SmartStock.Forms
                 ThemeManager.Apply(_currentParameterView);
                 _currentParameterView.Refresh();
             }
-
+            ApplyChartTheme();
             Refresh();
         }
 
@@ -263,6 +266,11 @@ namespace SmartStock.Forms
                     SetAnomalyChartSeries(result);
                     UpdateAnomalyBadges(result);
                 }
+                else if (baseContext.AnalysisType.Equals("Correlation Analysis", StringComparison.OrdinalIgnoreCase))
+                {
+                    UpdateChart(result.HistoricalSales, result.TrendValues, result.UpperBond, result.LowerBond, result.ChartLabels, isDemandForecast);
+                    UpdateCorrelationBadges(result);
+                }
                 else
                 {
                     UpdateChart(result.HistoricalSales, result.TrendValues, result.UpperBond, result.LowerBond, result.ChartLabels, isDemandForecast);
@@ -270,7 +278,9 @@ namespace SmartStock.Forms
                 }
 
                 ApplyMarkdownLikeFormatting(result.AiInsights);
-                status_lbl.Text = "Analysis complete.";
+                status_lbl.Text = isDemandForecast
+                    ? $"Analysis complete · {result.ModelType}"
+                    : "Analysis complete.";
 
                 // Best-effort chart snapshot for the weekly report email attachment.
                 _ = Task.Delay(1000).ContinueWith(_ => BeginInvoke(SaveChartSnapshot));
@@ -353,12 +363,56 @@ namespace SmartStock.Forms
             label4.Text = "Sales Trend (%)";
             label6.Text = "AI Confidence";
 
-            var rSquared = result.EconometricModel?.RSquared ?? result.Reliability;
+            // result.Reliability reflectă modelul EFECTIV folosit (multivariat sau univariat),
+            // fără a depinde de RSquared-ul persistat din EconometricModel.
+            var rSquared = result.Reliability;
             reliability_lbl.Text = $"{rSquared:F3}";
             trend_lbl.Text = result.TrendLabel;
             confidence_lbl.Text = $"{result.AiConfidence:P0}";
 
             ApplyBadgeColors(rSquared, result.TrendLabel, result.AiConfidence);
+        }
+
+        /// <summary>
+        /// Badge-uri pentru Correlation Analysis: corelația Pearson (aliniată pe dată),
+        /// semnificația statistică (p-value) și mărimea eșantionului.
+        /// </summary>
+        private void UpdateCorrelationBadges(AnalyticsResult result)
+        {
+            label5.Text = "Correlation (r)";
+            label4.Text = "Significance (p)";
+            label6.Text = "Sample Size (n)";
+
+            var r = result.Correlation;
+            var p = result.CorrelationPValue;
+
+            reliability_lbl.Text = $"{r:F3}";
+            confidence_lbl.Text = result.CorrelationSampleSize.ToString();
+
+            // Forța corelației (|r|): codare culoare după convenția uzuală.
+            var absR = Math.Abs(r);
+            reliability_lbl.ForeColor = absR < 0.2m ? Color.Red
+                : absR < 0.4m ? Color.Orange
+                : absR < 0.6m ? Color.Gold
+                : Color.LimeGreen;
+
+            // Semnificația: verde dacă p < 0.05 (corelație reală), altfel roșu.
+            if (result.CorrelationSampleSize < 3)
+            {
+                trend_lbl.Text = "n/a";
+                trend_lbl.ForeColor = Color.Orange;
+            }
+            else
+            {
+                // p≈0 e corect (corelație foarte semnificativă), dar "0.000" induce în eroare;
+                // afișăm "<0.001" ca să se citească drept „înalt semnificativ", nu „zero".
+                trend_lbl.Text = p < 0.001m ? "<0.001" : $"{p:F3}";
+                trend_lbl.ForeColor = p < 0.05m ? Color.LimeGreen
+                    : p < 0.10m ? Color.Gold
+                    : Color.Red;
+            }
+
+            confidence_lbl.ForeColor = result.CorrelationSampleSize >= 4 ? Color.LimeGreen : Color.Orange;
         }
 
         private void ApplyMarkdownLikeFormatting(string markdown)
@@ -384,7 +438,8 @@ namespace SmartStock.Forms
                 return;
             }
 
-            analysis_type_cb.SelectedIndex = analysis_type_cb.Items.Count > 0 ? 0 : -1;
+            // Reset only the PARAMETERS — keep the user on the analysis module they chose.
+            // (Previously this forced SelectedIndex=0, snapping back to Demand Forecast.)
             target_subject_cb.SelectedIndex = target_subject_cb.Items.Count > 0 ? 0 : -1;
 
             var now = DateTime.Now.Date;
@@ -540,6 +595,18 @@ namespace SmartStock.Forms
             SetEnumPropertyByName(chart, "TooltipPosition", "Top");
 
             return chart;
+        }
+
+        private void ApplyChartTheme()
+        {
+            var palette = ThemeManager.GetCurrentPalette();
+            var textColor = new SKColor(palette.TextPrimary.R, palette.TextPrimary.G, palette.TextPrimary.B);
+            var bgColor   = new SKColor(palette.Surface.R, palette.Surface.G, palette.Surface.B);
+
+            var chartType = _analysisChart.GetType();
+            chartType.GetProperty("LegendTextPaint")?.SetValue(_analysisChart, new SolidColorPaint(textColor));
+            chartType.GetProperty("LegendBackgroundPaint")?.SetValue(_analysisChart, new SolidColorPaint(bgColor));
+            _analysisChart.Invalidate();
         }
 
         private void SetChartSeries(double[] historicalValues, double[] trendValues, double[] upperValues, double[] lowerValues, List<string> labels, bool isDemandForecast)

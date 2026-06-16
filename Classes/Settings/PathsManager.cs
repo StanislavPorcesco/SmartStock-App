@@ -26,8 +26,6 @@ namespace SmartStock.Classes.Settings
         public static string DefaultDatabasePath =>
             Path.Combine(DataDir, "SmartStock.db");
 
-        // ── Load ──────────────────────────────────────────────────────────────
-
         public static void Load()
         {
             if (!Directory.Exists(DataDir)) Directory.CreateDirectory(DataDir);
@@ -53,8 +51,6 @@ namespace SmartStock.Classes.Settings
                     DatabasePath = val;
             }
         }
-
-        // ── Save ──────────────────────────────────────────────────────────────
 
         public static void Save(string settingsPath, string databasePath)
         {

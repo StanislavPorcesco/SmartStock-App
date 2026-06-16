@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using SmartStock.Classes.Data.DTOs;
 using SmartStock.Classes.Data.Interfaces;
 using SmartStock.Classes.Models;
 
@@ -106,59 +107,234 @@ namespace SmartStock.Classes.Data.Services
 
             var stats = CalculateLinearRegression(x, y);
 
-            // Corelația este calculată folosind DOAR lista de factori transmisă din Facade
-            // (dacă există), altfel fallback la factori din DB pe interval.
-            List<decimal> factorSeries;
-            if (factors != null)
-            {
-                factorSeries = factors
-                    .Where(f => f.IsActive)
-                    .OrderBy(f => f.Date)
-                    .Select(f => f.ImpactValue)
-                    .ToList();
-            }
-            else
-            {
-                factorSeries = await _externalFactorRepository.GetAll()
-                    .Where(f => f.IsActive &&
-                                (!startDate.HasValue || f.Date >= startDate) &&
-                                (!endDate.HasValue || f.Date <= endDate))
-                    .OrderBy(f => f.Date)
-                    .Select(f => f.ImpactValue)
-                    .ToListAsync();
-            }
-
-            var correlation = factorSeries.Count >= 2
-                ? CalculateCorrelation(salesSeries, factorSeries)
-                : 0m;
-
-            // P-value pentru corelația Pearson: t = r·√(n-2) / √(1-r²)
-            // cu n = numărul de perechi aliniate utilizate în calcul
-            decimal pValue;
-            if (factorSeries.Count >= 4)
-            {
-                int corrN = Math.Min(salesSeries.Count, factorSeries.Count);
-                double r = (double)correlation;
-                double tR = Math.Abs(r) < 1.0
-                    ? Math.Abs(r) * Math.Sqrt(corrN - 2) / Math.Sqrt(1.0 - r * r)
-                    : double.PositiveInfinity;
-                pValue = (decimal)TwoTailedPValue(tR, corrN - 2);
-            }
-            else
-            {
-                pValue = (decimal)stats.PValue;
-            }
-
-            // 4. Construirea Modelului Rezultat
+            // 4. Construirea Modelului Rezultat — DOAR trendul temporal.
+            //
+            // SEPARAREA RELAȚIILOR: acest model descrie regresia vânzări-vs-TIMP.
+            //   CoefficientValue = panta trendului temporal
+            //   RSquared         = R² al trendului
+            //   PValue           = semnificația PANTEI (testul t pe coeficient, df=n-2)
+            // Corelația cu factorii externi este o relație DIFERITĂ și este calculată
+            // separat în Facade prin AnalyzeFactorCorrelation (pe serii aliniate pe dată).
+            // Parametrul `factors` nu mai este folosit aici intenționat.
+            _ = factors;
             return new EconometricModel
             {
-                // Dinamic: Numele reflectă dacă am făcut netezirea datelor (Smoothing)
                 ModelName = salesSeries.Count < 15 ? "Aggregated Trend (High Reliability)" : "Daily Regression (High Granularity)",
                 CoefficientValue = (decimal)stats.Slope,
                 RSquared = (decimal)stats.RSquared,
-                PValue = pValue,
+                PValue = (decimal)stats.PValue,
                 LastTrainedDate = DateTime.Now
             };
+        }
+
+        /// <summary>
+        /// Corelație factorială pe serii deja aliniate pe dată (vezi IEconometricEngine).
+        /// </summary>
+        public (decimal Correlation, decimal PValue, int N) AnalyzeFactorCorrelation(
+            List<decimal> alignedSales,
+            List<decimal> alignedFactors)
+        {
+            if (alignedSales == null || alignedFactors == null)
+                return (0m, 1m, 0);
+
+            int n = Math.Min(alignedSales.Count, alignedFactors.Count);
+            if (n < 2)
+                return (0m, 1m, n);
+
+            var r = CalculateCorrelation(alignedSales, alignedFactors);
+
+            // Cu mai puțin de 3 perechi nu există grade de libertate pentru un t-test (df=n-2).
+            if (n < 3)
+                return (r, 1m, n);
+
+            double rd = (double)r;
+            double t = Math.Abs(rd) < 1.0
+                ? Math.Abs(rd) * Math.Sqrt(n - 2) / Math.Sqrt(1.0 - rd * rd)
+                : double.PositiveInfinity;
+            var p = (decimal)TwoTailedPValue(t, n - 2);
+            return (r, p, n);
+        }
+
+        /// <summary>
+        /// Multiplicator t-Student bilateral pentru benzile de confidență/predicție.
+        /// </summary>
+        public decimal GetConfidenceMultiplier(int confidencePercent, int df)
+        {
+            int conf = Math.Max(50, Math.Min(99, confidencePercent));
+            double alpha = 1.0 - conf / 100.0; // masa totală pe ambele cozi
+            if (df < 1)
+                return 1.96m; // fallback degenerat (nefolosit: benzile sunt plate la n<3)
+            return (decimal)TwoTailedTCritical(alpha, df);
+        }
+
+        // ─── Regresie liniară multiplă (OLS) ─────────────────────────────────────────
+
+        public MultipleRegressionResult FitMultipleRegression(
+            List<decimal> response,
+            List<List<decimal>> regressors)
+        {
+            var invalid = new MultipleRegressionResult { IsValid = false };
+
+            if (response == null || regressors == null || regressors.Count == 0)
+                return invalid;
+
+            int n = response.Count;
+            int k = regressors.Count;       // numărul de regresori (fără intercept)
+            int p = k + 1;                  // parametri = intercept + regresori
+
+            // Avem nevoie de mai multe observaţii decât parametri pentru df > 0.
+            if (n < p + 1) return invalid;
+            if (regressors.Any(c => c.Count != n)) return invalid;
+
+            var y = response.Select(v => (double)v).ToArray();
+
+            // Matricea de design X (n×p): coloana 0 = intercept (1), apoi regresorii.
+            var X = new double[n, p];
+            for (int i = 0; i < n; i++)
+            {
+                X[i, 0] = 1.0;
+                for (int j = 0; j < k; j++)
+                    X[i, j + 1] = (double)regressors[j][i];
+            }
+
+            // XᵀX (p×p) şi Xᵀy (p)
+            var xtx = new double[p, p];
+            var xty = new double[p];
+            for (int a = 0; a < p; a++)
+            {
+                for (int b = 0; b < p; b++)
+                {
+                    double s = 0;
+                    for (int i = 0; i < n; i++) s += X[i, a] * X[i, b];
+                    xtx[a, b] = s;
+                }
+                double sy = 0;
+                for (int i = 0; i < n; i++) sy += X[i, a] * y[i];
+                xty[a] = sy;
+            }
+
+            var xtxInv = InvertMatrix(xtx);
+            if (xtxInv == null) return invalid; // singulară / coliniaritate severă
+
+            // β = (XᵀX)⁻¹ Xᵀy
+            var beta = new double[p];
+            for (int a = 0; a < p; a++)
+            {
+                double s = 0;
+                for (int b = 0; b < p; b++) s += xtxInv[a, b] * xty[b];
+                beta[a] = s;
+            }
+
+            // Sume de pătrate
+            double meanY = y.Average();
+            double ssTot = 0, ssRes = 0;
+            for (int i = 0; i < n; i++)
+            {
+                double fit = 0;
+                for (int a = 0; a < p; a++) fit += beta[a] * X[i, a];
+                ssRes += (y[i] - fit) * (y[i] - fit);
+                ssTot += (y[i] - meanY) * (y[i] - meanY);
+            }
+
+            double rSquared = ssTot <= 0 ? 0 : 1.0 - ssRes / ssTot;
+            int dfRes = n - p;
+            double adjR2 = (ssTot <= 0 || dfRes <= 0)
+                ? 0
+                : 1.0 - (1.0 - rSquared) * (n - 1) / dfRes;
+            double mse = dfRes > 0 ? ssRes / dfRes : 0;
+            double see = Math.Sqrt(Math.Max(0, mse));
+
+            // Testul F pentru semnificaţia globală: F = (SSreg/k) / (SSres/(n-p))
+            double ssReg = ssTot - ssRes;
+            double fStat = (k > 0 && mse > 0) ? (ssReg / k) / mse : 0;
+            double fp = FTailProbability(fStat, k, dfRes);
+
+            // Erori standard, t şi p per coeficient: SE(βⱼ) = SEE·√((XᵀX)⁻¹ⱼⱼ)
+            var se = new double[p];
+            var tStat = new double[p];
+            var pVal = new double[p];
+            for (int a = 0; a < p; a++)
+            {
+                double diag = xtxInv[a, a];
+                se[a] = (diag > 0) ? see * Math.Sqrt(diag) : 0;
+                tStat[a] = se[a] > 0 ? beta[a] / se[a] : 0;
+                pVal[a] = (dfRes >= 1) ? TwoTailedPValue(Math.Abs(tStat[a]), dfRes) : 1.0;
+            }
+
+            return new MultipleRegressionResult
+            {
+                IsValid = true,
+                Coefficients = beta,
+                XtXInverse = xtxInv,
+                RSquared = Math.Clamp(rSquared, 0, 1),
+                AdjustedRSquared = adjR2,
+                StandardError = see,
+                FStatistic = fStat,
+                FPValue = fp,
+                CoefficientStdErrors = se,
+                CoefficientTStats = tStat,
+                CoefficientPValues = pVal,
+                N = n,
+                P = p
+            };
+        }
+
+        /// <summary>
+        /// Inversă prin Gauss-Jordan cu pivotare parţială; null dacă matricea e singulară.
+        /// </summary>
+        private static double[,]? InvertMatrix(double[,] a)
+        {
+            int n = a.GetLength(0);
+            var m = new double[n, 2 * n];
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++) m[i, j] = a[i, j];
+                m[i, n + i] = 1.0;
+            }
+
+            for (int col = 0; col < n; col++)
+            {
+                // Pivot parţial: cel mai mare element în valoare absolută
+                int pivot = col;
+                double best = Math.Abs(m[col, col]);
+                for (int r = col + 1; r < n; r++)
+                {
+                    double v = Math.Abs(m[r, col]);
+                    if (v > best) { best = v; pivot = r; }
+                }
+                if (best < 1e-12) return null; // singulară / coliniaritate severă
+
+                if (pivot != col)
+                    for (int j = 0; j < 2 * n; j++)
+                        (m[col, j], m[pivot, j]) = (m[pivot, j], m[col, j]);
+
+                double diag = m[col, col];
+                for (int j = 0; j < 2 * n; j++) m[col, j] /= diag;
+
+                for (int r = 0; r < n; r++)
+                {
+                    if (r == col) continue;
+                    double factor = m[r, col];
+                    if (factor == 0) continue;
+                    for (int j = 0; j < 2 * n; j++) m[r, j] -= factor * m[col, j];
+                }
+            }
+
+            var inv = new double[n, n];
+            for (int i = 0; i < n; i++)
+                for (int j = 0; j < n; j++)
+                    inv[i, j] = m[i, n + j];
+            return inv;
+        }
+
+        /// <summary>
+        /// P(F &gt; f) pentru distribuţia F(df1, df2): I_x(df2/2, df1/2), x = df2/(df2+df1·f).
+        /// </summary>
+        private static double FTailProbability(double f, int df1, int df2)
+        {
+            if (f <= 0 || df1 < 1 || df2 < 1) return 1.0;
+            double x = df2 / (df2 + df1 * f);
+            return Math.Clamp(RegularizedIncompleteBeta(x, df2 / 2.0, df1 / 2.0), 0.0, 1.0);
         }
 
         // Metodă Helper pentru Logica Matematică (y = ax + b)
@@ -226,6 +402,28 @@ namespace SmartStock.Classes.Data.Services
 
             double x = (double)df / (df + tAbs * tAbs);
             return Math.Clamp(RegularizedIncompleteBeta(x, df / 2.0, 0.5), 0.0, 1.0);
+        }
+
+        /// <summary>
+        /// Valoarea critică t bilaterală: t ≥ 0 astfel încât P(|T| &gt; t | df) = <paramref name="alpha"/>.
+        /// Inversare prin bisecție — TwoTailedPValue este strict descrescătoare în t
+        /// (P(0)=1, P(∞)=0), deci bisecția converge garantat.
+        /// Verificare: df=8, α=0.05 → ≈2.306; df mare, α=0.05 → ≈1.96.
+        /// </summary>
+        private static double TwoTailedTCritical(double alpha, int df)
+        {
+            if (alpha <= 0.0) return double.PositiveInfinity;
+            if (alpha >= 1.0) return 0.0;
+
+            double lo = 0.0, hi = 1000.0;
+            for (int i = 0; i < 100; i++)
+            {
+                double mid = 0.5 * (lo + hi);
+                double p = TwoTailedPValue(mid, df);
+                if (p > alpha) lo = mid; // încă prea mult în cozi → mărim t
+                else hi = mid;           // cozi prea mici → micșorăm t
+            }
+            return 0.5 * (lo + hi);
         }
 
         /// <summary>
