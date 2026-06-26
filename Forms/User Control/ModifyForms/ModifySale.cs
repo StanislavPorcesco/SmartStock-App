@@ -25,6 +25,7 @@ namespace SmartStock.Forms.User_Control
         public ModifySale()
         {
             InitializeComponent();
+            user_id_tb.Text = SessionManager.CurrentUser.UserId.ToString();
             InitializeService();
             DataLayer.PopulatePaymentMethodSelector(payment_method_cb);
             DataLayer.PopulatePaymentStatusSelector(payment_status_cb);
@@ -41,12 +42,7 @@ namespace SmartStock.Forms.User_Control
 
         private void search_btn_Click(object sender, EventArgs e)
         {
-            if (!int.TryParse(sale_id_tb.Text, out int saleId))
-            {
-                MessageBox.Show("Please enter a valid Sale ID.", "Search Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            if (!FormValidator.RequireId(sale_id_tb.Text, "Sale ID", out int saleId)) return;
 
             SearchAndLoadSale(saleId);
         }
@@ -114,19 +110,8 @@ namespace SmartStock.Forms.User_Control
 
         private async void add_to_cart_btn_Click(object sender, EventArgs e)
         {
-            if (!int.TryParse(product_id_tb.Text.Trim(), out int productId) || productId <= 0)
-            {
-                MessageBox.Show("Please enter a valid Product ID.", "Input Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            if (!int.TryParse(qty_tb.Text.Trim(), out int qty) || qty <= 0)
-            {
-                MessageBox.Show("Please enter a valid quantity (> 0).", "Input Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            if (!FormValidator.RequireId(product_id_tb.Text, "Product ID", out int productId)) return;
+            if (!FormValidator.RequireInt(qty_tb.Text, "Quantity", out int qty, positiveOnly: true)) return;
 
             try
             {
@@ -136,15 +121,13 @@ namespace SmartStock.Forms.User_Control
 
                 if (product == null)
                 {
-                    MessageBox.Show($"Product ID {productId} not found.", "Not Found",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    FormValidator.ShowError($"Product ID {productId} was not found.");
                     return;
                 }
 
                 if (!product.IsActive)
                 {
-                    MessageBox.Show($"'{product.ProductName}' is inactive and cannot be sold.", "Inactive Product",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    FormValidator.ShowError($"'{product.ProductName}' is inactive and cannot be sold.");
                     return;
                 }
 
@@ -154,10 +137,9 @@ namespace SmartStock.Forms.User_Control
 
                 if (product.CurrentStock < totalQty)
                 {
-                    MessageBox.Show(
-                        $"Insufficient stock for '{product.ProductName}'.\n" +
-                        $"Available: {product.CurrentStock}, Requested: {totalQty}",
-                        "Stock Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    FormValidator.ShowError(
+                        $"Insufficient stock for '{product.ProductName}'. " +
+                        $"Available: {product.CurrentStock}, Requested: {totalQty}.");
                     return;
                 }
 
@@ -181,8 +163,7 @@ namespace SmartStock.Forms.User_Control
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error looking up product: {ex.Message}", "Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                FormValidator.ShowDbError(ex);
             }
             finally
             {
@@ -192,19 +173,13 @@ namespace SmartStock.Forms.User_Control
 
         private void remove_from_cart_btn_Click(object sender, EventArgs e)
         {
-            if (!int.TryParse(product_id_tb.Text.Trim(), out int productId) || productId <= 0)
-            {
-                MessageBox.Show("Please enter a valid Product ID to remove.", "Input Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            if (!FormValidator.RequireId(product_id_tb.Text, "Product ID", out int productId)) return;
 
             var toRemove = _saleItemsList.Where(d => d.ProductId == productId).ToList();
 
             if (toRemove.Count == 0)
             {
-                MessageBox.Show($"Product ID {productId} is not in the cart.", "Not Found",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                FormValidator.ShowError($"Product ID {productId} is not in the cart.");
                 return;
             }
 
@@ -245,31 +220,21 @@ namespace SmartStock.Forms.User_Control
 
         // ── ISaveableControl ──────────────────────────────────────────────────
 
-        public async Task<bool> PerformSave(bool isAddMode)
+        public async Task<SaveOutcome> PerformSave(bool isAddMode)
         {
             try
             {
+                bool ok;
                 if (isAddMode)
                 {
-                    if (!int.TryParse(customer_id_tb.Text, out int custId) || custId <= 0)
-                    {
-                        MessageBox.Show("Please enter a valid Customer ID.", "Input Error",
-                                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return false;
-                    }
-
-                    if (payment_method_cb.SelectedIndex == -1 || payment_status_cb.SelectedIndex == -1)
-                    {
-                        MessageBox.Show("Please select Payment Method and Status.", "Input Error",
-                                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return false;
-                    }
+                    if (!FormValidator.RequireId(customer_id_tb.Text, "Customer ID", out int custId)) return SaveOutcome.Handled;
+                    if (!FormValidator.RequireSelection(payment_method_cb.SelectedIndex, "Payment Method")) return SaveOutcome.Handled;
+                    if (!FormValidator.RequireSelection(payment_status_cb.SelectedIndex, "Payment Status")) return SaveOutcome.Handled;
 
                     if (_saleItemsList.Count == 0)
                     {
-                        MessageBox.Show("Please add at least one item to the sale.", "Input Error",
-                                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return false;
+                        FormValidator.ShowError("Please add at least one item to the sale.");
+                        return SaveOutcome.Handled;
                     }
 
                     var sale = new Sale
@@ -283,27 +248,23 @@ namespace SmartStock.Forms.User_Control
                     };
 
                     int userId = SessionManager.CurrentUser?.UserId ?? 0;
-                    return await _saleService.AddSaleWithDetailsAsync(sale, _saleItemsList.ToList(), userId);
+                    ok = await _saleService.AddSaleWithDetailsAsync(sale, _saleItemsList.ToList(), userId);
                 }
                 else
                 {
-                    if (payment_status_cb.SelectedIndex == -1)
-                    {
-                        MessageBox.Show("Please select a Payment Status.", "Input Error",
-                                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return false;
-                    }
+                    if (!FormValidator.RequireSelection(payment_status_cb.SelectedIndex, "Payment Status")) return SaveOutcome.Handled;
 
-                    return await _saleService.UpdatePaymentStatusAsync(
+                    ok = await _saleService.UpdatePaymentStatusAsync(
                         _currentSaleId,
                         payment_status_cb.SelectedItem.ToString());
                 }
+
+                return ok ? SaveOutcome.Success : SaveOutcome.Failed;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error: {ex.Message}", "Database Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
+                FormValidator.ShowDbError(ex);
+                return SaveOutcome.Handled;
             }
         }
 
@@ -379,7 +340,7 @@ namespace SmartStock.Forms.User_Control
         {
             sale_id_tb.Clear();
             customer_id_tb.Clear();
-            user_id_tb.Clear();
+            //user_id_tb.Clear();
             product_id_tb.Clear();
             qty_tb.Clear();
             total_amount_tb.Clear();

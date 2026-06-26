@@ -56,27 +56,52 @@ namespace SmartStock.Classes.Utils
             var scheduledDateTime = now.Date.Add(scheduledTime);
             if (Math.Abs((now - scheduledDateTime).TotalMinutes) > 5) return;
 
-            await SendReportAsync(settings.ReportRecipientEmail, isTest: false);
+            // This runs on a timer (ThreadPool) thread in an async void callback —
+            // an unhandled exception here would crash the process. Swallow it so a
+            // failed send can't take down the app; SendReportAsync already logs the
+            // outcome, and the next 7-day cycle retries (LastWeeklyReportSent stays
+            // unset on failure).
+            try
+            {
+                await SendReportAsync(settings.ReportRecipientEmail, isTest: false);
+            }
+            catch
+            {
+                // Already logged inside SendReportAsync.
+            }
         }
 
         // ── Send logic (shared by scheduler + "Send Test" button) ─────────────
 
         public static async Task SendReportAsync(string recipientEmail, bool isTest = false)
         {
-            var service = new WeeklyReportService();
-            var html    = await service.BuildReportHtmlAsync();
+            // Tag used in both the email subject and the activity log.
+            var tag = isTest ? "[TEST] " : string.Empty;
 
-            var chartPath = ResolveChartPath();
-            var subject   = isTest
-                ? $"[TEST] SmartStock Weekly Report — {DateTime.Now:dd MMM yyyy}"
-                : $"SmartStock Weekly Report — {DateTime.Now:dd MMM yyyy}";
-
-            EmailService.SendReport(recipientEmail, subject, html, chartPath);
-
-            if (!isTest)
+            try
             {
-                SettingsManager.Current.LastWeeklyReportSent = DateTime.Now;
-                SettingsManager.Save();
+                var service = new WeeklyReportService();
+                var html    = await service.BuildReportHtmlAsync();
+
+                var chartPath = ResolveChartPath();
+                var subject   = $"{tag}SmartStock Weekly Report — {DateTime.Now:dd MMM yyyy}";
+
+                await EmailService.SendReportAsync(recipientEmail, subject, html, chartPath);
+
+                if (!isTest)
+                {
+                    SettingsManager.Current.LastWeeklyReportSent = DateTime.Now;
+                    SettingsManager.Save();
+                }
+
+                ActivityLogger.LogSystemAction("WEEKLY_REPORT",
+                    $"{tag}Weekly report sent to {recipientEmail}.");
+            }
+            catch (Exception ex)
+            {
+                ActivityLogger.LogSystemAction("WEEKLY_REPORT",
+                    $"{tag}Weekly report failed for {recipientEmail}: {ex.Message}", isError: true);
+                throw; // preserve existing behavior: scheduler swallows, test button shows the error
             }
         }
 

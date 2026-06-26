@@ -128,7 +128,7 @@ namespace SmartStock.Forms.User_Control.AnalysisForms
             lbl_info.Size = new Size(699, 337);
             lbl_info.TabIndex = 2;
             lbl_info.Tag = "muted";
-            lbl_info.Text = "Points outside the tolerance band  (mean ± N·σ)  are flagged as anomalies.\r\nLower σ = stricter detection (more false positives).\r\nHigher σ = only extreme deviations are flagged.";
+            lbl_info.Text = "Points outside the tolerance band  (mean ± N·σ)  are flagged as anomalies.\r\nLower σ = stricter detection (more false positives).\r\nHigher σ = only extreme deviations are flagged.\r\n\nStrict (1.5σ) - more anomalies\r\nStandard (2.0σ) - balanced\r\nRelaxed (2.5σ) - fewer anomalies\r\nConservative (3.0σ) - only extremes";
             // 
             // AnomalyDetection
             // 

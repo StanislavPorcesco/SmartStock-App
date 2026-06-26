@@ -1,5 +1,7 @@
 ﻿using SmartStock.Classes.Data.DTOs;
 using SmartStock.Classes.Data.Interfaces;
+using SmartStock.Classes.Settings;
+using SmartStock.Utils;
 
 namespace SmartStock.Forms.User_Control.AnalysisForms
 {
@@ -9,6 +11,16 @@ namespace SmartStock.Forms.User_Control.AnalysisForms
         {
             InitializeComponent();
             InitializeDefaults();
+            AddTooltips();
+        }
+
+        private void AddTooltips()
+        {
+            ToolTipHelp.AddToolTip(range_lbl, "Annual cost to hold one unit in stock, as a percentage of its unit price (H).");
+            ToolTipHelp.AddToolTip(label_ordering, "Fixed cost incurred each time a purchase order is placed (S).");
+            ToolTipHelp.AddToolTip(label1, "Days between placing an order and receiving it.");
+            ToolTipHelp.AddToolTip(label2, "Service-level target. Lower risk tolerance raises safety stock and the reorder point.");
+            label_ordering_unit.Text = SettingsManager.Current.CurrencySymbol;
         }
 
         public AnalysisContext GetParameters()

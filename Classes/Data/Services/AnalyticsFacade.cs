@@ -105,16 +105,34 @@ namespace SmartStock.Classes.Data.Services
                         "Selectați un interval cu cel puțin 7 zile de vânzări și introduceți parametri valizi (S > 0, h > 0).");
 
                 var eoqPrompt = BuildEoqPrompt(product, eoq);
-                var eoqReco   = await _aiReasoningProvider.GetRecommendationAsync(eoqPrompt);
 
-                await PersistStockRecommendationAsync(context.ProductId, eoq, eoqReco.Reasoning, product, cancellationToken);
+                // The EOQ analysis is already complete; the AI only adds a written summary.
+                // Its failure (e.g. no credits) must NOT abort the analysis.
+                string eoqInsights;
+                AiStockRecommendation eoqReco = null;
+                try
+                {
+                    eoqReco = await _aiReasoningProvider.GetRecommendationAsync(eoqPrompt);
+                    eoqInsights = eoqReco.Reasoning;
+                }
+                catch (Exception ex)
+                {
+                    eoqInsights = $"AI summary unavailable: {ExtractProviderError(ex)}";
+                }
+
+                // Persist a recommendation only when the AI produced one — keeps error text
+                // out of AiStockRecommendations (which the weekly report reads).
+                if (eoqReco != null)
+                    await PersistStockRecommendationAsync(context.ProductId, eoq, eoqReco.Reasoning, product, cancellationToken);
+
                 ActivityLogger.LogAiAction("STOCK_OPTIMIZATION",
-                    $"Product: \"{product.ProductName}\" → EOQ: {eoq.EoqQuantity:F0} units, ROP: {eoq.ReorderPoint:F0}, Priority: {eoqReco.PriorityLevel}");
+                    $"Product: \"{product.ProductName}\" → EOQ: {eoq.EoqQuantity:F0} units, ROP: {eoq.ReorderPoint:F0}" +
+                    (eoqReco != null ? $", Priority: {eoqReco.PriorityLevel}" : " (AI summary unavailable)"));
 
                 return new AnalyticsResult
                 {
                     Eoq             = eoq,
-                    AiInsights      = eoqReco.Reasoning,
+                    AiInsights      = eoqInsights,
                     Reliability     = eoq.ServiceLevel,
                     TrendLabel      = $"{eoq.EoqQuantity:F0}",
                     AiConfidence    = eoq.ServiceLevel,
@@ -138,10 +156,28 @@ namespace SmartStock.Classes.Data.Services
                 var sellingBuckets = salesByBucket
                     .OrderBy(kv => kv.Key)
                     .ToList();
-                return ComputeAnomalyDetection(
+                var anomalyResult = ComputeAnomalyDetection(
                     sellingBuckets.Select(kv => kv.Value).ToList(),
                     sellingBuckets.Select(kv => kv.Key).ToList(),
                     sensitivityThreshold);
+
+                // The deterministic report is the analysis output; the agent then adds a summary
+                // on top of it. AI failure is non-fatal — the error is shown after the report.
+                var deterministicReport = anomalyResult.AiInsights;
+                string aiSummary;
+                try
+                {
+                    var reco = await _aiReasoningProvider.GetRecommendationAsync(
+                        BuildAnomalyPrompt(product, anomalyResult, sensitivityThreshold));
+                    aiSummary = reco.Reasoning;
+                }
+                catch (Exception ex)
+                {
+                    aiSummary = $"AI summary unavailable: {ExtractProviderError(ex)}";
+                }
+
+                anomalyResult.AiInsights = $"{deterministicReport}\n\n— AI Summary —\n{aiSummary}";
+                return anomalyResult;
             }
 
             // ── Trend / Correlation / Forecast: ZERO-FILL pe grila calendaristică ────
@@ -325,7 +361,19 @@ namespace SmartStock.Classes.Data.Services
                     product, primaryFactor, correlation, correlationPValue, correlationN, context);
             }
 
-            var recommendation = await _aiReasoningProvider.GetRecommendationAsync(prompt);
+            // Analysis is already complete; the AI only writes a summary. A failure here
+            // (e.g. no credits) must NOT abort the analysis — surface the error in the AI
+            // section instead, and still persist the econometric model + forecasts below.
+            string aiInsights;
+            try
+            {
+                var recommendation = await _aiReasoningProvider.GetRecommendationAsync(prompt);
+                aiInsights = recommendation.Reasoning;
+            }
+            catch (Exception ex)
+            {
+                aiInsights = $"AI summary unavailable: {ExtractProviderError(ex)}";
+            }
 
             await PersistEconometricModelAsync(econometricModel, context.ProductId, cancellationToken);
             if (isDemandForecast)
@@ -359,7 +407,7 @@ namespace SmartStock.Classes.Data.Services
                 FPValue = fPValue,
                 FactorCoefficients = factorCoefficients,
                 ChartLabels = chartLabels,
-                AiInsights = recommendation.Reasoning,
+                AiInsights = aiInsights,
                 Reliability = displayRSquared,
                 TrendLabel = GetTrendPercentageLabel(historicalSales, trendBands.TrendValues, isDemandForecast),
                 AiConfidence = forecasts.Count == 0 ? 0m : forecasts.Average(f => f.ConfidenceScore)
@@ -1195,6 +1243,61 @@ namespace SmartStock.Classes.Data.Services
             }
 
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// Builds a concise prompt asking the agent to interpret the detected anomalies.
+        /// The deterministic numbers come from <see cref="ComputeAnomalyDetection"/>.
+        /// </summary>
+        private static string BuildAnomalyPrompt(Product product, AnalyticsResult result, double threshold)
+        {
+            var anomalies = result.Anomalies ?? new List<AnomalyPoint>();
+
+            var sb = new StringBuilder();
+            sb.AppendLine($"Product: {product.ProductName}");
+            sb.AppendLine($"Z-score anomaly detection on the sales series at a {threshold}σ threshold.");
+            sb.AppendLine($"Anomalies detected: {anomalies.Count}; maximum severity |Z|: {result.MaxSeverityZScore:F2}.");
+
+            if (anomalies.Count > 0)
+            {
+                sb.AppendLine("Most severe points:");
+                foreach (var a in anomalies.OrderByDescending(x => Math.Abs(x.ZScore)).Take(5))
+                    sb.AppendLine($"- {a.Date:MMM d}: actual {a.ActualValue:F0} vs expected {a.ExpectedValue:F0} (Z={a.ZScore:F2})");
+            }
+
+            sb.AppendLine();
+            sb.AppendLine("Summarize what these anomalies imply about demand and recommend concrete actions. " +
+                          "Do not restate the numbers verbatim — interpret them.");
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Extracts a clean, user-facing message from an AI provider exception. Provider errors
+        /// are surfaced as JSON (e.g. {"error":{"message":"Insufficient Balance"}}); when present
+        /// the inner message is returned, otherwise the raw exception message.
+        /// </summary>
+        private static string ExtractProviderError(Exception ex)
+        {
+            var raw = ex.Message ?? "Unknown error";
+
+            var braceIdx = raw.IndexOf('{');
+            if (braceIdx >= 0)
+            {
+                try
+                {
+                    using var doc = System.Text.Json.JsonDocument.Parse(raw[braceIdx..]);
+                    if (doc.RootElement.TryGetProperty("error", out var err) &&
+                        err.TryGetProperty("message", out var m) &&
+                        m.ValueKind == System.Text.Json.JsonValueKind.String)
+                    {
+                        var msg = m.GetString();
+                        if (!string.IsNullOrWhiteSpace(msg)) return msg;
+                    }
+                }
+                catch { /* not JSON — fall through to the raw message */ }
+            }
+
+            return raw;
         }
 
         // ── EOQ ───────────────────────────────────────────────────────────────────

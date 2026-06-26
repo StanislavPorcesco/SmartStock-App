@@ -3,6 +3,7 @@ using SmartStock.Classes.Data.Interfaces;
 using SmartStock.Classes.Data.Repositories;
 using SmartStock.Classes.Data.Services;
 using SmartStock.Classes.Models;
+using SmartStock.Utils;
 
 namespace SmartStock.Forms.User_Control.AnalysisForms
 {
@@ -19,7 +20,15 @@ namespace SmartStock.Forms.User_Control.AnalysisForms
             InitializeComponent();
             _externalFactorService = externalFactorService ?? throw new ArgumentNullException(nameof(externalFactorService));
             InitializeDefaults();
+            AddTooltips();
             _ = LoadFactorsAsync();
+        }
+
+        private void AddTooltips()
+        {
+            ToolTipHelp.AddToolTip(range_lbl, "Number of future days to project demand for (1–365).");
+            ToolTipHelp.AddToolTip(label1, "Optional external factors to condition the forecast on. Selecting factors switches to a multivariate model (sales ~ factors).");
+            ToolTipHelp.AddToolTip(label2, "Confidence level for the forecast band — higher values widen the prediction interval.");
         }
 
         public AnalysisContext GetParameters()

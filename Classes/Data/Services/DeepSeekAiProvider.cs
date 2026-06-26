@@ -42,7 +42,7 @@ namespace SmartStock.Classes.Data.Services
             if (!string.IsNullOrWhiteSpace(settingsKey))
                 return settingsKey;
 
-            return Environment.GetEnvironmentVariable("DEEPSEEK_API_KEY") ?? string.Empty;
+            return EnvManager.Get(EnvManager.DeepSeekKey);
         }
 
         public async Task<AiStockRecommendation> GetRecommendationAsync(string prompt)

@@ -31,55 +31,72 @@
                 Current = new AppSettings();
             }
 
-            // If no API key is persisted in appSettings.json, try loading it from .env
-            if (string.IsNullOrWhiteSpace(Current.DeepSeekApiKey))
-            {
-                var envKey = ReadKeyFromDotEnv("DEEPSEEK_API_KEY");
-                if (!string.IsNullOrWhiteSpace(envKey))
-                {
-                    Current.DeepSeekApiKey = envKey;
-                    Console.WriteLine("DeepSeek API key loaded from .env file.");
-                }
-            }
+            // Secrets live ONLY in .env. Load it (creating the example on first run),
+            // migrate any keys still embedded in an old appSettings.json, then hydrate
+            // the in-memory AppSettings so consumers keep reading Current.*ApiKey.
+            EnvManager.Load();
+            MigrateLegacyKeys();
+            HydrateSecrets();
+        }
 
-            if (string.IsNullOrWhiteSpace(Current.OpenAIApiKey))
-            {
-                var envKey = ReadKeyFromDotEnv("OPENAI_API_KEY");
-                if (!string.IsNullOrWhiteSpace(envKey))
-                {
-                    Current.OpenAIApiKey = envKey;
-                    Console.WriteLine("OpenAI API key loaded from .env file.");
-                }
-            }
+        /// <summary>
+        /// Copies the secret values from <see cref="EnvManager"/> into <see cref="Current"/>.
+        /// Public so callers (e.g. SettingsForm) can refresh after editing keys at runtime,
+        /// which lets call-time key resolution pick up new values without a restart.
+        /// </summary>
+        public static void HydrateSecrets()
+        {
+            Current.DeepSeekApiKey     = EnvManager.Get(EnvManager.DeepSeekKey);
+            Current.OpenAIApiKey       = EnvManager.Get(EnvManager.OpenAIKey);
+            Current.ClaudeApiKey       = EnvManager.Get(EnvManager.ClaudeKey);
+            Current.AlphaVantageApiKey = EnvManager.Get(EnvManager.AlphaVantageKey);
+            Current.PredictHQApiKey    = EnvManager.Get(EnvManager.PredictHQKey);
+        }
 
-            if (string.IsNullOrWhiteSpace(Current.ClaudeApiKey))
-            {
-                var envKey = ReadKeyFromDotEnv("ANTHROPIC_API_KEY") ?? ReadKeyFromDotEnv("CLAUDE_API_KEY");
-                if (!string.IsNullOrWhiteSpace(envKey))
-                {
-                    Current.ClaudeApiKey = envKey;
-                    Console.WriteLine("Claude API key loaded from .env file.");
-                }
-            }
+        /// <summary>
+        /// One-time migration: copies any API keys still stored in appSettings.json into
+        /// .env (only when .env doesn't already have them). Idempotent — once a setting save
+        /// rewrites the JSON without the now-[JsonIgnore]d key fields, this finds nothing.
+        /// </summary>
+        private static void MigrateLegacyKeys()
+        {
+            if (!File.Exists(FilePath)) return;
 
-            if (string.IsNullOrWhiteSpace(Current.AlphaVantageApiKey))
+            try
             {
-                var envKey = ReadKeyFromDotEnv("ALPHAVANTAGE_API_KEY");
-                if (!string.IsNullOrWhiteSpace(envKey))
-                {
-                    Current.AlphaVantageApiKey = envKey;
-                    Console.WriteLine("Alpha Vantage API key loaded from .env file.");
-                }
-            }
+                using var doc = JsonDocument.Parse(File.ReadAllText(FilePath));
+                var root = doc.RootElement;
 
-            if (string.IsNullOrWhiteSpace(Current.PredictHQApiKey))
-            {
-                var envKey = ReadKeyFromDotEnv("PREDICTHQ_API_KEY");
-                if (!string.IsNullOrWhiteSpace(envKey))
+                var map = new (string Json, string Env)[]
                 {
-                    Current.PredictHQApiKey = envKey;
-                    Console.WriteLine("PredictHQ API key loaded from .env file.");
+                    ("DeepSeekApiKey",     EnvManager.DeepSeekKey),
+                    ("OpenAIApiKey",       EnvManager.OpenAIKey),
+                    ("ClaudeApiKey",       EnvManager.ClaudeKey),
+                    ("AlphaVantageApiKey", EnvManager.AlphaVantageKey),
+                    ("PredictHQApiKey",    EnvManager.PredictHQKey),
+                };
+
+                var migrated = false;
+                foreach (var (jsonName, envName) in map)
+                {
+                    if (root.TryGetProperty(jsonName, out var el) &&
+                        el.ValueKind == JsonValueKind.String)
+                    {
+                        var val = el.GetString();
+                        if (!string.IsNullOrWhiteSpace(val) &&
+                            string.IsNullOrWhiteSpace(EnvManager.Get(envName)))
+                        {
+                            EnvManager.Set(envName, val);
+                            migrated = true;
+                        }
+                    }
                 }
+
+                if (migrated) EnvManager.Save();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error migrating legacy API keys: {ex.Message}");
             }
         }
 
@@ -100,47 +117,5 @@
             }
         }
 
-        /// <summary>
-        /// Searches for a .env file starting from the runtime output directory and
-        /// walking up to the repository root (up to 4 levels). Parses KEY=VALUE pairs.
-        /// Lines beginning with # are treated as comments and ignored.
-        /// </summary>
-        private static string? ReadKeyFromDotEnv(string key)
-        {
-            var searchDir = AppDomain.CurrentDomain.BaseDirectory;
-
-            for (var depth = 0; depth < 5; depth++)
-            {
-                if (string.IsNullOrEmpty(searchDir)) break;
-
-                var envPath = Path.Combine(searchDir, ".env");
-                if (File.Exists(envPath))
-                {
-                    foreach (var line in File.ReadAllLines(envPath))
-                    {
-                        var trimmed = line.Trim();
-                        if (trimmed.StartsWith('#') || !trimmed.Contains('='))
-                            continue;
-
-                        var separatorIndex = trimmed.IndexOf('=');
-                        var lineKey   = trimmed[..separatorIndex].Trim();
-                        var lineValue = trimmed[(separatorIndex + 1)..].Trim();
-
-                        if (lineKey.Equals(key, StringComparison.OrdinalIgnoreCase) &&
-                            !string.IsNullOrWhiteSpace(lineValue))
-                        {
-                            return lineValue;
-                        }
-                    }
-
-                    // Found the .env file but key was missing or empty — stop searching.
-                    break;
-                }
-
-                searchDir = Path.GetDirectoryName(searchDir);
-            }
-
-            return null;
-        }
     }
 }

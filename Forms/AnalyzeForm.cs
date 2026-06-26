@@ -606,7 +606,35 @@ namespace SmartStock.Forms
             var chartType = _analysisChart.GetType();
             chartType.GetProperty("LegendTextPaint")?.SetValue(_analysisChart, new SolidColorPaint(textColor));
             chartType.GetProperty("LegendBackgroundPaint")?.SetValue(_analysisChart, new SolidColorPaint(bgColor));
+
+            // Re-theme the axis labels/titles too. Without this, a live theme change updates
+            // only the legend while the X/Y period labels keep the color from when the axes
+            // were last built (ConfigureAxes / EOQ), so they never turn white in dark mode.
+            RethemeAxis(chartType.GetProperty("XAxes")?.GetValue(_analysisChart) as System.Collections.IEnumerable, textColor);
+            RethemeAxis(chartType.GetProperty("YAxes")?.GetValue(_analysisChart) as System.Collections.IEnumerable, textColor);
+
             _analysisChart.Invalidate();
+        }
+
+        /// <summary>Repaints the labels and title of every axis in the sequence to the theme color.</summary>
+        private static void RethemeAxis(System.Collections.IEnumerable axes, SKColor textColor)
+        {
+            if (axes == null) return;
+            foreach (var a in axes)
+            {
+                if (a is Axis axis)
+                {
+                    axis.LabelsPaint = new SolidColorPaint(textColor);
+                    axis.NamePaint   = new SolidColorPaint(textColor);
+                }
+            }
+        }
+
+        /// <summary>Current theme's primary text color as an SKColor (for chart paints).</summary>
+        private static SKColor GetChartTextColor()
+        {
+            var p = ThemeManager.GetCurrentPalette();
+            return new SKColor(p.TextPrimary.R, p.TextPrimary.G, p.TextPrimary.B);
         }
 
         private void SetChartSeries(double[] historicalValues, double[] trendValues, double[] upperValues, double[] lowerValues, List<string> labels, bool isDemandForecast)
@@ -711,6 +739,7 @@ namespace SmartStock.Forms
 
         private void ConfigureAxes(List<string> labels)
         {
+            var textColor = GetChartTextColor();
             var xAxesProperty = _analysisChart.GetType().GetProperty("XAxes");
             var yAxesProperty = _analysisChart.GetType().GetProperty("YAxes");
 
@@ -720,7 +749,9 @@ namespace SmartStock.Forms
                 {
                     Name = "Date",
                     Labels = labels,
-                    LabelsRotation = 15
+                    LabelsRotation = 15,
+                    LabelsPaint = new SolidColorPaint(textColor),
+                    NamePaint   = new SolidColorPaint(textColor)
                 };
 
                 var xAxisArray = Array.CreateInstance(typeof(Axis), 1);
@@ -732,7 +763,9 @@ namespace SmartStock.Forms
             {
                 var yAxis = new Axis
                 {
-                    Name = "Sales Quantity"
+                    Name = "Sales Quantity",
+                    LabelsPaint = new SolidColorPaint(textColor),
+                    NamePaint   = new SolidColorPaint(textColor)
                 };
 
                 var yAxisArray = Array.CreateInstance(typeof(Axis), 1);
@@ -900,6 +933,7 @@ namespace SmartStock.Forms
 
             seriesProperty.SetValue(_analysisChart, seriesArray);
 
+            var textColor = GetChartTextColor();
             var xAxesProperty = _analysisChart.GetType().GetProperty("XAxes");
             var yAxesProperty = _analysisChart.GetType().GetProperty("YAxes");
 
@@ -909,7 +943,9 @@ namespace SmartStock.Forms
                 {
                     Name = "Order Quantity (units)",
                     Labels = eoq.QuantityLabels,
-                    LabelsRotation = 45
+                    LabelsRotation = 45,
+                    LabelsPaint = new SolidColorPaint(textColor),
+                    NamePaint   = new SolidColorPaint(textColor)
                 };
                 var arr = Array.CreateInstance(typeof(Axis), 1);
                 arr.SetValue(xAxis, 0);
@@ -918,7 +954,12 @@ namespace SmartStock.Forms
 
             if (yAxesProperty != null)
             {
-                var yAxis = new Axis { Name = "Annual Cost" };
+                var yAxis = new Axis
+                {
+                    Name = "Annual Cost",
+                    LabelsPaint = new SolidColorPaint(textColor),
+                    NamePaint   = new SolidColorPaint(textColor)
+                };
                 var arr = Array.CreateInstance(typeof(Axis), 1);
                 arr.SetValue(yAxis, 0);
                 yAxesProperty.SetValue(_analysisChart, arr);

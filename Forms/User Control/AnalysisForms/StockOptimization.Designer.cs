@@ -32,7 +32,7 @@ namespace SmartStock.Forms.User_Control.AnalysisForms
             label_ordering_unit = new Label();
             ordering_cost_nud = new ThemedNumericUpDown();
             label2 = new Label();
-            risk_cb = new SmartStock.Classes.Utils.ThemedComboBox();
+            risk_cb = new ThemedComboBox();
             panel1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             panel3.SuspendLayout();
@@ -122,12 +122,13 @@ namespace SmartStock.Forms.User_Control.AnalysisForms
             // 
             // buffer_nud
             // 
+            buffer_nud.BorderStyle = BorderStyle.None;
             buffer_nud.Dock = DockStyle.Right;
             buffer_nud.Font = new Font("Segoe UI", 11F);
             buffer_nud.Location = new Point(222, 0);
             buffer_nud.Margin = new Padding(0, 10, 0, 0);
             buffer_nud.Name = "buffer_nud";
-            buffer_nud.Size = new Size(128, 32);
+            buffer_nud.Size = new Size(128, 28);
             buffer_nud.TabIndex = 0;
             buffer_nud.Tag = "range_lock";
             // 
@@ -173,13 +174,14 @@ namespace SmartStock.Forms.User_Control.AnalysisForms
             // 
             // delivery_days_nud
             // 
+            delivery_days_nud.BorderStyle = BorderStyle.None;
             delivery_days_nud.Dock = DockStyle.Right;
             delivery_days_nud.Font = new Font("Segoe UI", 11F);
             delivery_days_nud.Location = new Point(222, 0);
             delivery_days_nud.Margin = new Padding(0, 10, 0, 0);
             delivery_days_nud.Maximum = new decimal(new int[] { 365, 0, 0, 0 });
             delivery_days_nud.Name = "delivery_days_nud";
-            delivery_days_nud.Size = new Size(128, 32);
+            delivery_days_nud.Size = new Size(128, 28);
             delivery_days_nud.TabIndex = 0;
             delivery_days_nud.Tag = "range_lock";
             // 
@@ -225,12 +227,13 @@ namespace SmartStock.Forms.User_Control.AnalysisForms
             // 
             // ordering_cost_nud
             // 
+            ordering_cost_nud.BorderStyle = BorderStyle.None;
             ordering_cost_nud.DecimalPlaces = 2;
             ordering_cost_nud.Dock = DockStyle.Right;
             ordering_cost_nud.Font = new Font("Segoe UI", 11F);
             ordering_cost_nud.Location = new Point(222, 0);
             ordering_cost_nud.Name = "ordering_cost_nud";
-            ordering_cost_nud.Size = new Size(128, 32);
+            ordering_cost_nud.Size = new Size(128, 28);
             ordering_cost_nud.TabIndex = 1;
             ordering_cost_nud.Tag = "range_lock";
             // 
@@ -250,14 +253,16 @@ namespace SmartStock.Forms.User_Control.AnalysisForms
             // risk_cb
             // 
             risk_cb.Dock = DockStyle.Fill;
+            risk_cb.DrawMode = DrawMode.OwnerDrawFixed;
             risk_cb.DropDownStyle = ComboBoxStyle.DropDownList;
             risk_cb.FlatStyle = FlatStyle.Flat;
             risk_cb.Font = new Font("Segoe UI", 11F);
             risk_cb.FormattingEnabled = true;
+            risk_cb.ItemHeight = 30;
             risk_cb.Location = new Point(359, 165);
             risk_cb.Margin = new Padding(0, 5, 10, 10);
             risk_cb.Name = "risk_cb";
-            risk_cb.Size = new Size(350, 33);
+            risk_cb.Size = new Size(350, 36);
             risk_cb.TabIndex = 32;
             // 
             // StockOptimization

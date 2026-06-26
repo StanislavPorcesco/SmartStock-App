@@ -5,14 +5,16 @@ namespace SmartStock.Classes.Utils
     using System.IO;
     using System.Net;
     using System.Net.Mail;
+    using SmartStock.Classes.Settings;
 
     public static class EmailService
     {
         private static readonly string AuthEmail    = "smartstock.auth@gmail.com";
-        private static readonly string AuthPassword = "atpmqdmhoglkariy";
+        // Secrets are read from .env at call time — never hardcoded. See EnvManager.
+        private static string AuthPassword => EnvManager.Get(EnvManager.AuthEmailPassword);
 
         private static readonly string ReportsEmail    = "smartstock.reports@gmail.com";
-        private static readonly string ReportsPassword = "clhycbnyrxbqqfjh";
+        private static string ReportsPassword => EnvManager.Get(EnvManager.ReportsEmailPassword);
 
         public static string SendVerificationCode(string receiverEmail)
         {
@@ -85,36 +87,30 @@ namespace SmartStock.Classes.Utils
 
         /// <summary>
         /// Sends an HTML report email with an optional PNG chart attachment.
+        /// Fully asynchronous — the SMTP round-trip never runs on the UI thread,
+        /// so the app stays responsive even when the connection is slow or times out.
+        /// Exceptions propagate to the caller (logged + surfaced by ReportScheduler).
         /// </summary>
-        public static void SendReport(string recipientEmail, string subject, string htmlBody, string? attachmentPath = null)
+        public static async Task SendReportAsync(string recipientEmail, string subject, string htmlBody, string? attachmentPath = null)
         {
-            try
+            using var msg = new MailMessage();
+            msg.From = new MailAddress(ReportsEmail, "SmartStock Reports");
+            msg.To.Add(recipientEmail);
+            msg.Subject = subject;
+            msg.Body = htmlBody;
+            msg.IsBodyHtml = true;
+
+            if (!string.IsNullOrEmpty(attachmentPath) && File.Exists(attachmentPath))
+                msg.Attachments.Add(new Attachment(attachmentPath, "image/png"));
+
+            using var smtpClient = new SmtpClient("smtp.gmail.com")
             {
-                var msg = new MailMessage();
-                msg.From = new MailAddress(ReportsEmail, "SmartStock Reports");
-                msg.To.Add(recipientEmail);
-                msg.Subject = subject;
-                msg.Body = htmlBody;
-                msg.IsBodyHtml = true;
+                Port = 587,
+                Credentials = new NetworkCredential(ReportsEmail, ReportsPassword),
+                EnableSsl = true,
+            };
 
-                if (!string.IsNullOrEmpty(attachmentPath) && File.Exists(attachmentPath))
-                    msg.Attachments.Add(new Attachment(attachmentPath, "image/png"));
-
-                var smtpClient = new SmtpClient("smtp.gmail.com")
-                {
-                    Port = 587,
-                    Credentials = new NetworkCredential(ReportsEmail, ReportsPassword),
-                    EnableSsl = true,
-                };
-
-                smtpClient.Send(msg);
-                Console.WriteLine($"Report sent to {recipientEmail}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Report send error: {ex.Message}");
-                throw;
-            }
+            await smtpClient.SendMailAsync(msg);
         }
     }
 }

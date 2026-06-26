@@ -33,12 +33,7 @@ namespace SmartStock.Forms.User_Control
 
         private void search_btn_Click(object sender, EventArgs e)
         {
-            if (!int.TryParse(user_id_tb.Text, out int userId))
-            {
-                MessageBox.Show("Please enter a valid User ID.", "Search Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            if (!FormValidator.RequireId(user_id_tb.Text, "User ID", out int userId)) return;
 
             SearchAndLoadUser(userId);
         }
@@ -96,73 +91,33 @@ namespace SmartStock.Forms.User_Control
                                 MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private bool TryCollectUserData(out User user)
+        // ── ISaveableControl ──────────────────────────────────────────────────
+
+        public async Task<SaveOutcome> PerformSave(bool isAddMode)
         {
-            user = null;
+            if (!FormValidator.RequireText(username_tb.Text, "Username", minLength: 3)) return SaveOutcome.Handled;
+            if (!FormValidator.RequireText(fullname_tb.Text, "Full Name")) return SaveOutcome.Handled;
+            if (!FormValidator.RequireEmail(email_tb.Text)) return SaveOutcome.Handled;
+            if (!FormValidator.RequireSelection(role_cb.SelectedIndex, "Role")) return SaveOutcome.Handled;
 
-            string username = username_tb.Text.Trim();
-            string fullName = fullname_tb.Text.Trim();
-            string email    = email_tb.Text.Trim();
-
-            if (string.IsNullOrWhiteSpace(username) || username.Length < 3)
+            var user = new User
             {
-                MessageBox.Show("Username must be at least 3 characters long.", "Input Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(fullName))
-            {
-                MessageBox.Show("Full name is required.", "Input Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-
-            if (role_cb.SelectedIndex == -1)
-            {
-                MessageBox.Show("Please select a role.", "Input Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-
-            if (!string.IsNullOrWhiteSpace(email) && (!email.Contains("@") || !email.Contains(".")))
-            {
-                MessageBox.Show("The email format is invalid.", "Validation Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-
-            user = new User
-            {
-                Username = username,
-                FullName = fullName,
-                Email    = email,
+                Username = username_tb.Text.Trim(),
+                FullName = fullname_tb.Text.Trim(),
+                Email    = email_tb.Text.Trim(),
                 Role     = role_cb.SelectedItem.ToString(),
                 IsActive = is_active_ck.Checked
             };
 
-            return true;
-        }
-
-        // ── ISaveableControl ──────────────────────────────────────────────────
-
-        public async Task<bool> PerformSave(bool isAddMode)
-        {
-            if (!TryCollectUserData(out var user)) return false;
-
             try
             {
+                bool ok;
                 if (isAddMode)
                 {
                     string password = password_tb.Text;
-                    if (string.IsNullOrWhiteSpace(password) || password.Length < 6)
-                    {
-                        MessageBox.Show("Password must be at least 6 characters.", "Input Error",
-                                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return false;
-                    }
+                    if (!FormValidator.RequireText(password, "Password", minLength: 6)) return SaveOutcome.Handled;
 
-                    return await _userService.CreateUserAsync(user, password);
+                    ok = await _userService.CreateUserAsync(user, password);
                 }
                 else
                 {
@@ -172,14 +127,15 @@ namespace SmartStock.Forms.User_Control
                     _loadedUser.Email    = user.Email;
                     _loadedUser.Role     = user.Role;
                     _loadedUser.IsActive = user.IsActive;
-                    return await _userService.UpdateUserAsync(_loadedUser);
+                    ok = await _userService.UpdateUserAsync(_loadedUser);
                 }
+
+                return ok ? SaveOutcome.Success : SaveOutcome.Failed;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error: {ex.Message}", "Database Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
+                FormValidator.ShowDbError(ex);
+                return SaveOutcome.Handled;
             }
         }
 

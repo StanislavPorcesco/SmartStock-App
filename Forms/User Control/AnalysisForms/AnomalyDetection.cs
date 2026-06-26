@@ -1,5 +1,6 @@
 using SmartStock.Classes.Data.DTOs;
 using SmartStock.Classes.Data.Interfaces;
+using SmartStock.Utils;
 
 namespace SmartStock.Forms.User_Control.AnalysisForms
 {
@@ -9,6 +10,13 @@ namespace SmartStock.Forms.User_Control.AnalysisForms
         {
             InitializeComponent();
             InitializeDefaults();
+            AddTooltips();
+        }
+
+        private void AddTooltips()
+        {
+            ToolTipHelp.AddToolTip(lbl_sensitivity, "How many standard deviations (σ) from the mean before a point is flagged. Stricter (lower σ) = more anomalies.");
+            ToolTipHelp.AddToolTip(lbl_aggregation, "Time bucket used to group sales before detection (Daily, Weekly, Monthly).");
         }
 
         public AnalysisContext GetParameters()
@@ -42,10 +50,10 @@ namespace SmartStock.Forms.User_Control.AnalysisForms
         {
             sensitivity_cb.Items.AddRange(new object[]
             {
-                "Strict (1.5σ)  — more anomalies",
-                "Standard (2.0σ)  — balanced",
-                "Relaxed (2.5σ)  — fewer anomalies",
-                "Conservative (3.0σ)  — only extremes"
+                "Strict (1.5σ)",
+                "Standard (2.0σ)",
+                "Relaxed (2.5σ)",
+                "Conservative (3.0σ)"
             });
             sensitivity_cb.SelectedIndex = 1;
 

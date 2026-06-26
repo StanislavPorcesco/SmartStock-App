@@ -67,9 +67,9 @@ namespace SmartStock.Forms.User_Control
             label6 = new Label();
             db_lbl = new Label();
             logs_lbl = new Label();
-            payment_method_cb = new SmartStock.Classes.Utils.ThemedComboBox();
+            payment_method_cb = new ThemedComboBox();
             label4 = new Label();
-            payment_status_cb = new SmartStock.Classes.Utils.ThemedComboBox();
+            payment_status_cb = new ThemedComboBox();
             label3 = new Label();
             date_picker = new ThemedDateTimePicker();
             label2 = new Label();
@@ -196,6 +196,7 @@ namespace SmartStock.Forms.User_Control
             tableLayoutPanel7.Location = new Point(0, 0);
             tableLayoutPanel7.Margin = new Padding(0);
             tableLayoutPanel7.Name = "tableLayoutPanel7";
+            tableLayoutPanel7.Padding = new Padding(15, 0, 15, 0);
             tableLayoutPanel7.RowCount = 1;
             tableLayoutPanel7.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel7.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
@@ -206,10 +207,10 @@ namespace SmartStock.Forms.User_Control
             // 
             qty_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             qty_tb.Font = new Font("Segoe UI", 11F);
-            qty_tb.Location = new Point(0, 0);
+            qty_tb.Location = new Point(15, 0);
             qty_tb.Margin = new Padding(0);
             qty_tb.Name = "qty_tb";
-            qty_tb.Size = new Size(700, 32);
+            qty_tb.Size = new Size(670, 32);
             qty_tb.TabIndex = 3;
             qty_tb.Tag = "borderless";
             // 
@@ -246,6 +247,7 @@ namespace SmartStock.Forms.User_Control
             tableLayoutPanel5.Location = new Point(0, 0);
             tableLayoutPanel5.Margin = new Padding(0);
             tableLayoutPanel5.Name = "tableLayoutPanel5";
+            tableLayoutPanel5.Padding = new Padding(15, 0, 15, 0);
             tableLayoutPanel5.RowCount = 1;
             tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
@@ -256,10 +258,10 @@ namespace SmartStock.Forms.User_Control
             // 
             product_id_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             product_id_tb.Font = new Font("Segoe UI", 11F);
-            product_id_tb.Location = new Point(0, 0);
+            product_id_tb.Location = new Point(15, 0);
             product_id_tb.Margin = new Padding(0);
             product_id_tb.Name = "product_id_tb";
-            product_id_tb.Size = new Size(700, 32);
+            product_id_tb.Size = new Size(670, 32);
             product_id_tb.TabIndex = 1;
             product_id_tb.Tag = "borderless";
             // 
@@ -437,6 +439,7 @@ namespace SmartStock.Forms.User_Control
             tableLayoutPanel4.Location = new Point(0, 0);
             tableLayoutPanel4.Margin = new Padding(0);
             tableLayoutPanel4.Name = "tableLayoutPanel4";
+            tableLayoutPanel4.Padding = new Padding(15, 0, 15, 0);
             tableLayoutPanel4.RowCount = 1;
             tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
@@ -448,10 +451,10 @@ namespace SmartStock.Forms.User_Control
             total_amount_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             total_amount_tb.Enabled = false;
             total_amount_tb.Font = new Font("Segoe UI", 11F);
-            total_amount_tb.Location = new Point(0, 1);
+            total_amount_tb.Location = new Point(15, 1);
             total_amount_tb.Margin = new Padding(0);
             total_amount_tb.Name = "total_amount_tb";
-            total_amount_tb.Size = new Size(700, 32);
+            total_amount_tb.Size = new Size(670, 32);
             total_amount_tb.TabIndex = 13;
             total_amount_tb.Tag = "borderless";
             // 
@@ -488,6 +491,7 @@ namespace SmartStock.Forms.User_Control
             tableLayoutPanel3.Location = new Point(0, 0);
             tableLayoutPanel3.Margin = new Padding(0);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
+            tableLayoutPanel3.Padding = new Padding(15, 0, 15, 0);
             tableLayoutPanel3.RowCount = 1;
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
@@ -498,10 +502,10 @@ namespace SmartStock.Forms.User_Control
             // 
             customer_id_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             customer_id_tb.Font = new Font("Segoe UI", 11F);
-            customer_id_tb.Location = new Point(0, 0);
+            customer_id_tb.Location = new Point(15, 0);
             customer_id_tb.Margin = new Padding(0);
             customer_id_tb.Name = "customer_id_tb";
-            customer_id_tb.Size = new Size(700, 32);
+            customer_id_tb.Size = new Size(670, 32);
             customer_id_tb.TabIndex = 5;
             customer_id_tb.Tag = "borderless";
             // 
@@ -538,6 +542,7 @@ namespace SmartStock.Forms.User_Control
             tableLayoutPanel2.Location = new Point(0, 0);
             tableLayoutPanel2.Margin = new Padding(0);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
+            tableLayoutPanel2.Padding = new Padding(15, 0, 15, 0);
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
@@ -549,10 +554,10 @@ namespace SmartStock.Forms.User_Control
             user_id_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             user_id_tb.Enabled = false;
             user_id_tb.Font = new Font("Segoe UI", 11F);
-            user_id_tb.Location = new Point(0, 0);
+            user_id_tb.Location = new Point(15, 0);
             user_id_tb.Margin = new Padding(0);
             user_id_tb.Name = "user_id_tb";
-            user_id_tb.Size = new Size(700, 32);
+            user_id_tb.Size = new Size(670, 32);
             user_id_tb.TabIndex = 3;
             user_id_tb.Tag = "borderless";
             // 
@@ -617,8 +622,8 @@ namespace SmartStock.Forms.User_Control
             payment_method_cb.Font = new Font("Segoe UI", 11F);
             payment_method_cb.FormattingEnabled = true;
             payment_method_cb.ItemHeight = 30;
-            payment_method_cb.Location = new Point(158, 171);
-            payment_method_cb.Margin = new Padding(3, 5, 3, 5);
+            payment_method_cb.Location = new Point(161, 171);
+            payment_method_cb.Margin = new Padding(6, 5, 0, 5);
             payment_method_cb.Name = "payment_method_cb";
             payment_method_cb.Size = new Size(702, 36);
             payment_method_cb.TabIndex = 7;
@@ -645,8 +650,8 @@ namespace SmartStock.Forms.User_Control
             payment_status_cb.Font = new Font("Segoe UI", 11F);
             payment_status_cb.FormattingEnabled = true;
             payment_status_cb.ItemHeight = 30;
-            payment_status_cb.Location = new Point(158, 225);
-            payment_status_cb.Margin = new Padding(3, 5, 3, 5);
+            payment_status_cb.Location = new Point(161, 225);
+            payment_status_cb.Margin = new Padding(6, 5, 0, 5);
             payment_status_cb.Name = "payment_status_cb";
             payment_status_cb.Size = new Size(702, 36);
             payment_status_cb.TabIndex = 9;
@@ -667,10 +672,11 @@ namespace SmartStock.Forms.User_Control
             // date_picker
             // 
             date_picker.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            date_picker.CustomFormat = "dd MMM yyyy";
             date_picker.Font = new Font("Segoe UI", 11F);
             date_picker.Format = DateTimePickerFormat.Short;
-            date_picker.Location = new Point(158, 281);
-            date_picker.Margin = new Padding(3, 5, 3, 5);
+            date_picker.Location = new Point(161, 281);
+            date_picker.Margin = new Padding(6, 5, 0, 5);
             date_picker.Name = "date_picker";
             date_picker.Size = new Size(702, 32);
             date_picker.TabIndex = 11;
@@ -737,6 +743,7 @@ namespace SmartStock.Forms.User_Control
             tableLayoutPanel6.Location = new Point(0, 0);
             tableLayoutPanel6.Margin = new Padding(0);
             tableLayoutPanel6.Name = "tableLayoutPanel6";
+            tableLayoutPanel6.Padding = new Padding(15, 0, 15, 0);
             tableLayoutPanel6.RowCount = 1;
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
@@ -747,10 +754,10 @@ namespace SmartStock.Forms.User_Control
             // 
             sale_id_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             sale_id_tb.Font = new Font("Segoe UI", 11F);
-            sale_id_tb.Location = new Point(0, 0);
+            sale_id_tb.Location = new Point(15, 0);
             sale_id_tb.Margin = new Padding(0);
             sale_id_tb.Name = "sale_id_tb";
-            sale_id_tb.Size = new Size(590, 32);
+            sale_id_tb.Size = new Size(560, 32);
             sale_id_tb.TabIndex = 0;
             sale_id_tb.Tag = "borderless";
             // 
@@ -763,10 +770,10 @@ namespace SmartStock.Forms.User_Control
             search_btn.IconColor = Color.Black;
             search_btn.IconFont = IconFont.Auto;
             search_btn.IconSize = 18;
-            search_btn.Location = new Point(604, 10);
-            search_btn.Margin = new Padding(6, 10, 0, 10);
+            search_btn.Location = new Point(608, 10);
+            search_btn.Margin = new Padding(10, 10, 0, 10);
             search_btn.Name = "search_btn";
-            search_btn.Size = new Size(104, 34);
+            search_btn.Size = new Size(100, 34);
             search_btn.TabIndex = 1;
             search_btn.Tag = "outlined";
             search_btn.Text = "  Search";

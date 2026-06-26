@@ -178,6 +178,7 @@ namespace SmartStock.Forms.User_Control
             tableLayoutPanel7.Location = new Point(0, 0);
             tableLayoutPanel7.Margin = new Padding(0);
             tableLayoutPanel7.Name = "tableLayoutPanel7";
+            tableLayoutPanel7.Padding = new Padding(15, 0, 15, 0);
             tableLayoutPanel7.RowCount = 1;
             tableLayoutPanel7.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel7.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
@@ -188,10 +189,10 @@ namespace SmartStock.Forms.User_Control
             // 
             unit_measure_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             unit_measure_tb.Font = new Font("Segoe UI", 11F);
-            unit_measure_tb.Location = new Point(0, 0);
+            unit_measure_tb.Location = new Point(15, 0);
             unit_measure_tb.Margin = new Padding(0);
             unit_measure_tb.Name = "unit_measure_tb";
-            unit_measure_tb.Size = new Size(673, 32);
+            unit_measure_tb.Size = new Size(643, 32);
             unit_measure_tb.TabIndex = 15;
             unit_measure_tb.Tag = "borderless";
             // 
@@ -228,6 +229,7 @@ namespace SmartStock.Forms.User_Control
             tableLayoutPanel5.Location = new Point(0, 0);
             tableLayoutPanel5.Margin = new Padding(0);
             tableLayoutPanel5.Name = "tableLayoutPanel5";
+            tableLayoutPanel5.Padding = new Padding(15, 0, 15, 0);
             tableLayoutPanel5.RowCount = 1;
             tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
@@ -238,10 +240,10 @@ namespace SmartStock.Forms.User_Control
             // 
             safety_stock_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             safety_stock_tb.Font = new Font("Segoe UI", 11F);
-            safety_stock_tb.Location = new Point(0, 0);
+            safety_stock_tb.Location = new Point(15, 0);
             safety_stock_tb.Margin = new Padding(0);
             safety_stock_tb.Name = "safety_stock_tb";
-            safety_stock_tb.Size = new Size(673, 32);
+            safety_stock_tb.Size = new Size(643, 32);
             safety_stock_tb.TabIndex = 13;
             safety_stock_tb.Tag = "borderless";
             // 
@@ -278,6 +280,7 @@ namespace SmartStock.Forms.User_Control
             tableLayoutPanel4.Location = new Point(0, 0);
             tableLayoutPanel4.Margin = new Padding(0);
             tableLayoutPanel4.Name = "tableLayoutPanel4";
+            tableLayoutPanel4.Padding = new Padding(15, 0, 15, 0);
             tableLayoutPanel4.RowCount = 1;
             tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
@@ -288,10 +291,10 @@ namespace SmartStock.Forms.User_Control
             // 
             current_stock_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             current_stock_tb.Font = new Font("Segoe UI", 11F);
-            current_stock_tb.Location = new Point(0, 0);
+            current_stock_tb.Location = new Point(15, 0);
             current_stock_tb.Margin = new Padding(0);
             current_stock_tb.Name = "current_stock_tb";
-            current_stock_tb.Size = new Size(673, 32);
+            current_stock_tb.Size = new Size(643, 32);
             current_stock_tb.TabIndex = 11;
             current_stock_tb.Tag = "borderless";
             // 
@@ -328,6 +331,7 @@ namespace SmartStock.Forms.User_Control
             tableLayoutPanel3.Location = new Point(0, 0);
             tableLayoutPanel3.Margin = new Padding(0);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
+            tableLayoutPanel3.Padding = new Padding(15, 0, 15, 0);
             tableLayoutPanel3.RowCount = 1;
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
@@ -338,10 +342,10 @@ namespace SmartStock.Forms.User_Control
             // 
             unit_price_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             unit_price_tb.Font = new Font("Segoe UI", 11F);
-            unit_price_tb.Location = new Point(0, 0);
+            unit_price_tb.Location = new Point(15, 0);
             unit_price_tb.Margin = new Padding(0);
             unit_price_tb.Name = "unit_price_tb";
-            unit_price_tb.Size = new Size(673, 32);
+            unit_price_tb.Size = new Size(643, 32);
             unit_price_tb.TabIndex = 9;
             unit_price_tb.Tag = "borderless";
             // 
@@ -378,6 +382,7 @@ namespace SmartStock.Forms.User_Control
             tableLayoutPanel2.Location = new Point(0, 0);
             tableLayoutPanel2.Margin = new Padding(0);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
+            tableLayoutPanel2.Padding = new Padding(15, 0, 15, 0);
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
@@ -388,10 +393,10 @@ namespace SmartStock.Forms.User_Control
             // 
             supplier_id_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             supplier_id_tb.Font = new Font("Segoe UI", 11F);
-            supplier_id_tb.Location = new Point(0, 0);
+            supplier_id_tb.Location = new Point(15, 0);
             supplier_id_tb.Margin = new Padding(0);
             supplier_id_tb.Name = "supplier_id_tb";
-            supplier_id_tb.Size = new Size(673, 32);
+            supplier_id_tb.Size = new Size(643, 32);
             supplier_id_tb.TabIndex = 7;
             supplier_id_tb.Tag = "borderless";
             // 
@@ -428,6 +433,7 @@ namespace SmartStock.Forms.User_Control
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Margin = new Padding(0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.Padding = new Padding(15, 0, 15, 0);
             tableLayoutPanel1.RowCount = 1;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
@@ -438,10 +444,10 @@ namespace SmartStock.Forms.User_Control
             // 
             product_name_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             product_name_tb.Font = new Font("Segoe UI", 11F);
-            product_name_tb.Location = new Point(0, 0);
+            product_name_tb.Location = new Point(15, 0);
             product_name_tb.Margin = new Padding(0);
             product_name_tb.Name = "product_name_tb";
-            product_name_tb.Size = new Size(673, 32);
+            product_name_tb.Size = new Size(643, 32);
             product_name_tb.TabIndex = 3;
             product_name_tb.Tag = "borderless";
             // 
@@ -493,8 +499,8 @@ namespace SmartStock.Forms.User_Control
             product_category_cb.Font = new Font("Segoe UI", 11F);
             product_category_cb.FormattingEnabled = true;
             product_category_cb.ItemHeight = 30;
-            product_category_cb.Location = new Point(173, 117);
-            product_category_cb.Margin = new Padding(3, 5, 3, 5);
+            product_category_cb.Location = new Point(176, 117);
+            product_category_cb.Margin = new Padding(6, 5, 0, 5);
             product_category_cb.Name = "product_category_cb";
             product_category_cb.Size = new Size(675, 36);
             product_category_cb.TabIndex = 5;
@@ -612,6 +618,7 @@ namespace SmartStock.Forms.User_Control
             tableLayoutPanel6.Location = new Point(0, 0);
             tableLayoutPanel6.Margin = new Padding(0);
             tableLayoutPanel6.Name = "tableLayoutPanel6";
+            tableLayoutPanel6.Padding = new Padding(15, 0, 15, 0);
             tableLayoutPanel6.RowCount = 1;
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
@@ -622,10 +629,10 @@ namespace SmartStock.Forms.User_Control
             // 
             product_id_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             product_id_tb.Font = new Font("Segoe UI", 11F);
-            product_id_tb.Location = new Point(0, 0);
+            product_id_tb.Location = new Point(15, 0);
             product_id_tb.Margin = new Padding(0);
             product_id_tb.Name = "product_id_tb";
-            product_id_tb.Size = new Size(563, 32);
+            product_id_tb.Size = new Size(533, 32);
             product_id_tb.TabIndex = 0;
             product_id_tb.Tag = "borderless";
             // 
@@ -638,10 +645,10 @@ namespace SmartStock.Forms.User_Control
             search_btn.IconColor = Color.Black;
             search_btn.IconFont = IconFont.Auto;
             search_btn.IconSize = 18;
-            search_btn.Location = new Point(577, 10);
-            search_btn.Margin = new Padding(6, 10, 0, 10);
+            search_btn.Location = new Point(581, 10);
+            search_btn.Margin = new Padding(10, 10, 0, 10);
             search_btn.Name = "search_btn";
-            search_btn.Size = new Size(104, 34);
+            search_btn.Size = new Size(100, 34);
             search_btn.TabIndex = 1;
             search_btn.Tag = "outlined";
             search_btn.Text = "  Search";

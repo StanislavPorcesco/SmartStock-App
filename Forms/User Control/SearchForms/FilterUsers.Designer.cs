@@ -99,6 +99,7 @@ namespace SmartStock.Forms.User_Control.SearchForms
             status_ck.Location = new Point(264, 10);
             status_ck.Margin = new Padding(0, 10, 10, 10);
             status_ck.Name = "status_ck";
+            status_ck.Padding = new Padding(9, 0, 0, 0);
             status_ck.Size = new Size(255, 24);
             status_ck.TabIndex = 28;
             status_ck.Text = "On / Off";
@@ -113,6 +114,7 @@ namespace SmartStock.Forms.User_Control.SearchForms
             total_ck.Location = new Point(264, 154);
             total_ck.Margin = new Padding(0, 10, 10, 10);
             total_ck.Name = "total_ck";
+            total_ck.Padding = new Padding(9, 0, 0, 0);
             total_ck.Size = new Size(255, 24);
             total_ck.TabIndex = 26;
             total_ck.Text = "On / Off";
@@ -181,7 +183,8 @@ namespace SmartStock.Forms.User_Control.SearchForms
             label4.Font = new Font("Segoe UI", 10F);
             label4.Location = new Point(0, 0);
             label4.Name = "label4";
-            label4.Size = new Size(39, 23);
+            label4.Padding = new Padding(9, 0, 0, 0);
+            label4.Size = new Size(48, 23);
             label4.TabIndex = 21;
             label4.Tag = "muted";
             label4.Text = "Min";
@@ -189,13 +192,14 @@ namespace SmartStock.Forms.User_Control.SearchForms
             // 
             // min_numeric
             // 
+            min_numeric.BorderStyle = BorderStyle.None;
             min_numeric.Dock = DockStyle.Right;
             min_numeric.Font = new Font("Segoe UI", 11F);
             min_numeric.Location = new Point(127, 0);
             min_numeric.Margin = new Padding(0, 10, 0, 0);
             min_numeric.Maximum = new decimal(new int[] { 999999, 0, 0, 0 });
             min_numeric.Name = "min_numeric";
-            min_numeric.Size = new Size(128, 32);
+            min_numeric.Size = new Size(128, 28);
             min_numeric.TabIndex = 0;
             min_numeric.Tag = "range_lock";
             // 
@@ -219,7 +223,8 @@ namespace SmartStock.Forms.User_Control.SearchForms
             label5.Font = new Font("Segoe UI", 10F);
             label5.Location = new Point(0, 0);
             label5.Name = "label5";
-            label5.Size = new Size(42, 23);
+            label5.Padding = new Padding(9, 0, 0, 0);
+            label5.Size = new Size(51, 23);
             label5.TabIndex = 22;
             label5.Tag = "muted";
             label5.Text = "Max";
@@ -227,12 +232,13 @@ namespace SmartStock.Forms.User_Control.SearchForms
             // 
             // max_numeric
             // 
+            max_numeric.BorderStyle = BorderStyle.None;
             max_numeric.Dock = DockStyle.Right;
             max_numeric.Font = new Font("Segoe UI", 11F);
             max_numeric.Location = new Point(127, 0);
             max_numeric.Maximum = new decimal(new int[] { 999999, 0, 0, 0 });
             max_numeric.Name = "max_numeric";
-            max_numeric.Size = new Size(128, 32);
+            max_numeric.Size = new Size(128, 28);
             max_numeric.TabIndex = 0;
             max_numeric.Tag = "range_lock";
             // 

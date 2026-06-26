@@ -30,12 +30,7 @@ namespace SmartStock.Forms.User_Control
 
         private void search_btn_Click(object sender, EventArgs e)
         {
-            if (!int.TryParse(supplier_id_tb.Text, out int suppId))
-            {
-                MessageBox.Show("Please enter a valid Supplier ID.", "Search Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            if (!FormValidator.RequireId(supplier_id_tb.Text, "Supplier ID", out int suppId)) return;
 
             SearchAndLoadSupplier(suppId);
         }
@@ -58,7 +53,7 @@ namespace SmartStock.Forms.User_Control
                 {
                     supplier_id_tb.BackColor = Color.DarkRed;
                     supplier_id_tb.ForeColor = Color.White;
-                    MessageBox.Show("Supplier ID not found!", "Search Error",
+                    MessageBox.Show("Supplier not found.", "Search Error",
                                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                     ClearControls();
                 }
@@ -101,28 +96,14 @@ namespace SmartStock.Forms.User_Control
         {
             supplier = null;
 
-            string sName  = supplier_name_tb.Text.Trim();
-            string sEmail = email_tb.Text.Trim();
-
-            if (string.IsNullOrWhiteSpace(sName))
-            {
-                MessageBox.Show("Please enter the Supplier Name.", "Input Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-
-            if (!string.IsNullOrWhiteSpace(sEmail) && (!sEmail.Contains("@") || !sEmail.Contains(".")))
-            {
-                MessageBox.Show("Please enter a valid email address.", "Validation Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
+            if (!FormValidator.RequireText(supplier_name_tb.Text, "Supplier Name")) return false;
+            if (!FormValidator.ValidateOptionalEmail(email_tb.Text)) return false;
 
             supplier = new Supplier
             {
-                SupplierName   = sName,
+                SupplierName   = supplier_name_tb.Text.Trim(),
                 ContactPerson  = contact_person_tb.Text.Trim(),
-                Email          = sEmail,
+                Email          = email_tb.Text.Trim(),
                 Phone          = phone_tb.Text.Trim(),
                 Address        = address_tb.Text.Trim(),
                 IsActive       = true
@@ -133,15 +114,16 @@ namespace SmartStock.Forms.User_Control
 
         // ── ISaveableControl ──────────────────────────────────────────────────
 
-        public async Task<bool> PerformSave(bool isAddMode)
+        public async Task<SaveOutcome> PerformSave(bool isAddMode)
         {
-            if (!TryCollectSupplierData(out var supplier)) return false;
+            if (!TryCollectSupplierData(out var supplier)) return SaveOutcome.Handled;
 
             try
             {
+                bool ok;
                 if (isAddMode)
                 {
-                    return await _supplierService.AddSupplierAsync(supplier);
+                    ok = await _supplierService.AddSupplierAsync(supplier);
                 }
                 else
                 {
@@ -151,14 +133,15 @@ namespace SmartStock.Forms.User_Control
                     _loadedSupplier.Email         = supplier.Email;
                     _loadedSupplier.Phone         = supplier.Phone;
                     _loadedSupplier.Address       = supplier.Address;
-                    return await _supplierService.UpdateSupplierAsync(_loadedSupplier);
+                    ok = await _supplierService.UpdateSupplierAsync(_loadedSupplier);
                 }
+
+                return ok ? SaveOutcome.Success : SaveOutcome.Failed;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error: {ex.Message}", "Database Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
+                FormValidator.ShowDbError(ex);
+                return SaveOutcome.Handled;
             }
         }
 

@@ -151,6 +151,7 @@ namespace SmartStock.Forms.User_Control
             tableLayoutPanel5.Location = new Point(0, 0);
             tableLayoutPanel5.Margin = new Padding(0);
             tableLayoutPanel5.Name = "tableLayoutPanel5";
+            tableLayoutPanel5.Padding = new Padding(15, 0, 15, 0);
             tableLayoutPanel5.RowCount = 1;
             tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
@@ -161,10 +162,10 @@ namespace SmartStock.Forms.User_Control
             // 
             email_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             email_tb.Font = new Font("Segoe UI", 11F);
-            email_tb.Location = new Point(0, 0);
+            email_tb.Location = new Point(15, 0);
             email_tb.Margin = new Padding(0);
             email_tb.Name = "email_tb";
-            email_tb.Size = new Size(683, 32);
+            email_tb.Size = new Size(653, 32);
             email_tb.TabIndex = 9;
             email_tb.Tag = "borderless";
             // 
@@ -201,6 +202,7 @@ namespace SmartStock.Forms.User_Control
             tableLayoutPanel4.Location = new Point(0, 0);
             tableLayoutPanel4.Margin = new Padding(0);
             tableLayoutPanel4.Name = "tableLayoutPanel4";
+            tableLayoutPanel4.Padding = new Padding(15, 0, 15, 0);
             tableLayoutPanel4.RowCount = 1;
             tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
@@ -211,10 +213,10 @@ namespace SmartStock.Forms.User_Control
             // 
             phone_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             phone_tb.Font = new Font("Segoe UI", 11F);
-            phone_tb.Location = new Point(0, 0);
+            phone_tb.Location = new Point(15, 0);
             phone_tb.Margin = new Padding(0);
             phone_tb.Name = "phone_tb";
-            phone_tb.Size = new Size(683, 32);
+            phone_tb.Size = new Size(653, 32);
             phone_tb.TabIndex = 7;
             phone_tb.Tag = "borderless";
             // 
@@ -251,6 +253,7 @@ namespace SmartStock.Forms.User_Control
             tableLayoutPanel3.Location = new Point(0, 0);
             tableLayoutPanel3.Margin = new Padding(0);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
+            tableLayoutPanel3.Padding = new Padding(15, 0, 15, 0);
             tableLayoutPanel3.RowCount = 1;
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
@@ -261,10 +264,10 @@ namespace SmartStock.Forms.User_Control
             // 
             city_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             city_tb.Font = new Font("Segoe UI", 11F);
-            city_tb.Location = new Point(0, 0);
+            city_tb.Location = new Point(15, 0);
             city_tb.Margin = new Padding(0);
             city_tb.Name = "city_tb";
-            city_tb.Size = new Size(683, 32);
+            city_tb.Size = new Size(653, 32);
             city_tb.TabIndex = 5;
             city_tb.Tag = "borderless";
             // 
@@ -301,6 +304,7 @@ namespace SmartStock.Forms.User_Control
             tableLayoutPanel2.Location = new Point(0, 0);
             tableLayoutPanel2.Margin = new Padding(0);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
+            tableLayoutPanel2.Padding = new Padding(15, 0, 15, 0);
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
@@ -311,10 +315,10 @@ namespace SmartStock.Forms.User_Control
             // 
             full_name_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             full_name_tb.Font = new Font("Segoe UI", 11F);
-            full_name_tb.Location = new Point(0, 0);
+            full_name_tb.Location = new Point(15, 0);
             full_name_tb.Margin = new Padding(0);
             full_name_tb.Name = "full_name_tb";
-            full_name_tb.Size = new Size(683, 32);
+            full_name_tb.Size = new Size(653, 32);
             full_name_tb.TabIndex = 3;
             full_name_tb.Tag = "borderless";
             // 
@@ -432,6 +436,7 @@ namespace SmartStock.Forms.User_Control
             tableLayoutPanel6.Location = new Point(0, 0);
             tableLayoutPanel6.Margin = new Padding(0);
             tableLayoutPanel6.Name = "tableLayoutPanel6";
+            tableLayoutPanel6.Padding = new Padding(15, 0, 15, 0);
             tableLayoutPanel6.RowCount = 1;
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
@@ -442,10 +447,10 @@ namespace SmartStock.Forms.User_Control
             // 
             customer_id_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             customer_id_tb.Font = new Font("Segoe UI", 11F);
-            customer_id_tb.Location = new Point(0, 0);
+            customer_id_tb.Location = new Point(15, 0);
             customer_id_tb.Margin = new Padding(0);
             customer_id_tb.Name = "customer_id_tb";
-            customer_id_tb.Size = new Size(573, 32);
+            customer_id_tb.Size = new Size(543, 32);
             customer_id_tb.TabIndex = 0;
             customer_id_tb.Tag = "borderless";
             // 
@@ -458,10 +463,10 @@ namespace SmartStock.Forms.User_Control
             search_btn.IconColor = Color.Black;
             search_btn.IconFont = IconFont.Auto;
             search_btn.IconSize = 18;
-            search_btn.Location = new Point(587, 10);
-            search_btn.Margin = new Padding(6, 10, 0, 10);
+            search_btn.Location = new Point(591, 10);
+            search_btn.Margin = new Padding(10, 10, 0, 10);
             search_btn.Name = "search_btn";
-            search_btn.Size = new Size(104, 34);
+            search_btn.Size = new Size(100, 34);
             search_btn.TabIndex = 1;
             search_btn.Tag = "outlined";
             search_btn.Text = "  Search";

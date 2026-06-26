@@ -217,6 +217,28 @@ namespace SmartStock.Classes.Data.Services
         }
 
         /// <summary>
+        /// Verifică dacă un email de client există deja (case-insensitive).
+        /// Emailurile goale nu sunt considerate duplicate. Verifică toți clienții
+        /// (activi și inactivi). <paramref name="excludeId"/> sare peste un client anume
+        /// (folosit la modificare, pentru a nu se compara cu el însuși).
+        /// </summary>
+        public async Task<bool> CustomerEmailExistsAsync(string email, int? excludeId = null)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return false;
+
+            var emailLower = email.Trim().ToLower();
+            var query = _customerRepository
+                .GetAll()
+                .Where(c => c.Email != null && c.Email.ToLower() == emailLower);
+
+            if (excludeId.HasValue)
+                query = query.Where(c => c.CustomerId != excludeId.Value);
+
+            return await query.AnyAsync();
+        }
+
+        /// <summary>
         /// Validează un email (format de bază).
         /// </summary>
         public bool IsValidEmail(string email)
@@ -237,9 +259,8 @@ namespace SmartStock.Classes.Data.Services
 
             ValidateCustomer(customer);
 
-            // Verifică duplicate
-            if (await CustomerNameExistsAsync(customer.FullName))
-                throw new InvalidOperationException($"Customer '{customer.FullName}' already exists.");
+            // Note: customer names are NOT unique — multiple people can share the same name,
+            // so no duplicate-name check is performed here.
 
             try
             {
@@ -268,9 +289,7 @@ namespace SmartStock.Classes.Data.Services
 
             ValidateCustomer(customer);
 
-            // Verifică duplicate (excluzând ID-ul curent)
-            if (await CustomerNameExistsAsync(customer.FullName, customer.CustomerId))
-                throw new InvalidOperationException($"Another customer with name '{customer.FullName}' already exists.");
+            // Note: customer names are NOT unique — duplicates are allowed by design.
 
             try
             {

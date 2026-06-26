@@ -30,12 +30,7 @@ namespace SmartStock.Forms.User_Control
 
         private void search_btn_Click(object sender, EventArgs e)
         {
-            if (!int.TryParse(customer_id_tb.Text, out int custId))
-            {
-                MessageBox.Show("Please enter a valid Customer ID.", "Search Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            if (!FormValidator.RequireId(customer_id_tb.Text, "Customer ID", out int custId)) return;
 
             SearchAndLoadCustomer(custId);
         }
@@ -100,27 +95,13 @@ namespace SmartStock.Forms.User_Control
         {
             customer = null;
 
-            string cName  = full_name_tb.Text.Trim();
-            string cEmail = email_tb.Text.Trim();
-
-            if (string.IsNullOrWhiteSpace(cName))
-            {
-                MessageBox.Show("Please enter the Customer Name.", "Input Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-
-            if (!string.IsNullOrWhiteSpace(cEmail) && (!cEmail.Contains("@") || !cEmail.Contains(".")))
-            {
-                MessageBox.Show("The email format is invalid.", "Validation Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
+            if (!FormValidator.RequireText(full_name_tb.Text, "Customer Name")) return false;
+            if (!FormValidator.RequireEmail(email_tb.Text)) return false;
 
             customer = new Customer
             {
-                FullName = cName,
-                Email    = cEmail,
+                FullName = full_name_tb.Text.Trim(),
+                Email    = email_tb.Text.Trim(),
                 Phone    = phone_tb.Text.Trim(),
                 City     = city_tb.Text.Trim(),
                 IsActive = true
@@ -131,15 +112,24 @@ namespace SmartStock.Forms.User_Control
 
         // ── ISaveableControl ──────────────────────────────────────────────────
 
-        public async Task<bool> PerformSave(bool isAddMode)
+        public async Task<SaveOutcome> PerformSave(bool isAddMode)
         {
-            if (!TryCollectCustomerData(out var customer)) return false;
+            if (!TryCollectCustomerData(out var customer)) return SaveOutcome.Handled;
+
+            // Email must be unique across customers (unlike the name, which may repeat).
+            int? excludeId = isAddMode ? (int?)null : _currentCustomerId;
+            if (await _customerService.CustomerEmailExistsAsync(customer.Email, excludeId))
+            {
+                FormValidator.ShowError("A customer with this email address already exists.");
+                return SaveOutcome.Handled;
+            }
 
             try
             {
+                bool ok;
                 if (isAddMode)
                 {
-                    return await _customerService.AddCustomerAsync(customer);
+                    ok = await _customerService.AddCustomerAsync(customer);
                 }
                 else
                 {
@@ -148,14 +138,15 @@ namespace SmartStock.Forms.User_Control
                     _loadedCustomer.Email    = customer.Email;
                     _loadedCustomer.Phone    = customer.Phone;
                     _loadedCustomer.City     = customer.City;
-                    return await _customerService.UpdateCustomerAsync(_loadedCustomer);
+                    ok = await _customerService.UpdateCustomerAsync(_loadedCustomer);
                 }
+
+                return ok ? SaveOutcome.Success : SaveOutcome.Failed;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error: {ex.Message}", "Database Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
+                FormValidator.ShowDbError(ex);
+                return SaveOutcome.Handled;
             }
         }
 

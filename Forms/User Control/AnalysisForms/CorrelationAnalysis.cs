@@ -1,5 +1,6 @@
 ﻿using SmartStock.Classes.Data.DTOs;
 using SmartStock.Classes.Data.Interfaces;
+using SmartStock.Utils;
 
 namespace SmartStock.Forms.User_Control.AnalysisForms
 {
@@ -9,6 +10,14 @@ namespace SmartStock.Forms.User_Control.AnalysisForms
         {
             InitializeComponent();
             InitializeDefaults();
+            AddTooltips();
+        }
+
+        private void AddTooltips()
+        {
+            ToolTipHelp.AddToolTip(range_lbl, "External factor to correlate against this product's sales.");
+            ToolTipHelp.AddToolTip(label1, "Shift the factor by this many days to test a delayed (lagged) effect on sales.");
+            ToolTipHelp.AddToolTip(label2, "Time bucket used to align sales with the factor (Daily, Weekly, Monthly).");
         }
 
         public AnalysisContext GetParameters()

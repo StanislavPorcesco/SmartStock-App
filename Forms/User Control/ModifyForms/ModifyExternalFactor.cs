@@ -31,12 +31,7 @@ namespace SmartStock.Forms.User_Control
 
         private void search_btn_Click(object sender, EventArgs e)
         {
-            if (!int.TryParse(factor_id_tb.Text, out int factorId))
-            {
-                MessageBox.Show("Please enter a valid Factor ID.", "Search Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            if (!FormValidator.RequireId(factor_id_tb.Text, "Factor ID", out int factorId)) return;
 
             SearchAndLoadFactor(factorId);
         }
@@ -59,7 +54,7 @@ namespace SmartStock.Forms.User_Control
                 {
                     factor_id_tb.BackColor = Color.DarkRed;
                     factor_id_tb.ForeColor = Color.White;
-                    MessageBox.Show("Factor ID not found.", "Search Error",
+                    MessageBox.Show("External Factor not found.", "Search Error",
                                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                     ClearControls();
                 }
@@ -97,43 +92,16 @@ namespace SmartStock.Forms.User_Control
         {
             factor = null;
 
-            string factorType   = factor_type_tb.Text.Trim();
-            string region       = region_tb.Text.Trim();
-            string description  = description_tb.Text.Trim();
-
-            if (string.IsNullOrWhiteSpace(factorType))
-            {
-                MessageBox.Show("Factor Type is required.", "Input Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(region))
-            {
-                MessageBox.Show("Region is required.", "Input Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-
-            if (!decimal.TryParse(impact_value_tb.Text, out decimal impactValue))
-            {
-                MessageBox.Show("Please enter a valid numeric value for Impact Value.", "Input Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-
-            if (value_type_cb.SelectedIndex == -1)
-            {
-                MessageBox.Show("Please select a Value Type.", "Input Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
+            if (!FormValidator.RequireText(factor_type_tb.Text, "Factor Type")) return false;
+            if (!FormValidator.RequireText(region_tb.Text, "Region")) return false;
+            if (!FormValidator.RequireDecimal(impact_value_tb.Text, "Impact Value", out decimal impactValue)) return false;
+            if (!FormValidator.RequireSelection(value_type_cb.SelectedIndex, "Value Type")) return false;
 
             factor = new ExternalFactor
             {
-                FactorType  = factorType,
-                Description = description,
-                Region      = region,
+                FactorType  = factor_type_tb.Text.Trim(),
+                Description = description_tb.Text.Trim(),
+                Region      = region_tb.Text.Trim(),
                 ImpactValue = impactValue,
                 ValueType   = value_type_cb.SelectedItem.ToString(),
                 Date        = date_picker.Value,
@@ -145,15 +113,16 @@ namespace SmartStock.Forms.User_Control
 
         // ── ISaveableControl ──────────────────────────────────────────────────
 
-        public async Task<bool> PerformSave(bool isAddMode)
+        public async Task<SaveOutcome> PerformSave(bool isAddMode)
         {
-            if (!TryCollectFactorData(out var factor)) return false;
+            if (!TryCollectFactorData(out var factor)) return SaveOutcome.Handled;
 
             try
             {
+                bool ok;
                 if (isAddMode)
                 {
-                    return await _factorService.AddFactorAsync(factor);
+                    ok = await _factorService.AddFactorAsync(factor);
                 }
                 else
                 {
@@ -164,14 +133,15 @@ namespace SmartStock.Forms.User_Control
                     _loadedFactor.ImpactValue = factor.ImpactValue;
                     _loadedFactor.ValueType   = factor.ValueType;
                     _loadedFactor.Date        = factor.Date;
-                    return await _factorService.UpdateFactorAsync(_loadedFactor);
+                    ok = await _factorService.UpdateFactorAsync(_loadedFactor);
                 }
+
+                return ok ? SaveOutcome.Success : SaveOutcome.Failed;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error: {ex.Message}", "Database Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
+                FormValidator.ShowDbError(ex);
+                return SaveOutcome.Handled;
             }
         }
 

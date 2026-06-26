@@ -1,17 +1,23 @@
-﻿
+﻿using System.Text.Json.Serialization;
+
 namespace SmartStock.Classes.Settings
 {
     public class AppSettings
     {
         public string Theme { get; set; } = "Light";
         public string Language { get; set; } = "en-US";
-        public string DeepSeekApiKey { get; set; } = string.Empty;
-        public string OpenAIApiKey { get; set; } = string.Empty;
-        public string ClaudeApiKey { get; set; } = string.Empty;
+        public string CurrencySymbol { get; set; } = "$";
+
+        // Secrets are NEVER persisted to appSettings.json — they live only in .env and are
+        // hydrated at load by SettingsManager via EnvManager. [JsonIgnore] keeps them out of
+        // the JSON file while letting consumers keep reading SettingsManager.Current.*ApiKey.
+        [JsonIgnore] public string DeepSeekApiKey { get; set; } = string.Empty;
+        [JsonIgnore] public string OpenAIApiKey { get; set; } = string.Empty;
+        [JsonIgnore] public string ClaudeApiKey { get; set; } = string.Empty;
         public string SelectedAiProvider { get; set; } = "DeepSeek";
         public double AiTemperature { get; set; } = 0.2;
-        public string AlphaVantageApiKey { get; set; } = string.Empty;
-        public string PredictHQApiKey { get; set; } = string.Empty;
+        [JsonIgnore] public string AlphaVantageApiKey { get; set; } = string.Empty;
+        [JsonIgnore] public string PredictHQApiKey { get; set; } = string.Empty;
         public string WorldBankCountryCode { get; set; } = "RO";
         public double WeatherLatitude { get; set; } = 45.9432;
         public double WeatherLongitude { get; set; } = 24.9668;

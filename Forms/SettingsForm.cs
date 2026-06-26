@@ -142,6 +142,7 @@ namespace SmartStock
             ai_pnl.Visible        = PermissionService.CanAccessAiSettings;
 
             // ── Theme & Preferences: visible to all; Currency Symbol gated ─────
+            currency_symbol_tb.Text = SettingsManager.Current.CurrencySymbol;
             currency_symbol_tb.Visible = PermissionService.CanEditCurrencySymbol;
             label4.Visible = true;
 
@@ -228,17 +229,29 @@ namespace SmartStock
             SettingsManager.Current.Theme = selectedTheme;
             SettingsManager.Current.LoggingEnabled = enable_logging_chk.Checked;
 
+            // Currency symbol is gated like its control: only persist when the role may edit it,
+            // and never store an empty symbol (fall back to "$").
+            if (PermissionService.CanEditCurrencySymbol)
+            {
+                var symbol = currency_symbol_tb.Text.Trim();
+                SettingsManager.Current.CurrencySymbol = string.IsNullOrEmpty(symbol) ? "$" : symbol;
+            }
+
             // SAVE-SIDE ENFORCEMENT: hiding a control does NOT stop Apply from reading it, so
             // each block is gated by the same capability that controls its visibility. Without
             // this, a restricted role could overwrite (blank out) a setting it never saw.
 
             if (PermissionService.CanViewApiKey)
             {
-                // Flush the visible key into per-provider memory, then persist all three.
+                // Flush the visible key into per-provider memory, then persist all three to
+                // .env (the only store for secrets) and re-hydrate Current so call-time key
+                // resolution picks up the change without a restart.
                 _providerKeys[_currentProvider] = api_tb.Text.Trim();
-                SettingsManager.Current.DeepSeekApiKey = _providerKeys.GetValueOrDefault("DeepSeek", string.Empty);
-                SettingsManager.Current.OpenAIApiKey   = _providerKeys.GetValueOrDefault("OpenAI", string.Empty);
-                SettingsManager.Current.ClaudeApiKey   = _providerKeys.GetValueOrDefault("Claude", string.Empty);
+                EnvManager.Set(EnvManager.DeepSeekKey, _providerKeys.GetValueOrDefault("DeepSeek", string.Empty));
+                EnvManager.Set(EnvManager.OpenAIKey,   _providerKeys.GetValueOrDefault("OpenAI", string.Empty));
+                EnvManager.Set(EnvManager.ClaudeKey,   _providerKeys.GetValueOrDefault("Claude", string.Empty));
+                EnvManager.Save();
+                SettingsManager.HydrateSecrets();
             }
 
             if (PermissionService.CanAccessAiSettings)

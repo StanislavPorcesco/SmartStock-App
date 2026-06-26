@@ -28,11 +28,7 @@ namespace SmartStock.Forms.AddForms
         }
         private void search_btn_Click(object sender, EventArgs e)
         {
-            if (!int.TryParse(category_id_tb.Text, out int catId))
-            {
-                MessageBox.Show("Please enter a valid Category ID.", "Search Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            if (!FormValidator.RequireId(category_id_tb.Text, "Category ID", out int catId)) return;
 
             SearchAndLoadCategory(catId);
         }
@@ -57,7 +53,7 @@ namespace SmartStock.Forms.AddForms
                 {
                     category_id_tb.BackColor = Color.DarkRed;
                     category_id_tb.ForeColor = Color.White;
-                    MessageBox.Show("Category ID not found.", "Search Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Category not found.", "Search Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     ClearControls();
                 }
             }
@@ -99,18 +95,11 @@ namespace SmartStock.Forms.AddForms
         {
             category = null;
 
-            string categoryName = category_name_tb.Text.Trim();
-
-            if (string.IsNullOrWhiteSpace(categoryName))
-            {
-                MessageBox.Show("Please enter a category name.", "Input Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
+            if (!FormValidator.RequireText(category_name_tb.Text, "Category Name")) return false;
 
             category = new Category
             {
-                CategoryName = categoryName,
+                CategoryName = category_name_tb.Text.Trim(),
                 IsActive = true
             };
 
@@ -120,26 +109,22 @@ namespace SmartStock.Forms.AddForms
         /// <summary>
         /// Actualizează categoria în baza de date.
         /// </summary>
-        public async Task<bool> PerformSave(bool isAddMode)
+        public async Task<SaveOutcome> PerformSave(bool isAddMode)
         {
-            if (string.IsNullOrWhiteSpace(category_name_tb.Text)) return false;
+            if (!TryCollectCategoryData(out var category)) return SaveOutcome.Handled;
+
             try
             {
-                if (isAddMode)
-                {
-                    TryCollectCategoryData(out var newCategory);
-                    return await _categoryService.AddCategoryAsync(newCategory);
-                }
-                else
-                {
-                    TryCollectCategoryData(out var updatedCategory);
-                    return await _categoryService.UpdateCategoryAsync(updatedCategory);
-                }
-            }
-            catch 
-            { 
+                bool ok = isAddMode
+                    ? await _categoryService.AddCategoryAsync(category)
+                    : await _categoryService.UpdateCategoryAsync(category);
 
-                return false; 
+                return ok ? SaveOutcome.Success : SaveOutcome.Failed;
+            }
+            catch (Exception ex)
+            {
+                FormValidator.ShowDbError(ex);
+                return SaveOutcome.Handled;
             }
         }
 

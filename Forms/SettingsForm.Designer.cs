@@ -241,7 +241,7 @@ namespace SmartStock
             content_host.Dock = DockStyle.Top;
             content_host.Location = new Point(28, 24);
             content_host.Name = "content_host";
-            content_host.Size = new Size(1190, 1336);
+            content_host.Size = new Size(1190, 1180);
             content_host.TabIndex = 0;
             content_host.Tag = "base";
             // 
@@ -348,6 +348,7 @@ namespace SmartStock
             tableLayoutPanel13.Location = new Point(0, 0);
             tableLayoutPanel13.Margin = new Padding(0);
             tableLayoutPanel13.Name = "tableLayoutPanel13";
+            tableLayoutPanel13.Padding = new Padding(15, 0, 15, 0);
             tableLayoutPanel13.RowCount = 1;
             tableLayoutPanel13.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel13.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
@@ -358,10 +359,10 @@ namespace SmartStock
             // 
             currency_symbol_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             currency_symbol_tb.Font = new Font("Segoe UI", 11F);
-            currency_symbol_tb.Location = new Point(0, 0);
+            currency_symbol_tb.Location = new Point(15, 0);
             currency_symbol_tb.Margin = new Padding(0);
             currency_symbol_tb.Name = "currency_symbol_tb";
-            currency_symbol_tb.Size = new Size(333, 32);
+            currency_symbol_tb.Size = new Size(303, 32);
             currency_symbol_tb.TabIndex = 3;
             currency_symbol_tb.Tag = "borderless";
             // 
@@ -564,6 +565,7 @@ namespace SmartStock
             tableLayoutPanel11.Location = new Point(0, 0);
             tableLayoutPanel11.Margin = new Padding(0);
             tableLayoutPanel11.Name = "tableLayoutPanel11";
+            tableLayoutPanel11.Padding = new Padding(15, 0, 15, 0);
             tableLayoutPanel11.RowCount = 1;
             tableLayoutPanel11.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel11.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
@@ -574,10 +576,10 @@ namespace SmartStock
             // 
             logs_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             logs_tb.Font = new Font("Segoe UI", 11F);
-            logs_tb.Location = new Point(0, 0);
+            logs_tb.Location = new Point(15, 0);
             logs_tb.Margin = new Padding(0);
             logs_tb.Name = "logs_tb";
-            logs_tb.Size = new Size(293, 32);
+            logs_tb.Size = new Size(263, 32);
             logs_tb.TabIndex = 8;
             logs_tb.Tag = "borderless";
             // 
@@ -614,6 +616,7 @@ namespace SmartStock
             tableLayoutPanel10.Location = new Point(0, 0);
             tableLayoutPanel10.Margin = new Padding(0);
             tableLayoutPanel10.Name = "tableLayoutPanel10";
+            tableLayoutPanel10.Padding = new Padding(15, 0, 15, 0);
             tableLayoutPanel10.RowCount = 1;
             tableLayoutPanel10.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel10.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
@@ -624,10 +627,10 @@ namespace SmartStock
             // 
             db_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             db_tb.Font = new Font("Segoe UI", 11F);
-            db_tb.Location = new Point(0, 0);
+            db_tb.Location = new Point(15, 0);
             db_tb.Margin = new Padding(0);
             db_tb.Name = "db_tb";
-            db_tb.Size = new Size(293, 32);
+            db_tb.Size = new Size(263, 32);
             db_tb.TabIndex = 6;
             db_tb.Tag = "borderless";
             // 
@@ -664,6 +667,7 @@ namespace SmartStock
             tableLayoutPanel9.Location = new Point(0, 0);
             tableLayoutPanel9.Margin = new Padding(0);
             tableLayoutPanel9.Name = "tableLayoutPanel9";
+            tableLayoutPanel9.Padding = new Padding(15, 0, 15, 0);
             tableLayoutPanel9.RowCount = 1;
             tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
@@ -674,10 +678,10 @@ namespace SmartStock
             // 
             settings_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             settings_tb.Font = new Font("Segoe UI", 11F);
-            settings_tb.Location = new Point(0, 0);
+            settings_tb.Location = new Point(15, 0);
             settings_tb.Margin = new Padding(0);
             settings_tb.Name = "settings_tb";
-            settings_tb.Size = new Size(293, 32);
+            settings_tb.Size = new Size(263, 32);
             settings_tb.TabIndex = 4;
             settings_tb.Tag = "borderless";
             // 
@@ -903,6 +907,7 @@ namespace SmartStock
             tableLayoutPanel12.Location = new Point(0, 0);
             tableLayoutPanel12.Margin = new Padding(0);
             tableLayoutPanel12.Name = "tableLayoutPanel12";
+            tableLayoutPanel12.Padding = new Padding(15, 0, 15, 0);
             tableLayoutPanel12.RowCount = 1;
             tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
@@ -913,10 +918,10 @@ namespace SmartStock
             // 
             api_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             api_tb.Font = new Font("Segoe UI", 11F);
-            api_tb.Location = new Point(0, 0);
+            api_tb.Location = new Point(15, 0);
             api_tb.Margin = new Padding(0);
             api_tb.Name = "api_tb";
-            api_tb.Size = new Size(293, 32);
+            api_tb.Size = new Size(263, 32);
             api_tb.TabIndex = 10;
             api_tb.Tag = "borderless";
             // 
@@ -1608,6 +1613,7 @@ namespace SmartStock
             tableLayoutPanel8.Location = new Point(0, 0);
             tableLayoutPanel8.Margin = new Padding(0);
             tableLayoutPanel8.Name = "tableLayoutPanel8";
+            tableLayoutPanel8.Padding = new Padding(15, 0, 15, 0);
             tableLayoutPanel8.RowCount = 1;
             tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
@@ -1618,10 +1624,10 @@ namespace SmartStock
             // 
             email_recipient_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             email_recipient_tb.Font = new Font("Segoe UI", 11F);
-            email_recipient_tb.Location = new Point(0, 0);
+            email_recipient_tb.Location = new Point(15, 0);
             email_recipient_tb.Margin = new Padding(0);
             email_recipient_tb.Name = "email_recipient_tb";
-            email_recipient_tb.Size = new Size(333, 32);
+            email_recipient_tb.Size = new Size(303, 32);
             email_recipient_tb.TabIndex = 16;
             email_recipient_tb.Tag = "borderless";
             // 

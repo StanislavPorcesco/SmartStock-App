@@ -34,8 +34,8 @@ namespace SmartStock.Forms.User_Control.SearchForms
             tableLayoutPanel1 = new TableLayoutPanel();
             date_lbl = new Label();
             date_start = new ThemedDateTimePicker();
-            user_cb = new SmartStock.Classes.Utils.ThemedComboBox();
-            type_cb = new SmartStock.Classes.Utils.ThemedComboBox();
+            user_cb = new ThemedComboBox();
+            type_cb = new ThemedComboBox();
             user_lbl = new Label();
             type_lbl = new Label();
             date_end = new ThemedDateTimePicker();
@@ -111,6 +111,7 @@ namespace SmartStock.Forms.User_Control.SearchForms
             // 
             // date_start
             // 
+            date_start.CustomFormat = "dd MMM yyyy";
             date_start.Dock = DockStyle.Fill;
             date_start.DropDownAlign = LeftRightAlignment.Right;
             date_start.Font = new Font("Segoe UI", 11F);
@@ -125,6 +126,7 @@ namespace SmartStock.Forms.User_Control.SearchForms
             // 
             user_cb.Dock = DockStyle.Fill;
             user_cb.DrawMode = DrawMode.OwnerDrawFixed;
+            user_cb.DropDownStyle = ComboBoxStyle.DropDownList;
             user_cb.FlatStyle = FlatStyle.Flat;
             user_cb.Font = new Font("Segoe UI", 11F);
             user_cb.FormattingEnabled = true;
@@ -139,6 +141,7 @@ namespace SmartStock.Forms.User_Control.SearchForms
             // 
             type_cb.Dock = DockStyle.Fill;
             type_cb.DrawMode = DrawMode.OwnerDrawFixed;
+            type_cb.DropDownStyle = ComboBoxStyle.DropDownList;
             type_cb.FlatStyle = FlatStyle.Flat;
             type_cb.Font = new Font("Segoe UI", 11F);
             type_cb.FormattingEnabled = true;
@@ -179,6 +182,7 @@ namespace SmartStock.Forms.User_Control.SearchForms
             // 
             // date_end
             // 
+            date_end.CustomFormat = "dd MMM yyyy";
             date_end.Dock = DockStyle.Fill;
             date_end.DropDownAlign = LeftRightAlignment.Right;
             date_end.Font = new Font("Segoe UI", 11F);
@@ -224,7 +228,8 @@ namespace SmartStock.Forms.User_Control.SearchForms
             label4.Font = new Font("Segoe UI", 10F);
             label4.Location = new Point(0, 0);
             label4.Name = "label4";
-            label4.Size = new Size(39, 23);
+            label4.Padding = new Padding(9, 0, 0, 0);
+            label4.Size = new Size(48, 23);
             label4.TabIndex = 21;
             label4.Tag = "muted";
             label4.Text = "Min";
@@ -232,13 +237,14 @@ namespace SmartStock.Forms.User_Control.SearchForms
             // 
             // min_numeric
             // 
+            min_numeric.BorderStyle = BorderStyle.None;
             min_numeric.Dock = DockStyle.Right;
             min_numeric.Font = new Font("Segoe UI", 11F);
             min_numeric.Location = new Point(226, 0);
             min_numeric.Margin = new Padding(0, 10, 0, 0);
             min_numeric.Maximum = new decimal(new int[] { 999999, 0, 0, 0 });
             min_numeric.Name = "min_numeric";
-            min_numeric.Size = new Size(128, 32);
+            min_numeric.Size = new Size(128, 28);
             min_numeric.TabIndex = 0;
             min_numeric.Tag = "range_lock";
             // 
@@ -262,7 +268,8 @@ namespace SmartStock.Forms.User_Control.SearchForms
             label5.Font = new Font("Segoe UI", 10F);
             label5.Location = new Point(0, 0);
             label5.Name = "label5";
-            label5.Size = new Size(42, 23);
+            label5.Padding = new Padding(9, 0, 0, 0);
+            label5.Size = new Size(51, 23);
             label5.TabIndex = 22;
             label5.Tag = "muted";
             label5.Text = "Max";
@@ -270,12 +277,13 @@ namespace SmartStock.Forms.User_Control.SearchForms
             // 
             // max_numeric
             // 
+            max_numeric.BorderStyle = BorderStyle.None;
             max_numeric.Dock = DockStyle.Right;
             max_numeric.Font = new Font("Segoe UI", 11F);
             max_numeric.Location = new Point(226, 0);
             max_numeric.Maximum = new decimal(new int[] { 999999, 0, 0, 0 });
             max_numeric.Name = "max_numeric";
-            max_numeric.Size = new Size(128, 32);
+            max_numeric.Size = new Size(128, 28);
             max_numeric.TabIndex = 0;
             max_numeric.Tag = "range_lock";
             // 

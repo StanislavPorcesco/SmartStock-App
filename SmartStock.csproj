@@ -9,6 +9,31 @@
     <ApplicationIcon>Resources\icon_dark.ico</ApplicationIcon>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove=".claude\**" />
+    <Compile Remove=".github\**" />
+    <Compile Remove="Classes\graphify-out\**" />
+    <Compile Remove="graphify-out\**" />
+    <Compile Remove="Tests\**" />
+    <EmbeddedResource Remove=".claude\**" />
+    <EmbeddedResource Remove=".github\**" />
+    <EmbeddedResource Remove="Classes\graphify-out\**" />
+    <EmbeddedResource Remove="graphify-out\**" />
+    <EmbeddedResource Remove="Tests\**" />
+    <None Remove=".claude\**" />
+    <None Remove=".github\**" />
+    <None Remove="Classes\graphify-out\**" />
+    <None Remove="graphify-out\**" />
+    <None Remove="Tests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove=".claudeignore" />
+    <None Remove=".graphifyignore" />
+    <None Remove=".graphify_python" />
+    <None Remove="CLAUDE.md" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="FontAwesome.Sharp" Version="6.3.0" />
@@ -90,21 +115,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Tests\Services\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include=".github\copilot-instructions.md" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include=".claude\agents\sql-expert.md">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>Resources\sql-expert.md</TargetPath>
-    </None>
   </ItemGroup>
 
   <ItemGroup>

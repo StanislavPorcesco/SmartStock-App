@@ -19,6 +19,7 @@ namespace SmartStock.Forms.User_Control
         public ModifyTransaction()
         {
             InitializeComponent();
+            user_id_tb.Enabled = false;
             InitializeService();
             type_cb.Items.AddRange(new object[] { "Stock In", "Stock Out", "Adjustment" });
         }
@@ -32,12 +33,7 @@ namespace SmartStock.Forms.User_Control
 
         private void search_btn_Click(object sender, EventArgs e)
         {
-            if (!int.TryParse(transaction_id_tb.Text, out int transId))
-            {
-                MessageBox.Show("Please enter a valid Transaction ID.", "Search Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            if (!FormValidator.RequireId(transaction_id_tb.Text, "Transaction ID", out int transId)) return;
 
             SearchAndLoadTransaction(transId);
         }
@@ -95,29 +91,30 @@ namespace SmartStock.Forms.User_Control
         {
             transaction = null;
 
-            if (!int.TryParse(product_id_tb.Text, out int productId) || productId <= 0)
-            {
-                MessageBox.Show("Please enter a valid Product ID.", "Input Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
+            if (!FormValidator.RequireId(product_id_tb.Text, "Product ID", out int productId)) return false;
+            if (!FormValidator.RequireSelection(type_cb.SelectedIndex, "Transaction Type")) return false;
+            
 
-            if (!int.TryParse(quantity_tb.Text, out int quantity) || quantity <= 0)
-            {
-                MessageBox.Show("Please enter a valid Quantity (positive integer).", "Input Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
+            string type = type_cb.SelectedItem.ToString();
 
-            if (type_cb.SelectedIndex == -1)
+            // Entity is the Supplier (Stock In) or Customer (Stock Out) — required for those types.
+            // For Adjustment it is optional, but a non-empty value must still be a valid id.
+            int? entityId;
+            if (type == "Stock In" || type == "Stock Out")
             {
-                MessageBox.Show("Please select a Transaction Type.", "Input Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
+                string entityField = type == "Stock In" ? "Supplier ID" : "Customer ID";
+                if (!FormValidator.RequireId(entity_id_tb.Text, entityField, out int requiredEntity)) return false;
+                entityId = requiredEntity;
             }
-
-            int? entityId = int.TryParse(entity_id_tb.Text, out int eid) ? eid : (int?)null;
-            int  userId   = SessionManager.CurrentUser?.UserId ?? 0;
+            else
+            {
+                if (!FormValidator.RequireOptionalId(entity_id_tb.Text, "Entity ID", out entityId)) return false;
+            }
+            
+            if (!FormValidator.RequireInt(quantity_tb.Text, "Quantity", out int quantity, positiveOnly: true)) return false;
+            if (!FormValidator.RequireNotFuture(date_picker.Value, "Date")) return false;
+            // UserId is taken from the (read-only, session-filled) field — never validated.
+            int userId = int.TryParse(user_id_tb.Text, out int uid) ? uid : 0;
 
             transaction = new Transaction
             {
@@ -126,7 +123,7 @@ namespace SmartStock.Forms.User_Control
                 UserId    = userId,
                 Quantity  = quantity,
                 Date      = date_picker.Value,
-                Type      = type_cb.SelectedItem.ToString()
+                Type      = type
             };
 
             return true;
@@ -134,27 +131,27 @@ namespace SmartStock.Forms.User_Control
 
         // ── ISaveableControl ──────────────────────────────────────────────────
 
-        public async Task<bool> PerformSave(bool isAddMode)
+        public async Task<SaveOutcome> PerformSave(bool isAddMode)
         {
             if (!isAddMode)
             {
                 MessageBox.Show("Transactions cannot be edited. To correct a transaction, " +
                                 "archive (delete) it and create a new one.",
                                 "Not Supported", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return false;
+                return SaveOutcome.Handled;
             }
 
-            if (!TryCollectTransactionData(out var transaction)) return false;
+            if (!TryCollectTransactionData(out var transaction)) return SaveOutcome.Handled;
 
             try
             {
-                return await _transactionService.AddTransactionAsync(transaction);
+                bool ok = await _transactionService.AddTransactionAsync(transaction);
+                return ok ? SaveOutcome.Success : SaveOutcome.Failed;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error: {ex.Message}", "Database Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
+                FormValidator.ShowDbError(ex);
+                return SaveOutcome.Handled;
             }
         }
 
@@ -217,7 +214,7 @@ namespace SmartStock.Forms.User_Control
             transaction_id_tb.Clear();
             product_id_tb.Clear();
             entity_id_tb.Clear();
-            user_id_tb.Clear();
+            user_id_tb.Text = SessionManager.CurrentUser.UserId.ToString();
             quantity_tb.Clear();
             type_cb.SelectedIndex = -1;
             ThemeManager.Apply(this);

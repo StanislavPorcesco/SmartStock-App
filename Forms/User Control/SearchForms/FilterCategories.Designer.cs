@@ -140,6 +140,7 @@ namespace SmartStock.Forms.User_Control.SearchForms
             tableLayoutPanel6.Location = new Point(0, 0);
             tableLayoutPanel6.Margin = new Padding(0);
             tableLayoutPanel6.Name = "tableLayoutPanel6";
+            tableLayoutPanel6.Padding = new Padding(15, 0, 15, 0);
             tableLayoutPanel6.RowCount = 1;
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
@@ -151,10 +152,10 @@ namespace SmartStock.Forms.User_Control.SearchForms
             category_name_tb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             category_name_tb.BackColor = SystemColors.Window;
             category_name_tb.Font = new Font("Segoe UI", 10.5F);
-            category_name_tb.Location = new Point(0, 0);
+            category_name_tb.Location = new Point(15, 0);
             category_name_tb.Margin = new Padding(0);
             category_name_tb.Name = "category_name_tb";
-            category_name_tb.Size = new Size(277, 31);
+            category_name_tb.Size = new Size(247, 31);
             category_name_tb.TabIndex = 40;
             category_name_tb.Tag = "borderless";
             // 
@@ -222,7 +223,8 @@ namespace SmartStock.Forms.User_Control.SearchForms
             label4.Font = new Font("Segoe UI", 10F);
             label4.Location = new Point(0, 0);
             label4.Name = "label4";
-            label4.Size = new Size(39, 23);
+            label4.Padding = new Padding(9, 0, 0, 0);
+            label4.Size = new Size(48, 23);
             label4.TabIndex = 0;
             label4.Tag = "muted";
             label4.Text = "Min";
@@ -261,7 +263,8 @@ namespace SmartStock.Forms.User_Control.SearchForms
             label5.Font = new Font("Segoe UI", 10F);
             label5.Location = new Point(0, 0);
             label5.Name = "label5";
-            label5.Size = new Size(42, 23);
+            label5.Padding = new Padding(9, 0, 0, 0);
+            label5.Size = new Size(51, 23);
             label5.TabIndex = 0;
             label5.Tag = "muted";
             label5.Text = "Max";
@@ -302,6 +305,7 @@ namespace SmartStock.Forms.User_Control.SearchForms
             total_ck.Location = new Point(290, 164);
             total_ck.Margin = new Padding(6, 10, 0, 10);
             total_ck.Name = "total_ck";
+            total_ck.Padding = new Padding(9, 0, 0, 0);
             total_ck.Size = new Size(279, 24);
             total_ck.TabIndex = 26;
             total_ck.Text = "On / Off";
@@ -327,7 +331,8 @@ namespace SmartStock.Forms.User_Control.SearchForms
             label2.Font = new Font("Segoe UI", 10F);
             label2.Location = new Point(0, 0);
             label2.Name = "label2";
-            label2.Size = new Size(39, 23);
+            label2.Padding = new Padding(9, 0, 0, 0);
+            label2.Size = new Size(48, 23);
             label2.TabIndex = 0;
             label2.Tag = "muted";
             label2.Text = "Min";
@@ -366,7 +371,8 @@ namespace SmartStock.Forms.User_Control.SearchForms
             label3.Font = new Font("Segoe UI", 10F);
             label3.Location = new Point(0, 0);
             label3.Name = "label3";
-            label3.Size = new Size(42, 23);
+            label3.Padding = new Padding(9, 0, 0, 0);
+            label3.Size = new Size(51, 23);
             label3.TabIndex = 0;
             label3.Tag = "muted";
             label3.Text = "Max";
@@ -423,6 +429,7 @@ namespace SmartStock.Forms.User_Control.SearchForms
             inactive_rb.Location = new Point(6, 104);
             inactive_rb.Margin = new Padding(6, 10, 0, 10);
             inactive_rb.Name = "inactive_rb";
+            inactive_rb.Padding = new Padding(5, 0, 0, 0);
             inactive_rb.Size = new Size(273, 27);
             inactive_rb.TabIndex = 2;
             inactive_rb.TabStop = true;
@@ -438,6 +445,7 @@ namespace SmartStock.Forms.User_Control.SearchForms
             active_rb.Location = new Point(6, 57);
             active_rb.Margin = new Padding(6, 10, 0, 10);
             active_rb.Name = "active_rb";
+            active_rb.Padding = new Padding(5, 0, 0, 0);
             active_rb.Size = new Size(273, 27);
             active_rb.TabIndex = 1;
             active_rb.TabStop = true;
@@ -453,6 +461,7 @@ namespace SmartStock.Forms.User_Control.SearchForms
             all_rb.Location = new Point(6, 10);
             all_rb.Margin = new Padding(6, 10, 0, 10);
             all_rb.Name = "all_rb";
+            all_rb.Padding = new Padding(5, 0, 0, 0);
             all_rb.Size = new Size(273, 27);
             all_rb.TabIndex = 0;
             all_rb.TabStop = true;

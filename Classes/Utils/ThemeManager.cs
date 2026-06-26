@@ -192,7 +192,7 @@ namespace SmartStock.Classes.Utils
                     else if("borderless".Equals(txt.Tag))
                     {
                         txt.BorderStyle = BorderStyle.None;
-                        txt.Font = new Font(txt.Font.FontFamily, 10, FontStyle.Bold);
+                        txt.Font = new Font(txt.Font.FontFamily, 10);
                     }
                     else
                     {

@@ -32,12 +32,7 @@ namespace SmartStock.Forms.User_Control
 
         private void search_btn_Click(object sender, EventArgs e)
         {
-            if (!int.TryParse(product_id_tb.Text, out int productId))
-            {
-                MessageBox.Show("Please enter a valid Product ID.", "Search Error", 
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            if (!FormValidator.RequireId(product_id_tb.Text, "Product ID", out int productId)) return;
 
             SearchAndLoadProduct(productId);
         }
@@ -112,17 +107,14 @@ namespace SmartStock.Forms.User_Control
         {
             product = null;
 
-            // Validare numerică
-            if (!decimal.TryParse(unit_price_tb.Text, out decimal price) ||
-                !int.TryParse(current_stock_tb.Text, out int stock) ||
-                !int.TryParse(safety_stock_tb.Text, out int safetyStock) ||
-                !int.TryParse(supplier_id_tb.Text, out int supplierId))
-            {
-                MessageBox.Show("Please enter valid numbers.", "Numeric Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-
+            if (!FormValidator.RequireText(product_name_tb.Text, "Product Name")) return false;
+            if (!FormValidator.RequireSelection(product_category_cb.SelectedIndex, "Category")) return false;
+            if (!FormValidator.RequireId(supplier_id_tb.Text, "Supplier ID", out int supplierId)) return false;
+            if (!FormValidator.RequireDecimal(unit_price_tb.Text, "Unit Price", out decimal price, nonNegative: true)) return false;
+            if (!FormValidator.RequireInt(current_stock_tb.Text, "Current Stock", out int stock, nonNegative: true)) return false;
+            if (!FormValidator.RequireInt(safety_stock_tb.Text, "Safety Stock", out int safetyStock, nonNegative: true)) return false;
+            if (!FormValidator.RequireText(unit_measure_tb.Text, "Unit of Measure")) return false;
+            
             product = new Product
             {
                 ProductName = product_name_tb.Text.Trim(),
@@ -137,23 +129,23 @@ namespace SmartStock.Forms.User_Control
 
             return true;
         }
-        public async Task<bool> PerformSave(bool isAddMode)
+        public async Task<SaveOutcome> PerformSave(bool isAddMode)
         {
-            if (string.IsNullOrWhiteSpace(product_name_tb.Text)) return false;
+            if (!TryCollectProductData(out var product)) return SaveOutcome.Handled;
+
             try
             {
-                if (isAddMode)
-                {
-                    TryCollectProductData(out var newProduct);
-                    return await _productService.AddProductAsync(newProduct);
-                }
-                else
-                {
-                    TryCollectProductData(out var updatedProduct);
-                    return await _productService.UpdateProductAsync(updatedProduct);
-                }
+                bool ok = isAddMode
+                    ? await _productService.AddProductAsync(product)
+                    : await _productService.UpdateProductAsync(product);
+
+                return ok ? SaveOutcome.Success : SaveOutcome.Failed;
             }
-            catch { return false; }
+            catch (Exception ex)
+            {
+                FormValidator.ShowDbError(ex);
+                return SaveOutcome.Handled;
+            }
         }
         void ISaveableControl.UpdateUIState(bool isAddMode)
         {

@@ -11,9 +11,18 @@ namespace SmartStock.Classes.Settings
     /// </summary>
     public static class PathsManager
     {
+        // DEBUG builds use a separate data folder so a dev session never shares its
+        // database/settings/migrations with an installed (Release) copy on the same machine.
+        private const string AppFolderName =
+#if DEBUG
+            "SmartStock (Dev)";
+#else
+            "SmartStock";
+#endif
+
         private static readonly string DataDir = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
-            "SmartStock");
+            AppFolderName);
 
         private static readonly string BootstrapPath = Path.Combine(DataDir, "paths.cfg");
 
@@ -25,6 +34,13 @@ namespace SmartStock.Classes.Settings
 
         public static string DefaultDatabasePath =>
             Path.Combine(DataDir, "SmartStock.db");
+
+        /// <summary>
+        /// Canonical location of the secrets file (.env), kept in the shared data folder
+        /// alongside appSettings.json. <see cref="EnvManager"/> reads/writes it here.
+        /// </summary>
+        public static string EnvFilePath =>
+            Path.Combine(DataDir, ".env");
 
         public static void Load()
         {
